@@ -1,0 +1,62 @@
+{
+ "name": "synthesized_46661pwm5",
+ "sha256": "6ab37de77a9f57d8424d85db722f07b8201c33c547e6d380ddac318594959a75",
+ "model": "muse-wonder-1.0",
+ "created": "2026-10-27",
+ "issuer": "JPMorgan Chase Financial Company LLC",
+ "cusip": "46661PWM5",
+ "unsupported_features": [
+  "Absolute Stock Return"
+ ],
+ "battery": [
+  {
+   "name": "static_safety",
+   "passed": true,
+   "value": 1.0,
+   "reference": 1.0,
+   "tolerance": 0.0,
+   "detail": "sandbox static check passed"
+  },
+  {
+   "name": "determinism",
+   "passed": true,
+   "value": 0.0,
+   "reference": 0.0,
+   "tolerance": 0.0,
+   "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical"
+  },
+  {
+   "name": "output_sanity",
+   "passed": true,
+   "value": 0.0,
+   "reference": 0.0,
+   "tolerance": 0.0,
+   "detail": "shape (20000, 2), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)"
+  },
+  {
+   "name": "filing_examples",
+   "passed": true,
+   "value": 2.2737367544323206e-13,
+   "reference": 0.0,
+   "tolerance": 0.01,
+   "detail": "20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0"
+  },
+  {
+   "name": "called_paths_match_template",
+   "passed": true,
+   "value": 0.0,
+   "reference": 0.0,
+   "tolerance": 1.0000000000000002e-06,
+   "detail": "4615 called paths (seed=0, n_paths=20000); generated row sums must equal trusted template undiscounted totals within 1e-9 * notional and columns after the call must be zero"
+  },
+  {
+   "name": "convergence",
+   "passed": true,
+   "value": 0.507590976730855,
+   "reference": 0.5,
+   "tolerance": 0.1,
+   "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE"
+  }
+ ],
+ "passed": true
+}
