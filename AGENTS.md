@@ -77,8 +77,9 @@ Joyeb wants development to run mostly on Meta credits, not Claude cloud credits.
   feeds the submission answer "use of Meta products to build the project".
 - **Budget:** up to $80 of Meta credits for development; keep at least $50 for the product and demo.
   Stop and tell Joyeb if the log shows development spend above $80.
-- **One build day per session.** Start a fresh session each day: long sessions cost far more per step.
-  Keep replies and tool output short.
+- **Keep context small.** Long sessions cost far more per step: update `docs/CHECKPOINT.md` at the
+  end of each task, and Joyeb runs `/compact` (or starts a fresh session) at checkpoints. After a
+  compact, re-read `docs/CHECKPOINT.md`. Keep replies and tool output short.
 - Joyeb may use **Muse Code** on his PC for side tasks; note what it built in the same log.
 
 ## Cost awareness (~$150 of Meta credits)
