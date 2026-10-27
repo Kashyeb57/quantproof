@@ -31,6 +31,108 @@ from quantproof.ingest.html import Filing, read_filing
 
 LIVE_MODEL = "muse-spark-1.3"
 
+SESSION_EXTRACTION_LIMIT = 3
+DAILY_CAP_ENV = "QP_DAILY_CAP_USD"
+DEFAULT_DAILY_CAP_USD = 5.0
+
+
+class LiveRefused(RuntimeError):
+    """Live mode refused by the cost guard (session limit or daily cap)."""
+
+
+def daily_cap_usd(env: dict | None = None) -> float:
+    """Daily spend cap in USD: env ``QP_DAILY_CAP_USD``, default $5."""
+    import os
+
+    raw = (os.environ if env is None else env).get(DAILY_CAP_ENV, "")
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return DEFAULT_DAILY_CAP_USD
+    return value if value > 0 else DEFAULT_DAILY_CAP_USD
+
+
+def daily_spend(log_path=None, *, day=None) -> float:
+    """USD spent today (UTC) according to the Meta API cost log.
+
+    Sums ``cost_usd`` over the JSON-lines log written by
+    ``quantproof.agent.client.chat`` for records whose timestamp falls
+    on ``day`` (default: today, UTC).  A missing log means zero spend.
+    """
+    import datetime
+    import json as _json
+    from pathlib import Path
+
+    from quantproof.agent.client import DEFAULT_LOG
+
+    path = Path(log_path) if log_path is not None else DEFAULT_LOG
+    today = day or datetime.datetime.now(datetime.timezone.utc).date()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        return 0.0
+    total = 0.0
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            record = _json.loads(line)
+            stamp = datetime.datetime.fromisoformat(str(record["time"]))
+        except (ValueError, KeyError, TypeError):
+            continue
+        if stamp.date() == today:
+            total += float(record.get("cost_usd") or 0.0)
+    return total
+
+
+def live_available(spent_today: float, cap: float) -> bool:
+    """Whether live mode may spend at all under the daily cap."""
+    return spent_today < cap
+
+
+
+
+
+@dataclass
+class LiveGuard:
+    """Per-session cost guard: extraction limit + served-from-cache URLs.
+
+    ``get_or_extract`` returns the cached note for a repeated filing
+    key without consuming budget or calling the extractor.  A new
+    filing is refused (``LiveRefused``) once the session has used its
+    extractions or today's spend has reached the daily cap; the checks
+    run before the extractor, so a refused filing costs nothing.
+    """
+
+    extractions_used: int = 0
+    session_limit: int = SESSION_EXTRACTION_LIMIT
+    cache: dict = None  # type: ignore[assignment]
+
+    def __post_init__(self) -> None:
+        if self.cache is None:
+            self.cache = {}
+
+    def get_or_extract(self, key: str, extract_fn, *, spent_today: float, cap: float):
+        """Return (note, from_cache) for ``key``, enforcing the guard."""
+        if key in self.cache:
+            return self.cache[key], True
+        if self.extractions_used >= self.session_limit:
+            raise LiveRefused(
+                f"Live extraction limit reached: at most "
+                f"{self.session_limit} live extractions per browser session. "
+                "Demo mode remains available."
+            )
+        if not live_available(spent_today, cap):
+            raise LiveRefused(
+                "Live mode is off: today's spend has reached the daily "
+                f"cap of ${cap:,.2f}. Demo mode remains available."
+            )
+        note = extract_fn()
+        self.extractions_used += 1
+        self.cache[key] = note
+        return note, False
+
 
 @dataclass
 class LiveNote:

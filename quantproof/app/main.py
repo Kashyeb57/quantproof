@@ -132,6 +132,15 @@ def run() -> None:
         "Live mode downloads a filing and extracts it with Muse Spark 1.3.",
     )
     live_mode = mode == "Live mode"
+    cap = live.daily_cap_usd()
+    spent_today = live.daily_spend()
+    if live_mode and not live.live_available(spent_today, cap):
+        _error(
+            "Live mode is off: today's spend has reached the daily cap "
+            f"of ${cap:,.2f} (set by QP_DAILY_CAP_USD). "
+            "Demo mode remains available."
+        )
+        live_mode = False
     if live_mode:
         _warning(
             "Live mode uses real API credits: each new filing is extracted "
@@ -152,23 +161,51 @@ def run() -> None:
         uploaded = st.file_uploader("Or upload a filing (.htm)", type=["htm", "html"])
         fetch = st.button("Fetch and extract (uses real API credits)")
         if fetch:
+            guard: live.LiveGuard = st.session_state.setdefault(
+                "live_guard", live.LiveGuard()
+            )
             try:
-                with st.spinner("Downloading and extracting (Muse Spark 1.3)..."):
-                    if url.strip():
+                if url.strip():
+                    key = source = url.strip()
+
+                    def extract_fn():
                         filing = live.filing_from_url(
                             url.strip(),
                             edgar_client=EdgarClient(env=_client_env()),
                         )
-                        source = url.strip()
-                    elif uploaded is not None:
-                        filing = live.filing_from_upload(uploaded.getvalue())
-                        source = "upload"
-                    else:
-                        raise ValueError("enter an EDGAR link or upload a filing first")
-                    live_note = live.extract_and_crosscheck(
-                        filing, source, chat=_live_chat()
+                        return live.extract_and_crosscheck(
+                            filing, source, chat=_live_chat()
+                        )
+
+                elif uploaded is not None:
+                    import hashlib
+
+                    data = uploaded.getvalue()
+                    key = "upload:" + hashlib.sha256(data).hexdigest()
+                    source = "upload"
+
+                    def extract_fn():
+                        filing = live.filing_from_upload(data)
+                        return live.extract_and_crosscheck(
+                            filing, source, chat=_live_chat()
+                        )
+
+                else:
+                    raise ValueError("enter an EDGAR link or upload a filing first")
+                with st.spinner("Downloading and extracting (Muse Spark 1.3)..."):
+                    live_note, from_cache = guard.get_or_extract(
+                        key,
+                        extract_fn,
+                        spent_today=live.daily_spend(),
+                        cap=cap,
                     )
+                if from_cache:
+                    _caption("Served from this session's cache (no new extraction).")
                 st.session_state["live_note"] = live_note
+            except live.LiveRefused as refused:
+                _error(str(refused))
+                _footer()
+                return
             except Exception as error:  # download / extraction failures are shown, never hidden
                 _error(f"Live extraction failed: {error}")
                 _footer()
