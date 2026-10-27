@@ -8,7 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from quantproof.agent.costs import Usage
+from quantproof.agent.client import ChatResult
+from quantproof.agent.costs import Usage, estimate_cost
 
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "muse_draft.py"
 spec = importlib.util.spec_from_file_location("muse_draft", SCRIPT)
@@ -96,8 +97,8 @@ def test_call_muse_streams_and_rebuilds_the_reply(monkeypatch):
     captured = {}
     out = md.call_muse([{"role": "user", "content": "hi"}], "muse-spark-1.3", 4000,
                        urlopen=fake_urlopen(captured))
-    assert out["choices"][0] == {"message": {"content": "Hello, world"}, "finish_reason": "stop"}
-    assert out["usage"]["completion_tokens"] == 2781
+    assert (out.text, out.finish_reason) == ("Hello, world", "stop")
+    assert out.usage.output_tokens == 2781 and out.usage.reasoning_tokens == 1574
     req = captured["req"]
     assert req.full_url == "https://api.meta.ai/v1/chat/completions"
     assert req.get_header("Authorization") is None  # network secret supplies it
@@ -116,7 +117,7 @@ def test_call_muse_sends_bearer_when_key_set(monkeypatch):
 def test_call_muse_cut_off_stream_keeps_length_reason():
     out = md.call_muse([], "muse-spark-1.3", 10, urlopen=fake_urlopen({}, sse(
         {"choices": [{"delta": {"content": "x ="}, "finish_reason": "length"}]})))
-    assert out["choices"][0]["finish_reason"] == "length" and out["usage"] is None
+    assert out.finish_reason == "length" and out.usage == Usage(0, 0)
 
 
 def test_log_rows_and_total(tmp_path):
@@ -142,6 +143,12 @@ def test_write_files_refuses_escape(tmp_path):
         md.write_files({"../evil.py": "x"}, tmp_path)
 
 
+def result(text, finish, prompt_tokens, completion_tokens):
+    usage = Usage(prompt_tokens, completion_tokens)
+    return ChatResult(text=text, model="muse-spark-1.3", finish_reason=finish, usage=usage,
+                      cost_usd=estimate_cost("muse-spark-1.3", usage), seconds=1.0, attempts=1)
+
+
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
     log = tmp_path / "log.md"
@@ -157,9 +164,7 @@ def test_dry_run_makes_no_call(sandbox, monkeypatch):
 
 
 def test_main_writes_drafts_and_logs(sandbox, monkeypatch):
-    reply = {"choices": [{"message": {"content": REPLY}, "finish_reason": "stop"}],
-             "usage": {"prompt_tokens": 1000, "completion_tokens": 2000}}
-    monkeypatch.setattr(md, "call_muse", lambda *a, **k: reply)
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: result(REPLY, "stop", 1000, 2000))
     assert md.main(["--task", "write html.py", "--context", "pyproject.toml"]) == 0
     (run,) = (sandbox / "drafts").iterdir()
     assert (run / "files" / "quantproof" / "ingest" / "html.py").exists()
@@ -169,9 +174,8 @@ def test_main_writes_drafts_and_logs(sandbox, monkeypatch):
 
 
 def test_cut_off_reply_is_logged_and_flagged(sandbox, monkeypatch):
-    reply = {"choices": [{"message": {"content": "<<<FILE a.py>>>\nx ="}, "finish_reason": "length"}],
-             "usage": {"prompt_tokens": 100, "completion_tokens": 24000}}
-    monkeypatch.setattr(md, "call_muse", lambda *a, **k: reply)
+    monkeypatch.setattr(md, "call_muse",
+                        lambda *a, **k: result("<<<FILE a.py>>>\nx =", "length", 100, 24000))
     assert md.main(["--task", "x"]) == 1
     assert "cut off at max_tokens" in md.LOG_PATH.read_text()
     assert md.total_spend(md.LOG_PATH) > 0  # billed tokens are still counted
@@ -182,3 +186,10 @@ def test_over_budget_stops_before_calling(sandbox, monkeypatch):
                   returned=[], usage=Usage(0, 0), cost=80.01)
     monkeypatch.setattr(md, "call_muse", lambda *a, **k: pytest.fail("called over budget"))
     assert md.main(["--task", "x"]) == 2
+
+
+def test_stream_that_ends_early_is_flagged(sandbox, monkeypatch):
+    # No finish_reason means the connection closed mid-reply: never trust that output.
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: result(REPLY, None, 100, 200))
+    assert md.main(["--task", "x"]) == 1
+    assert "stream ended early" in md.LOG_PATH.read_text()

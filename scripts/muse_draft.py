@@ -22,10 +22,9 @@ import argparse
 import json
 import re
 import sys
-import time
-import urllib.error
 import urllib.request
 from collections.abc import Callable
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
@@ -33,7 +32,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from quantproof.agent import client  # noqa: E402
-from quantproof.agent.costs import Usage, estimate_cost  # noqa: E402
+from quantproof.agent.costs import Usage  # noqa: E402
 
 DEFAULT_MODEL = "muse-spark-1.3"
 # Muse Spark reasons before answering and reasoning counts against max_tokens; complete files
@@ -112,39 +111,14 @@ def parse_reply(text: str) -> tuple[dict[str, str], str]:
 
 
 def call_muse(messages: list[dict], model: str, max_tokens: int,
-              urlopen: Callable = urllib.request.urlopen) -> dict:
-    """One streamed Chat Completions call, returned in the non-streamed reply shape
-    {"choices": [{"message": {"content"}, "finish_reason"}], "usage"}.
-
-    Streamed because the gateway returns 502 when a non-streamed reply takes more than ~30 s,
-    which long drafts do. Usage arrives in the last event (stream_options.include_usage).
-    Auth header only when MODEL_API_KEY is set (client.py).
-    """
-    body = json.dumps({"model": model, "messages": messages, "max_tokens": max_tokens,
-                       "stream": True, "stream_options": {"include_usage": True}}).encode()
-    req = urllib.request.Request(f"{client.BASE_URL}/chat/completions", data=body,
-                                 headers=client.request_headers(), method="POST")
-    content: list[str] = []
-    finish, usage = None, None
+              urlopen: Callable = urllib.request.urlopen) -> client.ChatResult:
+    """One streamed call through the product client (retries included). It is not written to
+    the product's cost log: development calls are logged in MUSE_DEV_LOG.md instead."""
     try:
-        with urlopen(req, timeout=TIMEOUT_S) as resp:
-            for raw in resp:
-                line = raw.decode("utf-8").strip()
-                if not line.startswith("data:"):
-                    continue
-                data = line[len("data:"):].strip()
-                if data == "[DONE]":
-                    break
-                event = json.loads(data)
-                for choice in event.get("choices") or []:
-                    content.append((choice.get("delta") or {}).get("content") or "")
-                    finish = choice.get("finish_reason") or finish
-                usage = event.get("usage") or usage
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", "replace")[:500]
-        raise SystemExit(f"Meta API error {e.code}: {detail}") from None
-    return {"choices": [{"message": {"content": "".join(content)}, "finish_reason": finish}],
-            "usage": usage}
+        return client.chat(messages, model=model, max_tokens=max_tokens, purpose="dev draft",
+                           log_path=None, urlopen=urlopen)
+    except client.MetaAPIError as e:
+        raise SystemExit(f"Meta API error {e.status}: {e.detail}") from None
 
 
 def _cell(text: str) -> str:
@@ -218,14 +192,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Development spend ${spent:.2f} is over the ${DEV_BUDGET_USD:.0f} budget; ask Joyeb.")
         return 2
 
-    start = time.monotonic()
-    reply = call_muse(messages, args.model, args.max_tokens)
-    seconds = time.monotonic() - start
-    usage = Usage.from_response(reply.get("usage") or {})
-    cost = estimate_cost(args.model, usage)
-    choice = (reply.get("choices") or [{}])[0]
-    text = (choice.get("message") or {}).get("content") or ""
-    finish = choice.get("finish_reason")
+    result = call_muse(messages, args.model, args.max_tokens)
+    usage, cost, text, finish = result.usage, result.cost_usd, result.text, result.finish_reason
 
     # Parse before logging so the log records what came back, but log even if parsing fails:
     # the tokens were billed either way.
@@ -234,8 +202,9 @@ def main(argv: list[str] | None = None) -> int:
         problem = ""
     except ValueError as e:
         files, notes, problem = {}, "", str(e)
-    if finish == "length":
-        problem = (problem + "; " if problem else "") + "cut off at max_tokens"
+    if finish != "stop":
+        cut = "cut off at max_tokens" if finish == "length" else f"stream ended early ({finish})"
+        problem = (problem + "; " if problem else "") + cut
     append_log(LOG_PATH, when=datetime.now(timezone.utc), model=args.model, task=task,
                sent=list(context), returned=list(files), usage=usage, cost=cost,
                note=problem or "awaiting review")
@@ -245,11 +214,12 @@ def main(argv: list[str] | None = None) -> int:
     out.mkdir(parents=True, exist_ok=True)
     (out / "reply.md").write_text(text, encoding="utf-8")
     (out / "meta.json").write_text(json.dumps(
-        {"model": args.model, "finish_reason": finish, "seconds": round(seconds, 1),
-         "usage": reply.get("usage"), "estimated_cost_usd": round(cost, 6)}, indent=2))
+        {"model": args.model, "finish_reason": finish, "seconds": round(result.seconds, 1),
+         "attempts": result.attempts, "usage": asdict(usage), "estimated_cost_usd": round(cost, 6)},
+        indent=2))
     write_files(files, REPO if args.apply else out / "files")
 
-    print(f"{args.model}: {seconds:.0f} s, {usage.input_tokens:,} in ({usage.cached_tokens:,} cached), "
+    print(f"{args.model}: {result.seconds:.0f} s, {usage.input_tokens:,} in ({usage.cached_tokens:,} cached), "
           f"{usage.output_tokens:,} out ({usage.reasoning_tokens:,} reasoning), ~${cost:.4f}")
     print(f"Files: {', '.join(files) or 'none'} -> {'working tree' if args.apply else out / 'files'}")
     if notes:
