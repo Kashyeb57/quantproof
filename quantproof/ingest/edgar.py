@@ -244,15 +244,22 @@ class EdgarClient:
         return refs
 
     def search(
-        self, phrase: str, *, start: date, end: date, forms: str = "424B2"
+        self, phrase: str, *, start: date, end: date, forms: str = "424B2",
+        cik: str | int | None = None,
     ) -> list[FilingRef]:
-        """Full-text search for an exact phrase via EFTS search-index."""
+        """Full-text search for an exact phrase via EFTS search-index.
+
+        cik limits hits to filings that list that filer. Each FilingRef gets the first listed
+        CIK (for JPMorgan notes that is the parent, 19617); the archive URL works with either.
+        """
         params = {
             "q": f'"{phrase}"',
             "forms": forms,
             "startdt": start.isoformat(),
             "enddt": end.isoformat(),
         }
+        if cik is not None:
+            params["ciks"] = f"{int(str(cik).strip()):010d}"
         query = urllib.parse.urlencode(params)
         url = "https://efts.sec.gov/LATEST/search-index?" + query
         data = self.get_json(url, max_age_s=INDEX_MAX_AGE_S)

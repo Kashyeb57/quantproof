@@ -210,6 +210,15 @@ def test_search_query(tmp_path):
     client.search("Lesser Performing", start=date(2025, 1, 1), end=date(2026, 10, 27))
     q = urllib.parse.parse_qs(urllib.parse.urlparse(net.requests[0].full_url).query)
     assert q["q"] == ['"Lesser Performing"'] and q["forms"] == ["424B2"] and "startdt" in q and "enddt" in q
+    assert "ciks" not in q
+
+
+def test_search_cik_filter_is_zero_padded(tmp_path):
+    # Hits list the parent first, so filtering by issuer must happen in the query, not on ref.cik.
+    client, net = _search_client(tmp_path)
+    client.search("Lesser Performing", start=date(2025, 1, 1), end=date(2026, 10, 27), cik=1665650)
+    q = urllib.parse.parse_qs(urllib.parse.urlparse(net.requests[0].full_url).query)
+    assert q["ciks"] == ["0001665650"]
 
 
 def test_search_first_hit(tmp_path):
