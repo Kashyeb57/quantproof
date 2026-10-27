@@ -72,9 +72,9 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
       note where our range sits relative to the bank's ~$954 and explain why
 
 ## Day 6 — Sun Nov 1: the verifiable agent — **CHECKPOINT**
-- [ ] `agent/crosscheck.py`: Muse Spark Open (Baseten) second extraction, field diff, re-check loop
-- [ ] `agent/synthesis.py` + `registry/`: Muse Wonder writes payoff code → sandbox → battery → register
-- [ ] `agent/provenance.py`: every number in generated text matches an engine output or citation
+- [x] `agent/crosscheck.py`: Muse Spark Open (Baseten) second extraction, field diff, re-check loop
+- [x] `agent/synthesis.py` + `registry/`: Muse Wonder writes payoff code → sandbox → battery → register
+- [x] `agent/provenance.py`: every number in generated text matches an engine output or citation
 - [ ] **Checkpoint (evening):** all must-haves green? If not, cut stretch items now. No new features after tonight except the app.
 
 ## Day 7 — Mon Nov 2: the app

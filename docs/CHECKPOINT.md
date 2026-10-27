@@ -109,10 +109,30 @@ Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://g
 - Battery fix: convergence used n/16 paths (odd for 2,000) -> m, 4m, 16m with m even.
 - Dev spend $5.03 of $80. Tests: all pass.
 
+## Day 6 verifiable agent (Oct 27, night)
+- `agent/provenance.py`: every number/date in generated text must match an engine output, a
+  cited filing value or a stated methodology constant (rounding rule |x - v| <= 0.5*10^-d);
+  numbers inside verified quotes and verified cited strings are exempt. The 38582 report passes.
+- `agent/crosscheck.py`: second extraction (muse-spark-1.2 until BASETEN_API_KEY exists), field
+  diff, re-check accepted only with a verified quote; non-first-wins go to the user. Live on
+  38582: 0 disagreements ($0.05), recorded in `tests/fixtures/crosscheck/`.
+- `registry/sandbox.py` + `_sandbox_child.py`: static allow-list, subprocess, timeout, rlimits,
+  empty env, network blocked, proxy modules (no submodules), audit hook. Security-reviewed;
+  found and closed: `from numpy import load`, generator-frame escape, module reach via f2py etc.
+- `payoffs/synthesized.py` (price sandboxed cash flows, risk-neutral, issuer spread) and
+  `validation/synth_battery.py` (filing payout examples to the cent with verified quotes,
+  exact template match on paths called before maturity, sanity, determinism, convergence).
+- `agent/synthesis.py` + `registry/store.py` (sha256 tamper check). Live on the refused
+  ea0306095 dual-directional note: Wonder passed all 6 checks on attempt 1, 20/20 filing
+  examples, $0.14; registered as `synthesized_46661pwm5`. Base value $1,083.27 +- 0.54 with
+  illustrative vols 30/35/28%; $978.55 at 1.5x vols; bank $980. Use real implied vols.
+- Suite: 1461 tests, ~80 s (sandbox subprocesses).
+
 ## Next (in order)
-1. Day 6 agent: `agent/crosscheck.py` (second extraction, field diff; Baseten key not set yet ->
-   second Muse Spark run or Wonder as the cross-checker), `agent/synthesis.py` + `registry/`
-   (Wonder writes payoff code -> sandbox -> battery), `agent/provenance.py`.
+1. Day 7 app: Streamlit flow (EDGAR link -> TermSheet with citations + cross-check diffs ->
+   confirm -> battery -> range vs bank vs price -> real-world risk -> heatmap); refused notes
+   offer synthesis; cost guard; deploy. Also: fair-value range / loss odds for synthesized
+   payoffs (they take price_note today), and provenance check on any generated prose.
 2. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
 
 ## Environment facts
