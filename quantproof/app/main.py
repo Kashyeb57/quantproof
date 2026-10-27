@@ -35,6 +35,34 @@ def _pct(value: object) -> str:
     return f"{100.0 * float(value):.2f}%"
 
 
+@st.cache_data(show_spinner=False)
+def _cached_note(stem: str):
+    """Demo note for ``stem``, cached per note (fixture loads are pure)."""
+    return demo.load_note(stem)
+
+
+@st.cache_data(show_spinner=False)
+def _cached_battery(stem, edits_key, rate, spread, vols, dividends, rho):
+    """Proof battery cached per (note, edits, market inputs) set."""
+    note = _cached_note(stem)
+    ts, _edited, _errors = demo.apply_user_edits(note.termsheet, dict(edits_key))
+    market = demo.build_market(
+        ts, rate=rate, spread=spread, vols=vols, dividends=dividends, rho=rho
+    )
+    return demo.run_proof_battery(note, ts, market)
+
+
+@st.cache_data(show_spinner=False)
+def _cached_analysis(stem, edits_key, rate, spread, vols, dividends, rho):
+    """Verdict analysis cached per (note, edits, market inputs) set."""
+    note = _cached_note(stem)
+    ts, _edited, _errors = demo.apply_user_edits(note.termsheet, dict(edits_key))
+    market = demo.build_market(
+        ts, rate=rate, spread=spread, vols=vols, dividends=dividends, rho=rho
+    )
+    return demo.run_analysis(note, ts, market)
+
+
 def run() -> None:
     """Render the Stage A demo app."""
     st.set_page_config(page_title="QuantProof risk analysis", layout="wide")
@@ -48,15 +76,14 @@ def run() -> None:
     st.header("1. Pick a note")
     labels = {}
     for stem in demo.NOTE_STEMS:
-        note = demo.load_note(stem)
-        labels[stem] = demo.note_label(stem, note.termsheet)
+        labels[stem] = demo.note_label(stem, _cached_note(stem).termsheet)
     stem = st.selectbox(
         "Saved note (demo mode)", demo.NOTE_STEMS, format_func=labels.get
     )
     st.text_input("EDGAR link (coming soon)", value="", disabled=True)
     st.file_uploader("Upload a filing (coming soon)", disabled=True)
 
-    note = demo.load_note(stem)
+    note = _cached_note(stem)
     edits_by_stem: dict = st.session_state.setdefault("edits", {})
     edits: dict[str, str] = edits_by_stem.setdefault(stem, {})
 
@@ -176,7 +203,10 @@ def run() -> None:
     # d. Proof checks.
     st.header("4. Proof checks")
     with st.spinner("Running the proof battery..."):
-        battery = demo.run_proof_battery(note, ts, market)
+        battery = _cached_battery(
+            stem, tuple(sorted(edits.items())), rate, spread,
+            tuple(vols), tuple(dividends), rho,
+        )
     st.caption(battery["note"])
     if battery["kind"] == "refused":
         st.error(f"Refused: {battery['note']}")
@@ -215,7 +245,10 @@ def run() -> None:
     # e. Verdict.
     st.header("5. Verdict")
     with st.spinner("Pricing under the stated assumptions..."):
-        result = demo.run_analysis(note, ts, market)
+        result = _cached_analysis(
+            stem, tuple(sorted(edits.items())), rate, spread,
+            tuple(vols), tuple(dividends), rho,
+        )
     verdict = demo.verdict_summary(result)
     if verdict["preliminary"]:
         st.write("Based on preliminary terms.")
