@@ -26,3 +26,6 @@ htmlcov/
 .DS_Store
 .idea/
 .vscode/
+
+# Muse drafts awaiting review (scripts/muse_draft.py)
+.muse_drafts/

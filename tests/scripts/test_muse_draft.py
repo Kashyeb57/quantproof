@@ -1,0 +1,161 @@
+"""Tests for scripts/muse_draft.py. No network: the API call is replaced by fakes."""
+
+import importlib.util
+import io
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+import pytest
+
+from quantproof.agent.costs import Usage
+
+SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "muse_draft.py"
+spec = importlib.util.spec_from_file_location("muse_draft", SCRIPT)
+md = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(md)
+
+REPLY = """<<<FILE quantproof/ingest/html.py>>>
+def to_text(html):
+    return html
+<<<END>>>
+<<<FILE tests/ingest/test_html.py>>>
+```python
+def test_x():
+    assert True
+```
+<<<END>>>
+<<<NOTES>>>
+Unsure about charset fallback.
+<<<END>>>"""
+
+
+def test_parse_reply_files_and_notes():
+    files, notes = md.parse_reply(REPLY)
+    assert list(files) == ["quantproof/ingest/html.py", "tests/ingest/test_html.py"]
+    assert files["quantproof/ingest/html.py"] == "def to_text(html):\n    return html\n"
+    # Markdown fences around a whole file are removed.
+    assert files["tests/ingest/test_html.py"] == "def test_x():\n    assert True\n"
+    assert notes == "Unsure about charset fallback."
+
+
+def test_truncated_file_is_dropped_not_half_written():
+    text = "<<<FILE a.py>>>\nx = 1\n<<<END>>>\n<<<FILE b.py>>>\ny = "
+    files, _ = md.parse_reply(text)
+    assert list(files) == ["a.py"]
+
+
+@pytest.mark.parametrize("bad", ["../x.py", "/etc/passwd", "a/../../b.py", ".git/config",
+                                 ".env", "config/.env.local", "C:\\x.py", "a\\b.py"])
+def test_unsafe_paths_rejected(bad):
+    with pytest.raises(ValueError):
+        md.safe_path(bad)
+    with pytest.raises(ValueError):
+        md.parse_reply(f"<<<FILE {bad}>>>\nx\n<<<END>>>")
+
+
+def test_every_env_file_is_refused_even_the_example():
+    # .env.example is committed on purpose, but Muse never needs to write it; refusing every
+    # .env* name keeps the rule simple and errs on the safe side.
+    with pytest.raises(ValueError):
+        md.safe_path(".env.example")
+
+
+def test_build_messages_puts_rules_first_and_context_after_task():
+    msgs = md.build_messages("Do X", {"a.py": "A = 1\n"}, rules="RULE ONE")
+    assert [m["role"] for m in msgs] == ["system", "user"]
+    assert "RULE ONE" in msgs[0]["content"] and "<<<FILE" in msgs[0]["content"]
+    assert msgs[1]["content"].startswith("Task:\nDo X")
+    assert "<<<CONTEXT a.py>>>\nA = 1\n<<<END>>>" in msgs[1]["content"]
+
+
+def fake_urlopen(captured, reply):
+    def urlopen(req, timeout):
+        captured["req"], captured["timeout"] = req, timeout
+        return io.BytesIO(json.dumps(reply).encode())
+    return urlopen
+
+
+def test_call_muse_sends_no_auth_header_without_key(monkeypatch):
+    monkeypatch.delenv("MODEL_API_KEY", raising=False)
+    captured = {}
+    out = md.call_muse([{"role": "user", "content": "hi"}], "muse-spark-1.3", 4000,
+                       urlopen=fake_urlopen(captured, {"ok": 1}))
+    req = captured["req"]
+    assert out == {"ok": 1}
+    assert req.full_url == "https://api.meta.ai/v1/chat/completions"
+    assert req.get_header("Authorization") is None
+    body = json.loads(req.data)
+    assert body["model"] == "muse-spark-1.3" and body["max_tokens"] == 4000
+
+
+def test_call_muse_sends_bearer_when_key_set(monkeypatch):
+    monkeypatch.setenv("MODEL_API_KEY", "test-key-not-real")
+    captured = {}
+    md.call_muse([], "muse-spark-1.3", 4000, urlopen=fake_urlopen(captured, {}))
+    assert captured["req"].get_header("Authorization") == "Bearer test-key-not-real"
+
+
+def test_log_rows_and_total(tmp_path):
+    log = tmp_path / "log.md"
+    log.write_text("| When | Model | Task | Sent | Returned | In | Out | Est. cost | Review |\n"
+                   "|---|---|---|---|---|---|---|---|---|\n"
+                   "| by hand | Muse Code | side task | - | - | - | - | n/a | ok |\n")
+    when = datetime(2026, 10, 27, 12, 0, tzinfo=timezone.utc)
+    for cost in (0.05, 0.1234):
+        md.append_log(log, when=when, model="muse-spark-1.3", task="a | b\nc", sent=["x.py"],
+                      returned=["y.py"], usage=Usage(10, 20, 5, 15), cost=cost)
+    last = log.read_text().splitlines()[-1]
+    assert "a \\| b c" in last and "10 (5)" in last and "20 (15)" in last and "$0.1234" in last
+    # The escaped pipe in the task must not shift the cost column.
+    assert md.total_spend(log) == pytest.approx(0.1734)
+    assert md.total_spend(tmp_path / "missing.md") == 0.0
+
+
+def test_write_files_refuses_escape(tmp_path):
+    md.write_files({"a/b.py": "x\n"}, tmp_path)
+    assert (tmp_path / "a" / "b.py").read_text() == "x\n"
+    with pytest.raises(ValueError):
+        md.write_files({"../evil.py": "x"}, tmp_path)
+
+
+@pytest.fixture
+def sandbox(tmp_path, monkeypatch):
+    log = tmp_path / "log.md"
+    log.write_text("")
+    monkeypatch.setattr(md, "LOG_PATH", log)
+    monkeypatch.setattr(md, "DRAFTS_DIR", tmp_path / "drafts")
+    return tmp_path
+
+
+def test_dry_run_makes_no_call(sandbox, monkeypatch):
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: pytest.fail("API called on dry run"))
+    assert md.main(["--task", "x", "--dry-run"]) == 0
+
+
+def test_main_writes_drafts_and_logs(sandbox, monkeypatch):
+    reply = {"choices": [{"message": {"content": REPLY}, "finish_reason": "stop"}],
+             "usage": {"prompt_tokens": 1000, "completion_tokens": 2000}}
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: reply)
+    assert md.main(["--task", "write html.py", "--context", "pyproject.toml"]) == 0
+    (run,) = (sandbox / "drafts").iterdir()
+    assert (run / "files" / "quantproof" / "ingest" / "html.py").exists()
+    assert json.loads((run / "meta.json").read_text())["estimated_cost_usd"] == pytest.approx(0.00975)
+    row = md.LOG_PATH.read_text()
+    assert "write html.py" in row and "pyproject.toml" in row and "awaiting review" in row
+
+
+def test_cut_off_reply_is_logged_and_flagged(sandbox, monkeypatch):
+    reply = {"choices": [{"message": {"content": "<<<FILE a.py>>>\nx ="}, "finish_reason": "length"}],
+             "usage": {"prompt_tokens": 100, "completion_tokens": 24000}}
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: reply)
+    assert md.main(["--task", "x"]) == 1
+    assert "cut off at max_tokens" in md.LOG_PATH.read_text()
+    assert md.total_spend(md.LOG_PATH) > 0  # billed tokens are still counted
+
+
+def test_over_budget_stops_before_calling(sandbox, monkeypatch):
+    md.append_log(md.LOG_PATH, when=datetime.now(timezone.utc), model="m", task="t", sent=[],
+                  returned=[], usage=Usage(0, 0), cost=80.01)
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: pytest.fail("called over budget"))
+    assert md.main(["--task", "x"]) == 2
