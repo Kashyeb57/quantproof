@@ -67,9 +67,12 @@ pricing maths** in a graduate-school interview. So:
 
 Joyeb wants development to run mostly on Meta credits, not Claude cloud credits.
 
-- **Muse Spark 1.3 drafts new code** through `scripts/muse_draft.py`: send it the task, the relevant
-  files and these rules; it returns complete files. Claude Code then reviews every line, runs the
-  tests, fixes problems and commits. Never commit Muse output that has not been reviewed and tested.
+- **Muse drafts new code** through `scripts/muse_draft.py`: send it the task, the relevant
+  files and these rules. Since Oct 27 (owner's choice) drafts use Muse Wonder 1.0 with
+  `--model muse-wonder-1.0 --reasoning-effort low|medium`; without the effort setting it reasons
+  until the gateway cuts the stream at ~300 s. Split large tasks (code, then tests). Muse returns
+  complete files; Claude Code then reviews every line, runs the tests, fixes problems and commits.
+  Never commit Muse output that has not been reviewed and tested.
 - **Pricing maths** (`models/`, `payoffs/`, `valuation/`, `risk/`, `validation/`): Muse may draft, but
   Claude checks each formula against its docstring, the reference and independent tests before
   accepting it. Correctness beats credit savings here.
@@ -94,7 +97,8 @@ Joyeb wants development to run mostly on Meta credits, not Claude cloud credits.
 ## Cost awareness (~$150 of Meta credits)
 
 - Live API calls only when a task needs them; mock them in tests.
-- Default `muse-spark-1.3`; use `muse-wonder-1.0` only for payoff synthesis.
+- Product: default `muse-spark-1.3`; `muse-wonder-1.0` only for payoff synthesis. Development drafts use
+  `muse-wonder-1.0` (see the workflow above).
 - Use prompt caching for filing text. Log tokens and estimated cost for every live call.
 - The public app keeps its cost guard: per-session limit, daily spend cap, demo mode with cached runs.
 
