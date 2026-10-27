@@ -222,6 +222,18 @@ def chat(
                 usage = Usage(input_tokens=len(payload) // 4, output_tokens=max_tokens)
             cost = estimate_cost(model, usage)
             seconds = time.monotonic() - start
+            empty = not text and usage_dict is None
+            _log_call(log_path, model=model, purpose=purpose, usage=usage, cost=cost,
+                      seconds=seconds, finish_reason=finish_reason, attempts=attempt,
+                      usage_estimated=usage_estimated, empty_reply=empty)
+            if empty:
+                # Seen on Day 2: a stream that "finishes" with no content and no usage. It is
+                # logged above at its upper-bound cost in case it was billed, then retried.
+                if attempt >= MAX_ATTEMPTS:
+                    raise MetaAPIError(f"empty reply after {attempt} attempts", status=None,
+                                       detail="stream finished with no content and no usage")
+                sleep(2**attempt)
+                continue
             result = ChatResult(
                 text=text,
                 model=model,
@@ -232,27 +244,6 @@ def chat(
                 attempts=attempt,
                 usage_estimated=usage_estimated,
             )
-            if log_path is not None:
-                record = {
-                    "time": datetime.datetime.now(
-                        datetime.timezone.utc
-                    ).isoformat(),
-                    "model": model,
-                    "purpose": purpose,
-                    "input_tokens": usage.input_tokens,
-                    "cached_tokens": usage.cached_tokens,
-                    "output_tokens": usage.output_tokens,
-                    "reasoning_tokens": usage.reasoning_tokens,
-                    "cost_usd": cost,
-                    "seconds": seconds,
-                    "finish_reason": finish_reason,
-                    "attempts": attempt,
-                    "usage_estimated": usage_estimated,
-                }
-                log_file = Path(log_path)
-                log_file.parent.mkdir(parents=True, exist_ok=True)
-                with log_file.open("a", encoding="utf-8") as fh:
-                    fh.write(json.dumps(record) + "\n")
             return result
         except urllib.error.HTTPError as exc:
             detail = _read_http_error_body(exc)
@@ -282,6 +273,22 @@ def chat(
             sleep(2**attempt)
             continue
     raise AssertionError("unreachable")  # pragma: no cover
+
+
+def _log_call(log_path: Path | None, **fields) -> None:
+    """Append one JSON line per attempt that reached the model. Never message content or keys."""
+    if log_path is None:
+        return
+    record = {"time": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "model": fields.pop("model"), "purpose": fields.pop("purpose")}
+    usage = fields.pop("usage")
+    record.update(input_tokens=usage.input_tokens, cached_tokens=usage.cached_tokens,
+                  output_tokens=usage.output_tokens, reasoning_tokens=usage.reasoning_tokens,
+                  cost_usd=fields.pop("cost"), **fields)
+    log_file = Path(log_path)
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    with log_file.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(record) + "\n")
 
 
 def spend(log_path: Path = DEFAULT_LOG) -> float:

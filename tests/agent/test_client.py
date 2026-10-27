@@ -424,3 +424,25 @@ def test_missing_usage_is_charged_as_an_upper_bound(tmp_path):
     # 1000 output tokens at $4.25 per million alone is $0.00425.
     assert res.cost_usd > 0.00425
     assert json.loads(log.read_text())["usage_estimated"] is True
+
+
+def test_empty_reply_without_usage_is_logged_and_retried(tmp_path):
+    # Day 2 live glitch: "finish_reason": "stop" with no content and no usage at all.
+    empty = b'data: {"choices": [{"delta": {}, "finish_reason": "stop"}]}\n\ndata: [DONE]\n\n'
+    good = (b'data: {"choices": [{"delta": {"content": "{}"}, "finish_reason": "stop"}], '
+            b'"usage": {"prompt_tokens": 10, "completion_tokens": 5}}\n\ndata: [DONE]\n\n')
+    replies, slept, log = [empty, good], [], tmp_path / "calls.jsonl"
+    res = client.chat([], max_tokens=100, log_path=log, env={}, sleep=slept.append,
+                      urlopen=lambda req, timeout: io.BytesIO(replies.pop(0)))
+    assert (res.text, res.attempts, slept) == ("{}", 2, [2])
+    records = [json.loads(line) for line in log.read_text().splitlines()]
+    # Both attempts are logged; the empty one at its upper bound (all 100 max tokens).
+    assert [r["empty_reply"] for r in records] == [True, False]
+    assert records[0]["output_tokens"] == 100 and client.spend(log) > records[1]["cost_usd"]
+
+
+def test_empty_replies_give_up_after_max_attempts():
+    empty = b'data: {"choices": [{"delta": {}, "finish_reason": "stop"}]}\n\ndata: [DONE]\n\n'
+    with pytest.raises(client.MetaAPIError, match="empty reply"):
+        client.chat([], log_path=None, env={}, sleep=lambda s: None,
+                    urlopen=lambda req, timeout: io.BytesIO(empty))
