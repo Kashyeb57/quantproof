@@ -78,10 +78,10 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [ ] **Checkpoint (evening):** all must-haves green? If not, cut stretch items now. No new features after tonight except the app.
 
 ## Day 7 — Mon Nov 2: the app
-- [ ] `app/` Streamlit: EDGAR link/upload → TermSheet with citations and disagreements → confirm →
+- [x] `app/` Streamlit: EDGAR link/upload → TermSheet with citations and disagreements → confirm →
       proof checks → verdict (range vs bank value vs price) → real-world risk (labelled) → heatmap
-- [ ] Cost guard: per-session limit, daily spend cap, demo mode with cached runs
-- [ ] Deploy; secrets in the host; live URL tested on phone and laptop
+- [x] Cost guard: per-session limit (3 live extractions), daily spend cap $5 and lifetime cap $20 with pre-flight worst-case estimates, demo mode default with cached runs; live runs take ~80 s and cost ~$0.13 measured on the deployed app
+- [x] Deploy (Streamlit Community Cloud, secrets in the host): https://kashyeb57-quantproof-app-snew9v.streamlit.app/ — live run verified (~80 s, ~$0.13); phone/laptop check still to do in rehearsal
 
 ## Day 8 — Tue Nov 3: polish + record
 - [ ] README as a research note (brief section 13), including assumptions and limitations

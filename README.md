@@ -1,3 +1,5 @@
+Live app: https://kashyeb57-quantproof-app-snew9v.streamlit.app/
+
 # QuantProof
 
 QuantProof reads the SEC pricing supplement (a 424B2 filing) of a structured note and shows, under stated assumptions, an independently computed estimated-value range next to the bank's own estimated value and the issue price, plus how and when the note can lose money. Meta models extract the note's terms with a filing quote for every field and a second model cross-checks the extraction; our own engine does all the maths, and no payoff is priced until its code passes a proof battery of closed-form, limiting-case and monotonicity checks. Every number in a report comes from an engine output or a cited filing value, never from a model.
