@@ -69,6 +69,23 @@ def test_extract_and_crosscheck_verifies_quotes_and_agrees():
     assert note.cost_usd == pytest.approx(0.10)  # two fake extractions
 
 
+def test_staged_pipeline_matches_one_shot_and_progress_labels():
+    filing = live.filing_from_upload(FILING_BYTES)
+    extraction = live.extract_only(filing, chat=fake_chat)
+    note = live.finish_live_note(filing, "upload", extraction, chat=fake_chat)
+    assert note.unverified == ["downside.gearing"]
+    assert note.agreed is True
+    assert [step for step in live.PROGRESS_STEPS] == [
+        "Downloading the filing",
+        "Checking it is a 424B2 pricing supplement",
+        "Extracting terms with Muse Spark 1.3",
+        "Verifying quotes against the filing",
+        "Cross-checking with a second extraction",
+        "Done",
+    ]
+    assert "1-2 minutes" in live.LIVE_RUN_NOTICE
+
+
 def test_live_mode_refuses_any_other_model():
     filing = live.filing_from_upload(FILING_BYTES)
     with pytest.raises(ValueError, match="muse-spark-1.3 only"):

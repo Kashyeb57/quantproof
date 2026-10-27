@@ -31,6 +31,16 @@ from quantproof.ingest.html import Filing, read_filing
 
 LIVE_MODEL = "muse-spark-1.3"
 
+LIVE_RUN_NOTICE = "A live run takes about 1-2 minutes."
+PROGRESS_STEPS = (
+    "Downloading the filing",
+    "Checking it is a 424B2 pricing supplement",
+    "Extracting terms with Muse Spark 1.3",
+    "Verifying quotes against the filing",
+    "Cross-checking with a second extraction",
+    "Done",
+)
+
 MAX_FILING_CHARS_ENV = "QP_MAX_FILING_CHARS"
 DEFAULT_MAX_FILING_CHARS = 400_000
 
@@ -352,22 +362,24 @@ def filing_from_upload(data: bytes) -> Filing:
     return read_filing(data)
 
 
-def extract_and_crosscheck(
-    filing: Filing, source: str, *, chat, model: str = LIVE_MODEL
-) -> LiveNote:
-    """Extract with Muse Spark 1.3, verify quotes, cross-check. Live only.
-
-    Both the first and the second extraction use Muse Spark 1.3 (the
-    public app calls no other model; that makes the second extraction a
-    weaker independence check than a different model service, which the
-    UI states).  Quote verification happens inside
-    ``extract_termsheet``; unverified fields are listed, never hidden.
-    """
+def extract_only(filing: Filing, *, chat, model: str = LIVE_MODEL) -> Extraction:
+    """First extraction only (quotes verified inside); Muse Spark 1.3 only."""
     if model != LIVE_MODEL:
         raise ValueError(
             f"the public app uses {LIVE_MODEL} only, not {model!r}"
         )
-    extraction: Extraction = extract_termsheet(filing, chat=chat, model=LIVE_MODEL)
+    return extract_termsheet(filing, chat=chat, model=LIVE_MODEL)
+
+
+def finish_live_note(
+    filing: Filing, source: str, extraction: Extraction, *, chat,
+    model: str = LIVE_MODEL,
+) -> LiveNote:
+    """Cross-check a first extraction and build the LiveNote."""
+    if model != LIVE_MODEL:
+        raise ValueError(
+            f"the public app uses {LIVE_MODEL} only, not {model!r}"
+        )
     result: CrossCheck = crosscheck(
         filing,
         extraction,
@@ -392,6 +404,21 @@ def extract_and_crosscheck(
         model=LIVE_MODEL,
         cost_usd=cost,
     )
+
+
+def extract_and_crosscheck(
+    filing: Filing, source: str, *, chat, model: str = LIVE_MODEL
+) -> LiveNote:
+    """Extract with Muse Spark 1.3, verify quotes, cross-check. Live only.
+
+    Both the first and the second extraction use Muse Spark 1.3 (the
+    public app calls no other model; that makes the second extraction a
+    weaker independence check than a different model service, which the
+    UI states).  Quote verification happens inside
+    ``extract_termsheet``; unverified fields are listed, never hidden.
+    """
+    extraction = extract_only(filing, chat=chat, model=model)
+    return finish_live_note(filing, source, extraction, chat=chat, model=model)
 
 
 def unsupported_features(ts: TermSheet) -> list[tuple[str, str]]:

@@ -202,6 +202,7 @@ def run() -> None:
     if live_mode:
         url = st.text_input("EDGAR link to a 424B2 filing (.htm)")
         uploaded = st.file_uploader("Or upload a filing (.htm)", type=["htm", "html"])
+        _write(live.LIVE_RUN_NOTICE)
         fetch = st.button("Fetch and extract (uses real API credits)")
         if fetch:
             guard: live.LiveGuard = st.session_state.setdefault(
@@ -223,7 +224,18 @@ def run() -> None:
                     live_note = guard.cached_note(key)
                     _caption("Served from this session's cache (no new extraction).")
                 else:
-                    with st.spinner("Downloading filing (no credits spent yet)..."):
+                    import time as _time
+
+                    _started = _time.monotonic()
+
+                    def _step(message: str) -> None:
+                        _write(f"{message} ({_time.monotonic() - _started:.0f}s)")
+
+                    with st.status(
+                        f"Live run in progress. {live.LIVE_RUN_NOTICE}",
+                        expanded=True,
+                    ) as status:
+                        _step(live.PROGRESS_STEPS[0] + "...")
                         if data is None:
                             filing = live.filing_from_url(
                                 url.strip(),
@@ -231,25 +243,48 @@ def run() -> None:
                             )
                         else:
                             filing = live.filing_from_upload(data)
-                    live.check_filing_admissible(
-                        filing, max_chars=live.max_filing_chars()
-                    )
-                    estimate = live.estimate_live_cost(len(filing.text))
-                    _caption(
-                        f"Worst-case estimate for this live run: "
-                        f"${estimate:,.2f} (both extractions plus re-checks)."
-                    )
-                    with st.spinner("Extracting with Muse Spark 1.3..."):
+                        _step(live.PROGRESS_STEPS[1] + "...")
+                        live.check_filing_admissible(
+                            filing, max_chars=live.max_filing_chars()
+                        )
+                        estimate = live.estimate_live_cost(len(filing.text))
+                        _write(
+                            f"Worst-case estimate for this live run: "
+                            f"${estimate:,.2f} (both extractions plus re-checks)."
+                        )
+
+                        def _staged_run():
+                            _step(live.PROGRESS_STEPS[2] + "...")
+                            extraction = live.extract_only(
+                                filing, chat=_live_chat()
+                            )
+                            _step(
+                                live.PROGRESS_STEPS[3]
+                                + f": {len(extraction.checks) - len(extraction.unverified)}"
+                                f"/{len(extraction.checks)} quotes verified."
+                            )
+                            _step(live.PROGRESS_STEPS[4] + "...")
+                            return live.finish_live_note(
+                                filing, source, extraction, chat=_live_chat()
+                            )
+
                         live_note, _from_cache = guard.get_or_extract(
                             key,
-                            lambda: live.extract_and_crosscheck(
-                                filing, source, chat=_live_chat()
-                            ),
+                            _staged_run,
                             spent_today=live.daily_spend(),
                             cap=cap,
                             estimate=estimate,
                             spent_total=live.total_spend(),
                             total_cap=total_cap,
+                        )
+                        _step(live.PROGRESS_STEPS[5] + ".")
+                        status.update(
+                            label=(
+                                f"Live run done in "
+                                f"{_time.monotonic() - _started:.0f}s. "
+                                f"{live.LIVE_RUN_NOTICE}"
+                            ),
+                            state="complete",
                         )
                 st.session_state["live_note"] = live_note
             except live.LiveRefused as refused:

@@ -49,3 +49,4 @@ def test_app_shows_remaining_runs_in_live_mode():
     rendered = "\n".join(str(el.value) for el in at.markdown)
     assert "Live runs remaining in this session: 3 of 3" in rendered
     assert "Live mode is available today" in rendered
+    assert live.LIVE_RUN_NOTICE in rendered
