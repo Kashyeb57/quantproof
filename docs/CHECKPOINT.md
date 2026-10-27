@@ -33,15 +33,22 @@ Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://githu
   the hand-built term sheet; 77/77 quotes verify; gearing flagged (not in the filing).
 - `scripts/muse_draft.py` now uses `client.chat`. Dev spend $0.60 of $80. Tests: 1,167 pass.
 
+## Done since (Oct 27, late)
+- Value-support check in `validation/quotes.py`: a quote must show its value (number forms,
+  percents, dates, call premiums as % of notional); reordered passages reported "out of order".
+  It caught 55 label-only quotes in the hand-built fixture (fixed) and "..."-shortened lists in
+  Muse's quotes (prompt now requires full lists, passages in filing order). Recorded JPM reply
+  re-recorded: 77/77 quotes found and show their value; gearing flagged.
+- `ingest/edgar.py`: `EdgarClient` (`get`, `get_json`, `recent_filings`, `search`,
+  `fetch_filing` with images), cache in `.cache/edgar/`, 5 requests/s, 60 s timeout.
+- API glitch seen twice: no usage + reply cut off despite "stop"; callers check completeness.
+- Dev spend $1.00 of $80. Tests: 1,203 pass.
+
 ## Next (in order)
-1. Value-support check (Day 4 proof battery, or sooner): a quote must contain its value (dates
-   as written, percent forms of fractions, call premium %). Hand-built fixture quotes such as
-   "Review Dates*:" would fail it; the model's quotes are stronger.
-2. `ingest/edgar.py` EDGAR fetch: User-Agent from `SEC_USER_AGENT` (required, never logged), well
-   under 10 requests/s, every download cached in `.cache/edgar/`; tests offline with fakes.
-3. Extraction on 3 more filings (single-underlying, contingent coupon, buffered): needs filings.
-4. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`.
-5. Joyeb: read the JPM key terms himself (table in the chat); derive d1/d2.
+1. Extraction + quote verification on 3 more real filings from EDGAR: one single-underlying,
+   one with a contingent coupon, one buffered; save each as a fixture with a recorded reply.
+2. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`.
+3. Joyeb: read the JPM key terms himself (guide ch. 4 p. 23, then the filing); derive d1/d2.
 
 ## Environment facts
 - Meta key is a **network secret** (proxy adds the header); `MODEL_API_KEY` not set. `/v1/models`
