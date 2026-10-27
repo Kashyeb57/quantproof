@@ -73,6 +73,15 @@ Joyeb wants development to run mostly on Meta credits, not Claude cloud credits.
 - **Pricing maths** (`models/`, `payoffs/`, `valuation/`, `risk/`, `validation/`): Muse may draft, but
   Claude checks each formula against its docstring, the reference and independent tests before
   accepting it. Correctness beats credit savings here.
+- **Claude credits are the scarce ones; Meta credits do the work.** Concretely:
+  - Specs to Muse are short: the interfaces, the rules that matter, the tests that must pass.
+  - Review findings go back to Muse as a short issue list (`muse_draft.py` with the file as
+    `--context`); Claude edits by hand only one-line fixes and pricing maths.
+  - Failing tests go to Muse with `muse_draft.py --pytest <test path>`, which runs pytest and sends
+    the failure output with the task.
+  - Claude reviews from test results and `git diff`, and reads whole files only for pricing maths
+    (`models/`, `payoffs/`, `valuation/`, `risk/`, `validation/`) and security-sensitive code.
+  - Live API experiments run as one script, not as many interactive steps.
 - **Log every development call** (task, files, tokens, estimated cost) in `docs/MUSE_DEV_LOG.md`. It
   feeds the submission answer "use of Meta products to build the project".
 - **Budget:** up to $80 of Meta credits for development; keep at least $50 for the product and demo.
