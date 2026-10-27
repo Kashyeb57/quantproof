@@ -20,6 +20,12 @@ them, so only check 1 applies. Their machine values (``True``/``False`` or
 enum names) rarely appear verbatim in a filing; a human reads those quotes in
 the validation report to confirm the extraction.
 
+Two extra support rules live in :func:`verify_termsheet`:
+
+- A buffer ``downside.level`` quoted as a Buffer Amount must show ``1 - level``.
+- A trigger/barrier/level of exactly 1.0 may be quoted as the Initial (or
+  Strike) Value without a percent sign.
+
 No AI, no network. Pure Python standard library only.
 """
 
@@ -32,7 +38,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
-from quantproof.core.termsheet import TermSheet
+from quantproof.core.termsheet import DownsideKind, TermSheet
 
 #: A normalised quote (or ellipsis piece) shorter than this is too short to be
 #: evidence (e.g. "70%" matches almost any filing).
@@ -303,6 +309,33 @@ def value_in_quote(
     return False
 
 
+#: Fields holding a level as a fraction of initial, which filings sometimes write indirectly.
+_LEVEL_PATHS = ("autocall.trigger", "coupon.barrier", "downside.level")
+#: Names of the initial level; "at or above the Initial Value" is a level of exactly 1.0.
+_INITIAL_LEVEL_NAMES = ("initialvalue", "strikevalue", "initiallevel")
+
+
+def _level_support(path: str, value: Any, quote: str, ts: TermSheet) -> bool | None:
+    """Support rules for levels that a filing states indirectly; None if no rule applies.
+
+    - A buffer quoted as a "Buffer Amount" states 1 - level: "Buffer Amount: 40.00%" means
+      losses start at 0.60 of initial, so it supports 0.60 and not 0.40.
+    - A quote with no percent that names the initial level ("greater than or equal to the
+      Initial Value") supports exactly 1.0. "80.00% of the Initial Value" has a percent, so
+      the ordinary check applies and it does not support 1.0.
+    """
+    if path not in _LEVEL_PATHS:
+        return None
+    # Compare without spaces so "Buffer Amount" and "BufferAmount" match alike.
+    compact = normalise_for_match(re.sub(r"\.{3,}|…", " ", quote)).replace(" ", "")
+    if (path == "downside.level" and ts.downside.kind.value is DownsideKind.BUFFER
+            and "bufferamount" in compact):
+        return value_in_quote(round(1.0 - value, 10), quote) is True
+    if value == 1.0 and "%" not in quote and any(n in compact for n in _INITIAL_LEVEL_NAMES):
+        return True
+    return None
+
+
 @dataclass(frozen=True)
 class QuoteCheck:
     """Result of checking one cited field against the filing text."""
@@ -336,6 +369,12 @@ def verify_termsheet(ts: TermSheet, filing_text: str) -> list[QuoteCheck]:
        appear verbatim -- a human reads those quotes in the validation
        report) or ``True``, the ``"found"`` result stands.
 
+    Extra support rules:
+
+    Levels (``autocall.trigger``, ``coupon.barrier``, ``downside.level``) first go through
+    :func:`_level_support`: a buffer quoted as a "Buffer Amount" must show ``1 - level``, and
+    a quote naming "the Initial Value" without a percent supports exactly 1.0.
+
     Returns the checks in ``cited_fields`` order.
     """
     normalised_text = normalise_for_match(filing_text)
@@ -350,12 +389,14 @@ def verify_termsheet(ts: TermSheet, filing_text: str) -> list[QuoteCheck]:
         if verified:
             field_value = cited.value
             per_notional = path.endswith(".call_amount") or path == "coupon.amount"
-            support = value_in_quote(
-                field_value,
-                cited.citation.quote,
-                notional=notional_value,
-                per_notional=per_notional,
-            )
+            support = _level_support(path, field_value, cited.citation.quote, ts)
+            if support is None:
+                support = value_in_quote(
+                    field_value,
+                    cited.citation.quote,
+                    notional=notional_value,
+                    per_notional=per_notional,
+                )
             if support is False:
                 verified = False
                 reason = f"value not in quote: {field_value}"

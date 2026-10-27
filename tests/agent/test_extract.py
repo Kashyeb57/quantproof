@@ -94,12 +94,12 @@ def _reply() -> dict:
         "downside": {
             "kind": {
                 "value": "buffer",
-                "quote": "Buffered downside with Buffer Amount 90.00%",
+                "quote": "Buffered downside with Buffer Threshold 90.00%",
                 "section": "Key Terms",
             },
             "level": {
                 "value": 0.9,
-                "quote": "Buffer Amount 90.00% of Initial Level",
+                "quote": "Buffer Threshold 90.00% of Initial Level",
                 "section": "Key Terms",
             },
             "observation": {
@@ -137,6 +137,8 @@ def _reply() -> dict:
                 "section": "Key Terms",
             },
         },
+        "upside": None,
+        "unsupported_features": [],
         "estimated_value": {
             "value": 940.0,
             "quote": "Estimated value of $940.00 per note",
@@ -171,8 +173,8 @@ FILING_TEXT = "\n".join(
         "Issue Date: 2025-06-05",
         "Maturity Date: 2027-06-07",
         "Final Review Date: 2027-06-02",
-        "Buffered downside with Buffer Amount 90.00%",
-        "Buffer Amount 90.00% of Initial Level",
+        "Buffered downside with Buffer Threshold 90.00%",
+        "Buffer Threshold 90.00% of Initial Level",
         "observed on the Final Review Date only",
         "Coupon Barrier Amount 70.00% of Initial Level",
         "Contingent coupon of $25.00 per $1,000 note",
@@ -255,6 +257,8 @@ def test_to_termsheet_maps_every_field() -> None:
     assert ts.estimated_value_floor is None
     assert ts.max_selling_commission is not None and ts.max_selling_commission.value == 30.0
     assert ts.missing_or_ambiguous == []
+    assert ts.upside is None
+    assert ts.unsupported_features == []
     # Coupon observations parse from the two cited lists with per-item citations.
     obs = ts.coupon.observations
     assert len(obs) == 3
@@ -548,3 +552,105 @@ def test_prompt_distinguishes_coupon_dates_from_call_dates() -> None:
 def test_prompt_states_call_amounts_exclude_coupon() -> None:
     assert "Contingent Interest Payment" in extract.SYSTEM_PROMPT
     assert "coupon is not added" in extract.SYSTEM_PROMPT
+
+
+def test_upside_present_with_cap_values_and_citations() -> None:
+    reply = _reply()
+    reply["upside"] = {
+        "leverage": {
+            "value": 2.0,
+            "quote": "Upside Leverage Factor: 2.00 on the upside return",
+            "section": "Key Terms",
+        },
+        "cap": {
+            "value": 0.25,
+            "quote": "Maximum Return: 25.00% of the Initial Level",
+            "section": "Key Terms",
+        },
+    }
+    ts = to_termsheet(reply)
+    assert ts.upside is not None
+    assert ts.upside.leverage.value == 2.0
+    assert ts.upside.cap is not None and ts.upside.cap.value == 0.25
+    assert ts.upside.leverage.citation.quote == "Upside Leverage Factor: 2.00 on the upside return"
+    assert ts.upside.cap.citation.quote == "Maximum Return: 25.00% of the Initial Level"
+    by_path = dict(ts.cited_fields())
+    assert by_path["upside.leverage"].value == 2.0
+    assert by_path["upside.cap"].value == 0.25
+
+
+def test_upside_present_with_cap_null() -> None:
+    reply = _reply()
+    reply["upside"] = {
+        "leverage": {
+            "value": 1.5,
+            "quote": "Upside Leverage Factor: 1.50 on any appreciation",
+            "section": "Key Terms",
+        },
+        "cap": None,
+    }
+    ts = to_termsheet(reply)
+    assert ts.upside is not None
+    assert ts.upside.leverage.value == 1.5
+    assert ts.upside.cap is None
+
+
+def test_upside_null_means_no_upside() -> None:
+    reply = _reply()
+    reply["upside"] = None
+    ts = to_termsheet(reply)
+    assert ts.upside is None
+
+
+def test_missing_upside_key_is_a_problem() -> None:
+    reply = _reply()
+    del reply["upside"]
+    with pytest.raises(ExtractionError) as excinfo:
+        to_termsheet(reply)
+    assert any("upside" in p for p in excinfo.value.problems)
+
+
+def test_unsupported_features_two_entries_with_paths() -> None:
+    reply = _reply()
+    reply["unsupported_features"] = [
+        {
+            "value": "Digital return",
+            "quote": "Digital return of 12.00% if the index closes above target level",
+            "section": "Key Terms",
+        },
+        {
+            "value": "Absolute return",
+            "quote": "Absolute return feature pays the absolute performance described here",
+            "section": "Key Terms",
+        },
+    ]
+    ts = to_termsheet(reply)
+    assert len(ts.unsupported_features) == 2
+    assert ts.unsupported_features[0].value == "Digital return"
+    assert ts.unsupported_features[1].value == "Absolute return"
+    assert ts.unsupported_features[0].citation.quote.startswith("Digital return")
+    assert ts.unsupported_features[1].citation.quote.startswith("Absolute return")
+    by_path = dict(ts.cited_fields())
+    assert by_path["unsupported_features[0]"].value == "Digital return"
+    assert by_path["unsupported_features[1]"].value == "Absolute return"
+
+
+def test_unsupported_features_empty_list_stays_empty() -> None:
+    ts = to_termsheet(_reply())
+    assert ts.unsupported_features == []
+
+
+def test_missing_unsupported_features_key_is_a_problem() -> None:
+    reply = _reply()
+    del reply["unsupported_features"]
+    with pytest.raises(ExtractionError) as excinfo:
+        to_termsheet(reply)
+    assert any("unsupported_features" in p for p in excinfo.value.problems)
+
+
+def test_unsupported_features_non_list_is_a_problem() -> None:
+    reply = _reply()
+    reply["unsupported_features"] = "not a list"
+    with pytest.raises(ExtractionError) as excinfo:
+        to_termsheet(reply)
+    assert any("unsupported_features" in p for p in excinfo.value.problems)

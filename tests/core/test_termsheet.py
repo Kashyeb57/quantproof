@@ -3,7 +3,7 @@ from datetime import date
 
 import pytest
 
-from quantproof.core import Cited, ContingentCoupon, CouponObservation, Dependency
+from quantproof.core import Cited, ContingentCoupon, CouponObservation, Dependency, Upside
 
 
 def _valid_coupon() -> ContingentCoupon:
@@ -125,3 +125,30 @@ def test_rejects_coupon_barrier_outside_unit_interval(jpm_38582_termsheet):
         replace(ts, coupon=replace(_valid_coupon(), barrier=Cited(0.0)))
     with pytest.raises(ValueError, match="fraction"):
         replace(ts, coupon=replace(_valid_coupon(), barrier=Cited(1.5)))
+
+
+def test_rejects_upside_leverage_nonpositive(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    # Tolerance is exact: any leverage <= 0 is rejected by TermSheet.__post_init__.
+    with pytest.raises(ValueError, match="leverage must be positive"):
+        replace(ts, upside=Upside(leverage=Cited(0.0), cap=None))
+    with pytest.raises(ValueError, match="leverage must be positive"):
+        replace(ts, upside=Upside(leverage=Cited(-1.0), cap=None))
+
+
+def test_rejects_upside_cap_nonpositive(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    with pytest.raises(ValueError, match="cap must be positive"):
+        replace(ts, upside=Upside(leverage=Cited(2.0), cap=Cited(0.0)))
+    with pytest.raises(ValueError, match="cap must be positive"):
+        replace(ts, upside=Upside(leverage=Cited(2.0), cap=Cited(-0.1)))
+
+
+def test_upside_cap_none_is_allowed(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    uncapped = replace(ts, upside=Upside(leverage=Cited(2.0), cap=None))
+    assert uncapped.upside is not None
+    assert uncapped.upside.leverage.value == 2.0
+    assert uncapped.upside.cap is None
+    capped = replace(ts, upside=Upside(leverage=Cited(1.5), cap=Cited(0.25)))
+    assert capped.upside.cap.value == 0.25

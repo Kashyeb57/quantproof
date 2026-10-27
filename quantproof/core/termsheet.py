@@ -109,6 +109,19 @@ class ContingentCoupon:
 
 
 @dataclass
+class Upside:
+    """Upside participation at maturity.
+
+    At maturity, if the final level of the (worst) underlying is above its initial level,
+    the note pays notional x (1 + min(leverage x return, cap)); cap is the maximum return
+    as a fraction (25.00% -> 0.25), None if uncapped.
+    """
+
+    leverage: Cited[float]
+    cap: Cited[float] | None = None
+
+
+@dataclass
 class Downside:
     kind: Cited[DownsideKind]
     level: Cited[float]  # barrier or buffer level, as a fraction of initial
@@ -135,10 +148,13 @@ class TermSheet:
     # Payoff features (each optional; templates check which are present)
     autocall: Autocall | None = None
     coupon: ContingentCoupon | None = None
+    upside: Upside | None = None
     # The bank's own disclosures (comparison points, never calibration targets)
     estimated_value: Cited[float] | None = None
     estimated_value_floor: Cited[float] | None = None
     max_selling_commission: Cited[float] | None = None
+    # Payoff features this schema cannot hold; a note with any is not priced by the templates.
+    unsupported_features: list[Cited[str]] = field(default_factory=list)
     # Anything the extractor could not determine
     missing_or_ambiguous: list[str] = field(default_factory=list)
 
@@ -175,6 +191,11 @@ class TermSheet:
                 raise ValueError("coupon amount must be positive")
             if not 0 < self.coupon.barrier.value <= 1:
                 raise ValueError("coupon barrier must be a fraction of initial in (0, 1]")
+        if self.upside is not None:
+            if not self.upside.leverage.value > 0:
+                raise ValueError("upside leverage must be positive")
+            if self.upside.cap is not None and not self.upside.cap.value > 0:
+                raise ValueError("upside cap must be positive when set")
 
     @property
     def n_underlyings(self) -> int:

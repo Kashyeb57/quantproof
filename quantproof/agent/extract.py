@@ -29,6 +29,7 @@ from quantproof.core.termsheet import (
     DownsideKind,
     TermSheet,
     Underlying,
+    Upside,
 )
 from quantproof.ingest.html import Filing
 from quantproof.validation.quotes import QuoteCheck, verify_termsheet
@@ -45,6 +46,10 @@ A cited field "F" is an object {"value": ..., "quote": "...", "section": ...}.
   label). Keep it short: one sentence or one table row, under 300 characters.
   Join two separate passages with "..." only when needed, in the order they
   appear in the filing.
+- For a value in a table, quote the row: the row's name, then the cells in the
+  order they appear. For example "Common stock of Amazon.com, Inc. ... AMZN $251.19"
+  is wrong because of the ellipsis; quote "Common stock of Amazon.com, Inc., par value
+  $0.01 per share AMZN $251.19".
 - For a list value (autocall.review_dates, autocall.payment_dates,
   autocall.call_amounts, coupon.review_dates, coupon.payment_dates) the quote must
   show every value in the list: quote the whole list or table, and never use "..." to
@@ -84,6 +89,8 @@ Return a single JSON object with exactly these top level keys:
 - coupon: null or {"barrier": F(fraction), "amount": F(number), "memory": F(bool),
   "review_dates": F(list of "YYYY-MM-DD"),
   "payment_dates": F(list of "YYYY-MM-DD")}.
+- upside: null or {"leverage": F(number), "cap": F(fraction) or null}.
+- unsupported_features: list of F(str).
 - estimated_value: F(number) or null.
 - estimated_value_floor: F(number) or null.
 - max_selling_commission: F(number) or null.
@@ -95,7 +102,7 @@ What the fields mean:
 - issue_price: the price to the public of one note.
 - is_preliminary: true for a preliminary pricing supplement (terms subject to completion).
 - dependency: "worst_of" when the payoff follows the lesser performing underlying; also use
-  "worst_of" for a single underlying.
+  "worst_of" for a single underlying (then quote the passage naming that underlying).
 - initial_level: the underlying's initial value as a number, when the filing states it.
 - reference_level / reference_date: the most recent closing level the filing quotes for the
   underlying and the date of that close (for example "The closing level of the ... Index on
@@ -105,6 +112,8 @@ What the fields mean:
 - downside.kind: "barrier" if, once the final level is below the barrier, the holder loses 1%
   for every 1% the underlying fell from its initial level; "buffer" if only losses beyond the
   buffer are borne. downside.level is that barrier or buffer as a fraction of initial.
+- downside.level: for a buffer, downside.level is where losses start: a Buffer Amount
+  of 40.00% gives level 0.60; a "Buffer Threshold" of 82.50% gives 0.825.
 - downside.observation: "final_only" if the barrier is checked only on the final review date,
   "each_review" if on every review date, "daily" if every trading day.
 - downside.gearing: loss per 1% below the level, only when the filing states one; else null.
@@ -115,6 +124,13 @@ What the fields mean:
   autocall.review_dates; coupon.payment_dates: the matching interest payment dates.
 - coupon: a contingent coupon paid when the underlyings are at or above a coupon barrier;
   null if the note pays no coupon. memory is true if missed coupons are paid later.
+- upside.leverage: the upside leverage / participation factor (for example 2.00 for
+  "Upside Leverage Factor: 2.00"). upside.cap: the maximum return as a fraction
+  (25.00% becomes 0.25); null when the upside is uncapped.
+- unsupported_features: every payoff feature not covered by these fields (for example
+  a digital return or an absolute return on the downside). A barrier checked daily or on
+  every review date is not one: downside.observation covers it. Each entry's
+  value is the feature's name as the filing writes it and its quote is the passage defining it.
 - estimated_value: the issuer's estimated value of one note (e.g. "approximately $954.00
   per $1,000"); estimated_value_floor: the stated minimum for it ("will not be less than");
   max_selling_commission: the maximum selling commission per note.
@@ -220,7 +236,9 @@ def to_termsheet(data: dict) -> TermSheet:
     BarrierObservation; numbers become float. The autocall's three cited lists are zipped into
     AutocallObservation objects and the coupon's two cited lists are zipped into
     CouponObservation objects, each value with its own Citation carrying the list's quote.
-    A null downside gearing keeps the dataclass default.
+    A null downside gearing keeps the dataclass default. upside is a required top-level key
+    (null means no upside participation); unsupported_features is a required top-level key
+    holding a list of cited feature names.
 
     Every problem (missing key, wrong type, bad date, unknown enum, list lengths differ, empty
     quote) is collected and raised together as one ExtractionError, so a bad reply is reported
@@ -421,6 +439,27 @@ def to_termsheet(data: dict) -> TermSheet:
                 coupon = ContingentCoupon(barrier=barrier, amount=amount, memory=memory,
                                           observations=observations)
 
+    # --- upside -------------------------------------------------------------------------------
+
+    upside = None
+    if (raw := obj(data, "upside", "upside", allow_null=True)) is not None:
+        leverage = cited(raw, "leverage", "upside.leverage", as_number)
+        cap = cited(raw, "cap", "upside.cap", as_number, allow_null=True)
+        if leverage is not None:
+            upside = Upside(leverage=leverage, cap=cap)
+
+    # --- unsupported_features -----------------------------------------------------------------
+
+    unsupported_features: list[Cited[str]] = []
+    raw_unsupported = data.get("unsupported_features")
+    if not isinstance(raw_unsupported, list):
+        problems.append("unsupported_features: expected a list of cited fields")
+    else:
+        for i, entry in enumerate(raw_unsupported):
+            parsed = cited({"v": entry}, "v", f"unsupported_features[{i}]", as_str)
+            if parsed is not None:
+                unsupported_features.append(parsed)
+
     # --- missing_or_ambiguous -----------------------------------------------------------------
 
     missing = data.get("missing_or_ambiguous")
@@ -432,7 +471,9 @@ def to_termsheet(data: dict) -> TermSheet:
         raise ExtractionError(problems)
     try:
         return TermSheet(underlyings=underlyings, downside=downside, autocall=autocall,
-                         coupon=coupon, missing_or_ambiguous=list(missing), **fields)
+                         coupon=coupon, upside=upside,
+                         unsupported_features=list(unsupported_features),
+                         missing_or_ambiguous=list(missing), **fields)
     except ValueError as exc:
         raise ExtractionError([str(exc)]) from exc
 

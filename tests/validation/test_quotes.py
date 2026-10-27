@@ -7,6 +7,18 @@ import enum
 from datetime import date
 from pathlib import Path
 
+from quantproof.core.termsheet import (
+    Autocall,
+    AutocallObservation,
+    BarrierObservation,
+    Cited,
+    Citation,
+    Dependency,
+    Downside,
+    DownsideKind,
+    TermSheet,
+    Underlying,
+)
 from quantproof.ingest.html import read_filing
 from quantproof.validation.quotes import (
     MIN_QUOTE_CHARS,
@@ -347,3 +359,140 @@ def test_reordered_passages_are_reported_as_out_of_order() -> None:
     normalised = normalise_for_match("Call Premium Amount is set below. Later: equal to $1,000 plus it.")
     verified, reason = verify_quote("equal to $1,000 plus it ... Call Premium Amount is set", normalised)
     assert verified is False and reason.startswith("out of order:")
+
+
+def _small_termsheet(
+    *,
+    downside_kind: DownsideKind,
+    downside_level: float,
+    downside_quote: str,
+    trigger: float | None = None,
+    trigger_quote: str | None = None,
+) -> tuple[TermSheet, str]:
+    """Build a minimal one-underlying TermSheet plus a filing text containing every quote.
+
+    Every non-target quote contains its own value, so only the target level/trigger
+    determines its check. Filing text is the join of all quotes, so quote presence passes.
+    """
+    def _c(value, quote: str) -> Cited:
+        return Cited(value, Citation(quote, "Key Terms"))
+
+    autocall = None
+    if trigger is not None:
+        assert trigger_quote is not None
+        autocall = Autocall(
+            trigger=_c(trigger, trigger_quote),
+            observations=[
+                AutocallObservation(
+                    review_date=_c(date(2027, 6, 2), "Review Date: 2027-06-02 single valuation date here"),
+                    payment_date=_c(date(2027, 6, 7), "Payment Date: 2027-06-07 final settlement payment here"),
+                    call_amount=_c(1000.0, "Call Amount: $1,000 per note if called early feature"),
+                )
+            ],
+        )
+    ts = TermSheet(
+        issuer=_c("Test Bank LLC", "Issuer: Test Bank LLC offering documents for notes"),
+        is_preliminary=_c(False, "This pricing supplement sets forth final terms for the notes"),
+        underlyings=[
+            Underlying(
+                name=_c("Test Index", "Underlying: Test Index linked notes performance"),
+                ticker=_c("TST", "Ticker TST for the underlying asset class here"),
+            )
+        ],
+        dependency=_c(Dependency.WORST_OF, "Payments based on the worst-of performance of the underlyings"),
+        notional=_c(1000.0, "Notional per note: $1,000 payable at maturity date"),
+        issue_price=_c(1000.0, "Issue price: $1,000 per note on settlement date here"),
+        pricing_date=_c(date(2025, 6, 2), "Pricing Date: 2025-06-02 as stated in terms here"),
+        issue_date=_c(date(2025, 6, 5), "Issue Date: 2025-06-05 settlement of the notes here"),
+        maturity_date=_c(date(2027, 6, 7), "Maturity Date: 2027-06-07 final payment date here"),
+        final_review_date=_c(date(2027, 6, 2), "Final Review Date: 2027-06-02 valuation date here"),
+        downside=Downside(
+            kind=_c(downside_kind, "Buffered downside with protection feature described here"),
+            level=_c(downside_level, downside_quote),
+            observation=_c(BarrierObservation.FINAL_ONLY, "observed on the Final Review Date only for this note"),
+        ),
+        autocall=autocall,
+        unsupported_features=[],
+        missing_or_ambiguous=[],
+    )
+    filing_text = "\n".join(
+        c.citation.quote for _, c in ts.cited_fields() if c.citation is not None
+    )
+    return ts, filing_text
+
+
+def test_buffer_amount_supports_complement_level() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.60,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["downside.level"].verified is True
+
+
+def test_buffer_amount_does_not_support_same_number() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.40,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["downside.level"].verified is False
+    assert by_path["downside.level"].reason.startswith("value not in quote:")
+
+
+def test_buffer_threshold_supports_stated_percent() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.825,
+        downside_quote="Buffer Threshold: 82.50% of its Strike Value as stated here",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["downside.level"].verified is True
+
+
+def test_initial_value_phrase_supports_trigger_one() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.60,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+        trigger=1.0,
+        trigger_quote="The notes are called if the level is greater than or equal to the Initial Value stated",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["autocall.trigger"].verified is True
+
+
+def test_percent_of_initial_does_not_support_trigger_one() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.60,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+        trigger=1.0,
+        trigger_quote="Call Trigger: 80.00% of the Initial Value as stated herein",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["autocall.trigger"].verified is False
+
+
+def test_hundred_percent_of_initial_supports_trigger_one() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BUFFER,
+        downside_level=0.60,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+        trigger=1.0,
+        trigger_quote="Call Trigger: 100.00% of its Initial Value as stated herein",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["autocall.trigger"].verified is True
+
+
+def test_barrier_level_with_buffer_amount_quote_not_supported() -> None:
+    ts, filing_text = _small_termsheet(
+        downside_kind=DownsideKind.BARRIER,
+        downside_level=0.60,
+        downside_quote="Buffer Amount: 40.00% of the Initial Level protection here",
+    )
+    by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
+    assert by_path["downside.level"].verified is False

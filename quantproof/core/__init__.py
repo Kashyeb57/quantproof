@@ -15,10 +15,11 @@ from quantproof.core.termsheet import (
     DownsideKind,
     TermSheet,
     Underlying,
+    Upside,
 )
 
 __all__ = [
     "Autocall", "AutocallObservation", "BarrierObservation", "Citation", "Cited",
     "ContingentCoupon", "CouponObservation", "Dependency", "Downside", "DownsideKind",
-    "MarketInputs", "Measure", "PricingResult", "TermSheet", "Underlying",
+    "MarketInputs", "Measure", "PricingResult", "TermSheet", "Underlying", "Upside",
 ]
