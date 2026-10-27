@@ -849,7 +849,10 @@ def check_convergence(ts: TermSheet, market: MarketInputs, n_paths: int, seed: i
     worst ratio (furthest from 0.5), ``reference`` 0.5, ``tolerance`` 0.1.
     """
     ts_check, market_single, closed_form, _ = _barrier_at_maturity_setup(ts, market)
-    counts = (n_paths // 16, n_paths // 4, n_paths)
+    # m, 4m, 16m with m even: antithetic sampling needs an even path count, and an exact
+    # factor of 4 keeps the expected SE ratio at exactly 1/2 (equals n/16, n/4, n when 32 | n).
+    m = 2 * (n_paths // 32)
+    counts = (m, 4 * m, 16 * m)
     rows: list[dict] = []
     prices: list[float] = []
     ses: list[float] = []
