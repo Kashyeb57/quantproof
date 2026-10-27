@@ -3,13 +3,20 @@
 from __future__ import annotations
 
 import copy
+import enum
+from datetime import date
 from pathlib import Path
 
 from quantproof.ingest.html import read_filing
 from quantproof.validation.quotes import (
     MIN_QUOTE_CHARS,
     QuoteCheck,
+    date_forms,
     normalise_for_match,
+    number_forms,
+    percent_forms,
+    value_forms,
+    value_in_quote,
     verify_quote,
     verify_termsheet,
 )
@@ -82,7 +89,8 @@ def test_verify_quote_ellipsis_reverse_order_not_found() -> None:
     normalised = normalise_for_match(filing)
     verified, reason = verify_quote("second passage ... first passage", normalised)
     assert verified is False
-    assert reason.startswith("not found:")
+    # Still rejected; the reason now says the text exists but comes before the previous piece.
+    assert reason.startswith("out of order:")
     assert "first passage" in reason
 
 
@@ -178,3 +186,164 @@ def test_period_inside_a_number_is_part_of_the_token() -> None:
 def test_four_dots_count_as_an_ellipsis() -> None:
     normalised = normalise_for_match("The notes are not bank deposits. They are not insured.")
     assert verify_quote("The notes are not bank deposits.... not insured", normalised) == (True, "found")
+
+
+def test_number_forms_examples() -> None:
+    forms_954 = number_forms(954.0)
+    assert "954" in forms_954
+    assert "954.0" in forms_954
+    assert "954.00" in forms_954
+    assert "954.000000" in forms_954
+    forms_large = number_forms(2341.377)
+    assert "2,341.377" in forms_large
+    assert "2341.377" in forms_large
+    assert "2,341.3770" in forms_large
+    assert "2341.3770" in forms_large
+    # 2341.377 needs 3 decimals, so integer forms must be absent.
+    assert "2,341" not in forms_large
+    assert "2341" not in forms_large
+    forms_1000 = number_forms(1000.0)
+    assert "1,000" in forms_1000
+    assert "1000" in forms_1000
+
+
+def test_percent_forms_examples() -> None:
+    forms_70 = percent_forms(0.70)
+    assert "70%" in forms_70
+    assert "70.0%" in forms_70
+    assert "70.00%" in forms_70
+    forms_975 = percent_forms(0.0975)
+    assert "9.75%" in forms_975
+    assert "9.750%" in forms_975
+    assert "9.7500%" in forms_975
+    # Needs 2 decimals, so 1-decimal and integer forms must be absent.
+    assert "9.7%" not in forms_975
+    assert "10%" not in forms_975
+
+
+def test_date_forms_examples() -> None:
+    forms = date_forms(date(2026, 12, 2))
+    expected = {
+        "December 2, 2026",
+        "December 02, 2026",
+        "Dec. 2, 2026",
+        "Dec 2, 2026",
+        "2 December 2026",
+        "2026-12-02",
+        "12/2/2026",
+        "12/02/2026",
+    }
+    for text in expected:
+        assert text in forms
+
+
+def test_value_in_quote_barrier_percent() -> None:
+    quote = "Barrier Amount: With respect to each Index, 70.00% of its Initial Value"
+    assert value_in_quote(0.70, quote) is True
+    assert value_in_quote(0.75, quote) is False
+
+
+def test_value_in_quote_review_dates() -> None:
+    assert value_in_quote(date(2026, 12, 2), "Review Dates*:") is False
+    assert (
+        value_in_quote(date(2026, 12, 2), "Review Dates*: December 2, 2026, February 25, 2027")
+        is True
+    )
+
+
+def test_value_in_quote_call_amount_per_notional() -> None:
+    quote = "first Review Date: at least 9.7500% \u00d7 $1,000"
+    assert value_in_quote(1097.5, quote, notional=1000.0, per_notional=True) is True
+    # Without per_notional the premium-percent spelling does not apply.
+    assert value_in_quote(1097.5, quote) is False
+    assert value_in_quote(1097.5, quote, notional=1000.0, per_notional=False) is False
+
+
+def test_value_in_quote_approx_954() -> None:
+    assert value_in_quote(954.0, "approximately $954.00 per $1,000") is True
+
+
+def test_value_in_quote_ticker_vs_index() -> None:
+    assert value_in_quote("Russell 2000 Index", "Bloomberg ticker: RTY") is False
+    assert (
+        value_in_quote("Russell 2000 Index", "The Russell 2000\u00ae Index (Bloomberg ticker: RTY)")
+        is True
+    )
+
+
+class _Colour(enum.Enum):
+    RED = 1
+
+
+def test_value_in_quote_bool_enum_none() -> None:
+    assert value_in_quote(True, "anything True here") is None
+    assert value_in_quote(False, "anything False here") is None
+    assert value_in_quote(_Colour.RED, "RED colour quote") is None
+    assert value_forms(True) is None
+    assert value_forms(_Colour.RED) is None
+
+
+def test_value_in_quote_at_least_9_boundary() -> None:
+    # "9" must not match inside "9.75%" (period is part of the token).
+    assert value_in_quote(9.0, "at least 9.75%") is False
+    # Sanity: the exact number does match.
+    assert value_in_quote(9.75, "at least 9.75%") is True
+
+
+def test_value_in_quote_ellipsis_does_not_break_support() -> None:
+    assert value_in_quote(0.70, "Barrier Amount ... 70.00% of its Initial Value") is True
+    assert value_in_quote(0.70, "Barrier Amount \u2026 70.00% of its Initial Value") is True
+
+
+def test_verify_termsheet_value_not_in_quote(jpm_38582_termsheet) -> None:
+    ts = copy.deepcopy(jpm_38582_termsheet)
+    filing_text = _load_filing_text()
+    normalised_filing = normalise_for_match(filing_text)
+    cited_by_path = dict(ts.cited_fields())
+    try:
+        notional_val = ts.notional.value  # type: ignore[union-attr]
+    except AttributeError:
+        notional_val = None
+    target_path: str | None = None
+    target_value = None
+    replacement_quote: str | None = None
+    for path, cited in cited_by_path.items():
+        if cited.citation is None:
+            continue
+        val = getattr(cited, "value", None)
+        if value_forms(val) is None:
+            continue
+        per = path.endswith(".call_amount") or path == "coupon.amount"
+        if value_in_quote(val, cited.citation.quote, notional=notional_val, per_notional=per) is not True:
+            continue
+        for other_path, other_cited in cited_by_path.items():
+            if other_path == path or other_cited.citation is None:
+                continue
+            other_quote = other_cited.citation.quote
+            verified_other, _ = verify_quote(other_quote, normalised_filing)
+            if not verified_other:
+                continue
+            if value_in_quote(val, other_quote, notional=notional_val, per_notional=per) is False:
+                target_path = path
+                target_value = val
+                replacement_quote = other_quote
+                break
+        if target_path is not None:
+            break
+    assert target_path is not None, "could not find suitable field pair for value-support test"
+    assert replacement_quote is not None
+    cited_by_path[target_path].citation.quote = replacement_quote
+    checks = verify_termsheet(ts, filing_text)
+    by_path = {c.path: c for c in checks}
+    check = by_path[target_path]
+    assert check.verified is False
+    assert check.reason.startswith("value not in quote:")
+    assert cited_by_path[target_path].citation.verified is False
+    assert target_path in ts.unverified_fields()
+
+
+def test_reordered_passages_are_reported_as_out_of_order() -> None:
+    # Day 2 live run: the model joined two real passages in reverse document order.
+    normalised = normalise_for_match("Call Premium Amount is set below. Later: equal to $1,000 plus it.")
+    verified, reason = verify_quote("equal to $1,000 plus it ... Call Premium Amount is set", normalised)
+    assert verified is False and reason.startswith("out of order:")
