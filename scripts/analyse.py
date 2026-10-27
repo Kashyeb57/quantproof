@@ -284,6 +284,12 @@ def render_report(result: dict) -> str:
     if summary.get("cusip"):
         lines.append(f"CUSIP: {summary['cusip']}")
         lines.append("")
+    lines.append(
+        "> **Illustrative inputs, not market data:** the market inputs in this "
+        "report are illustrative assumptions entered for this analysis. They "
+        "are not market data, and every result below is conditional on them."
+    )
+    lines.append("")
 
     # 2. Extracted terms.
     lines.append("## Extracted terms")
@@ -359,7 +365,8 @@ def render_report(result: dict) -> str:
         "dividend": "Dividend yields",
         "skew": "Skew",
     }
-    for name, pair in (fair.get("sensitivities") or {}).items():
+    sensitivities = fair.get("sensitivities") or {}
+    for name, pair in sensitivities.items():
         label = sensitivity_labels.get(str(name), str(name))
         low_value = pair[0] if pair else None
         high_value = pair[1] if len(pair) > 1 else None
@@ -367,6 +374,26 @@ def render_report(result: dict) -> str:
             f"| {_clean_cell(label)} | {_fmt_money(low_value)} | {_fmt_money(high_value)} |"
         )
     lines.append("")
+
+    if sensitivities:
+        def _move(pair) -> float:
+            try:
+                return abs(float(pair[1]) - float(pair[0]))
+            except (TypeError, ValueError, IndexError):
+                return -1.0
+
+        dominant_name, dominant_pair = max(
+            sensitivities.items(), key=lambda item: _move(item[1])
+        )
+        dominant_label = sensitivity_labels.get(str(dominant_name), str(dominant_name))
+        dominant_low = dominant_pair[0] if dominant_pair else None
+        dominant_high = dominant_pair[1] if len(dominant_pair) > 1 else None
+        lines.append(
+            f"The assumption that moves the estimated value most is "
+            f"{dominant_label}: {_fmt_money(dominant_low)} to "
+            f"{_fmt_money(dominant_high)} across its stated range."
+        )
+        lines.append("")
 
     lines.append("Assumptions:")
     lines.append("")

@@ -94,6 +94,8 @@ def test_main_reply_end_to_end(tmp_path, monkeypatch):
     # Bank's estimated value from the filing fixture, formatted as money.
     assert "954" in report
     assert "Issuer default is not simulated" in report
+    assert "Illustrative inputs, not market data" in report
+    assert "moves the estimated value most is" in report
     assert not FORBIDDEN.search(report)
 
 

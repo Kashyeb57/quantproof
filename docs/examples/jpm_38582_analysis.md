@@ -4,6 +4,8 @@ Based on preliminary terms.
 
 CUSIP: 48136LQH5
 
+> **Illustrative inputs, not market data:** the market inputs in this report are illustrative assumptions entered for this analysis. They are not market data, and every result below is conditional on them.
+
 ## Extracted terms
 
 | Term | Value | Filing quote |
@@ -114,6 +116,8 @@ Position of the bank's estimated value: inside range.
 | Issuer credit spread | $911.42 | $900.93 |
 | Dividend yields | $916.78 | $895.55 |
 | Skew | $906.15 | $854.51 |
+
+The assumption that moves the estimated value most is Volatility: $953.98 to $862.91 across its stated range.
 
 Assumptions:
 
