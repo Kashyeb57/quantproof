@@ -93,9 +93,26 @@ Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://g
   ea0308498 12/13 (the misses are quote flags: gearing not stated), ea0306095 refused.
 - Dev spend $4.12 of $80. Tests: 1,301 pass.
 
+## Day 5 value + risk + CLI (Oct 27, night)
+- `valuation/fair_value.py`: `fair_value_range(ts, market, grid, n_paths, seed, n_paths_base)` over
+  vol x correlation x spread x dividend x skew (162 points, common random numbers). Correlation is
+  blended towards all-ones or identity (stays PSD). Skew = extra vol at the barrier strike,
+  `skew_per_10pct * (1 - K) / 0.10`, applied to the whole note (stated simplification). The bank
+  value is only compared, never an input (test proves it).
+- `risk/real_world.py`: `loss_odds` (REAL-WORLD, drift r + 5% ERP by default, undiscounted cash,
+  binomial SEs, issuer default not simulated) and `stress_heatmap` (drift x vol scale).
+  Closed-form tests: P(W_T < x) and E[cash] for a one-asset barrier note.
+- `scripts/analyse.py`: filing + recorded reply (or `--live`, or `--url`) -> Markdown/JSON report.
+  Example: `docs/examples/jpm_38582_analysis.md`. JPM 38582 (illustrative inputs): range
+  $778-$975, base $908, bank $954 inside the range. Why below the bank's: we discount at r + 60 bp
+  market spread (the bank uses its lower internal funding rate) and the range includes skew.
+- Battery fix: convergence used n/16 paths (odd for 2,000) -> m, 4m, 16m with m even.
+- Dev spend $5.03 of $80. Tests: all pass.
+
 ## Next (in order)
-1. Day 5 `valuation/` (fair-value range over vol x corr x spread x dividend grid, skew, bank
-   comparison) and `risk/` (labelled real-world simulation, loss odds, stress heatmap); end-to-end CLI.
+1. Day 6 agent: `agent/crosscheck.py` (second extraction, field diff; Baseten key not set yet ->
+   second Muse Spark run or Wonder as the cross-checker), `agent/synthesis.py` + `registry/`
+   (Wonder writes payoff code -> sandbox -> battery), `agent/provenance.py`.
 2. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
 
 ## Environment facts

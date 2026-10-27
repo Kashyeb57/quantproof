@@ -65,10 +65,10 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [ ] Watch: Fireworks workshop on Muse open models (11:00 AM)
 
 ## Day 5 — Sat Oct 31: value + risk — **must-haves done today**
-- [ ] `valuation/`: fair-value range over vol × correlation × spread × dividend grid, skew adjustment,
+- [x] `valuation/`: fair-value range over vol × correlation × spread × dividend grid, skew adjustment,
       bank comparison (comparison only, never a calibration target)
-- [ ] `risk/`: real-world simulation (labelled, stated drift), loss probabilities, stress heatmap
-- [ ] End-to-end run on the test filing: ingest → extract → verify quotes → price → report (CLI is enough);
+- [x] `risk/`: real-world simulation (labelled, stated drift), loss probabilities, stress heatmap
+- [x] End-to-end run on the test filing: ingest → extract → verify quotes → price → report (CLI is enough);
       note where our range sits relative to the bank's ~$954 and explain why
 
 ## Day 6 — Sun Nov 1: the verifiable agent — **CHECKPOINT**
