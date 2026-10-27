@@ -22,6 +22,8 @@ import argparse
 import json
 import re
 import secrets
+import shlex
+import subprocess
 import sys
 import urllib.request
 from collections.abc import Callable
@@ -134,6 +136,20 @@ def call_muse(messages: list[dict], model: str, max_tokens: int,
         raise SystemExit(f"Meta API error {e.status}: {e.detail}") from None
 
 
+def run_pytest(args: list[str], runner: Callable = subprocess.run) -> tuple[bool, str]:
+    """Run pytest with the given args plus fixed flags.
+
+    Runs [sys.executable, "-m", "pytest", *args, "-x", "--tb=short", "-p",
+    "no:cacheprovider"] in REPO, capturing stdout+stderr as text. Returns
+    (passed, output) where output is the last 150 lines (to keep the prompt small).
+    """
+    cmd = [sys.executable, "-m", "pytest", *args, "-x", "--tb=short", "-p", "no:cacheprovider"]
+    completed = runner(cmd, cwd=REPO, capture_output=True, text=True)
+    text = (completed.stdout or "") + (completed.stderr or "")
+    lines = text.splitlines()
+    return (completed.returncode == 0, "\n".join(lines[-150:]))
+
+
 def _cell(text: str) -> str:
     return " ".join(str(text).split()).replace("|", "\\|")
 
@@ -183,14 +199,33 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--apply", action="store_true", help="write into the working tree for review")
     ap.add_argument("--dry-run", action="store_true", help="show prompt size; no API call")
     ap.add_argument("--total", action="store_true", help="print development spend so far")
+    ap.add_argument("--pytest", default=None,
+                    help='pytest args as one string, e.g. "tests/ingest -k edgar"; '
+                         "run first and attach failures to the task")
     args = ap.parse_args(argv)
 
     if args.total:
         print(f"Development spend so far: ${total_spend(LOG_PATH):.4f} of ${DEV_BUDGET_USD:.0f}")
         return 0
+
+    pytest_output = ""
+    if args.pytest is not None:
+        split_args = shlex.split(args.pytest)
+        passed, pytest_output = run_pytest(split_args)
+        if passed:
+            print("Tests pass; nothing to fix.")
+            return 0
+
     task = args.task_file.read_text(encoding="utf-8") if args.task_file else args.task
     if not task:
-        ap.error("give --task or --task-file")
+        if args.pytest is not None:
+            task = "Make these tests pass."
+        else:
+            ap.error("give --task or --task-file")
+    if args.pytest is not None:
+        task = (task + "\n\nThe tests fail. Fix the code (not the tests, unless a test is "
+                "clearly wrong; then say why in the notes). Failing output:\n```\n"
+                + pytest_output + "\n```")
 
     context = {str(PurePosixPath(p)): (REPO / p).read_text(encoding="utf-8") for p in args.context}
     rules = (REPO / "AGENTS.md").read_text(encoding="utf-8")

@@ -3,8 +3,10 @@
 import importlib.util
 import io
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -227,3 +229,104 @@ def test_apply_holds_existing_files_not_in_context(sandbox, monkeypatch):
     assert (repo / "keep" / "old.py").read_text() == "original\n"  # not overwritten
     assert (repo / "keep" / "new.py").read_text() == "fresh\n"  # new files are fine
     assert "held (existing, not in --context): keep/old.py" in md.LOG_PATH.read_text()
+
+
+def test_run_pytest_builds_command_with_fixed_flags():
+    captured = {}
+
+    def fake_runner(cmd, **kwargs):
+        captured["cmd"] = cmd
+        captured["kwargs"] = kwargs
+        return SimpleNamespace(returncode=0, stdout="ok\n", stderr="")
+
+    passed, output = md.run_pytest(["tests/ingest", "-k", "edgar"], runner=fake_runner)
+    assert passed is True
+    assert output == "ok"
+    # Split args are spliced in, fixed flags are appended.
+    assert captured["cmd"] == [sys.executable, "-m", "pytest", "tests/ingest", "-k", "edgar",
+                               "-x", "--tb=short", "-p", "no:cacheprovider"]
+    assert captured["kwargs"]["cwd"] == md.REPO
+    assert captured["kwargs"]["capture_output"] is True
+    assert captured["kwargs"]["text"] is True
+
+
+def test_run_pytest_failure_combines_streams_and_reports_failed():
+    def fake_runner(cmd, **kwargs):
+        return SimpleNamespace(returncode=1, stdout="out\n", stderr="err\n")
+
+    passed, output = md.run_pytest([], runner=fake_runner)
+    assert passed is False
+    assert "out" in output and "err" in output
+
+
+def test_run_pytest_output_cut_to_last_150_lines():
+    lines = [f"line {i}" for i in range(200)]
+
+    def fake_runner(cmd, **kwargs):
+        return SimpleNamespace(returncode=1, stdout="\n".join(lines) + "\n", stderr="")
+
+    passed, output = md.run_pytest(["tests/x"], runner=fake_runner)
+    assert passed is False
+    got = output.splitlines()
+    # Only the tail is kept so the failure fits in the prompt.
+    assert len(got) == 150
+    assert got[0] == "line 50" and got[-1] == "line 199"
+
+
+def test_pytest_passing_returns_early_without_api(sandbox, monkeypatch, capsys):
+    seen = {}
+
+    def fake_run(args, runner=None):
+        seen["args"] = args
+        return (True, "1 passed\n")
+
+    monkeypatch.setattr(md, "run_pytest", fake_run)
+    monkeypatch.setattr(md, "call_muse",
+                        lambda *a, **k: pytest.fail("API must not be called when tests pass"))
+    # No --task: passing tests need nothing to fix, so no task is required.
+    assert md.main(["--pytest", "tests/ingest -k edgar"]) == 0
+    # The one-string option is split with shlex before running.
+    assert seen["args"] == ["tests/ingest", "-k", "edgar"]
+    assert "Tests pass; nothing to fix." in capsys.readouterr().out
+
+
+def test_pytest_failing_appends_output_to_task(sandbox, monkeypatch):
+    seen = {}
+    failure = "FAILED tests/x::test_y - assert 1 == 2"
+
+    def fake_run(args, runner=None):
+        seen["args"] = args
+        return (False, failure)
+
+    monkeypatch.setattr(md, "run_pytest", fake_run)
+
+    captured = {}
+
+    def fake_call(messages, model, max_tokens):
+        captured["messages"] = messages
+        return result(REPLY, "stop", 100, 200)
+
+    monkeypatch.setattr(md, "call_muse", fake_call)
+    assert md.main(["--pytest", "tests/x -k foo", "--task", "Add feature"]) == 0
+    assert seen["args"] == ["tests/x", "-k", "foo"]
+    user_content = captured["messages"][1]["content"]
+    assert "Add feature" in user_content
+    assert "The tests fail." in user_content
+    assert "Fix the code (not the tests" in user_content
+    assert failure in user_content
+    assert "```" in user_content
+
+
+def test_pytest_failing_without_task_uses_default_task(sandbox, monkeypatch):
+    monkeypatch.setattr(md, "run_pytest", lambda args, runner=None: (False, "FAILED boom"))
+    captured = {}
+
+    def fake_call(messages, model, max_tokens):
+        captured["messages"] = messages
+        return result(REPLY, "stop", 100, 200)
+
+    monkeypatch.setattr(md, "call_muse", fake_call)
+    assert md.main(["--pytest", "tests/x"]) == 0
+    user_content = captured["messages"][1]["content"]
+    assert "Make these tests pass." in user_content
+    assert "FAILED boom" in user_content
