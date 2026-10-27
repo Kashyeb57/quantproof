@@ -42,7 +42,11 @@ Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://githu
 - `ingest/edgar.py`: `EdgarClient` (`get`, `get_json`, `recent_filings`, `search`,
   `fetch_filing` with images), cache in `.cache/edgar/`, 5 requests/s, 60 s timeout.
 - API glitch seen twice: no usage + reply cut off despite "stop"; callers check completeness.
-- Dev spend $1.00 of $80. Tests: 1,203 pass.
+- `muse_draft.py`: per-call tagged markers (a file containing markers no longer splits a reply);
+  `--apply` never overwrites a file not sent as `--context`; `--pytest "<args>"` sends failures.
+- AGENTS.md: Meta credits do the work; Muse fixes review findings and failing tests; Claude
+  reviews from diffs and tests, reads whole files only for pricing maths and security.
+- Dev spend $1.14 of $80. Tests: 1,212 pass.
 
 ## Next (in order)
 1. Extraction + quote verification on 3 more real filings from EDGAR: one single-underlying,
