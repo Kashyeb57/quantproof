@@ -69,31 +69,54 @@ def test_build_messages_puts_rules_first_and_context_after_task():
     assert "<<<CONTEXT a.py>>>\nA = 1\n<<<END>>>" in msgs[1]["content"]
 
 
-def fake_urlopen(captured, reply):
+def sse(*events):
+    """Server-sent events as the API streams them, ending with [DONE]."""
+    lines = [f"data: {json.dumps(e)}\n\n" for e in events] + ["data: [DONE]\n\n"]
+    return "".join(lines).encode()
+
+
+STREAM = sse(
+    {"choices": [{"delta": {"role": "assistant"}, "finish_reason": None}]},
+    {"choices": [{"delta": {"content": "Hello, "}, "finish_reason": None}]},
+    {"choices": [{"delta": {"content": "world"}, "finish_reason": "stop"}]},
+    {"choices": [], "usage": {"prompt_tokens": 22, "completion_tokens": 2781,
+                              "completion_tokens_details": {"reasoning_tokens": 1574}}},
+)
+
+
+def fake_urlopen(captured, payload=STREAM):
     def urlopen(req, timeout):
         captured["req"], captured["timeout"] = req, timeout
-        return io.BytesIO(json.dumps(reply).encode())
+        return io.BytesIO(payload)
     return urlopen
 
 
-def test_call_muse_sends_no_auth_header_without_key(monkeypatch):
+def test_call_muse_streams_and_rebuilds_the_reply(monkeypatch):
     monkeypatch.delenv("MODEL_API_KEY", raising=False)
     captured = {}
     out = md.call_muse([{"role": "user", "content": "hi"}], "muse-spark-1.3", 4000,
-                       urlopen=fake_urlopen(captured, {"ok": 1}))
+                       urlopen=fake_urlopen(captured))
+    assert out["choices"][0] == {"message": {"content": "Hello, world"}, "finish_reason": "stop"}
+    assert out["usage"]["completion_tokens"] == 2781
     req = captured["req"]
-    assert out == {"ok": 1}
     assert req.full_url == "https://api.meta.ai/v1/chat/completions"
-    assert req.get_header("Authorization") is None
+    assert req.get_header("Authorization") is None  # network secret supplies it
     body = json.loads(req.data)
     assert body["model"] == "muse-spark-1.3" and body["max_tokens"] == 4000
+    assert body["stream"] is True and body["stream_options"] == {"include_usage": True}
 
 
 def test_call_muse_sends_bearer_when_key_set(monkeypatch):
     monkeypatch.setenv("MODEL_API_KEY", "test-key-not-real")
     captured = {}
-    md.call_muse([], "muse-spark-1.3", 4000, urlopen=fake_urlopen(captured, {}))
+    md.call_muse([], "muse-spark-1.3", 4000, urlopen=fake_urlopen(captured))
     assert captured["req"].get_header("Authorization") == "Bearer test-key-not-real"
+
+
+def test_call_muse_cut_off_stream_keeps_length_reason():
+    out = md.call_muse([], "muse-spark-1.3", 10, urlopen=fake_urlopen({}, sse(
+        {"choices": [{"delta": {"content": "x ="}, "finish_reason": "length"}]})))
+    assert out["choices"][0]["finish_reason"] == "length" and out["usage"] is None
 
 
 def test_log_rows_and_total(tmp_path):

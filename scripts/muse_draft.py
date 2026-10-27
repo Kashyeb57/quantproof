@@ -113,16 +113,38 @@ def parse_reply(text: str) -> tuple[dict[str, str], str]:
 
 def call_muse(messages: list[dict], model: str, max_tokens: int,
               urlopen: Callable = urllib.request.urlopen) -> dict:
-    """One Chat Completions call. Auth header only when MODEL_API_KEY is set (client.py)."""
-    body = json.dumps({"model": model, "messages": messages, "max_tokens": max_tokens}).encode()
+    """One streamed Chat Completions call, returned in the non-streamed reply shape
+    {"choices": [{"message": {"content"}, "finish_reason"}], "usage"}.
+
+    Streamed because the gateway returns 502 when a non-streamed reply takes more than ~30 s,
+    which long drafts do. Usage arrives in the last event (stream_options.include_usage).
+    Auth header only when MODEL_API_KEY is set (client.py).
+    """
+    body = json.dumps({"model": model, "messages": messages, "max_tokens": max_tokens,
+                       "stream": True, "stream_options": {"include_usage": True}}).encode()
     req = urllib.request.Request(f"{client.BASE_URL}/chat/completions", data=body,
                                  headers=client.request_headers(), method="POST")
+    content: list[str] = []
+    finish, usage = None, None
     try:
         with urlopen(req, timeout=TIMEOUT_S) as resp:
-            return json.load(resp)
+            for raw in resp:
+                line = raw.decode("utf-8").strip()
+                if not line.startswith("data:"):
+                    continue
+                data = line[len("data:"):].strip()
+                if data == "[DONE]":
+                    break
+                event = json.loads(data)
+                for choice in event.get("choices") or []:
+                    content.append((choice.get("delta") or {}).get("content") or "")
+                    finish = choice.get("finish_reason") or finish
+                usage = event.get("usage") or usage
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", "replace")[:500]
         raise SystemExit(f"Meta API error {e.code}: {detail}") from None
+    return {"choices": [{"message": {"content": "".join(content)}, "finish_reason": finish}],
+            "usage": usage}
 
 
 def _cell(text: str) -> str:
