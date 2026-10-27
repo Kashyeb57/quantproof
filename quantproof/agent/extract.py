@@ -42,7 +42,15 @@ A cited field "F" is an object {"value": ..., "quote": "...", "section": ...}.
   appears in the filing. The quote must contain the value itself as the filing
   writes it (for "Barrier Amount ... 70.00%" quote the 70.00%, not just the
   label). Keep it short: one sentence or one table row, under 300 characters.
-  Join two separate passages with "..." only when needed.
+  Join two separate passages with "..." only when needed, in the order they
+  appear in the filing.
+- For a list value (review_dates, payment_dates, call_amounts) the quote must show
+  every value in the list: quote the whole list or table, and never use "..." to
+  skip values (the 300-character limit does not apply). If an item is written as a
+  reference (a payment date given as "the Maturity Date"), add the passage that
+  states it, joined with "...".
+- Each quote is checked automatically: it must appear in the filing and must show
+  the value. A quote that is only a label fails.
 - "section" is the nearest heading or page label (for example "Key Terms",
   "PS-1", "Cover"), or null if there is none.
 

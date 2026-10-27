@@ -461,3 +461,8 @@ def test_prompt_defines_the_fields_a_model_could_misread() -> None:
     # Day 2 live run: without a definition the model read reference_level as the final value.
     for term in ("reference_level / reference_date", "final_review_date", "estimated_value_floor"):
         assert term in extract.SYSTEM_PROMPT
+
+
+def test_prompt_requires_full_list_quotes() -> None:
+    # Day 2 live run: the model shortened date lists with "...", hiding the middle dates.
+    assert 'never use "..." to\n  skip values' in extract.SYSTEM_PROMPT
