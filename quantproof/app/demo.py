@@ -83,6 +83,23 @@ SENSITIVITY_LABELS = {
     "skew": "Skew",
 }
 
+def escape_dollars(text: object) -> str:
+    """Escape ``$`` for Streamlit text so money is not rendered as LaTeX.
+
+    Streamlit treats text between two ``$`` signs as a maths formula, so
+    a line containing two money amounts loses its dollar signs and is
+    set in a maths font.  Replacing each unescaped ``$`` with ``\\$``
+    keeps the literal dollar sign.  Idempotent: an already-escaped
+    ``\\$`` is left alone.
+    """
+    return re.sub(r"(?<!\\)\$", r"\\$", str(text))
+
+
+def unescaped_dollar_count(text: object) -> int:
+    """Number of ``$`` not preceded by a backslash (LaTeX delimiters)."""
+    return len(re.findall(r"(?<!\\)\$", str(text)))
+
+
 ISSUER_RISK_LINE = (
     "If the issuer defaults, you can lose money regardless of the index."
 )

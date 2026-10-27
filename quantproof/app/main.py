@@ -22,11 +22,33 @@ from quantproof.app import demo
 REPO_URL = "https://github.com/Kashyeb57/quantproof"
 VALIDATION_URL = f"{REPO_URL}/blob/main/docs/VALIDATION.md"
 
+def _write(text: object) -> None:
+    """st.markdown with every $ escaped (Streamlit renders $...$ as LaTeX)."""
+    st.markdown(demo.escape_dollars(text))
+
+
+def _caption(text: object) -> None:
+    st.caption(demo.escape_dollars(text))
+
+
+def _warning(text: object) -> None:
+    st.warning(demo.escape_dollars(text))
+
+
+def _error(text: object) -> None:
+    st.error(demo.escape_dollars(text))
+
+
+def _info(text: object) -> None:
+    st.info(demo.escape_dollars(text))
+
+
+
 
 def _money(value: object) -> str:
     if value is None:
         return "n/a"
-    return f"${float(value):,.2f}"
+    return demo.escape_dollars(f"${float(value):,.2f}")
 
 
 def _pct(value: object) -> str:
@@ -67,7 +89,7 @@ def run() -> None:
     """Render the Stage A demo app."""
     st.set_page_config(page_title="QuantProof risk analysis", layout="wide")
     st.title("QuantProof")
-    st.caption(
+    _caption(
         "Demo mode: saved JPMorgan filings with recorded extractions. "
         "No API calls, no credits spent."
     )
@@ -91,7 +113,7 @@ def run() -> None:
         note.termsheet, edits
     )
     for error in edit_errors:
-        st.error(f"Edit not applied: {error}")
+        _error(f"Edit not applied: {error}")
     ts = edited_ts if edited_paths else note.termsheet
     # Term rows reflect the edited values, labelled user-entered.
     row_note = demo.DemoNote(
@@ -102,24 +124,24 @@ def run() -> None:
     # b. Term sheet.
     st.header("2. Term sheet")
     if ts.is_preliminary.value:
-        st.write("Based on preliminary terms.")
+        _write("Based on preliminary terms.")
     rows = demo.term_rows(row_note, edited_paths)
     st.dataframe(rows, use_container_width=True, hide_index=True)
     if note.unverified:
-        st.write(
+        _write(
             "Fields needing confirmation (no verified quote): "
             + ", ".join(note.unverified)
         )
 
     diffs = demo.recorded_crosscheck_diffs(stem, note.termsheet)
     if diffs is None:
-        st.caption("Cross-check: no recorded second extraction in demo mode.")
+        _caption("Cross-check: no recorded second extraction in demo mode.")
     elif not diffs:
-        st.write(
+        _write(
             "Cross-check: the recorded second extraction agrees on every field."
         )
     else:
-        st.write("Cross-check disagreements (confirm before pricing):")
+        _write("Cross-check disagreements (confirm before pricing):")
         st.dataframe(
             [
                 {
@@ -145,16 +167,16 @@ def run() -> None:
             edits.clear()
             st.rerun()
     if edited_paths:
-        st.write("User-entered fields: " + ", ".join(sorted(edited_paths)))
+        _write("User-entered fields: " + ", ".join(sorted(edited_paths)))
 
     confirmed = st.checkbox("I confirm these terms")
     if not confirmed:
-        st.info("Tick “I confirm these terms” to continue to pricing.")
+        _info("Tick “I confirm these terms” to continue to pricing.")
         return
 
     # c. Market inputs.
     st.header("3. Market inputs")
-    st.warning(
+    _warning(
         f"{demo.ILLUSTRATIVE_BANNER}: the inputs below are illustrative "
         "assumptions for this analysis, not market data. Every result is "
         "conditional on them."
@@ -207,9 +229,9 @@ def run() -> None:
             stem, tuple(sorted(edits.items())), rate, spread,
             tuple(vols), tuple(dividends), rho,
         )
-    st.caption(battery["note"])
+    _caption(battery["note"])
     if battery["kind"] == "refused":
-        st.error(f"Refused: {battery['note']}")
+        _error(f"Refused: {battery['note']}")
         return
     st.dataframe(
         [
@@ -228,13 +250,13 @@ def run() -> None:
         hide_index=True,
     )
     if not battery["passed"]:
-        st.error(
+        _error(
             "The proof battery did not pass, so no value is shown. "
             "See the failed checks above."
         )
         return
     if battery["kind"] == "synthesized":
-        st.info(
+        _info(
             "This note's agent-written payoff passed its proof battery in "
             "the registry. Pricing registered payoffs in the app comes "
             "after Stage A, so no estimated value is shown here yet."
@@ -251,7 +273,7 @@ def run() -> None:
         )
     verdict = demo.verdict_summary(result)
     if verdict["preliminary"]:
-        st.write("Based on preliminary terms.")
+        _write("Based on preliminary terms.")
     col_issue, col_bank, col_range = st.columns(3)
     col_issue.metric("Issue price", _money(verdict["issue_price"]))
     col_bank.metric("Bank's estimated value", _money(verdict["bank_estimate"]))
@@ -261,26 +283,26 @@ def run() -> None:
     )
     se = verdict["base_std_error"]
     if verdict["base_price"] is not None and se is not None:
-        st.write(
+        _write(
             f"Base estimated value: {_money(verdict['base_price'])} "
             f"+- {_money(1.96 * float(se))} (1.96 SE, SE = {_money(se)}), "
             f"seed {verdict['seed']}, base paths {verdict['base_paths']}, "
             f"grid paths per point {verdict['grid_paths']}."
         )
     if verdict["bank_position"] is not None:
-        st.write(
+        _write(
             "Position of the bank's estimated value: "
             f"{verdict['bank_position']}."
         )
     if verdict["driver"] is not None:
         label, low, high = verdict["driver"]
-        st.write(
+        _write(
             f"Biggest driver of the range: {label} "
             f"({_money(low)} to {_money(high)} across its stated range)."
         )
 
     st.subheader("Estimated value (risk-neutral)")
-    st.write(
+    _write(
         "Risk-neutral Monte Carlo under the assumptions above. The "
         "bank's estimated value is a comparison point only; assumptions "
         "are never adjusted to match it."
@@ -296,21 +318,21 @@ def run() -> None:
     )
 
     st.subheader("Real-world loss odds (REAL-WORLD measure, not a value)")
-    st.write(
+    _write(
         "These figures use the REAL-WORLD measure. They are not a value "
         "and must not be read as an estimated value."
     )
     odds = result["loss_odds"]
     std_errors = odds.get("std_errors") or {}
-    st.write(f"- P(loss): {_pct(odds.get('prob_loss'))} (SE {_pct(std_errors.get('prob_loss'))})")
-    st.write(f"- P(loss > 20%): {_pct(odds.get('prob_loss_over_20'))} (SE {_pct(std_errors.get('prob_loss_over_20'))})")
-    st.write(f"- P(loss > 50%): {_pct(odds.get('prob_loss_over_50'))} (SE {_pct(std_errors.get('prob_loss_over_50'))})")
+    _write(f"- P(loss): {_pct(odds.get('prob_loss'))} (SE {_pct(std_errors.get('prob_loss'))})")
+    _write(f"- P(loss > 20%): {_pct(odds.get('prob_loss_over_20'))} (SE {_pct(std_errors.get('prob_loss_over_20'))})")
+    _write(f"- P(loss > 50%): {_pct(odds.get('prob_loss_over_50'))} (SE {_pct(std_errors.get('prob_loss_over_50'))})")
     if odds.get("prob_called") is None:
-        st.write("- P(called early): n/a (no autocall)")
+        _write("- P(called early): n/a (no autocall)")
     else:
-        st.write(f"- P(called early): {_pct(odds.get('prob_called'))} (SE {_pct(std_errors.get('prob_called'))})")
-    st.write(f"- Paths: {odds.get('n_paths')}, seed: {odds.get('seed')}, measure: {odds.get('measure')}")
-    st.write(demo.ISSUER_RISK_LINE)
+        _write(f"- P(called early): {_pct(odds.get('prob_called'))} (SE {_pct(std_errors.get('prob_called'))})")
+    _write(f"- Paths: {odds.get('n_paths')}, seed: {odds.get('seed')}, measure: {odds.get('measure')}")
+    _write(demo.ISSUER_RISK_LINE)
 
     st.subheader("Loss heatmap (real-world)")
     stress = result["stress"]
@@ -323,7 +345,7 @@ def run() -> None:
             row[f"{float(scale):.2f}x vol"] = _pct(probs[j]) if j < len(probs) else "n/a"
         heat_rows.append(row)
     st.dataframe(heat_rows, use_container_width=True, hide_index=True)
-    st.caption(
+    _caption(
         "Cells are P(loss) under the real-world measure for each drift "
         "(rows) and vol scale (columns)."
     )
@@ -334,6 +356,6 @@ def run() -> None:
 def _footer() -> None:
     """f. Footer on every completed path."""
     st.divider()
-    st.write(demo.FOOTER_LINE + ".")
-    st.write(f"[QuantProof repository]({REPO_URL})")
-    st.write(f"[Validation report]({VALIDATION_URL})")
+    _write(demo.FOOTER_LINE + ".")
+    _write(f"[QuantProof repository]({REPO_URL})")
+    _write(f"[Validation report]({VALIDATION_URL})")

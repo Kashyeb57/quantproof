@@ -35,6 +35,11 @@ def test_app_runs_demo_flow_to_verdict():
     assert "4. Proof checks" in headers
     assert "5. Verdict" in headers
     metrics = {m.label: m.value for m in at.metric}
-    assert metrics["Issue price"] == "$1,000.00"
-    assert metrics["Bank's estimated value"] == "$954.00"
-    assert metrics["Our estimated value range"].startswith("$")
+    assert metrics["Issue price"] == "\\$1,000.00"
+    assert metrics["Bank's estimated value"] == "\\$954.00"
+    assert metrics["Our estimated value range"].startswith("\\$")
+    # No rendered string may contain an unescaped $ pair (LaTeX dollars).
+    from quantproof.app import demo as app_demo
+
+    for element in list(at.markdown) + list(at.metric):
+        assert app_demo.unescaped_dollar_count(element.value) == 0, element.value
