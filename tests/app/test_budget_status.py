@@ -39,6 +39,20 @@ def test_budget_status_reports_each_blocking_reason():
     assert "lifetime cap reached" in status["reason"]
 
 
+def test_budget_line_recomputes_from_guard_state_on_rerun():
+    # The post-run refresh is a rerun: the budget line is recomputed
+    # from the session guard and the cost log on every render, so a
+    # guard that has used 2 runs must immediately show 1 left.
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
+    at.session_state["live_guard"] = live.LiveGuard(extractions_used=2)
+    at.radio[0].set_value("Live mode").run()
+    assert not at.exception
+    rendered = "\n".join(str(el.value) for el in at.markdown)
+    assert "Live runs remaining in this session: 1 of 3" in rendered
+
+
 def test_app_shows_remaining_runs_in_live_mode():
     from streamlit.testing.v1 import AppTest
 

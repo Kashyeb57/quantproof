@@ -287,6 +287,11 @@ def run() -> None:
                             state="complete",
                         )
                 st.session_state["live_note"] = live_note
+                # Rerun so the budget line at the top immediately shows
+                # the runs left in this session and today's spend after
+                # this run (both are recomputed from the guard and the
+                # cost log on every render).
+                st.rerun()
             except live.LiveRefused as refused:
                 _error(str(refused))
                 _footer()
