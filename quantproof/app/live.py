@@ -221,6 +221,41 @@ def estimate_live_cost(text_len: int, *, model: str = LIVE_MODEL) -> float:
     return 2.0 * one_extraction + RECHECK_ALLOWANCE * one_recheck
 
 
+def budget_status(
+    *,
+    extractions_used: int,
+    session_limit: int = SESSION_EXTRACTION_LIMIT,
+    spent_today: float,
+    cap: float,
+    spent_total: float,
+    total_cap: float,
+) -> dict:
+    """Visitor-facing budget status: remaining runs and availability.
+
+    Live is available only with session runs left, today's spend under
+    the daily cap, and lifetime spend under the lifetime cap.  All
+    numbers are copied from the guard state and the cost log.
+    """
+    remaining = max(int(session_limit) - int(extractions_used), 0)
+    reasons: list[str] = []
+    if remaining <= 0:
+        reasons.append("session limit reached")
+    if spent_today >= cap:
+        reasons.append("daily cap reached")
+    if spent_total >= total_cap:
+        reasons.append("lifetime cap reached")
+    return {
+        "remaining": remaining,
+        "session_limit": int(session_limit),
+        "available": not reasons,
+        "reason": "; ".join(reasons),
+        "spent_today": float(spent_today),
+        "cap": float(cap),
+        "spent_total": float(spent_total),
+        "total_cap": float(total_cap),
+    }
+
+
 def live_available(spent_today: float, cap: float) -> bool:
     """Whether live mode may spend at all under the daily cap."""
     return spent_today < cap

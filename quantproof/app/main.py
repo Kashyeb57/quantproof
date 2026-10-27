@@ -148,6 +148,28 @@ def run() -> None:
     )
     spent_today = live.daily_spend()
     spent_total = live.total_spend()
+    if mode == "Live mode":
+        _guard = st.session_state.get("live_guard")
+        _status = live.budget_status(
+            extractions_used=_guard.extractions_used if _guard is not None else 0,
+            spent_today=spent_today,
+            cap=cap,
+            spent_total=spent_total,
+            total_cap=total_cap,
+        )
+        _availability = (
+            "available today"
+            if _status["available"]
+            else f"not available today ({_status['reason']})"
+        )
+        _write(
+            f"Live runs remaining in this session: {_status['remaining']} "
+            f"of {_status['session_limit']}. Live mode is "
+            f"{_availability}: spent ${_status['spent_today']:,.2f} of "
+            f"${_status['cap']:,.2f} daily cap; lifetime "
+            f"${_status['spent_total']:,.2f} of "
+            f"${_status['total_cap']:,.2f}."
+        )
     if live_mode and spent_total >= total_cap:
         _error(
             "Live mode is off: lifetime spend has reached the lifetime "
