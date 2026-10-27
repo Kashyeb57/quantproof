@@ -37,8 +37,8 @@ Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://githu
 1. Value-support check (Day 4 proof battery, or sooner): a quote must contain its value (dates
    as written, percent forms of fractions, call premium %). Hand-built fixture quotes such as
    "Review Dates*:" would fail it; the model's quotes are stronger.
-2. EDGAR fetch: blocked until Joyeb allows `www.sec.gov`, `efts.sec.gov`, `data.sec.gov` and sets
-   `SEC_USER_AGENT` (a new session may be needed). Until then he can upload filings.
+2. `ingest/edgar.py` EDGAR fetch: User-Agent from `SEC_USER_AGENT` (required, never logged), well
+   under 10 requests/s, every download cached in `.cache/edgar/`; tests offline with fakes.
 3. Extraction on 3 more filings (single-underlying, contingent coupon, buffered): needs filings.
 4. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`.
 5. Joyeb: read the JPM key terms himself (table in the chat); derive d1/d2.
@@ -50,8 +50,10 @@ Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://githu
 - Muse Spark reasons before answering: give `max_tokens` >= 4000 or replies come back empty.
   Reasoning is ~70% of output tokens. Non-streamed calls over ~30 s fail with 502: stream.
 - Chat Completions works (`/v1/chat/completions`, OpenAI-style image parts as base64 data URIs).
-- **Blocked domains:** `www.sec.gov`, `efts.sec.gov`, `data.sec.gov` (not yet allowed).
-  `SEC_USER_AGENT` and `BASETEN_API_KEY` not set. Local venv: `.venv/` (numpy, scipy, pytest).
+- SEC domains **allowed** (Oct 27): `www.sec.gov`, `efts.sec.gov`, `data.sec.gov` all return 200
+  with a declared User-Agent. `SEC_USER_AGENT` is set in the environment (visible in new
+  sessions); in an older session pass it on the command only. Never write its value to the repo.
+  JPMorgan Chase Financial Co. LLC (issuer) is CIK 0001665650. `BASETEN_API_KEY` not set. Local venv: `.venv/` (numpy, scipy, pytest).
 - Force-push to `main` is blocked by the environment; Joyeb did the one history cleanup himself.
 
 ## Decisions to keep

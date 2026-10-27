@@ -37,7 +37,7 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 ## Day 2 — Wed Oct 28: building blocks + reading more filings
 - [x] `models/bsm.py` (done early, on Day 1): vanilla calls/puts, cash-or-nothing digitals, Greeks, implied vol; tests
       (textbook value S=42, K=40, r=10%, σ=20%, T=0.5 → call ≈ 4.76, put ≈ 0.81; parity; bounds)
-- [ ] `ingest/` EDGAR fetch (User-Agent, rate limit, cache). Blocked: SEC domains not yet allowed
+- [ ] `ingest/` EDGAR fetch (User-Agent, rate limit, cache). SEC domains allowed and tested (Oct 27)
 - [x] `agent/client.py`: Meta API client (streaming Chat Completions, retries, prompt caching, token/cost
       log). Chat Completions instead of the Responses API: tested with images and streaming
 - [ ] Extraction + quote verification on at least 3 more real filings: one single-underlying, one with
