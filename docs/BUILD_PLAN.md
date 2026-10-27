@@ -41,8 +41,9 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
       images); live run: search + index + one filing with 10 images in 10 s
 - [x] `agent/client.py`: Meta API client (streaming Chat Completions, retries, prompt caching, token/cost
       log). Chat Completions instead of the Responses API: tested with images and streaming
-- [ ] Extraction + quote verification on at least 3 more real filings: one single-underlying, one with
-      contingent coupons, one final (not preliminary); saved as fixtures
+- [x] Extraction + quote verification on at least 3 more real filings: one single-underlying, one with
+      contingent coupons, one final (not preliminary); saved as fixtures (done Oct 27: single stock
+      with monthly coupons, buffered worst-of-3 with coupons, dual-directional buffered; all final)
 - [ ] Joyeb: derive d1/d2; explain each Greek and the digital option
 - [ ] Watch: Agents 102 — Verifiable Agents (11:00 AM)
 

@@ -1,6 +1,6 @@
 # Checkpoint (read this after a /compact or in a new session)
 
-Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Updated: Tue Oct 27, 2026, night (Day 1 done, Day 2 filings task done early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
 
 ## Done
 - Day 1 go/no-go **GO**: Muse Spark 1.3 extracted the JPM 424B2 (worst-of autocallable, RTY + SPX,
@@ -48,13 +48,32 @@ Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://githu
   reviews from diffs and tests, reads whole files only for pricing maths and security.
 - Dev spend $1.14 of $80. Tests: 1,212 pass.
 
+## Done since (Oct 27, night)
+- Three new final JPM 424B2s from EDGAR saved as fixtures with recorded replies (text only):
+  A `ea0308498` single stock (Expand Energy), monthly contingent coupons, callable from month 6;
+  B `ea0309017` worst of 3 indices, 17.5% buffer with downside leverage 1.21212, coupons;
+  C `ea0306095` Dual Directional Buffered Return Enhanced Notes (upside leverage 2.0, 40% buffer).
+  A: 2 fields flagged (paraphrased dependency quote, no gearing); B and C: every quote verified.
+- Schema fixes they forced (Muse drafts, reviewed):
+  `ContingentCoupon.observations` (coupon dates separate from call dates; on a coupon note
+  call_amount is principal only); `TermSheet.upside` (`Upside(leverage, cap)`);
+  `TermSheet.unsupported_features` (cited; C flags "Absolute Stock Return"); required keys.
+- Verifier (`validation/quotes.py` `_level_support`, hand-written): a buffer quoted as
+  "Buffer Amount: 40.00%" must have level 0.60 (it caught Muse's 0.40); "at or above the Initial
+  Value" supports a level of 1.0. Prompt: table values quote the whole row.
+- `EdgarClient.search(..., cik=)`: EFTS hits list the parent (19617) first, so filter in the query.
+- JPM 38582 reply re-recorded with the new schema (78 checks, only gearing flagged).
+- Dev spend $2.21 of $80. Tests: 1,246 pass.
+
 ## Next (in order)
-1. Extraction + quote verification on 3 more real filings from EDGAR: one single-underlying,
-   one with a contingent coupon, one buffered; save each as a fixture with a recorded reply.
-2. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`.
-3. Joyeb: read the JPM key terms himself (guide ch. 4 p. 23, then the filing); derive d1/d2.
+1. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`. Payoffs must use
+   coupon observations separately from call dates, add the upside (leverage, cap) at maturity, and
+   refuse any TermSheet with `unsupported_features` (route to agent-written payoffs later).
+2. Joyeb: read the JPM key terms himself (guide ch. 4 p. 23, then the filing); derive d1/d2.
 
 ## Environment facts
+- Recent JPM filings are PDF-to-HTML conversions: `bg*.jpg` are whole-page backgrounds (not
+  diagrams), text lines wrap like the PDF, table cells come one per line. Extract them text-only.
 - Meta key is a **network secret** (proxy adds the header); `MODEL_API_KEY` not set. `/v1/models`
   returns 200 with 9 models: muse-spark-1.3 (default), 1.2, 1.1, -contributor variants (avoid),
   muse-wonder-1.0, muse-image-1.0, muse-voice-transcribe-1.0, sam-3.1.
