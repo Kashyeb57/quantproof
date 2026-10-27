@@ -1,6 +1,6 @@
 # Checkpoint (read this after a /compact or in a new session)
 
-Updated: Tue Oct 27, 2026, night (Day 1 done, Day 2 filings task done early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
 
 ## Done
 - Day 1 go/no-go **GO**: Muse Spark 1.3 extracted the JPM 424B2 (worst-of autocallable, RTY + SPX,
@@ -65,11 +65,23 @@ Updated: Tue Oct 27, 2026, night (Day 1 done, Day 2 filings task done early). Re
 - JPM 38582 reply re-recorded with the new schema (78 checks, only gearing flagged).
 - Dev spend $2.21 of $80. Tests: 1,246 pass.
 
+## Day 3 engine (Oct 27, late night)
+- `models/montecarlo.py`: `correlation_factor` (Cholesky, eigen fallback for correlation 1),
+  `simulate_performance` (exact GBM steps between observation dates, drifts passed in, antithetic
+  rows i and i + n/2), `mc_mean_and_se` (antithetic SE from pair means).
+- `models/discounting.py`: Act/365F `year_fraction`, `discount_factor` = exp(-(r + s) t).
+- `payoffs/worst_of.py`: `check_supported` (refuses `unsupported_features` and DAILY barriers),
+  `observation_dates`, `pathwise_cashflows` (coupons with memory on their own dates, autocall,
+  barrier final/each-review, buffer with gearing, capped upside), `price_note` (risk-neutral,
+  needs `market.as_of == pricing_date`). Call and coupon amounts are cash per note.
+- Closed-form check: one-asset barrier note = bond - put(0.7) - 0.3 x digital put; MC within 3 SE.
+- Sanity (not a test, made-up inputs r 3.7%, vols 24%/17%, spread 0.6%): JPM 38582 ~$900 (rho 0.5)
+  to ~$926 (rho 0.8) vs bank $954. Real inputs and the range come on Day 5.
+- Dev spend $2.47 of $80. Tests: 1,286 pass.
+
 ## Next (in order)
-1. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`. Payoffs must use
-   coupon observations separately from call dates, add the upside (leverage, cap) at maturity, and
-   refuse any TermSheet with `unsupported_features` (route to agent-written payoffs later).
-2. Joyeb: read the JPM key terms himself (guide ch. 4 p. 23, then the filing); derive d1/d2.
+1. Day 4 proof battery (`validation/`, brief section 7) on both templates; `docs/VALIDATION.md`.
+2. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
 
 ## Environment facts
 - Recent JPM filings are PDF-to-HTML conversions: `bg*.jpg` are whole-page backgrounds (not

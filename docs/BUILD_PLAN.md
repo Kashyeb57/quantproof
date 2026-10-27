@@ -48,12 +48,12 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [ ] Watch: Agents 102 — Verifiable Agents (11:00 AM)
 
 ## Day 3 — Thu Oct 29: the pricing engine
-- [ ] `models/montecarlo.py`: correlated multi-asset GBM (Cholesky), risk-neutral and real-world drift,
+- [x] `models/montecarlo.py`: correlated multi-asset GBM (Cholesky), risk-neutral and real-world drift,
       discrete observation dates, dividend yields, antithetic variates, standard errors, seeds
-- [ ] `models/discounting.py`: risk-free + issuer credit spread
-- [ ] `payoffs/`: worst-of autocallable (call premiums or contingent coupons, final barrier);
+- [x] `models/discounting.py`: risk-free + issuer credit spread
+- [x] `payoffs/`: worst-of autocallable (call premiums or contingent coupons, final barrier);
       worst-of buffered/barrier note at maturity (N = 1 covers single-asset notes)
-- [ ] Tests: each payoff on hand-computed paths
+- [x] Tests: each payoff on hand-computed paths
 - [ ] Joyeb: explain why the note is "short a put", why worst-of lowers the value, and why autocall
       dates need path simulation
 
