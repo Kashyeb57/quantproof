@@ -23,6 +23,7 @@ from quantproof.core.termsheet import (
     Cited,
     Citation,
     ContingentCoupon,
+    CouponObservation,
     Dependency,
     Downside,
     DownsideKind,
@@ -44,8 +45,9 @@ A cited field "F" is an object {"value": ..., "quote": "...", "section": ...}.
   label). Keep it short: one sentence or one table row, under 300 characters.
   Join two separate passages with "..." only when needed, in the order they
   appear in the filing.
-- For a list value (review_dates, payment_dates, call_amounts) the quote must show
-  every value in the list: quote the whole list or table, and never use "..." to
+- For a list value (autocall.review_dates, autocall.payment_dates,
+  autocall.call_amounts, coupon.review_dates, coupon.payment_dates) the quote must
+  show every value in the list: quote the whole list or table, and never use "..." to
   skip values (the 300-character limit does not apply). If an item is written as a
   reference (a payment date given as "the Maturity Date"), add the passage that
   states it, joined with "...".
@@ -79,7 +81,9 @@ Return a single JSON object with exactly these top level keys:
   "review_dates": F(list of "YYYY-MM-DD"),
   "payment_dates": F(list of "YYYY-MM-DD"),
   "call_amounts": F(list of numbers)}.
-- coupon: null or {"barrier": F(fraction), "amount": F(number), "memory": F(bool)}.
+- coupon: null or {"barrier": F(fraction), "amount": F(number), "memory": F(bool),
+  "review_dates": F(list of "YYYY-MM-DD"),
+  "payment_dates": F(list of "YYYY-MM-DD")}.
 - estimated_value: F(number) or null.
 - estimated_value_floor: F(number) or null.
 - max_selling_commission: F(number) or null.
@@ -106,6 +110,9 @@ What the fields mean:
 - downside.gearing: loss per 1% below the level, only when the filing states one; else null.
 - autocall.trigger: the level (fraction of initial) every underlying must close at or above
   for the note to be called.
+- autocall.review_dates: only the dates the note can be called.
+- coupon.review_dates: every date the coupon barrier is checked, which can be more dates than
+  autocall.review_dates; coupon.payment_dates: the matching interest payment dates.
 - coupon: a contingent coupon paid when the underlyings are at or above a coupon barrier;
   null if the note pays no coupon. memory is true if missed coupons are paid later.
 - estimated_value: the issuer's estimated value of one note (e.g. "approximately $954.00
@@ -116,12 +123,15 @@ Conventions you must follow:
 - Levels and barriers are fractions of the initial level (70.00% becomes 0.70).
 - Money amounts are per one note of `notional` and include principal (a call
   premium of 9.75% on $1,000 gives call amount 1097.5).
+- If the note pays a contingent coupon, call_amounts are the principal repaid on a call
+  (1000 for "$1,000 plus the Contingent Interest Payment"); the coupon is not added.
 - A preliminary filing's "at least" amounts are the stated minimums, with
   amounts_are_minimums true.
 - initial_level is null when the filing says it is set on the pricing date.
 - A payment date written as "the Maturity Date" is the maturity date.
-- review_dates, payment_dates and call_amounts have one entry per review date,
+- autocall review_dates, payment_dates and call_amounts have one entry per review date,
   in order.
+- coupon review_dates and payment_dates have one entry per coupon observation, in order.
 - If something is not in the filing use null and add a sentence to
   missing_or_ambiguous. Never guess.
 - Reply with the JSON object only, no prose, no code fences.
@@ -208,7 +218,8 @@ def to_termsheet(data: dict) -> TermSheet:
     Every cited field becomes Cited(value, Citation(quote, section)); a null optional field
     becomes None; dates use date.fromisoformat; enums use Dependency / DownsideKind /
     BarrierObservation; numbers become float. The autocall's three cited lists are zipped into
-    AutocallObservation objects, each value with its own Citation carrying the list's quote.
+    AutocallObservation objects and the coupon's two cited lists are zipped into
+    CouponObservation objects, each value with its own Citation carrying the list's quote.
     A null downside gearing keeps the dataclass default.
 
     Every problem (missing key, wrong type, bad date, unknown enum, list lengths differ, empty
@@ -395,8 +406,20 @@ def to_termsheet(data: dict) -> TermSheet:
         barrier = cited(raw, "barrier", "coupon.barrier", as_number)
         amount = cited(raw, "amount", "coupon.amount", as_number)
         memory = cited(raw, "memory", "coupon.memory", as_bool)
-        if None not in (barrier, amount, memory):
-            coupon = ContingentCoupon(barrier=barrier, amount=amount, memory=memory)
+        reviews = cited(raw, "review_dates", "coupon.review_dates", as_list(as_date))
+        payments = cited(raw, "payment_dates", "coupon.payment_dates", as_list(as_date))
+        if None not in (barrier, amount, memory, reviews, payments):
+            lengths = (len(reviews.value), len(payments.value))
+            if len(set(lengths)) != 1:
+                problems.append("coupon: list lengths differ: review_dates={}, payment_dates={}"
+                                .format(*lengths))
+            elif lengths[0] == 0:
+                problems.append("coupon: expected at least one review date")
+            else:
+                observations = [CouponObservation(review_date=r, payment_date=p)
+                                for r, p in zip(split(reviews), split(payments))]
+                coupon = ContingentCoupon(barrier=barrier, amount=amount, memory=memory,
+                                          observations=observations)
 
     # --- missing_or_ambiguous -----------------------------------------------------------------
 

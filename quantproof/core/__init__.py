@@ -9,6 +9,7 @@ from quantproof.core.termsheet import (
     Citation,
     Cited,
     ContingentCoupon,
+    CouponObservation,
     Dependency,
     Downside,
     DownsideKind,
@@ -18,6 +19,6 @@ from quantproof.core.termsheet import (
 
 __all__ = [
     "Autocall", "AutocallObservation", "BarrierObservation", "Citation", "Cited",
-    "ContingentCoupon", "Dependency", "Downside", "DownsideKind", "MarketInputs", "Measure",
-    "PricingResult", "TermSheet", "Underlying",
+    "ContingentCoupon", "CouponObservation", "Dependency", "Downside", "DownsideKind",
+    "MarketInputs", "Measure", "PricingResult", "TermSheet", "Underlying",
 ]

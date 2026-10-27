@@ -126,6 +126,16 @@ def _reply() -> dict:
                 "quote": "no memory feature for missed coupons",
                 "section": "Key Terms",
             },
+            "review_dates": {
+                "value": ["2025-09-02", "2025-10-02", "2025-11-03"],
+                "quote": "Coupon Review Dates: 2025-09-02, 2025-10-02, 2025-11-03",
+                "section": "Key Terms",
+            },
+            "payment_dates": {
+                "value": ["2025-09-05", "2025-10-07", "2025-11-06"],
+                "quote": "Coupon Payment Dates: 2025-09-05, 2025-10-07, 2025-11-06",
+                "section": "Key Terms",
+            },
         },
         "estimated_value": {
             "value": 940.0,
@@ -167,6 +177,8 @@ FILING_TEXT = "\n".join(
         "Coupon Barrier Amount 70.00% of Initial Level",
         "Contingent coupon of $25.00 per $1,000 note",
         "no memory feature for missed coupons",
+        "Coupon Review Dates: 2025-09-02, 2025-10-02, 2025-11-03",
+        "Coupon Payment Dates: 2025-09-05, 2025-10-07, 2025-11-06",
     ]
 )
 
@@ -243,6 +255,25 @@ def test_to_termsheet_maps_every_field() -> None:
     assert ts.estimated_value_floor is None
     assert ts.max_selling_commission is not None and ts.max_selling_commission.value == 30.0
     assert ts.missing_or_ambiguous == []
+    # Coupon observations parse from the two cited lists with per-item citations.
+    obs = ts.coupon.observations
+    assert len(obs) == 3
+    assert [o.review_date.value for o in obs] == [
+        date(2025, 9, 2),
+        date(2025, 10, 2),
+        date(2025, 11, 3),
+    ]
+    assert [o.payment_date.value for o in obs] == [
+        date(2025, 9, 5),
+        date(2025, 10, 7),
+        date(2025, 11, 6),
+    ]
+    # Each observation shares its list quote but owns its Citation object.
+    assert obs[0].review_date.citation is not obs[1].review_date.citation
+    assert obs[0].review_date.citation.quote == "Coupon Review Dates: 2025-09-02, 2025-10-02, 2025-11-03"
+    assert obs[1].review_date.citation.quote == "Coupon Review Dates: 2025-09-02, 2025-10-02, 2025-11-03"
+    assert obs[0].payment_date.citation.quote == "Coupon Payment Dates: 2025-09-05, 2025-10-07, 2025-11-06"
+    assert obs[2].payment_date.citation.quote == "Coupon Payment Dates: 2025-09-05, 2025-10-07, 2025-11-06"
 
 
 def test_autocall_three_observations_share_quote_with_separate_citations() -> None:
@@ -344,6 +375,46 @@ def test_mismatched_lengths_bad_date_unknown_enum_reported_together() -> None:
     assert "pricing_date" in joined
     assert "lengths differ" in joined
     assert len(excinfo.value.problems) >= 3
+
+
+def test_coupon_list_lengths_differ_reported() -> None:
+    reply = _reply()
+    reply["coupon"]["review_dates"] = {
+        "value": ["2025-09-02", "2025-10-02", "2025-11-03"],
+        "quote": "Coupon Review Dates: 2025-09-02, 2025-10-02, 2025-11-03",
+        "section": "Key Terms",
+    }
+    reply["coupon"]["payment_dates"] = {
+        "value": ["2025-09-05"],
+        "quote": "Coupon Payment Dates: 2025-09-05",
+        "section": "Key Terms",
+    }
+    with pytest.raises(ExtractionError) as excinfo:
+        to_termsheet(reply)
+    assert any(
+        "coupon: list lengths differ: review_dates=3, payment_dates=1" in p
+        for p in excinfo.value.problems
+    )
+
+
+def test_coupon_empty_lists_reported() -> None:
+    reply = _reply()
+    reply["coupon"]["review_dates"] = {
+        "value": [],
+        "quote": "Coupon Review Dates: none stated",
+        "section": "Key Terms",
+    }
+    reply["coupon"]["payment_dates"] = {
+        "value": [],
+        "quote": "Coupon Payment Dates: none stated",
+        "section": "Key Terms",
+    }
+    with pytest.raises(ExtractionError) as excinfo:
+        to_termsheet(reply)
+    assert any(
+        "coupon: expected at least one review date" in p
+        for p in excinfo.value.problems
+    )
 
 
 def test_missing_required_key_reported() -> None:
@@ -466,3 +537,14 @@ def test_prompt_defines_the_fields_a_model_could_misread() -> None:
 def test_prompt_requires_full_list_quotes() -> None:
     # Day 2 live run: the model shortened date lists with "...", hiding the middle dates.
     assert 'never use "..." to\n  skip values' in extract.SYSTEM_PROMPT
+
+
+def test_prompt_distinguishes_coupon_dates_from_call_dates() -> None:
+    assert "coupon.review_dates" in extract.SYSTEM_PROMPT
+    assert "autocall.review_dates" in extract.SYSTEM_PROMPT
+    assert "coupon.payment_dates" in extract.SYSTEM_PROMPT
+
+
+def test_prompt_states_call_amounts_exclude_coupon() -> None:
+    assert "Contingent Interest Payment" in extract.SYSTEM_PROMPT
+    assert "coupon is not added" in extract.SYSTEM_PROMPT

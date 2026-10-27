@@ -79,6 +79,8 @@ class Underlying:
 class AutocallObservation:
     review_date: Cited[date]
     payment_date: Cited[date]
+    # When the note also has a coupon, call_amount is the principal repaid on a call; that date's
+    # coupon is paid by the coupon leg, never added to call_amount.
     call_amount: Cited[float]  # paid per notional if called on this date, principal included
 
 
@@ -91,11 +93,19 @@ class Autocall:
 
 
 @dataclass
+class CouponObservation:
+    # The coupon barrier is checked on review_date, paid on payment_date.
+    review_date: Cited[date]
+    payment_date: Cited[date]
+
+
+@dataclass
 class ContingentCoupon:
     # Coupon paid on a review date if every underlying closes at or above `barrier` x initial.
     barrier: Cited[float]
     amount: Cited[float]  # per notional, per review date
     memory: Cited[bool]  # missed coupons are paid later if a later review date pays
+    observations: list[CouponObservation]
 
 
 @dataclass
@@ -152,6 +162,19 @@ class TermSheet:
                     raise ValueError(f"payment date before review date {o.review_date.value}")
                 if o.call_amount.value <= 0:
                     raise ValueError("call amounts must be positive")
+        if self.coupon is not None:
+            if not self.coupon.observations:
+                raise ValueError("coupon observations must contain at least one observation")
+            reviews = [o.review_date.value for o in self.coupon.observations]
+            if reviews != sorted(reviews) or len(set(reviews)) != len(reviews):
+                raise ValueError("coupon review dates must be strictly increasing")
+            for o in self.coupon.observations:
+                if o.payment_date.value < o.review_date.value:
+                    raise ValueError(f"payment date before review date {o.review_date.value}")
+            if not self.coupon.amount.value > 0:
+                raise ValueError("coupon amount must be positive")
+            if not 0 < self.coupon.barrier.value <= 1:
+                raise ValueError("coupon barrier must be a fraction of initial in (0, 1]")
 
     @property
     def n_underlyings(self) -> int:

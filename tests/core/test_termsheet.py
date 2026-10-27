@@ -3,7 +3,26 @@ from datetime import date
 
 import pytest
 
-from quantproof.core import Cited, Dependency
+from quantproof.core import Cited, ContingentCoupon, CouponObservation, Dependency
+
+
+def _valid_coupon() -> ContingentCoupon:
+    """Two monthly coupon observations with valid barrier and amount."""
+    return ContingentCoupon(
+        barrier=Cited(0.7),
+        amount=Cited(25.0),
+        memory=Cited(False),
+        observations=[
+            CouponObservation(
+                review_date=Cited(date(2026, 6, 2)),
+                payment_date=Cited(date(2026, 6, 5)),
+            ),
+            CouponObservation(
+                review_date=Cited(date(2026, 9, 2)),
+                payment_date=Cited(date(2026, 9, 5)),
+            ),
+        ],
+    )
 
 
 def test_jpm_filing_builds(jpm_38582_termsheet):
@@ -62,3 +81,47 @@ def test_rejects_unsorted_autocall_dates(jpm_38582_termsheet):
     obs = list(reversed(ts.autocall.observations))
     with pytest.raises(ValueError, match="increasing"):
         replace(ts, autocall=replace(ts.autocall, observations=obs))
+
+
+def test_rejects_coupon_with_no_observations(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    bad = replace(_valid_coupon(), observations=[])
+    with pytest.raises(ValueError, match="at least one observation"):
+        replace(ts, coupon=bad)
+
+
+def test_rejects_coupon_review_dates_not_strictly_increasing(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    dup = CouponObservation(
+        review_date=Cited(date(2026, 6, 2)),
+        payment_date=Cited(date(2026, 6, 6)),
+    )
+    bad = replace(_valid_coupon(), observations=[_valid_coupon().observations[0], dup])
+    with pytest.raises(ValueError, match="increasing"):
+        replace(ts, coupon=bad)
+
+
+def test_rejects_coupon_payment_before_review(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    bad_obs = CouponObservation(
+        review_date=Cited(date(2026, 6, 2)),
+        payment_date=Cited(date(2026, 6, 1)),
+    )
+    bad = replace(_valid_coupon(), observations=[bad_obs])
+    with pytest.raises(ValueError, match="payment date before review"):
+        replace(ts, coupon=bad)
+
+
+def test_rejects_coupon_nonpositive_amount(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    bad = replace(_valid_coupon(), amount=Cited(0.0))
+    with pytest.raises(ValueError, match="positive"):
+        replace(ts, coupon=bad)
+
+
+def test_rejects_coupon_barrier_outside_unit_interval(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    with pytest.raises(ValueError, match="fraction"):
+        replace(ts, coupon=replace(_valid_coupon(), barrier=Cited(0.0)))
+    with pytest.raises(ValueError, match="fraction"):
+        replace(ts, coupon=replace(_valid_coupon(), barrier=Cited(1.5)))
