@@ -96,17 +96,13 @@ def _client_env() -> dict:
     """
     import os
 
-    env: dict = {}
-    for name in ("MODEL_API_KEY", "SEC_USER_AGENT"):
-        value = os.environ.get(name)
-        if not value:
-            try:
-                value = st.secrets.get(name)  # type: ignore[attr-defined]
-            except Exception:
-                value = None
-        if value:
-            env[name] = str(value)
-    return env
+    try:
+        secrets = st.secrets  # type: ignore[attr-defined]
+    except Exception:
+        secrets = None
+    return live.resolve_secrets(
+        ("MODEL_API_KEY", "SEC_USER_AGENT"), env=os.environ, secrets=secrets
+    )
 
 
 def _live_chat():

@@ -36,6 +36,27 @@ DAILY_CAP_ENV = "QP_DAILY_CAP_USD"
 DEFAULT_DAILY_CAP_USD = 5.0
 
 
+def resolve_secrets(names, *, env, secrets) -> dict:
+    """Resolve API keys from environment variables or Streamlit secrets.
+
+    Environment variables win; ``secrets`` (a mapping, e.g. ``st.secrets``)
+    is the fallback.  Blank values count as unset.  The returned mapping
+    holds only the names that resolved; values are never logged or
+    displayed by any caller.
+    """
+    resolved: dict = {}
+    for name in names:
+        value = env.get(name) if env is not None else None
+        if not value and secrets is not None:
+            try:
+                value = secrets.get(name)
+            except Exception:
+                value = None
+        if value:
+            resolved[str(name)] = str(value)
+    return resolved
+
+
 class LiveRefused(RuntimeError):
     """Live mode refused by the cost guard (session limit or daily cap)."""
 
