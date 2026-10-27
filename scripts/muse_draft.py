@@ -202,6 +202,8 @@ def main(argv: list[str] | None = None) -> int:
         problem = ""
     except ValueError as e:
         files, notes, problem = {}, "", str(e)
+    if result.usage_estimated:
+        problem = "API sent no usage; cost is an upper bound (all of max_tokens)"
     if finish != "stop":
         cut = "cut off at max_tokens" if finish == "length" else f"stream ended early ({finish})"
         problem = (problem + "; " if problem else "") + cut

@@ -80,6 +80,9 @@ class ChatResult:
     cost_usd: float
     seconds: float
     attempts: int
+    # True when the API sent no usage (it happens occasionally): usage is then an upper bound,
+    # the request size for input and all of max_tokens for output, so spend is never undercounted.
+    usage_estimated: bool = False
 
     @property
     def truncated(self) -> bool:
@@ -213,6 +216,10 @@ def chat(
             with urlopen(request, timeout=TIMEOUT_S) as response:
                 text, finish_reason, usage_dict = parse_sse(response)
             usage = Usage.from_response(usage_dict or {})
+            usage_estimated = usage.input_tokens == 0 and usage.output_tokens == 0
+            if usage_estimated:
+                # ~4 bytes per token for the request; the reply may have used every max token.
+                usage = Usage(input_tokens=len(payload) // 4, output_tokens=max_tokens)
             cost = estimate_cost(model, usage)
             seconds = time.monotonic() - start
             result = ChatResult(
@@ -223,6 +230,7 @@ def chat(
                 cost_usd=cost,
                 seconds=seconds,
                 attempts=attempt,
+                usage_estimated=usage_estimated,
             )
             if log_path is not None:
                 record = {
@@ -239,6 +247,7 @@ def chat(
                     "seconds": seconds,
                     "finish_reason": finish_reason,
                     "attempts": attempt,
+                    "usage_estimated": usage_estimated,
                 }
                 log_file = Path(log_path)
                 log_file.parent.mkdir(parents=True, exist_ok=True)

@@ -410,3 +410,17 @@ def test_chat_unknown_model_fails_before_calling(tmp_path):
         raise AssertionError("must not call the API")
     with pytest.raises(ValueError, match="no price"):
         client.chat([], model="not-a-meta-model", log_path=None, env={}, urlopen=urlopen)
+
+
+def test_missing_usage_is_charged_as_an_upper_bound(tmp_path):
+    # The API occasionally omits usage; the call must not be logged as free.
+    stream = (b'data: {"choices": [{"delta": {"content": "hi"}, "finish_reason": "stop"}]}\n\n'
+              b"data: [DONE]\n\n")
+    log = tmp_path / "calls.jsonl"
+    res = client.chat([{"role": "user", "content": "x" * 400}], max_tokens=1000, log_path=log,
+                      env={}, urlopen=lambda req, timeout: io.BytesIO(stream))
+    assert res.usage_estimated is True
+    assert res.usage.output_tokens == 1000 and res.usage.input_tokens > 100
+    # 1000 output tokens at $4.25 per million alone is $0.00425.
+    assert res.cost_usd > 0.00425
+    assert json.loads(log.read_text())["usage_estimated"] is True

@@ -117,7 +117,9 @@ def test_call_muse_sends_bearer_when_key_set(monkeypatch):
 def test_call_muse_cut_off_stream_keeps_length_reason():
     out = md.call_muse([], "muse-spark-1.3", 10, urlopen=fake_urlopen({}, sse(
         {"choices": [{"delta": {"content": "x ="}, "finish_reason": "length"}]})))
-    assert out.finish_reason == "length" and out.usage == Usage(0, 0)
+    assert out.finish_reason == "length"
+    # No usage in the stream: charged as an upper bound, all 10 max tokens.
+    assert out.usage_estimated and out.usage.output_tokens == 10
 
 
 def test_log_rows_and_total(tmp_path):
