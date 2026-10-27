@@ -29,15 +29,17 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [x] `ingest/`: filing parser with correct charset decoding and Unicode normalisation
       (fixes the garbled "×"); the test filing saved as a fixture (Muse draft, reviewed)
 - [x] `validation/quotes.py` quote verifier, with tests: all 78 cited fields of the fixture verify
-- [ ] `agent/extract.py` extraction prompt + JSON schema -> TermSheet (moved to Day 2: needs the client)
+- [x] `agent/extract.py` extraction prompt + JSON schema -> TermSheet (done on Day 2): live run on the
+      JPM filing matches the hand-built term sheet on every value, 77/77 quotes verify
 - [ ] Joyeb: read the test filing's key terms yourself and compare with the extraction
 - [ ] Watch: Agents 101 (11:00 AM)
 
 ## Day 2 — Wed Oct 28: building blocks + reading more filings
 - [x] `models/bsm.py` (done early, on Day 1): vanilla calls/puts, cash-or-nothing digitals, Greeks, implied vol; tests
       (textbook value S=42, K=40, r=10%, σ=20%, T=0.5 → call ≈ 4.76, put ≈ 0.81; parity; bounds)
-- [ ] `ingest/` EDGAR fetch (User-Agent, rate limit, cache)
-- [ ] `agent/client.py`: Meta API client (Responses API, retries, prompt caching, token/cost log)
+- [ ] `ingest/` EDGAR fetch (User-Agent, rate limit, cache). Blocked: SEC domains not yet allowed
+- [x] `agent/client.py`: Meta API client (streaming Chat Completions, retries, prompt caching, token/cost
+      log). Chat Completions instead of the Responses API: tested with images and streaming
 - [ ] Extraction + quote verification on at least 3 more real filings: one single-underlying, one with
       contingent coupons, one final (not preliminary); saved as fixtures
 - [ ] Joyeb: derive d1/d2; explain each Greek and the digital option

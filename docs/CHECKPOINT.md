@@ -1,6 +1,6 @@
 # Checkpoint (read this after a /compact or in a new session)
 
-Updated: Tue Oct 27, 2026 (end of Day 1). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Updated: Tue Oct 27, 2026 (Day 1 done, Day 2 started early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
 
 ## Done
 - Day 1 go/no-go **GO**: Muse Spark 1.3 extracted the JPM 424B2 (worst-of autocallable, RTY + SPX,
@@ -23,15 +23,25 @@ Updated: Tue Oct 27, 2026 (end of Day 1). Repo: https://github.com/Kashyeb57/qua
   order, word boundaries (a sentence-final period is not a token). All 78 fixture citations verify.
 - Tests: 1,129 pass.
 
-## Next (Day 2, in order; Muse drafts each, task specs go in the scratchpad)
-1. `agent/client.py`: full Meta API client (streaming, retries, prompt caching, token/cost log
-   via `agent/costs.py`). Reuse the streaming code from `scripts/muse_draft.py`.
-2. `agent/extract.py`: extraction prompt + JSON schema -> TermSheet, then `validation/quotes.py`.
-3. `ingest/` EDGAR fetch: blocked until Joyeb allows `www.sec.gov`, `efts.sec.gov`,
-   `data.sec.gov` and sets `SEC_USER_AGENT`. Until then he can upload filings as fixtures.
-4. Extraction + quote verification on 3 more filings (single-underlying, contingent coupon,
-   buffered).
-5. Joyeb: read the test filing's key terms himself; derive d1/d2.
+## Day 2 so far (Tue Oct 27, evening)
+- `agent/client.py` (Muse draft, reviewed): streaming `chat()`, retries (429/5xx, network, and
+  the "stop with no content and no usage" glitch), `image_part()`, JSON-lines cost log in
+  `.cache/meta_calls.jsonl`, `spend()`. Missing usage is charged at the upper bound.
+- `agent/extract.py` (Muse draft, reviewed and rewritten for clarity): `SYSTEM_PROMPT` defines
+  every field; `to_termsheet()` reports every problem at once; `extract_termsheet()`.
+- Recorded live reply `tests/fixtures/extractions/jpm_424b2-38582.reply.json`: every value equals
+  the hand-built term sheet; 77/77 quotes verify; gearing flagged (not in the filing).
+- `scripts/muse_draft.py` now uses `client.chat`. Dev spend $0.60 of $80. Tests: 1,167 pass.
+
+## Next (in order)
+1. Value-support check (Day 4 proof battery, or sooner): a quote must contain its value (dates
+   as written, percent forms of fractions, call premium %). Hand-built fixture quotes such as
+   "Review Dates*:" would fail it; the model's quotes are stronger.
+2. EDGAR fetch: blocked until Joyeb allows `www.sec.gov`, `efts.sec.gov`, `data.sec.gov` and sets
+   `SEC_USER_AGENT` (a new session may be needed). Until then he can upload filings.
+3. Extraction on 3 more filings (single-underlying, contingent coupon, buffered): needs filings.
+4. Day 3 engine: `models/montecarlo.py`, `models/discounting.py`, `payoffs/`.
+5. Joyeb: read the JPM key terms himself (table in the chat); derive d1/d2.
 
 ## Environment facts
 - Meta key is a **network secret** (proxy adds the header); `MODEL_API_KEY` not set. `/v1/models`
