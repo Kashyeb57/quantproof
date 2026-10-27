@@ -20,8 +20,9 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
       zero wrong fields, 17/17 dates and call amounts, 93/97 quotes verbatim (4 line-join issues),
       diagrams read correctly, ~22 s and ~$0.05 per filing. Product supplement not needed for pricing.
 - [ ] Repo `quantproof` created (public); starter pack committed first
-- [ ] `pyproject.toml`, package skeleton (brief section 5), `.gitignore`, CI running pytest
-- [ ] `core/`: TermSheet (+ Citation; N >= 1 underlyings; preliminary flag; call schedule; barrier
+      (committed locally first; waiting for the empty GitHub repo to push)
+- [x] `pyproject.toml`, package skeleton (brief section 5), `.gitignore`, CI running pytest
+- [x] `core/`: TermSheet (+ Citation; N >= 1 underlyings; preliminary flag; call schedule; barrier
       type and observation), MarketInputs, PricingResult (with measure + provenance)
 - [ ] `ingest/`: filing parser with correct charset decoding and Unicode normalisation
       (fixes the garbled "×"); the test filing saved as a fixture
@@ -30,7 +31,7 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [ ] Watch: Agents 101 (11:00 AM)
 
 ## Day 2 — Wed Oct 28: building blocks + reading more filings
-- [ ] `models/bsm.py`: vanilla calls/puts, cash-or-nothing digitals, Greeks, implied vol; tests
+- [x] `models/bsm.py` (done early, on Day 1): vanilla calls/puts, cash-or-nothing digitals, Greeks, implied vol; tests
       (textbook value S=42, K=40, r=10%, σ=20%, T=0.5 → call ≈ 4.76, put ≈ 0.81; parity; bounds)
 - [ ] `ingest/` EDGAR fetch (User-Agent, rate limit, cache)
 - [ ] `agent/client.py`: Meta API client (Responses API, retries, prompt caching, token/cost log)
