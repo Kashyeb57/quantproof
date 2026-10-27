@@ -81,6 +81,31 @@ def check_filing_admissible(filing, *, max_chars: int) -> None:
             "priced in live mode."
         )
 
+TOTAL_CAP_ENV = "QP_TOTAL_CAP_USD"
+DEFAULT_TOTAL_CAP_USD = 20.0
+
+
+def total_cap_usd(env: dict | None = None) -> float:
+    """Lifetime spend cap in USD: env ``QP_TOTAL_CAP_USD``, default $20."""
+    import os
+
+    raw = (os.environ if env is None else env).get(TOTAL_CAP_ENV, "")
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return DEFAULT_TOTAL_CAP_USD
+    return value if value > 0 else DEFAULT_TOTAL_CAP_USD
+
+
+def total_spend(log_path=None) -> float:
+    """USD spent over the whole cost log (all dates), via ``client.spend``."""
+    from pathlib import Path
+
+    from quantproof.agent.client import DEFAULT_LOG, spend
+
+    return spend(Path(log_path) if log_path is not None else DEFAULT_LOG)
+
+
 SESSION_EXTRACTION_LIMIT = 3
 DAILY_CAP_ENV = "QP_DAILY_CAP_USD"
 DEFAULT_DAILY_CAP_USD = 5.0
@@ -229,7 +254,8 @@ class LiveGuard:
 
     def get_or_extract(
         self, key: str, extract_fn, *, spent_today: float, cap: float,
-        estimate: float = 0.0,
+        estimate: float = 0.0, spent_total: float = 0.0,
+        total_cap: float | None = None,
     ):
         """Return (note, from_cache) for ``key``, enforcing the guard."""
         if key in self.cache:
@@ -251,6 +277,13 @@ class LiveGuard:
                 f"of ${spent_today:,.2f} plus this filing's worst-case "
                 f"estimate of ${estimate:,.2f} would exceed the daily "
                 f"cap of ${cap:,.2f}. Demo mode remains available."
+            )
+        if total_cap is not None and spent_total + estimate > total_cap:
+            raise LiveRefused(
+                "Live extraction refused before it starts: lifetime spend "
+                f"of ${spent_total:,.2f} plus this filing's worst-case "
+                f"estimate of ${estimate:,.2f} would exceed the lifetime "
+                f"cap of ${total_cap:,.2f}. Demo mode remains available."
             )
         note = extract_fn()
         self.extractions_used += 1

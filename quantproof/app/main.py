@@ -101,7 +101,12 @@ def _client_env() -> dict:
     except Exception:
         secrets = None
     return live.resolve_secrets(
-        ("MODEL_API_KEY", "SEC_USER_AGENT", "QP_DAILY_CAP_USD"),
+        (
+            "MODEL_API_KEY",
+            "SEC_USER_AGENT",
+            "QP_DAILY_CAP_USD",
+            "QP_TOTAL_CAP_USD",
+        ),
         env=os.environ,
         secrets=secrets,
     )
@@ -136,7 +141,20 @@ def run() -> None:
         if "QP_DAILY_CAP_USD" in cap_env
         else {}
     )
+    total_cap = live.total_cap_usd(
+        {"QP_TOTAL_CAP_USD": cap_env["QP_TOTAL_CAP_USD"]}
+        if "QP_TOTAL_CAP_USD" in cap_env
+        else {}
+    )
     spent_today = live.daily_spend()
+    spent_total = live.total_spend()
+    if live_mode and spent_total >= total_cap:
+        _error(
+            "Live mode is off: lifetime spend has reached the lifetime "
+            f"cap of ${total_cap:,.2f} (set by QP_TOTAL_CAP_USD). "
+            "Demo mode remains available."
+        )
+        live_mode = False
     if live_mode and not live.live_available(spent_today, cap):
         _error(
             "Live mode is off: today's spend has reached the daily cap "
@@ -208,6 +226,8 @@ def run() -> None:
                             spent_today=live.daily_spend(),
                             cap=cap,
                             estimate=estimate,
+                            spent_total=live.total_spend(),
+                            total_cap=total_cap,
                         )
                 st.session_state["live_note"] = live_note
             except live.LiveRefused as refused:

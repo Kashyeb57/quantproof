@@ -30,11 +30,12 @@ Steps in the Streamlit Community Cloud website:
    MODEL_API_KEY = "your Meta Model API key"
    SEC_USER_AGENT = "Your Name your-email@example.com"
    QP_DAILY_CAP_USD = "5"
+   QP_TOTAL_CAP_USD = "20"
    ```
 
    `MODEL_API_KEY` is the Meta Model API key for Muse Spark 1.3 live
    extraction. `SEC_USER_AGENT` is the name-and-email User-Agent SEC
-   fair access requires. `QP_DAILY_CAP_USD` is optional; the daily
+   fair access requires. `QP_DAILY_CAP_USD` and `QP_TOTAL_CAP_USD` are optional; the daily
    spend cap defaults to $5 when unset. Never paste a key anywhere
    else, and never commit `.streamlit/secrets.toml` (it is gitignored;
    `.streamlit/secrets.toml.example` shows the format).
@@ -47,6 +48,18 @@ Steps in the Streamlit Community Cloud website:
    is reached.
 8. Put the live URL at the top of the README and in the submission
    description (Day 8).
+
+Two caps guard live mode, both enforced before an extraction starts:
+at most 3 live extractions per browser session; a daily cap
+(`QP_DAILY_CAP_USD`, default $5) that a new run's worst-case estimate
+must still fit under; and a lifetime cap (`QP_TOTAL_CAP_USD`,
+default $20) over the whole cost log. Restart-proofing caveat: the
+cost log is a local file (`.cache/meta_calls.jsonl`) and resets when
+the host restarts or redeploys, so the lifetime cap resets with it.
+Treat the caps as a strong brake, not an accounting guarantee: set a
+spend notification (billing alert) on the Meta developer billing page
+for the API key, which is the final backstop if the log is ever reset
+or bypassed.
 
 If live mode says it is off, today's logged spend has reached the cap;
 raise `QP_DAILY_CAP_USD` in the app secrets only after checking the
