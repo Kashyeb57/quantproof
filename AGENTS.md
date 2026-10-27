@@ -63,6 +63,24 @@ pricing maths** in a graduate-school interview. So:
   trailers** in commit messages (owner's choice). Tools used are disclosed in the README instead.
 - Do not delete or weaken tests to make them pass. Fix the code, or explain why the test is wrong.
 
+## Development workflow: Muse drafts, Claude verifies
+
+Joyeb wants development to run mostly on Meta credits, not Claude cloud credits.
+
+- **Muse Spark 1.3 drafts new code** through `scripts/muse_draft.py`: send it the task, the relevant
+  files and these rules; it returns complete files. Claude Code then reviews every line, runs the
+  tests, fixes problems and commits. Never commit Muse output that has not been reviewed and tested.
+- **Pricing maths** (`models/`, `payoffs/`, `valuation/`, `risk/`, `validation/`): Muse may draft, but
+  Claude checks each formula against its docstring, the reference and independent tests before
+  accepting it. Correctness beats credit savings here.
+- **Log every development call** (task, files, tokens, estimated cost) in `docs/MUSE_DEV_LOG.md`. It
+  feeds the submission answer "use of Meta products to build the project".
+- **Budget:** up to $80 of Meta credits for development; keep at least $50 for the product and demo.
+  Stop and tell Joyeb if the log shows development spend above $80.
+- **One build day per session.** Start a fresh session each day: long sessions cost far more per step.
+  Keep replies and tool output short.
+- Joyeb may use **Muse Code** on his PC for side tasks; note what it built in the same log.
+
 ## Cost awareness (~$150 of Meta credits)
 
 - Live API calls only when a task needs them; mock them in tests.
