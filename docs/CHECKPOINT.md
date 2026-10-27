@@ -79,8 +79,23 @@ Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://g
   to ~$926 (rho 0.8) vs bank $954. Real inputs and the range come on Day 5.
 - Dev spend $2.47 of $80. Tests: 1,286 pass.
 
+## Day 4 proof battery (Oct 27, night)
+- Drafts now by **Muse Wonder** (owner's choice) with `--reasoning-effort low|medium`: without it
+  Wonder reasoned ~30k tokens and the gateway cut the stream at ~300 s (only $0.70 lost).
+- `validation/battery.py`: `run_battery(ts, market, n_paths, seed, filing_text)` -> `CheckResult`s:
+  BSM known values, parity, determinism, barrier removed (buffer 100% = bond - ATM put), barrier at
+  maturity (bond - put - (1-K) digital), never callable (+ digital coupons), zero coupon, zero vol,
+  correlation 1, correlation / vol / spread / coupon monotonicity, convergence (SE ratio 0.5 +- 0.1),
+  quotes. N = 1 is covered by the closed-form checks (they run on asset 0 alone).
+- Stress run: 3 real term sheets x 6 seeds x 100k paths, no failures.
+- `validation/report.py` + `scripts/validation_report.py` -> `docs/VALIDATION.md` and
+  `docs/validation/*.svg` (hand-written SVG, no new dependency). 38582 13/14, ea0309017 15/15,
+  ea0308498 12/13 (the misses are quote flags: gearing not stated), ea0306095 refused.
+- Dev spend $4.12 of $80. Tests: 1,301 pass.
+
 ## Next (in order)
-1. Day 4 proof battery (`validation/`, brief section 7) on both templates; `docs/VALIDATION.md`.
+1. Day 5 `valuation/` (fair-value range over vol x corr x spread x dividend grid, skew, bank
+   comparison) and `risk/` (labelled real-world simulation, loss odds, stress heatmap); end-to-end CLI.
 2. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
 
 ## Environment facts

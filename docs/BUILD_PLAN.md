@@ -58,9 +58,9 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
       dates need path simulation
 
 ## Day 4 — Fri Oct 30: proof battery
-- [ ] `validation/`: every check in brief section 7 (incl. N = 1, correlation = 1, correlation
+- [x] `validation/`: every check in brief section 7 (incl. N = 1, correlation = 1, correlation
       monotonicity), applied to both templates
-- [ ] `docs/VALIDATION.md` generator with convergence and decomposition charts
+- [x] `docs/VALIDATION.md` generator with convergence and decomposition charts
 - [ ] Joyeb: explain the never-callable decomposition and the barrier-at-maturity closed form
 - [ ] Watch: Fireworks workshop on Muse open models (11:00 AM)
 
