@@ -157,6 +157,45 @@ def daily_spend(log_path=None, *, day=None) -> float:
     return total
 
 
+EXTRACTION_MAX_TOKENS = 16_000  # extract_termsheet default max_tokens
+RECHECK_MAX_TOKENS = 4_000  # crosscheck recheck default max_tokens
+RECHECK_ALLOWANCE = 3  # worst-case re-check calls allowed in the estimate
+
+
+def estimate_live_cost(text_len: int, *, model: str = LIVE_MODEL) -> float:
+    """Worst-case USD estimate for one whole live run, before it starts.
+
+    Formula: input tokens per call = ceil(text_len / 4) (about four
+    characters per token); each of the two extractions (first plus
+    cross-check second) is charged that input plus the full
+    ``EXTRACTION_MAX_TOKENS`` output; up to ``RECHECK_ALLOWANCE``
+    re-check calls are charged the same input plus the full
+    ``RECHECK_MAX_TOKENS`` output.  Output is charged at the maximum,
+    never at an expected value, so the estimate errs high.
+
+    Intuition: the daily cap is only useful if a run that would breach
+    it is refused before it starts, at the most it could possibly cost.
+
+    Reference: ``quantproof.agent.costs`` prices (Muse Spark: input and
+    output dollars per million tokens); extract/recheck token limits in
+    ``quantproof.agent.extract`` and ``quantproof.agent.crosscheck``.
+    """
+    import math
+
+    from quantproof.agent.costs import Usage, estimate_cost
+
+    if model != LIVE_MODEL:
+        raise ValueError(f"the public app uses {LIVE_MODEL} only, not {model!r}")
+    input_tokens = math.ceil(max(int(text_len), 0) / 4)
+    one_extraction = estimate_cost(
+        model, Usage(input_tokens=input_tokens, output_tokens=EXTRACTION_MAX_TOKENS)
+    )
+    one_recheck = estimate_cost(
+        model, Usage(input_tokens=input_tokens, output_tokens=RECHECK_MAX_TOKENS)
+    )
+    return 2.0 * one_extraction + RECHECK_ALLOWANCE * one_recheck
+
+
 def live_available(spent_today: float, cap: float) -> bool:
     """Whether live mode may spend at all under the daily cap."""
     return spent_today < cap
@@ -184,7 +223,14 @@ class LiveGuard:
         if self.cache is None:
             self.cache = {}
 
-    def get_or_extract(self, key: str, extract_fn, *, spent_today: float, cap: float):
+    def cached_note(self, key: str):
+        """The cached note for ``key``, or None (never extracts)."""
+        return self.cache.get(key)
+
+    def get_or_extract(
+        self, key: str, extract_fn, *, spent_today: float, cap: float,
+        estimate: float = 0.0,
+    ):
         """Return (note, from_cache) for ``key``, enforcing the guard."""
         if key in self.cache:
             return self.cache[key], True
@@ -197,6 +243,13 @@ class LiveGuard:
         if not live_available(spent_today, cap):
             raise LiveRefused(
                 "Live mode is off: today's spend has reached the daily "
+                f"cap of ${cap:,.2f}. Demo mode remains available."
+            )
+        if spent_today + estimate > cap:
+            raise LiveRefused(
+                "Live extraction refused before it starts: today's spend "
+                f"of ${spent_today:,.2f} plus this filing's worst-case "
+                f"estimate of ${estimate:,.2f} would exceed the daily "
                 f"cap of ${cap:,.2f}. Demo mode remains available."
             )
         note = extract_fn()
