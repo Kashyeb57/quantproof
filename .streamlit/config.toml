@@ -1,0 +1,5 @@
+# Streamlit server limits for the public app.
+# Uploads are single filing documents; 2 MB is ample for a 424B2 .htm
+# and refuses anything larger before the app sees it.
+[server]
+maxUploadSize = 2

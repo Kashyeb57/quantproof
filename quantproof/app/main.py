@@ -176,6 +176,9 @@ def run() -> None:
                             url.strip(),
                             edgar_client=EdgarClient(env=_client_env()),
                         )
+                        live.check_filing_admissible(
+                            filing, max_chars=live.max_filing_chars()
+                        )
                         return live.extract_and_crosscheck(
                             filing, source, chat=_live_chat()
                         )
@@ -189,6 +192,9 @@ def run() -> None:
 
                     def extract_fn():
                         filing = live.filing_from_upload(data)
+                        live.check_filing_admissible(
+                            filing, max_chars=live.max_filing_chars()
+                        )
                         return live.extract_and_crosscheck(
                             filing, source, chat=_live_chat()
                         )

@@ -31,6 +31,56 @@ from quantproof.ingest.html import Filing, read_filing
 
 LIVE_MODEL = "muse-spark-1.3"
 
+MAX_FILING_CHARS_ENV = "QP_MAX_FILING_CHARS"
+DEFAULT_MAX_FILING_CHARS = 400_000
+
+
+def max_filing_chars(env: dict | None = None) -> int:
+    """Cleaned-text size limit for a live filing: env or 400,000 chars."""
+    import os
+
+    raw = (os.environ if env is None else env).get(MAX_FILING_CHARS_ENV, "")
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return DEFAULT_MAX_FILING_CHARS
+    return value if value > 0 else DEFAULT_MAX_FILING_CHARS
+
+
+def is_pricing_supplement(text: str) -> bool:
+    """Whether cleaned filing text is a 424B2 pricing supplement.
+
+    Checks the document header (the first 2,000 characters of cleaned
+    text): SEC filings open with the form type, and every saved 424B2
+    fixture opens ``424B2 ... PRICING SUPPLEMENT``.  Anything else
+    (a 10-K, a prospectus without the supplement header, ...) is not a
+    document this app prices.
+    """
+    head = text[:2000].upper()
+    return "424B2" in head and "PRICING SUPPLEMENT" in head
+
+
+def check_filing_admissible(filing, *, max_chars: int) -> None:
+    """Refuse oversize or non-424B2 filings before any extraction spend.
+
+    Raises ``LiveRefused`` with a user-facing message.  Downloading and
+    cleaning a filing costs no credits, so a refusal here spends
+    nothing.
+    """
+    if len(filing.text) > max_chars:
+        raise LiveRefused(
+            f"Filing refused: its cleaned text is {len(filing.text):,} "
+            f"characters, over the {max_chars:,}-character limit for "
+            "live mode. Demo mode remains available."
+        )
+    if not is_pricing_supplement(filing.text):
+        raise LiveRefused(
+            "Filing refused: this does not look like a 424B2 pricing "
+            "supplement (the document header does not state 424B2 / "
+            "PRICING SUPPLEMENT). Only 424B2 pricing supplements are "
+            "priced in live mode."
+        )
+
 SESSION_EXTRACTION_LIMIT = 3
 DAILY_CAP_ENV = "QP_DAILY_CAP_USD"
 DEFAULT_DAILY_CAP_USD = 5.0
