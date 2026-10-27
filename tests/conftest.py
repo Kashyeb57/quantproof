@@ -40,6 +40,27 @@ PAYMENT_DATES = [
 # Minimum call premiums: 9.75% stepping up 2.4375% per review date ("at least ...").
 CALL_PREMIUMS = [97.5 + 24.375 * k for k in range(17)]
 
+# Every quote below shows its value (the quote verifier checks that, not just that the text
+# exists). Lists are quoted in full; the last call settlement date is "the Maturity Date", so its
+# quote adds the sentence that states that date.
+REVIEW_DATES_LINE = (
+    "Review Dates*: December 2, 2026, February 25, 2027, May 25, 2027, August 25, 2027, "
+    "November 26, 2027, February 25, 2028, May 25, 2028, August 25, 2028, November 27, 2028, "
+    "February 26, 2029, May 25, 2029, August 27, 2029, November 26, 2029, February 25, 2030, "
+    "May 28, 2030, August 26, 2030 and November 25, 2030 (final Review Date)"
+)
+SETTLEMENT_DATES_LINE = (
+    "Call Settlement Dates*: December 8, 2026, March 2, 2027, May 28, 2027, August 30, 2027, "
+    "December 1, 2027, March 1, 2028, May 31, 2028, August 30, 2028, November 30, 2028, "
+    "March 1, 2029, May 31, 2029, August 30, 2029, November 29, 2029, February 28, 2030, "
+    "May 31, 2030, August 29, 2030 and the Maturity Date ... Maturity Date*: November 29, 2030"
+)
+RTY_CLOSE = "The closing level of the Russell 2000® Index on November 17, 2025 was 2,341.377"
+SPX_CLOSE = "The closing level of the S&P 500® Index on November 17, 2025 was 6,672.41"
+ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
+            "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth",
+            "final"]
+
 
 def c(value, quote, section=KEY):
     return Cited(value, Citation(quote, section))
@@ -49,11 +70,11 @@ def c(value, quote, section=KEY):
 def jpm_38582_termsheet() -> TermSheet:
     observations = [
         AutocallObservation(
-            review_date=c(r, "Review Dates*:"),
-            payment_date=c(p, "Call Settlement Dates*:"),
-            call_amount=c(1000 + prem, "Call Premium Amount", "PS-2"),
+            review_date=c(r, REVIEW_DATES_LINE),
+            payment_date=c(p, SETTLEMENT_DATES_LINE),
+            call_amount=c(1000 + prem, f"{ordinal} Review Date: at least {prem / 10:.4f}% × $1,000"),
         )
-        for r, p, prem in zip(REVIEW_DATES, PAYMENT_DATES, CALL_PREMIUMS)
+        for r, p, prem, ordinal in zip(REVIEW_DATES, PAYMENT_DATES, CALL_PREMIUMS, ORDINALS)
     ]
     return TermSheet(
         issuer=c("JPMorgan Chase Financial Company LLC",
@@ -62,20 +83,19 @@ def jpm_38582_termsheet() -> TermSheet:
         cusip=c("48136LQH5", "CUSIP: 48136LQH5", "Cover"),
         is_preliminary=c(True, "PRELIMINARY PRICING SUPPLEMENT", "Cover"),
         underlyings=[
-            Underlying(name=c("Russell 2000 Index", "Bloomberg ticker: RTY"),
+            Underlying(name=c("Russell 2000 Index",
+                               "The Russell 2000® Index (Bloomberg ticker: RTY)"),
                        ticker=c("RTY", "Bloomberg ticker: RTY"),
-                       reference_level=c(2341.377, "The closing level of the Russell 2000",
-                                         "PS-7"),
-                       reference_date=c(date(2025, 11, 17), "on November 17, 2025 was", "PS-7")),
-            Underlying(name=c("S&P 500 Index", "Bloomberg ticker: SPX"),
+                       reference_level=c(2341.377, RTY_CLOSE, "PS-7"),
+                       reference_date=c(date(2025, 11, 17), RTY_CLOSE, "PS-7")),
+            Underlying(name=c("S&P 500 Index", "The S&P 500® Index (Bloomberg ticker: SPX)"),
                        ticker=c("SPX", "Bloomberg ticker: SPX"),
-                       reference_level=c(6672.41, "Index on November 17, 2025 was 6,672.41",
-                                         "PS-7"),
-                       reference_date=c(date(2025, 11, 17), "on November 17, 2025 was", "PS-7")),
+                       reference_level=c(6672.41, SPX_CLOSE, "PS-7"),
+                       reference_date=c(date(2025, 11, 17), SPX_CLOSE, "PS-7")),
         ],
         dependency=c(Dependency.WORST_OF, "Lesser Performing Index Return"),
         notional=c(1000.0, "Minimum denominations of $1,000", "Cover"),
-        issue_price=c(1000.0, "Price to Public", "Cover"),
+        issue_price=c(1000.0, "Per note | $1,000", "Cover"),
         pricing_date=c(date(2025, 11, 25), "Pricing Date: On or about November 25, 2025"),
         issue_date=c(date(2025, 11, 28), "On or about November 28, 2025"),
         maturity_date=c(date(2030, 11, 29), "Maturity Date*: November 29, 2030"),
