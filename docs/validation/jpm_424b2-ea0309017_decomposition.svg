@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" font-family="sans-serif" role="img">
+<title>Barrier note = bond - put - digital</title>
+<text x="320.0" y="24" text-anchor="middle" font-size="16" fill="#111827">Barrier note = bond - put - digital</text>
+<line x1="140.3" y1="40.0" x2="140.3" y2="306.0" stroke="#6b7280" stroke-width="1"/>
+<text x="110.0" y="324.0" text-anchor="middle" font-size="10" fill="#6b7280">-77.43</text>
+<text x="220.0" y="324.0" text-anchor="middle" font-size="10" fill="#6b7280">203.26</text>
+<text x="330.0" y="324.0" text-anchor="middle" font-size="10" fill="#6b7280">483.95</text>
+<text x="440.0" y="324.0" text-anchor="middle" font-size="10" fill="#6b7280">764.64</text>
+<text x="550.0" y="324.0" text-anchor="middle" font-size="10" fill="#6b7280">1045.33</text>
+<text x="330.0" y="352" text-anchor="middle" font-size="12" fill="#6b7280">value</text>
+<text x="102.0" y="63.0" text-anchor="end" font-size="12" fill="#111827">bond</text>
+<rect x="140.3" y="46.0" width="379.3" height="26.0" fill="#2563eb"/>
+<text x="525.7" y="63.0" text-anchor="start" font-size="11" fill="#111827">967.89</text>
+<text x="102.0" y="115.0" text-anchor="end" font-size="12" fill="#111827">put</text>
+<rect x="517.9" y="98.0" width="1.7" height="26.0" fill="#dc2626"/>
+<text x="511.9" y="115.0" text-anchor="end" font-size="11" fill="#111827">-4.43</text>
+<text x="102.0" y="167.0" text-anchor="end" font-size="12" fill="#111827">digital</text>
+<rect x="512.1" y="150.0" width="5.8" height="26.0" fill="#dc2626"/>
+<text x="506.1" y="167.0" text-anchor="end" font-size="11" fill="#111827">-14.74</text>
+<text x="102.0" y="219.0" text-anchor="end" font-size="12" fill="#111827">closed form</text>
+<rect x="140.3" y="202.0" width="371.8" height="26.0" fill="#2563eb"/>
+<text x="518.1" y="219.0" text-anchor="start" font-size="11" fill="#111827">948.72</text>
+<text x="102.0" y="271.0" text-anchor="end" font-size="12" fill="#111827">MC</text>
+<rect x="140.3" y="254.0" width="371.9" height="26.0" fill="#2563eb"/>
+<text x="518.2" y="271.0" text-anchor="start" font-size="11" fill="#111827">948.86</text>
+<line x1="512.0" y1="267.0" x2="512.4" y2="267.0" stroke="#6b7280" stroke-width="1.5"/>
+<line x1="512.0" y1="261.0" x2="512.0" y2="273.0" stroke="#6b7280" stroke-width="1.5"/>
+<line x1="512.4" y1="261.0" x2="512.4" y2="273.0" stroke="#6b7280" stroke-width="1.5"/>
+</svg>
