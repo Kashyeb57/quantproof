@@ -28,7 +28,9 @@ from quantproof.agent.extract import to_termsheet  # noqa: E402
 from quantproof.core.market import MarketInputs  # noqa: E402
 from quantproof.ingest.html import read_filing  # noqa: E402
 from quantproof.payoffs.worst_of import UnsupportedTermSheet, check_supported  # noqa: E402
-from quantproof.validation.battery import run_battery  # noqa: E402
+from quantproof.registry import store  # noqa: E402
+from quantproof.validation.battery import check_quotes, run_battery  # noqa: E402
+from quantproof.validation.synth_battery import battery_passed, run_synth_battery  # noqa: E402
 from quantproof.validation.report import (  # noqa: E402
     render_markdown,
     svg_convergence,
@@ -56,13 +58,55 @@ _SPECS: dict[str, dict] = {
         "correlation": ((1.0,),),
     },
     "jpm_424b2-ea0306095": {
-        "vols": (0.20,),
-        "dividend_yields": (0.01,),
-        "correlation": ((1.0,),),
+        "vols": (0.30, 0.35, 0.28),
+        "dividend_yields": (0.0, 0.01, 0.012),
+        "correlation": ((1.0, 0.5, 0.5), (0.5, 1.0, 0.5), (0.5, 0.5, 1.0)),
     },
 }
 
 _SOURCES = {"all": "illustrative inputs for the proof battery, not market data"}
+
+
+_SYNTH_PATHS_CAP = 20_000  # the registered synth battery ran at 20,000 paths
+
+
+def _recorded_examples(stem: str, filing) -> list:
+    """Filing payout examples for ``stem`` from its recorded live-run replies.
+
+    Offline: replays the saved ``extract_examples`` reply in
+    ``tests/fixtures/synthesis/<stem>.calls.json`` through a fake chat (the
+    same pattern as tests/registry/test_registered_payoffs.py). Returns []
+    when no recorded reply exists; the synth battery then fails its
+    filing-examples check for lack of evidence and the note stays refused.
+    """
+    calls_path = ROOT / "tests" / "fixtures" / "synthesis" / f"{stem}.calls.json"
+    if not calls_path.exists():
+        return []
+    try:
+        from types import SimpleNamespace
+
+        from quantproof.agent import synthesis
+
+        records = json.loads(calls_path.read_text(encoding="utf-8"))
+        if not isinstance(records, list):
+            return []
+        text = None
+        finish = "stop"
+        for record in records:
+            if isinstance(record, dict) and record.get("purpose") == "extract_examples":
+                if isinstance(record.get("text"), str) and record["text"]:
+                    text = record["text"]
+                    finish = record.get("finish_reason") or "stop"
+                break
+        if not text:
+            return []
+
+        def fake_chat(messages, **_kwargs):
+            return SimpleNamespace(text=text, finish_reason=finish)
+
+        return synthesis.extract_examples(filing, chat=fake_chat)
+    except Exception:
+        return []
 
 
 def _market(ts, spec: dict) -> MarketInputs:
@@ -160,7 +204,8 @@ def main(argv: list[str] | None = None) -> int:
         filing_path = ROOT / "tests" / "fixtures" / "filings" / f"{stem}.htm"
         with extraction_path.open(encoding="utf-8") as fh:
             ts = to_termsheet(json.load(fh))
-        filing_text = read_filing(filing_path.read_bytes()).text
+        filing = read_filing(filing_path.read_bytes())
+        filing_text = filing.text
         market = _market(ts, spec)
 
         note: dict = {
@@ -172,15 +217,45 @@ def main(argv: list[str] | None = None) -> int:
             "refused": None,
             "charts": {},
         }
+        results = None
         try:
             check_supported(ts)
         except UnsupportedTermSheet as error:
-            note["refused"] = str(error)
-            notes.append(note)
-            print(f"{stem}: refused: {error}")
-            continue
+            registered_name = store.find_for(ts)
+            synth_results = None
+            if registered_name is not None:
+                code, _metadata = store.load(registered_name)
+                candidate = run_synth_battery(
+                    code,
+                    ts,
+                    market,
+                    _recorded_examples(stem, filing),
+                    n_paths=min(args.paths, _SYNTH_PATHS_CAP),
+                    seed=args.seed,
+                    filing_text=filing_text,
+                )
+                if battery_passed(candidate):
+                    synth_results = candidate
+            if synth_results is None:
+                if registered_name is None:
+                    note["refused"] = str(error)
+                else:
+                    note["refused"] = (
+                        f"{error}; registered payoff {registered_name} did not "
+                        "pass the re-run synthesized-payoff battery"
+                    )
+                notes.append(note)
+                print(f"{stem}: refused: {note['refused']}")
+                continue
+            results = synth_results + [check_quotes(ts, filing_text)]
+            note["termsheet_summary"] = (
+                str(note["termsheet_summary"])
+                + f" Priced with the registered agent-written payoff "
+                f"{registered_name}, which passed the synthesized-payoff "
+                "proof battery in the registry."
+            )
 
-        results = run_battery(
+        results = results or run_battery(
             ts, market, n_paths=args.paths, seed=args.seed, filing_text=filing_text
         )
         note["results"] = results

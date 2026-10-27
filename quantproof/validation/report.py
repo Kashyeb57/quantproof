@@ -47,6 +47,10 @@ _FALLBACK_INTUITIONS: dict[str, str] = {
     "coupon_monotonicity": "The investor is long the coupon leg; paying 1.5x on the same paths pays more on every path that pays at all.",
     "convergence": "The standard error of a Monte Carlo mean falls with the square root of the number of paths; this checks the reported SE is honest.",
     "quotes": "A number without a quote that can be found in the filing cannot be trusted or shown to a user silently (project rule 5a).",
+    "static_safety": "Generated code is untrusted; anything the static checker cannot see through is refused without execution.",
+    "output_sanity": "A note cannot pay a negative amount, and once it has been called it no longer exists, so nothing may be paid afterwards.",
+    "filing_examples": "The filing's own hypothetical payment table is ground truth; a payoff that cannot reproduce it to the cent has misread the terms.",
+    "called_paths_match_template": "The new feature changes the maturity payoff only; called paths never reach maturity, so the trusted template is an exact reference there.",
 }
 
 
@@ -476,18 +480,35 @@ def render_markdown(notes: list[dict], generated: str) -> str:
     # Summary table.
     lines.append("## Summary")
     lines.append("")
-    lines.append("| Note | Checks passed | Flagged |")
+    lines.append("| Note | Maths | Quotes |")
     lines.append("| --- | --- | --- |")
     for note in notes:
         label = str(note.get("label", note.get("file", "")))
         if note.get("refused"):
-            lines.append(f"| {label} | - | refused |")
+            lines.append(f"| {label} | refused | - |")
             continue
         results = note.get("results") or []
-        n_passed = sum(1 for r in results if r.passed)
-        flagged = any(r.name == "quotes" and not r.passed for r in results)
+        maths = [r for r in results if r.name != "quotes"]
+        n_maths_passed = sum(1 for r in maths if r.passed)
+        if len(maths) == n_maths_passed:
+            maths_text = f"Maths {n_maths_passed}/{len(maths)} pass"
+        else:
+            maths_text = f"Maths {n_maths_passed}/{len(maths)} pass, {len(maths) - n_maths_passed} failed"
+        quotes_result = next((r for r in results if r.name == "quotes"), None)
+        if quotes_result is None:
+            quotes_text = "-"
+        else:
+            verified = int(quotes_result.value or 0)
+            total = int(quotes_result.reference or 0)
+            missing = total - verified
+            if missing <= 0:
+                quotes_text = f"Quotes {verified}/{total} verified"
+            else:
+                noun = "field needs" if missing == 1 else "fields need"
+                quotes_text = f"Quotes {verified}/{total}, {missing} {noun} user confirmation"
+        
         lines.append(
-            f"| {label} | {n_passed}/{len(results)} | {'FLAGGED' if flagged else '-'} |"
+            f"| {label} | {maths_text} | {quotes_text} |"
         )
     lines.append("")
 
@@ -513,7 +534,7 @@ def render_markdown(notes: list[dict], generated: str) -> str:
             if r.name not in seen_checks:
                 seen_checks.append(r.name)
             if r.name == "quotes" and not r.passed:
-                status = "FLAGGED"
+                status = "NEEDS CONFIRMATION"
             else:
                 status = "PASS" if r.passed else "FAIL"
             detail = str(r.detail).replace("|", "\\|")

@@ -115,7 +115,10 @@ def test_render_markdown_fake_notes() -> None:
     md = render_markdown(_fake_notes(), generated="2026-01-01")
     assert "# Validation report" in md
     assert "PASS" in md
-    assert "FLAGGED" in md
+    assert "NEEDS CONFIRMATION" in md
+    assert "| Note | Maths | Quotes |" in md
+    assert "Maths 1/1 pass" in md
+    assert "Quotes 3/4, 1 field needs user confirmation" in md
     assert "issuer" in md  # unverified field listed
     assert "unsupported features: ['daily barrier']" in md
     assert "![convergence](validation/fake-one_convergence.svg)" in md
@@ -149,5 +152,10 @@ def test_scripts_validation_report_end_to_end(tmp_path: Path) -> None:
     # Per-note sections.
     section_38582 = md.split("## jpm_424b2-38582", 1)[1].split("\n## ", 1)[0]
     assert "FAIL" not in section_38582
-    refused_section = md.split("## jpm_424b2-ea0306095", 1)[1].split("\n## ", 1)[0]
-    assert "Refused:" in refused_section
+    synth_section = md.split("## jpm_424b2-ea0306095", 1)[1].split("\n## ", 1)[0]
+    assert "Refused:" not in synth_section
+    assert "synthesized_46661pwm5" in synth_section
+    assert "filing_examples" in synth_section
+    summary = md.split("## Summary", 1)[1].split("\n## ", 1)[0]
+    assert "Maths 13/13 pass" in summary
+    assert "Quotes 77/78, 1 field needs user confirmation" in summary

@@ -4,12 +4,12 @@ This report records what the proof battery proves: the Monte Carlo engine reprod
 
 ## Summary
 
-| Note | Checks passed | Flagged |
+| Note | Maths | Quotes |
 | --- | --- | --- |
-| jpm_424b2-38582 | 13/14 | FLAGGED |
-| jpm_424b2-ea0309017 | 15/15 | - |
-| jpm_424b2-ea0308498 | 12/13 | FLAGGED |
-| jpm_424b2-ea0306095 | - | refused |
+| jpm_424b2-38582 | Maths 13/13 pass | Quotes 77/78, 1 field needs user confirmation |
+| jpm_424b2-ea0309017 | Maths 14/14 pass | Quotes 74/74 verified |
+| jpm_424b2-ea0308498 | Maths 12/12 pass | Quotes 71/73, 2 fields need user confirmation |
+| jpm_424b2-ea0306095 | Maths 6/6 pass | Quotes 38/38 verified |
 
 ## jpm_424b2-38582
 
@@ -32,7 +32,7 @@ Illustrative market inputs as of 2025-11-25: risk-free rate 0.037, credit spread
 | vol_monotonicity | PASS | 870.32 | 947.12 | 1.60 | all vols scaled by (0.8, 1.0, 1.2), same seed; each price must be <= previous + 2 SE (short-put note) |
 | spread_monotonicity | PASS | 887.12 | 907.72 | 0.0000 | credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing |
 | convergence | PASS | 0.4974 | 0.5000 | 0.1000 | barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6] |
-| quotes | FLAGGED | 77.00 | 78.00 | 0.0000 | 77/78 verified |
+| quotes | NEEDS CONFIRMATION | 77.00 | 78.00 | 0.0000 | 77/78 verified |
 
 Unverified fields are flagged to the user, not a pricing failure. Unverified:
 
@@ -98,7 +98,7 @@ Illustrative market inputs as of 2026-10-09: risk-free rate 0.037, credit spread
 | spread_monotonicity | PASS | 952.14 | 958.87 | 0.0000 | credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing |
 | coupon_monotonicity | PASS | 989.96 | 958.87 | 0.0000 | coupon amount x (1.0, 1.5), same seed; prices must be strictly increasing |
 | convergence | PASS | 0.4980 | 0.5000 | 0.1000 | barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6] |
-| quotes | FLAGGED | 71.00 | 73.00 | 0.0000 | 71/73 verified |
+| quotes | NEEDS CONFIRMATION | 71.00 | 73.00 | 0.0000 | 71/73 verified |
 
 Unverified fields are flagged to the user, not a pricing failure. Unverified:
 
@@ -113,7 +113,21 @@ Unverified fields are flagged to the user, not a pricing failure. Unverified:
 
 ## jpm_424b2-ea0306095
 
-Refused: unsupported features: ['Absolute Stock Return']
+Issuer: JPMorgan Chase Financial Company LLC. Underlyings (3): Common stock of Amazon.com, Inc., par value $0.01 per share, Common stock of Tractor Supply Company, par value $0.008 per share, Common stock of Oracle Corporation, par value $0.01 per share. Features: autocall on 1 dates (trigger 1.0); no coupon; upside leverage 2.0 cap None; downside kind buffer level 0.6 observation final_only gearing 1.0. Pricing date: 2026-09-17; maturity date: 2028-09-21; preliminary: False. bank's estimated value: $980.00 (comparison only). Priced with the registered agent-written payoff synthesized_46661pwm5, which passed the synthesized-payoff proof battery in the registry.
+
+Illustrative market inputs as of 2026-09-17: risk-free rate 0.037, credit spread 0.006, vols (0.3, 0.35, 0.28), dividend yields (0.0, 0.01, 0.012), correlation [1.00, 0.50, 0.50; 0.50, 1.00, 0.50; 0.50, 0.50, 1.00]. Source: illustrative inputs for the proof battery, not market data.
+
+| Check | Result | Engine | Reference | Tolerance | What was compared |
+| --- | --- | --- | --- | --- | --- |
+| static_safety | PASS | 1.00 | 1.00 | 0.0000 | sandbox static check passed |
+| determinism | PASS | 0.0000 | 0.0000 | 0.0000 | payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical |
+| output_sanity | PASS | 0.0000 | 0.0000 | 0.0000 | shape (20000, 2), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000) |
+| filing_examples | PASS | 0.0000 | 0.0000 | 0.0100 | 20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0 |
+| called_paths_match_template | PASS | 0.0000 | 0.0000 | 0.0000 | 4615 called paths (seed=0, n_paths=20000); generated row sums must equal trusted template undiscounted totals within 1e-9 * notional and columns after the call must be zero |
+| convergence | PASS | 0.5076 | 0.5000 | 0.1000 | price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE |
+| quotes | PASS | 38.00 | 38.00 | 0.0000 | 38/38 verified |
+
+![convergence](validation/jpm_424b2-ea0306095_convergence.svg)
 
 ## Checks
 
@@ -132,3 +146,7 @@ Refused: unsupported features: ['Absolute Stock Return']
 - **convergence**: the standard error of a Monte Carlo mean falls with the square root of the number of paths; this checks the reported SE is honest.
 - **quotes**: a number without a quote that can be found in the filing cannot be trusted or shown to a user silently (project rule 5a).
 - **coupon_monotonicity**: the investor is long the coupon leg; paying 1.5x on the same paths pays more on every path that pays at all.
+- **static_safety**: Generated code is untrusted; anything the static checker cannot see through is refused without execution.
+- **output_sanity**: A note cannot pay a negative amount, and once it has been called it no longer exists, so nothing may be paid afterwards.
+- **filing_examples**: The filing's own hypothetical payment table is ground truth; a payoff that cannot reproduce it to the cent has misread the terms.
+- **called_paths_match_template**: The new feature changes the maturity payoff only; called paths never reach maturity, so the trusted template is an exact reference there.
