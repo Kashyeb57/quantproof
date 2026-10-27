@@ -101,7 +101,9 @@ def _client_env() -> dict:
     except Exception:
         secrets = None
     return live.resolve_secrets(
-        ("MODEL_API_KEY", "SEC_USER_AGENT"), env=os.environ, secrets=secrets
+        ("MODEL_API_KEY", "SEC_USER_AGENT", "QP_DAILY_CAP_USD"),
+        env=os.environ,
+        secrets=secrets,
     )
 
 
@@ -128,7 +130,12 @@ def run() -> None:
         "Live mode downloads a filing and extracts it with Muse Spark 1.3.",
     )
     live_mode = mode == "Live mode"
-    cap = live.daily_cap_usd()
+    cap_env = _client_env()
+    cap = live.daily_cap_usd(
+        {"QP_DAILY_CAP_USD": cap_env["QP_DAILY_CAP_USD"]}
+        if "QP_DAILY_CAP_USD" in cap_env
+        else {}
+    )
     spent_today = live.daily_spend()
     if live_mode and not live.live_available(spent_today, cap):
         _error(
