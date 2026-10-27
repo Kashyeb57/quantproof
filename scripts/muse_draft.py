@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import secrets
 import sys
 import urllib.request
 from collections.abc import Callable
@@ -43,42 +44,50 @@ DEV_BUDGET_USD = 80.0
 LOG_PATH = REPO / "docs" / "MUSE_DEV_LOG.md"
 DRAFTS_DIR = REPO / ".muse_drafts"
 
-FILE_RE = re.compile(r"^<<<FILE (?P<path>[^\n>]+)>>>\n(?P<body>.*?)\n?^<<<END>>>[ \t]*$", re.M | re.S)
-NOTES_RE = re.compile(r"^<<<NOTES>>>\n(?P<body>.*?)\n?^<<<END>>>[ \t]*$", re.M | re.S)
 FENCE_RE = re.compile(r"\A```[\w+-]*\n(?P<body>.*)\n```\s*\Z", re.S)
 
-OUTPUT_FORMAT = """\
-Return every file you create or change in full (never a diff or a fragment), each as:
 
-<<<FILE relative/path/from/repo/root.py>>>
+def make_tag() -> str:
+    """A random tag for this call's block markers. Files may contain fixed markers as text (this
+    script does), so fixed markers could split a file in two; a fresh tag cannot collide."""
+    return secrets.token_hex(4)
+
+
+def output_format(tag: str) -> str:
+    return f"""\
+Return every file you create or change in full (never a diff, a fragment or "unchanged"
+placeholders), each as:
+
+<<<FILE {tag} relative/path/from/repo/root.py>>>
 ...complete file content, no markdown fences...
-<<<END>>>
+<<<END {tag}>>>
 
 After the files you may add one block of notes for the reviewer (assumptions, open questions,
 anything you were unsure of):
 
-<<<NOTES>>>
+<<<NOTES {tag}>>>
 ...
-<<<END>>>
+<<<END {tag}>>>
 
-Write nothing outside these blocks."""
+Use exactly the tag {tag} in every marker. Write nothing outside these blocks."""
 
 
 def system_prompt(rules: str) -> str:
-    """Stable text first, so repeated calls can reuse the cached prefix."""
+    """Stable text only (no per-call tag), so repeated calls can reuse the cached prefix."""
     return (
         "You are drafting code for QuantProof, a Python project. A reviewer (Claude Code) checks "
         "every line, runs the tests and fixes problems before anything is committed, so be "
         "correct and explicit rather than clever, and say in the notes where you are unsure.\n\n"
         "Follow these project rules exactly:\n\n"
-        f"{rules}\n\n{OUTPUT_FORMAT}"
+        f"{rules}"
     )
 
 
-def build_messages(task: str, context: dict[str, str], rules: str) -> list[dict]:
+def build_messages(task: str, context: dict[str, str], rules: str, tag: str) -> list[dict]:
     parts = [f"Task:\n{task.strip()}"]
     for path, text in context.items():
-        parts.append(f"<<<CONTEXT {path}>>>\n{text.rstrip()}\n<<<END>>>")
+        parts.append(f"<<<CONTEXT {tag} {path}>>>\n{text.rstrip()}\n<<<END {tag}>>>")
+    parts.append(output_format(tag))
     return [
         {"role": "system", "content": system_prompt(rules)},
         {"role": "user", "content": "\n\n".join(parts)},
@@ -95,18 +104,22 @@ def safe_path(path: str) -> PurePosixPath:
     return p
 
 
-def parse_reply(text: str) -> tuple[dict[str, str], str]:
-    """Split a reply into {path: content} and the notes. A file whose block was cut off (no
-    <<<END>>>) is not matched, so a truncated reply never produces a half-written file."""
+def parse_reply(text: str, tag: str) -> tuple[dict[str, str], str]:
+    """Split a reply into {path: content} and the notes. A file whose block was cut off (no end
+    marker) is not matched, so a truncated reply never produces a half-written file."""
+    t = re.escape(tag)
+    end = rf"\n?^<<<END {t}>>>[ \t]*$"
+    file_re = re.compile(rf"^<<<FILE {t} (?P<path>[^\n>]+)>>>\n(?P<body>.*?){end}", re.M | re.S)
+    notes_re = re.compile(rf"^<<<NOTES {t}>>>\n(?P<body>.*?){end}", re.M | re.S)
     files: dict[str, str] = {}
-    for m in FILE_RE.finditer(text):
+    for m in file_re.finditer(text):
         path = str(safe_path(m["path"]))
         body = m["body"]
         fenced = FENCE_RE.match(body)
         if fenced:  # the model wrapped the file in ``` despite being asked not to
             body = fenced["body"]
         files[path] = body.rstrip("\n") + "\n"
-    notes = NOTES_RE.search(text)
+    notes = notes_re.search(text)
     return files, (notes["body"].strip() if notes else "")
 
 
@@ -181,7 +194,8 @@ def main(argv: list[str] | None = None) -> int:
 
     context = {str(PurePosixPath(p)): (REPO / p).read_text(encoding="utf-8") for p in args.context}
     rules = (REPO / "AGENTS.md").read_text(encoding="utf-8")
-    messages = build_messages(task, context, rules)
+    tag = make_tag()
+    messages = build_messages(task, context, rules, tag)
     chars = sum(len(m["content"]) for m in messages)
     print(f"Prompt: {chars:,} characters (~{chars // 4:,} tokens), {len(context)} context files")
     if args.dry_run:
@@ -198,7 +212,7 @@ def main(argv: list[str] | None = None) -> int:
     # Parse before logging so the log records what came back, but log even if parsing fails:
     # the tokens were billed either way.
     try:
-        files, notes = parse_reply(text)
+        files, notes = parse_reply(text, tag)
         problem = ""
     except ValueError as e:
         files, notes, problem = {}, "", str(e)
@@ -207,6 +221,12 @@ def main(argv: list[str] | None = None) -> int:
     if finish != "stop":
         cut = "cut off at max_tokens" if finish == "length" else f"stream ended early ({finish})"
         problem = (problem + "; " if problem else "") + cut
+    # Never overwrite an existing file Muse was not shown: hold it in the drafts folder instead.
+    held = {f: c for f, c in files.items()
+            if args.apply and f not in context and (REPO / f).exists()}
+    if held:
+        problem = (problem + "; " if problem else "") + (
+            f"held (existing, not in --context): {', '.join(held)}")
     append_log(LOG_PATH, when=datetime.now(timezone.utc), model=args.model, task=task,
                sent=list(context), returned=list(files), usage=usage, cost=cost,
                note=problem or "awaiting review")
@@ -219,7 +239,11 @@ def main(argv: list[str] | None = None) -> int:
         {"model": args.model, "finish_reason": finish, "seconds": round(result.seconds, 1),
          "attempts": result.attempts, "usage": asdict(usage), "estimated_cost_usd": round(cost, 6)},
         indent=2))
-    write_files(files, REPO if args.apply else out / "files")
+    if args.apply:
+        write_files({f: c for f, c in files.items() if f not in held}, REPO)
+        write_files(held, out / "held")
+    else:
+        write_files(files, out / "files")
 
     print(f"{args.model}: {result.seconds:.0f} s, {usage.input_tokens:,} in ({usage.cached_tokens:,} cached), "
           f"{usage.output_tokens:,} out ({usage.reasoning_tokens:,} reasoning), ~${cost:.4f}")

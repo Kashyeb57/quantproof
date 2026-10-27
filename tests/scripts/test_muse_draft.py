@@ -16,23 +16,24 @@ spec = importlib.util.spec_from_file_location("muse_draft", SCRIPT)
 md = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(md)
 
-REPLY = """<<<FILE quantproof/ingest/html.py>>>
+TAG = "a1b2c3d4"
+REPLY = f"""<<<FILE {TAG} quantproof/ingest/html.py>>>
 def to_text(html):
     return html
-<<<END>>>
-<<<FILE tests/ingest/test_html.py>>>
+<<<END {TAG}>>>
+<<<FILE {TAG} tests/ingest/test_html.py>>>
 ```python
 def test_x():
     assert True
 ```
-<<<END>>>
-<<<NOTES>>>
+<<<END {TAG}>>>
+<<<NOTES {TAG}>>>
 Unsure about charset fallback.
-<<<END>>>"""
+<<<END {TAG}>>>"""
 
 
 def test_parse_reply_files_and_notes():
-    files, notes = md.parse_reply(REPLY)
+    files, notes = md.parse_reply(REPLY, TAG)
     assert list(files) == ["quantproof/ingest/html.py", "tests/ingest/test_html.py"]
     assert files["quantproof/ingest/html.py"] == "def to_text(html):\n    return html\n"
     # Markdown fences around a whole file are removed.
@@ -41,8 +42,8 @@ def test_parse_reply_files_and_notes():
 
 
 def test_truncated_file_is_dropped_not_half_written():
-    text = "<<<FILE a.py>>>\nx = 1\n<<<END>>>\n<<<FILE b.py>>>\ny = "
-    files, _ = md.parse_reply(text)
+    text = f"<<<FILE {TAG} a.py>>>\nx = 1\n<<<END {TAG}>>>\n<<<FILE {TAG} b.py>>>\ny = "
+    files, _ = md.parse_reply(text, TAG)
     assert list(files) == ["a.py"]
 
 
@@ -52,7 +53,7 @@ def test_unsafe_paths_rejected(bad):
     with pytest.raises(ValueError):
         md.safe_path(bad)
     with pytest.raises(ValueError):
-        md.parse_reply(f"<<<FILE {bad}>>>\nx\n<<<END>>>")
+        md.parse_reply(f"<<<FILE {TAG} {bad}>>>\nx\n<<<END {TAG}>>>", TAG)
 
 
 def test_every_env_file_is_refused_even_the_example():
@@ -63,11 +64,13 @@ def test_every_env_file_is_refused_even_the_example():
 
 
 def test_build_messages_puts_rules_first_and_context_after_task():
-    msgs = md.build_messages("Do X", {"a.py": "A = 1\n"}, rules="RULE ONE")
+    msgs = md.build_messages("Do X", {"a.py": "A = 1\n"}, rules="RULE ONE", tag=TAG)
     assert [m["role"] for m in msgs] == ["system", "user"]
-    assert "RULE ONE" in msgs[0]["content"] and "<<<FILE" in msgs[0]["content"]
+    # The system prompt has no per-call tag, so it stays identical (cacheable) across calls.
+    assert "RULE ONE" in msgs[0]["content"] and TAG not in msgs[0]["content"]
     assert msgs[1]["content"].startswith("Task:\nDo X")
-    assert "<<<CONTEXT a.py>>>\nA = 1\n<<<END>>>" in msgs[1]["content"]
+    assert f"<<<CONTEXT {TAG} a.py>>>\nA = 1\n<<<END {TAG}>>>" in msgs[1]["content"]
+    assert f"<<<FILE {TAG} " in msgs[1]["content"]
 
 
 def sse(*events):
@@ -157,6 +160,7 @@ def sandbox(tmp_path, monkeypatch):
     log.write_text("")
     monkeypatch.setattr(md, "LOG_PATH", log)
     monkeypatch.setattr(md, "DRAFTS_DIR", tmp_path / "drafts")
+    monkeypatch.setattr(md, "make_tag", lambda: TAG)  # replies in these tests use TAG
     return tmp_path
 
 
@@ -195,3 +199,31 @@ def test_stream_that_ends_early_is_flagged(sandbox, monkeypatch):
     monkeypatch.setattr(md, "call_muse", lambda *a, **k: result(REPLY, None, 100, 200))
     assert md.main(["--task", "x"]) == 1
     assert "stream ended early" in md.LOG_PATH.read_text()
+
+
+def test_file_containing_fixed_markers_is_kept_whole():
+    # Day 2: a file that itself contains "<<<FILE ...>>>" / "<<<END>>>" text (this script) was cut
+    # in two, and the second half was written over an unrelated file.
+    body = 'FORMAT = """\n<<<FILE other/file.py>>>\nx\n<<<END>>>\n"""\nprint(1)\n'
+    files, _ = md.parse_reply(f"<<<FILE {TAG} scripts/x.py>>>\n{body}<<<END {TAG}>>>", TAG)
+    assert files == {"scripts/x.py": body}
+
+
+def test_other_tag_is_ignored():
+    files, _ = md.parse_reply("<<<FILE deadbeef a.py>>>\nx\n<<<END deadbeef>>>", TAG)
+    assert files == {}
+
+
+def test_apply_holds_existing_files_not_in_context(sandbox, monkeypatch):
+    repo = sandbox / "repo"
+    (repo / "keep").mkdir(parents=True)
+    (repo / "keep" / "old.py").write_text("original\n")
+    (repo / "AGENTS.md").write_text("rules")
+    monkeypatch.setattr(md, "REPO", repo)
+    reply = (f"<<<FILE {TAG} keep/old.py>>>\nclobbered\n<<<END {TAG}>>>\n"
+             f"<<<FILE {TAG} keep/new.py>>>\nfresh\n<<<END {TAG}>>>")
+    monkeypatch.setattr(md, "call_muse", lambda *a, **k: result(reply, "stop", 10, 20))
+    assert md.main(["--task", "x", "--apply"]) == 1
+    assert (repo / "keep" / "old.py").read_text() == "original\n"  # not overwritten
+    assert (repo / "keep" / "new.py").read_text() == "fresh\n"  # new files are fine
+    assert "held (existing, not in --context): keep/old.py" in md.LOG_PATH.read_text()
