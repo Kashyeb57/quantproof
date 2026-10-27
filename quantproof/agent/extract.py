@@ -78,6 +78,32 @@ Return a single JSON object with exactly these top level keys:
 - missing_or_ambiguous: list of strings, one sentence per item the filing
   does not state clearly.
 
+What the fields mean:
+- notional: the principal amount of one note (e.g. 1000 for "$1,000 principal amount note").
+- issue_price: the price to the public of one note.
+- is_preliminary: true for a preliminary pricing supplement (terms subject to completion).
+- dependency: "worst_of" when the payoff follows the lesser performing underlying; also use
+  "worst_of" for a single underlying.
+- initial_level: the underlying's initial value as a number, when the filing states it.
+- reference_level / reference_date: the most recent closing level the filing quotes for the
+  underlying and the date of that close (for example "The closing level of the ... Index on
+  November 17, 2025 was 2,341.377"). Not the initial or final value.
+- final_review_date: the last date the underlyings are observed (the final review or
+  valuation date), not the maturity date.
+- downside.kind: "barrier" if, once the final level is below the barrier, the holder loses 1%
+  for every 1% the underlying fell from its initial level; "buffer" if only losses beyond the
+  buffer are borne. downside.level is that barrier or buffer as a fraction of initial.
+- downside.observation: "final_only" if the barrier is checked only on the final review date,
+  "each_review" if on every review date, "daily" if every trading day.
+- downside.gearing: loss per 1% below the level, only when the filing states one; else null.
+- autocall.trigger: the level (fraction of initial) every underlying must close at or above
+  for the note to be called.
+- coupon: a contingent coupon paid when the underlyings are at or above a coupon barrier;
+  null if the note pays no coupon. memory is true if missed coupons are paid later.
+- estimated_value: the issuer's estimated value of one note (e.g. "approximately $954.00
+  per $1,000"); estimated_value_floor: the stated minimum for it ("will not be less than");
+  max_selling_commission: the maximum selling commission per note.
+
 Conventions you must follow:
 - Levels and barriers are fractions of the initial level (70.00% becomes 0.70).
 - Money amounts are per one note of `notional` and include principal (a call
@@ -252,6 +278,8 @@ def to_termsheet(data: dict) -> TermSheet:
             problems.append(f"{path}: missing required key {key!r}")
             return None
         raw = container[key]
+        if allow_null and isinstance(raw, dict) and raw.get("value") is None:
+            raw = None  # the model sometimes writes {"value": null, "quote": ...} for "absent"
         if raw is None:
             if not allow_null:
                 problems.append(f"{path}: expected cited field, got null")

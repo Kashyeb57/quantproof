@@ -445,3 +445,19 @@ def test_image_paths_use_client_image_part(tmp_path: Path, monkeypatch) -> None:
     extract_termsheet(_filing(), image_paths=[created], chat=fake_chat)
     assert calls == [created]
     monkeypatch.setattr(extract.client, "image_part", real_image_part)
+
+
+def test_cited_null_value_counts_as_absent_for_optional_fields() -> None:
+    # Models sometimes write {"value": null, "quote": ...} instead of null.
+    reply = _reply()
+    reply["guarantor"] = {"value": None, "quote": "No guarantor is named", "section": None}
+    assert to_termsheet(reply).guarantor is None
+    reply["issuer"] = {"value": None, "quote": "Issuer: unknown", "section": None}
+    with pytest.raises(ExtractionError, match="issuer"):
+        to_termsheet(reply)
+
+
+def test_prompt_defines_the_fields_a_model_could_misread() -> None:
+    # Day 2 live run: without a definition the model read reference_level as the final value.
+    for term in ("reference_level / reference_date", "final_review_date", "estimated_value_floor"):
+        assert term in extract.SYSTEM_PROMPT
