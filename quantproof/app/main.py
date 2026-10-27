@@ -1,4 +1,4 @@
-"""Streamlit UI for QuantProof (Stage A: demo mode, no API calls).
+"""Streamlit UI for QuantProof (demo mode default; Stage B live mode).
 
 Flow, in order: pick a saved note -> term sheet with quotes and
 cross-check disagreements -> user confirms (edits are labelled
@@ -17,7 +17,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from quantproof.app import demo
+from quantproof.app import demo, live
+from quantproof.agent import client as meta_client
+from quantproof.ingest.edgar import EdgarClient
 
 REPO_URL = "https://github.com/Kashyeb57/quantproof"
 VALIDATION_URL = f"{REPO_URL}/blob/main/docs/VALIDATION.md"
@@ -85,27 +87,115 @@ def _cached_analysis(stem, edits_key, rate, spread, vols, dividends, rho):
     return demo.run_analysis(note, ts, market)
 
 
+def _client_env() -> dict:
+    """API keys from environment variables or Streamlit secrets only.
+
+    Returns a mapping with MODEL_API_KEY / SEC_USER_AGENT when set in
+    ``os.environ`` or ``st.secrets``.  Values are never logged, displayed
+    or stored on any object that gets printed.
+    """
+    import os
+
+    env: dict = {}
+    for name in ("MODEL_API_KEY", "SEC_USER_AGENT"):
+        value = os.environ.get(name)
+        if not value:
+            try:
+                value = st.secrets.get(name)  # type: ignore[attr-defined]
+            except Exception:
+                value = None
+        if value:
+            env[name] = str(value)
+    return env
+
+
+def _live_chat():
+    """Chat callable bound to the env/secrets keys (Muse Spark 1.3 only)."""
+    env = _client_env()
+
+    def chat(messages, **kwargs):
+        kwargs.setdefault("model", live.LIVE_MODEL)
+        return meta_client.chat(messages, env=env, **kwargs)
+
+    return chat
+
+
 def run() -> None:
     """Render the Stage A demo app."""
     st.set_page_config(page_title="QuantProof risk analysis", layout="wide")
     st.title("QuantProof")
-    _caption(
-        "Demo mode: saved JPMorgan filings with recorded extractions. "
-        "No API calls, no credits spent."
+    mode = st.radio(
+        "Mode",
+        ["Demo mode", "Live mode"],
+        horizontal=True,
+        help="Demo mode uses saved filings and spends nothing. "
+        "Live mode downloads a filing and extracts it with Muse Spark 1.3.",
     )
+    live_mode = mode == "Live mode"
+    if live_mode:
+        _warning(
+            "Live mode uses real API credits: each new filing is extracted "
+            "with Muse Spark 1.3 (the only model the public app calls) "
+            "and cross-checked with a second extraction."
+        )
+    else:
+        _caption(
+            "Demo mode: saved JPMorgan filings with recorded extractions. "
+            "No API calls, no credits spent."
+        )
 
     # a. Pick a note.
     st.header("1. Pick a note")
-    labels = {}
-    for stem in demo.NOTE_STEMS:
-        labels[stem] = demo.note_label(stem, _cached_note(stem).termsheet)
-    stem = st.selectbox(
-        "Saved note (demo mode)", demo.NOTE_STEMS, format_func=labels.get
-    )
-    st.text_input("EDGAR link (coming soon)", value="", disabled=True)
-    st.file_uploader("Upload a filing (coming soon)", disabled=True)
-
-    note = _cached_note(stem)
+    live_note = None
+    if live_mode:
+        url = st.text_input("EDGAR link to a 424B2 filing (.htm)")
+        uploaded = st.file_uploader("Or upload a filing (.htm)", type=["htm", "html"])
+        fetch = st.button("Fetch and extract (uses real API credits)")
+        if fetch:
+            try:
+                with st.spinner("Downloading and extracting (Muse Spark 1.3)..."):
+                    if url.strip():
+                        filing = live.filing_from_url(
+                            url.strip(),
+                            edgar_client=EdgarClient(env=_client_env()),
+                        )
+                        source = url.strip()
+                    elif uploaded is not None:
+                        filing = live.filing_from_upload(uploaded.getvalue())
+                        source = "upload"
+                    else:
+                        raise ValueError("enter an EDGAR link or upload a filing first")
+                    live_note = live.extract_and_crosscheck(
+                        filing, source, chat=_live_chat()
+                    )
+                st.session_state["live_note"] = live_note
+            except Exception as error:  # download / extraction failures are shown, never hidden
+                _error(f"Live extraction failed: {error}")
+                _footer()
+                return
+        live_note = st.session_state.get("live_note") or live_note
+        if live_note is None:
+            _info("Enter an EDGAR link or upload a filing, then fetch and extract.")
+            _footer()
+            return
+        stem = "live"
+        note = demo.DemoNote(
+            stem=stem,
+            termsheet=live_note.termsheet,
+            filing_text=live_note.filing_text,
+            checks=live_note.checks,
+            unverified=live_note.unverified,
+        )
+    else:
+        labels = {}
+        for stem_option in demo.NOTE_STEMS:
+            labels[stem_option] = demo.note_label(
+                stem_option, _cached_note(stem_option).termsheet
+            )
+        stem = st.selectbox(
+            "Saved note (demo mode)", demo.NOTE_STEMS, format_func=labels.get
+        )
+        note = _cached_note(stem)
     edits_by_stem: dict = st.session_state.setdefault("edits", {})
     edits: dict[str, str] = edits_by_stem.setdefault(stem, {})
 
@@ -133,14 +223,27 @@ def run() -> None:
             + ", ".join(note.unverified)
         )
 
-    diffs = demo.recorded_crosscheck_diffs(stem, note.termsheet)
-    if diffs is None:
+    if live_mode:
+        diffs = live_note.diffs
+        if live_note.crosscheck_error:
+            _caption(f"Cross-check unavailable: {live_note.crosscheck_error}")
+        elif not diffs:
+            _write(
+                "Cross-check: the second extraction (also Muse Spark 1.3 in "
+                "the public app, a weaker independence check than a "
+                "different model service) agrees on every field."
+            )
+        else:
+            _write("Cross-check disagreements (confirm before pricing):")
+    else:
+        diffs = demo.recorded_crosscheck_diffs(stem, note.termsheet)
+    if not live_mode and diffs is None:
         _caption("Cross-check: no recorded second extraction in demo mode.")
-    elif not diffs:
+    elif not live_mode and not diffs:
         _write(
             "Cross-check: the recorded second extraction agrees on every field."
         )
-    else:
+    elif diffs:
         _write("Cross-check disagreements (confirm before pricing):")
         st.dataframe(
             [
@@ -169,6 +272,20 @@ def run() -> None:
     if edited_paths:
         _write("User-entered fields: " + ", ".join(sorted(edited_paths)))
 
+    unsupported = live.unsupported_features(ts)
+    if unsupported:
+        for feature, quote in unsupported:
+            _error(f"Unsupported feature: {feature}")
+            if quote:
+                _write(f"Filing quote: {quote}")
+        _write(
+            "This feature is not covered by a pricing template. Payoff "
+            "synthesis runs offline only, so this note cannot be priced "
+            "in the public app."
+        )
+        _footer()
+        return
+
     confirmed = st.checkbox("I confirm these terms")
     if not confirmed:
         _info("Tick “I confirm these terms” to continue to pricing.")
@@ -181,7 +298,9 @@ def run() -> None:
         "assumptions for this analysis, not market data. Every result is "
         "conditional on them."
     )
-    defaults = demo.DEFAULT_INPUTS[stem]
+    defaults = (
+        live.generic_defaults(ts) if live_mode else demo.DEFAULT_INPUTS[stem]
+    )
     col_rate, col_spread, col_rho = st.columns(3)
     rate = col_rate.number_input(
         "Risk-free rate", value=float(defaults["rate"]), format="%.4f"
@@ -225,9 +344,13 @@ def run() -> None:
     # d. Proof checks.
     st.header("4. Proof checks")
     with st.spinner("Running the proof battery..."):
-        battery = _cached_battery(
-            stem, tuple(sorted(edits.items())), rate, spread,
-            tuple(vols), tuple(dividends), rho,
+        battery = (
+            demo.run_proof_battery(note, ts, market)
+            if live_mode
+            else _cached_battery(
+                stem, tuple(sorted(edits.items())), rate, spread,
+                tuple(vols), tuple(dividends), rho,
+            )
         )
     _caption(battery["note"])
     if battery["kind"] == "refused":
@@ -267,9 +390,13 @@ def run() -> None:
     # e. Verdict.
     st.header("5. Verdict")
     with st.spinner("Pricing under the stated assumptions..."):
-        result = _cached_analysis(
-            stem, tuple(sorted(edits.items())), rate, spread,
-            tuple(vols), tuple(dividends), rho,
+        result = (
+            demo.run_analysis(note, ts, market)
+            if live_mode
+            else _cached_analysis(
+                stem, tuple(sorted(edits.items())), rate, spread,
+                tuple(vols), tuple(dividends), rho,
+            )
         )
     verdict = demo.verdict_summary(result)
     if verdict["preliminary"]:
