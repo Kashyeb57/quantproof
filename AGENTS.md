@@ -59,6 +59,8 @@ pricing maths** in a graduate-school interview. So:
 - Small commits, one logical change each: `area: what changed`
   (e.g. `payoffs: add autocallable template with never-callable proof test`).
 - Pull before starting; never force-push; never rewrite history on `main`.
+- Commit as `Joyeb Kashyeb <168053382+Kashyeb57@users.noreply.github.com>`. **No `Co-Authored-By`
+  trailers** in commit messages (owner's choice). Tools used are disclosed in the README instead.
 - Do not delete or weaken tests to make them pass. Fix the code, or explain why the test is wrong.
 
 ## Cost awareness (~$150 of Meta credits)
