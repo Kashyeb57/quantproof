@@ -169,7 +169,8 @@ The validation report (`docs/VALIDATION.md` + charts), generated from this batte
 | Muse Code | Optional coding agent during development |
 
 Meta Model API (verified on dev.meta.ai): base URL `https://api.meta.ai/v1`, Responses API at
-`/v1/responses`, header `Authorization: Bearer $MODEL_API_KEY`. Docs: https://dev.meta.ai/docs
+`/v1/responses`, header `Authorization: Bearer $MODEL_API_KEY` when that variable is set (local or
+deployed); in the cloud environment the network secret adds the header instead. Docs: https://dev.meta.ai/docs
 (tool calling, structured output, image understanding, prompt caching).
 Prices per million tokens: Spark 1.3 $1.25 in / $0.15 cached / $4.25 out; Wonder $4.00 in / $20.00 out.
 Budget: ~$150 free credits. Prompt-cache the filing text; Spark for almost everything.

@@ -30,8 +30,9 @@ pricing maths** in a graduate-school interview. So:
    estimated value**: it is a comparison point, not a calibration target.
 5a. **Every extracted term needs a verified quote.** The quote verifier must confirm each citation
    appears verbatim in the normalised filing text; unverified fields are flagged, never used silently.
-6. **Meta models only inside the product.** Meta Model API: `https://api.meta.ai/v1`, key from env
-   `MODEL_API_KEY`. Muse Spark Open via Baseten, key from env `BASETEN_API_KEY`.
+6. **Meta models only inside the product.** Meta Model API: `https://api.meta.ai/v1`. Send
+   `Authorization: Bearer` only when env `MODEL_API_KEY` is set; otherwise send no auth header and rely on
+   the cloud environment's network secret (see CLAUDE.md). Muse Spark Open via Baseten, key from env `BASETEN_API_KEY`.
    No OpenAI / Anthropic / Google model calls in product code.
 7. **Secrets come from environment variables or host secrets only.** Never print, log, or commit a key.
    `.env` is in `.gitignore`. If a key appears anywhere in code or output, stop and tell Joyeb.
