@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantproof"
+version = "0.1.0"
+description = "Reads a structured note's SEC filing and shows what it is worth and how it can lose money. Every number is computed and proved."
+readme = "docs/PROJECT_BRIEF.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Joyeb Kashyeb" }]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["quantproof*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --import-mode=importlib"
