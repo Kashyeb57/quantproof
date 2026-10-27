@@ -82,6 +82,8 @@ class ChatResult:
     attempts: int
     # True when the API sent no usage (it happens occasionally): usage is then an upper bound,
     # the request size for input and all of max_tokens for output, so spend is never undercounted.
+    # Seen twice on Day 2 together with a reply cut off mid-way despite finish_reason "stop", so
+    # callers must check the reply is complete (JSON parses, every file block is closed).
     usage_estimated: bool = False
 
     @property
