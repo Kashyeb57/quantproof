@@ -126,11 +126,12 @@ def parse_reply(text: str, tag: str) -> tuple[dict[str, str], str]:
 
 
 def call_muse(messages: list[dict], model: str, max_tokens: int,
-              urlopen: Callable = urllib.request.urlopen) -> client.ChatResult:
+              reasoning_effort: str | None = None, urlopen: Callable = urllib.request.urlopen) -> client.ChatResult:
     """One streamed call through the product client (retries included). It is not written to
     the product's cost log: development calls are logged in MUSE_DEV_LOG.md instead."""
     try:
-        return client.chat(messages, model=model, max_tokens=max_tokens, purpose="dev draft",
+        return client.chat(messages, model=model, max_tokens=max_tokens,
+                           reasoning_effort=reasoning_effort, purpose="dev draft",
                            log_path=None, urlopen=urlopen)
     except client.MetaAPIError as e:
         raise SystemExit(f"Meta API error {e.status}: {e.detail}") from None
@@ -196,6 +197,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--context", nargs="*", default=[], help="repo files Muse should see")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS)
+    ap.add_argument("--reasoning-effort", choices=("low", "medium", "high"), default=None)
     ap.add_argument("--apply", action="store_true", help="write into the working tree for review")
     ap.add_argument("--dry-run", action="store_true", help="show prompt size; no API call")
     ap.add_argument("--total", action="store_true", help="print development spend so far")
@@ -241,7 +243,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Development spend ${spent:.2f} is over the ${DEV_BUDGET_USD:.0f} budget; ask Joyeb.")
         return 2
 
-    result = call_muse(messages, args.model, args.max_tokens)
+    result = call_muse(messages, args.model, args.max_tokens,
+                       reasoning_effort=args.reasoning_effort)
     usage, cost, text, finish = result.usage, result.cost_usd, result.text, result.finish_reason
 
     # Parse before logging so the log records what came back, but log even if parsing fails:

@@ -180,6 +180,7 @@ def chat(
     *,
     model: str = DEFAULT_MODEL,
     max_tokens: int = DEFAULT_MAX_TOKENS,
+    reasoning_effort: str | None = None,
     purpose: str = "",
     log_path: Path | None = DEFAULT_LOG,
     env: Mapping[str, str] | None = None,
@@ -208,6 +209,8 @@ def chat(
         "stream": True,
         "stream_options": {"include_usage": True},
     }
+    if reasoning_effort is not None:  # "low" / "medium" / "high"; Wonder over-reasons by default
+        body["reasoning_effort"] = reasoning_effort
     payload = json.dumps(body).encode("utf-8")
     headers = request_headers(env)
     for attempt in range(1, MAX_ATTEMPTS + 1):

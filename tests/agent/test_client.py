@@ -171,12 +171,25 @@ def test_chat_success_url_body_headers_result():
     assert body["max_tokens"] == client.DEFAULT_MAX_TOKENS
     assert body["stream"] is True
     assert body["stream_options"] == {"include_usage": True}
+    assert "reasoning_effort" not in body  # sent only when asked for
     assert result.text == "Hello world"
     assert result.finish_reason == "stop"
     assert result.attempts == 1
     assert result.usage == Usage.from_response(_usage_block())
     assert result.cost_usd == pytest.approx(estimate_cost(client.DEFAULT_MODEL, result.usage))
     assert result.seconds >= 0
+
+
+def test_chat_sends_reasoning_effort_when_given():
+    seen = {}
+
+    def fake_urlopen(req, timeout=None):
+        seen["body"] = json.loads(req.data.decode("utf-8"))
+        return io.BytesIO(_chat_stream_bytes())
+
+    client.chat([], reasoning_effort="low", env={}, urlopen=fake_urlopen, sleep=FakeSleep(),
+                log_path=None)
+    assert seen["body"]["reasoning_effort"] == "low"
 
 
 def test_chat_sends_bearer_when_key_set():

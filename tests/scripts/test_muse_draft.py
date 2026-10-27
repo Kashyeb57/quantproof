@@ -302,7 +302,7 @@ def test_pytest_failing_appends_output_to_task(sandbox, monkeypatch):
 
     captured = {}
 
-    def fake_call(messages, model, max_tokens):
+    def fake_call(messages, model, max_tokens, reasoning_effort=None):
         captured["messages"] = messages
         return result(REPLY, "stop", 100, 200)
 
@@ -321,7 +321,7 @@ def test_pytest_failing_without_task_uses_default_task(sandbox, monkeypatch):
     monkeypatch.setattr(md, "run_pytest", lambda args, runner=None: (False, "FAILED boom"))
     captured = {}
 
-    def fake_call(messages, model, max_tokens):
+    def fake_call(messages, model, max_tokens, reasoning_effort=None):
         captured["messages"] = messages
         return result(REPLY, "stop", 100, 200)
 
