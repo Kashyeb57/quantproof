@@ -24,11 +24,12 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [x] `pyproject.toml`, package skeleton (brief section 5), `.gitignore`, CI running pytest
 - [x] `core/`: TermSheet (+ Citation; N >= 1 underlyings; preliminary flag; call schedule; barrier
       type and observation), MarketInputs, PricingResult (with measure + provenance)
-- [ ] `scripts/muse_draft.py` (Muse Spark drafts code; cost logged in `docs/MUSE_DEV_LOG.md`), first,
-      then use it for the items below (AGENTS.md: "Muse drafts, Claude verifies")
-- [ ] `ingest/`: filing parser with correct charset decoding and Unicode normalisation
-      (fixes the garbled "×"); the test filing saved as a fixture
-- [ ] `agent/extract.py` schema + `validation/quotes.py` quote verifier (from the test script), with tests
+- [x] `scripts/muse_draft.py` (Muse Spark drafts code; cost logged in `docs/MUSE_DEV_LOG.md`), first,
+      then use it for the items below (AGENTS.md: "Muse drafts, Claude verifies"). Streams replies.
+- [x] `ingest/`: filing parser with correct charset decoding and Unicode normalisation
+      (fixes the garbled "×"); the test filing saved as a fixture (Muse draft, reviewed)
+- [x] `validation/quotes.py` quote verifier, with tests: all 78 cited fields of the fixture verify
+- [ ] `agent/extract.py` extraction prompt + JSON schema -> TermSheet (moved to Day 2: needs the client)
 - [ ] Joyeb: read the test filing's key terms yourself and compare with the extraction
 - [ ] Watch: Agents 101 (11:00 AM)
 
