@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+app = ["streamlit>=1.40"]
 
 [tool.setuptools.packages.find]
 include = ["quantproof*"]

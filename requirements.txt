@@ -1,0 +1,8 @@
+# Hosting requirements for the Streamlit app (Stage A demo mode).
+# The quantproof package itself is imported from the repository root
+# (app.py puts the root on sys.path); these are its runtime deps plus
+# Streamlit.  Install the package extras instead with:
+#   pip install -e ".[app]"
+numpy>=1.26
+scipy>=1.11
+streamlit>=1.40
