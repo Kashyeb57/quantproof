@@ -19,6 +19,7 @@ References: filing terms and hypothetical payment tables; J. C. Hull,
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 
 import numpy as np
@@ -160,33 +161,65 @@ def _example_perf(ts: TermSheet, examples: list[PayoutExample]) -> np.ndarray:
     return perf
 
 
-def _citation_verified(
-    cited: Cited, filing_text: str | None, notional: float | None = None
+def payment_in_quote(
+    payment: float, quote: str, notional: float | None = None, worst_final: float | None = None
 ) -> bool:
-    """Whether a cited value's quote is verified (see check_filing_examples).
+    """Whether a table-row quote states this payment at maturity.
 
-    The quote must be in the filing and state this payment: in currency
-    ("$1,212.00"), or, when ``notional`` is given, as a percentage of the
-    principal amount ("121.200%" for 1212.0 on 1000; bounded match, so
-    "21.200%" never matches inside "121.200%").
+    Accepted spellings: currency ("$1,073.40", via ``value_in_quote``) and,
+    when ``notional`` is given, payment / notional as a percent of principal
+    ("121.200%") or payment / notional - 1 as the total return on the note
+    ("7.34%").  Percent spellings are matched cell by cell (the row split on
+    spaces): the row's own final level and underlier return (from
+    ``worst_final``) each use up at most one matching cell first, so a
+    payment can never be "verified" by the level column of the same row
+    (a 150% final level does not support a payment of 1,500), while a row
+    that states the same percent twice ("110.00 10.00% 10.00%") still does.
+    """
+    if value_in_quote(payment, quote) is True:
+        return True
+    if not notional:
+        return False
+    # Cells keep their sign (normalise_for_match drops "-", which would let
+    # a +50% level take a -50% return cell): unify minus signs, drop "+"
+    # and table bars, split on whitespace.
+    raw = re.sub(r"\.{3,}|…|\|", " ", quote).replace("\u2212", "-").replace("\u2013", "-")
+    cells = [cell.lstrip("+").rstrip(",;") for cell in raw.split()]
+
+    def take(fraction: float) -> bool:
+        wanted = set(percent_forms(fraction))
+        for i, cell in enumerate(cells):
+            if cell in wanted:
+                del cells[i]
+                return True
+        return False
+
+    if worst_final is not None:
+        take(worst_final)  # final level as a percent of initial, if written so
+        take(worst_final - 1.0)  # underlier return
+    share = float(payment) / float(notional)
+    return take(share) or take(share - 1.0)
+
+
+def _citation_verified(
+    cited: Cited,
+    filing_text: str | None,
+    notional: float | None = None,
+    worst_final: float | None = None,
+) -> bool:
+    """Whether a cited payment's quote is verified (see check_filing_examples).
+
+    The quote must be in the filing and state this payment
+    (:func:`payment_in_quote`).
     """
     if cited.citation is None:
         return False
     if filing_text is None:
         return cited.citation.verified is True
     found, _reason = verify_quote(cited.citation.quote, normalise_for_match(filing_text))
-    if not found:
-        return False
-    # The quote must state this payment (not another row's).
-    if value_in_quote(cited.value, cited.citation.quote) is not False:
-        return True
-    if notional:
-        quote = normalise_for_match(cited.citation.quote)
-        return any(
-            _find_bounded(normalise_for_match(form), quote) is not None
-            for form in percent_forms(float(cited.value) / float(notional))
-        )
-    return False
+    return bool(found) and payment_in_quote(
+        float(cited.value), cited.citation.quote, notional, worst_final
+    )
 
 
 def _failed(name: str, detail: str, error: str | None) -> CheckResult:
@@ -377,7 +410,9 @@ def check_filing_examples(
     tolerance = 0.01  # filing states hypothetical payments to the cent
     verified = [
         ex for ex in examples
-        if _citation_verified(ex.payment, filing_text, notional=float(ts.notional.value))
+        if _citation_verified(
+            ex.payment, filing_text, notional=float(ts.notional.value), worst_final=ex.worst_final
+        )
     ]
     if len(verified) < 3:
         return CheckResult(

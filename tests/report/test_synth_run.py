@@ -150,3 +150,46 @@ def test_battery_filing_examples_accepts_a_percent_table(note):
     # A payoff that ignores the cap pays 1500 on the 150% row: caught to the cent.
     res = check_filing_examples(NO_CAP, ts, good, filing_text=filing.text)
     assert not res.passed and res.data["rows"][0]["got"] == pytest.approx(2500.0)
+
+
+@pytest.mark.parametrize(
+    "payment, quote, worst_final, ok",
+    [
+        (1073.4, "180.00 80.00% 7.34%", 1.8, True),     # JPM: total return on the notes
+        (1800.0, "180.00 80.00% 7.34%", 1.8, False),    # not by the level column
+        (1500.0, "150.000% | 121.200%", 1.5, False),    # not by the final-level column
+        (1212.0, "150.000% | 121.200%", 1.5, True),     # percent of principal
+        (750.0, "75.000% | 75.000%", 0.75, True),       # level and payment both 75%
+        (1100.0, "110.00 10.00% 7.34%", 1.1, False),    # 10% is the underlier return only
+        (1100.0, "110.00 10.00% 10.00%", 1.1, True),    # 1x upside: stated twice
+    ],
+)
+def test_payment_in_quote_forms(payment, quote, worst_final, ok):
+    from quantproof.validation.synth_battery import payment_in_quote
+
+    assert payment_in_quote(payment, quote, 1000.0, worst_final) is ok
+
+
+def test_repairs_stop_when_only_filing_evidence_is_missing(note):
+    """No examples verify: one attempt, no paid repairs that cannot help."""
+    from quantproof.agent.synthesis import synthesise_payoff
+
+    filing, ts, market = note
+    n = {"calls": 0}
+
+    def chat(messages, **kw):
+        n["calls"] += 1
+        return ChatResult(text="```python\n" + CORRECT + "\n```", model="m", finish_reason="stop",
+                          usage=Usage(1, 1), cost_usd=0.0, seconds=0.0, attempts=1)
+
+    res = synthesise_payoff(filing, ts, market, examples=[], chat=chat, max_attempts=4, n_paths=2000)
+    assert not res.passed and len(res.attempts) == 1 and n["calls"] == 1
+
+
+def test_payment_in_quote_when_level_return_and_payment_coincide():
+    from quantproof.validation.synth_battery import payment_in_quote
+
+    # JPM row: level 50.00 (no %), underlier return -50.00%, note return -50.00%.
+    assert payment_in_quote(500.0, "50.00 -50.00% -50.00%", 1000.0, 0.5) is True
+    assert payment_in_quote(1000.0, "50.00 -50.00% 0.00%", 1000.0, 0.5) is True
+    assert payment_in_quote(700.0, "50.00 -50.00% -50.00%", 1000.0, 0.5) is False

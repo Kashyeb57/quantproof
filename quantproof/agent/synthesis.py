@@ -31,11 +31,11 @@ from quantproof.validation.quotes import (
     _find_bounded,
     normalise_for_match,
     percent_forms,
-    value_in_quote,
     verify_quote,
 )
 from quantproof.validation.synth_battery import (
     PayoutExample,
+    payment_in_quote,
     battery_passed,
     run_synth_battery,
 )
@@ -273,6 +273,12 @@ def _format_feedback(feedback: object) -> str:
     return str(feedback)
 
 
+def _evidence_missing(r: CheckResult) -> bool:
+    """True for a filing-examples failure caused by too few verified rows."""
+    data = getattr(r, "data", None) or {}
+    return r.name == "filing_examples" and int(data.get("verified", 3)) < 3
+
+
 def build_synthesis_messages(filing_text, ts, feedback=None) -> list[dict]:
     """Build synthesis chat messages: system, filing text, then the request.
 
@@ -338,7 +344,8 @@ def extract_examples(
 
     Each row becomes a PayoutExample whose payment citation is verified
     (``verified`` is True) only when all of: the quote is found verbatim in
-    the normalised filing text; ``value_in_quote(payment, quote)`` is True;
+    the normalised filing text; ``payment_in_quote(payment, quote, notional,
+    worst_final)`` is True (currency, or percent of principal / total return);
     and the normalised quote contains the final value as
     ``f"${worst_final*100:,.2f}"`` or the return as
     ``f"{(worst_final-1)*100:.2f}%"`` (hypothetical tables use an initial
@@ -402,15 +409,9 @@ def extract_examples(
             or final_str in quote
             or return_str in quote
         )
-        payment_shown = value_in_quote(payment, quote) is True
+        payment_shown = payment_in_quote(payment, quote, notional, worst_final)
         if notional:
-            # Percent tables: "150.000% | 121.200%" (final level, payment as
-            # shares of the initial level and of the principal amount).
-            # Bounded match, so "21.200%" never matches inside "121.200%".
-            payment_shown = payment_shown or any(
-                _find_bounded(normalise_for_match(form), normalised_quote) is not None
-                for form in percent_forms(payment / float(notional))
-            )
+            # Percent tables state the final level as a share of the initial level.
             in_quote = in_quote or any(
                 _find_bounded(normalise_for_match(form), normalised_quote) is not None
                 for form in percent_forms(worst_final)
@@ -507,6 +508,10 @@ def synthesise_payoff(filing, ts, market, *, examples=None, chat=client.chat,
             passed_code = code
             break
         failed = [r for r in results if not r.passed]
+        if all(_evidence_missing(r) for r in failed):
+            # No code change can supply filing evidence: repairing would only
+            # spend credits.  The note fails for lack of evidence.
+            break
         feedback_lines = ["Previous code:\n```python\n" + code + "\n```", "Failed checks to fix:"]
         for r in failed:
             line = f"- {r.name}: {r.detail}"

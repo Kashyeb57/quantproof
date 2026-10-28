@@ -276,7 +276,10 @@ def template_examples(ts: TermSheet, examples, filing_text: str) -> dict:
     dates = observation_dates(ts)
     rows: list[dict[str, Any]] = []
     notional = float(ts.notional.value)
-    verified = [ex for ex in examples if _citation_verified(ex.payment, filing_text, notional)]
+    verified = [
+        ex for ex in examples
+        if _citation_verified(ex.payment, filing_text, notional, ex.worst_final)
+    ]
     if not verified:
         return {"rows": [], "max_error": None, "passed": False}
     perf = _example_perf(ts, verified)
