@@ -20,11 +20,21 @@ them, so only check 1 applies. Their machine values (``True``/``False`` or
 enum names) rarely appear verbatim in a filing; a human reads those quotes in
 the validation report to confirm the extraction.
 
-Two extra support rules live in :func:`verify_termsheet`:
+Three extra support rules live in :func:`verify_termsheet`:
 
 - A buffer ``downside.level`` quoted as a Buffer Amount must show ``1 - level``.
 - A trigger/barrier/level of exactly 1.0 may be quoted as the Initial (or
   Strike) Value without a percent sign.
+- A payment date (``autocall.observations[i].payment_date`` or
+  ``coupon.observations[i].payment_date``) whose quote states a business-day
+  offset instead of the date itself -- for example "the fifth business day
+  following the Call Observation Date" -- is supported when
+  :func:`quantproof.core.calendar.parse_business_day_lag` reads a lag ``N``
+  from the quote and ``add_business_days(review_date, N)`` for the same
+  observation equals the payment-date value. This covers payment dates the
+  extractor computed from a stated offset; the concrete date never appears
+  in the filing, so the ordinary value-in-quote check cannot pass. The
+  quote must still pass :func:`verify_quote` (presence) as usual.
 
 No AI, no network. Pure Python standard library only.
 """
@@ -38,6 +48,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
+from quantproof.core.calendar import add_business_days, parse_business_day_lag
 from quantproof.core.termsheet import DownsideKind, TermSheet
 
 #: A normalised quote (or ellipsis piece) shorter than this is too short to be
@@ -314,6 +325,9 @@ _LEVEL_PATHS = ("autocall.trigger", "coupon.barrier", "downside.level")
 #: Names of the initial level; "at or above the Initial Value" is a level of exactly 1.0.
 _INITIAL_LEVEL_NAMES = ("initialvalue", "strikevalue", "initiallevel")
 
+#: Payment-date paths whose value may be derived from a business-day offset quote.
+_PAYMENT_DATE_PATH_RE = re.compile(r"^(autocall|coupon)\.observations\[(\d+)\]\.payment_date$")
+
 
 def _level_support(path: str, value: Any, quote: str, ts: TermSheet) -> bool | None:
     """Support rules for levels that a filing states indirectly; None if no rule applies.
@@ -334,6 +348,38 @@ def _level_support(path: str, value: Any, quote: str, ts: TermSheet) -> bool | N
     if value == 1.0 and "%" not in quote and any(n in compact for n in _INITIAL_LEVEL_NAMES):
         return True
     return None
+
+
+def _payment_lag_support(path: str, value: Any, quote: str, ts: TermSheet) -> bool | None:
+    """Support rule for payment dates derived from a business-day offset.
+
+    Returns ``None`` when the rule does not apply (the path is not an
+    autocall/coupon observation payment date, or the quote states no
+    readable lag). Otherwise returns ``True`` exactly when the same
+    observation's review date plus the lagged number of business days
+    equals ``value``, and ``False`` when it does not.
+
+    Intuition: the filing never writes the concrete payment date, only
+    "the fifth business day following the Observation Date", so the date
+    is supported by showing it is exactly that offset applied to the
+    (separately cited) review date.
+    """
+    match = _PAYMENT_DATE_PATH_RE.match(path)
+    if match is None:
+        return None
+    lag = parse_business_day_lag(quote)
+    if lag is None:
+        return None
+    block = ts.autocall if match.group(1) == "autocall" else ts.coupon
+    if block is None:
+        return False
+    index = int(match.group(2))
+    if index >= len(block.observations):
+        return False
+    review_date = block.observations[index].review_date.value
+    if not isinstance(review_date, date) or not isinstance(value, date):
+        return False
+    return add_business_days(review_date, lag) == value
 
 
 @dataclass(frozen=True)
@@ -375,6 +421,14 @@ def verify_termsheet(ts: TermSheet, filing_text: str) -> list[QuoteCheck]:
     :func:`_level_support`: a buffer quoted as a "Buffer Amount" must show ``1 - level``, and
     a quote naming "the Initial Value" without a percent supports exactly 1.0.
 
+    Payment dates (``autocall.observations[i].payment_date`` and
+    ``coupon.observations[i].payment_date``) whose ordinary value check
+    returns ``False`` go through :func:`_payment_lag_support`: if the quote
+    states a business-day lag ``N`` and the same observation's review date
+    plus ``N`` business days equals the payment-date value, the field is
+    supported (verified). The quote must still have passed quote presence
+    above; this rule only replaces the value-support check.
+
     Returns the checks in ``cited_fields`` order.
     """
     normalised_text = normalise_for_match(filing_text)
@@ -397,6 +451,15 @@ def verify_termsheet(ts: TermSheet, filing_text: str) -> list[QuoteCheck]:
                     notional=notional_value,
                     per_notional=per_notional,
                 )
+            if support is False:
+                # Third extra support rule: a payment date computed from a
+                # stated business-day offset is supported if the offset,
+                # applied to the same observation's review date, gives it.
+                lag_support = _payment_lag_support(
+                    path, field_value, cited.citation.quote, ts
+                )
+                if lag_support is True:
+                    support = True
             if support is False:
                 verified = False
                 reason = f"value not in quote: {field_value}"

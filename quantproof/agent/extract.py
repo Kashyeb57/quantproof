@@ -16,6 +16,7 @@ from datetime import date
 from pathlib import Path
 
 from quantproof.agent import client
+from quantproof.core.calendar import add_business_days, parse_business_day_lag
 from quantproof.core.termsheet import (
     Autocall,
     AutocallObservation,
@@ -85,10 +86,12 @@ Return a single JSON object with exactly these top level keys:
   "amounts_are_minimums": F(bool),
   "review_dates": F(list of "YYYY-MM-DD"),
   "payment_dates": F(list of "YYYY-MM-DD"),
+  "payment_lag_business_days": F(integer) (optional),
   "call_amounts": F(list of numbers)}.
 - coupon: null or {"barrier": F(fraction), "amount": F(number), "memory": F(bool),
   "review_dates": F(list of "YYYY-MM-DD"),
-  "payment_dates": F(list of "YYYY-MM-DD")}.
+  "payment_dates": F(list of "YYYY-MM-DD"),
+  "payment_lag_business_days": F(integer) (optional)}.
 - upside: null or {"leverage": F(number), "cap": F(fraction) or null}.
 - unsupported_features: list of F(str).
 - estimated_value: F(number) or null.
@@ -145,6 +148,9 @@ Conventions you must follow:
   amounts_are_minimums true.
 - initial_level is null when the filing says it is set on the pricing date.
 - A payment date written as "the Maturity Date" is the maturity date.
+- If the filing gives payment dates only as an offset ("the fifth business day following the
+  Observation Date"), set payment_dates to null and payment_lag_business_days to that number,
+  quoting the offset sentence. Otherwise omit payment_lag_business_days.
 - autocall review_dates, payment_dates and call_amounts have one entry per review date,
   in order.
 - coupon review_dates and payment_dates have one entry per coupon observation, in order.
@@ -240,6 +246,15 @@ def to_termsheet(data: dict) -> TermSheet:
     (null means no upside participation); unsupported_features is a required top-level key
     holding a list of cited feature names.
 
+    Payment dates given only as a business-day offset (for example "the fifth
+    business day following the Observation Date") are handled in one place,
+    ``resolve_payments`` below: the model then sets payment_dates to null and
+    supplies the optional cited integer ``payment_lag_business_days``, and the
+    payment dates are computed here as ``add_business_days(review_date, lag)``
+    with the lag field's citation. Replies without that key behave exactly as
+    before, except that a lag readable from the null payment_dates field's own
+    quote (older replies) is also honoured.
+
     Every problem (missing key, wrong type, bad date, unknown enum, list lengths differ, empty
     quote) is collected and raised together as one ExtractionError, so a bad reply is reported
     in full rather than one error at a time. A ValueError from TermSheet's own validation
@@ -268,6 +283,21 @@ def to_termsheet(data: dict) -> TermSheet:
             return float(value)
         problems.append(f"{path}.value: expected number, got {type(value).__name__}")
         return None
+
+    def as_lag(value: object, path: str) -> int | None:
+        # A payment lag must be a whole number >= 0. Note the problem text
+        # deliberately has no ".value" suffix: "<block>.payment_lag_business_days:
+        # expected a whole number >= 0".
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            problems.append(f"{path}: expected a whole number >= 0")
+            return None
+        if isinstance(value, float) and not value.is_integer():
+            problems.append(f"{path}: expected a whole number >= 0")
+            return None
+        if value < 0:
+            problems.append(f"{path}: expected a whole number >= 0")
+            return None
+        return int(value)
 
     def as_date(value: object, path: str) -> date | None:
         try:
@@ -338,6 +368,67 @@ def to_termsheet(data: dict) -> TermSheet:
         """A cited list -> one Cited per item, each with its own Citation (same quote)."""
         return [Cited(v, Citation(c.citation.quote, c.citation.section)) for v in c.value]
 
+    def resolve_payments(raw: dict, block: str, reviews: Cited | None) -> Cited | None:
+        """Resolve one block's payment_dates, allowing a business-day lag.
+
+        ``block`` is "autocall" or "coupon". Three cases:
+
+        1. payment_dates is a cited list of dates: parsed exactly as before;
+           a ``payment_lag_business_days`` key, if present, is ignored.
+        2. payment_dates is null (a plain null, or {"value": null, ...}) and
+           the raw object has a ``payment_lag_business_days`` key: that key is
+           read as a cited whole number >= 0, and the payment dates are built
+           as ``add_business_days(review_date, lag)`` for each review date,
+           carrying the lag field's quote/section as their Citation.
+        3. payment_dates is null, there is no lag key, but the null field's
+           own quote states a lag that parse_business_day_lag can read
+           (older replies put the offset sentence there): that lag is used,
+           with the payment_dates field's quote/section as the Citation.
+
+        Otherwise the old problem is recorded verbatim:
+        "<block>.payment_dates: expected list, got NoneType". If the lag is
+        present but reviews is not a valid list, returns None without adding
+        a new problem (the review_dates problem is already recorded).
+        """
+        path = f"{block}.payment_dates"
+        if "payment_dates" not in raw:
+            problems.append(f"{path}: missing required key 'payment_dates'")
+            return None
+        raw_payments = raw["payment_dates"]
+        is_null = raw_payments is None or (
+            isinstance(raw_payments, dict) and raw_payments.get("value") is None
+        )
+        if not is_null:
+            return cited(raw, "payment_dates", path, as_list(as_date))
+
+        # payment_dates is null from here on.
+        if "payment_lag_business_days" in raw:
+            lag_cited = cited(
+                raw, "payment_lag_business_days", f"{block}.payment_lag_business_days", as_lag
+            )
+            if lag_cited is None:
+                return None
+            lag = lag_cited.value
+            citation = lag_cited.citation
+        else:
+            quote = raw_payments.get("quote") if isinstance(raw_payments, dict) else None
+            lag = parse_business_day_lag(quote) if isinstance(quote, str) else None
+            if lag is None:
+                problems.append(f"{path}: expected list, got NoneType")
+                return None
+            section = raw_payments.get("section")
+            if section is not None and not isinstance(section, str):
+                problems.append(f"{path}.section: expected string or null")
+                section = None
+            citation = Citation(quote, section)
+
+        if reviews is None:
+            return None
+        return Cited(
+            [add_business_days(review_date, lag) for review_date in reviews.value],
+            citation,
+        )
+
     # --- document -----------------------------------------------------------------------------
 
     fields = dict(
@@ -385,11 +476,21 @@ def to_termsheet(data: dict) -> TermSheet:
     # --- downside -----------------------------------------------------------------------------
 
     downside = None
+    # A downside level of 0 ("if the final value is less than or equal to the initial value:
+    # $1,000") means principal is repaid in full however far the underlying falls: principal
+    # protection, which no template models.  It is recorded as an unsupported feature with the
+    # filing's quote, so the note is never priced by a template; the level is set to 1.0 only so
+    # the TermSheet can be built, and that placeholder is stated in missing_or_ambiguous.
+    protection: Cited[str] | None = None
     if (raw := obj(data, "downside", "downside")) is not None:
         kind = cited(raw, "kind", "downside.kind", as_enum(DownsideKind))
         level = cited(raw, "level", "downside.level", as_number)
         observation = cited(raw, "observation", "downside.observation", as_enum(BarrierObservation))
         gearing = cited(raw, "gearing", "downside.gearing", as_number, allow_null=True)
+        if level is not None and level.value == 0:
+            protection = Cited("principal protection (no loss of principal at maturity)",
+                               Citation(level.citation.quote, level.citation.section))
+            level = Cited(1.0, Citation(level.citation.quote, level.citation.section))
         if None not in (kind, level, observation):
             extra = {"gearing": gearing} if gearing is not None else {}  # null keeps the default 1.0
             downside = Downside(kind=kind, level=level, observation=observation, **extra)
@@ -401,7 +502,7 @@ def to_termsheet(data: dict) -> TermSheet:
         trigger = cited(raw, "trigger", "autocall.trigger", as_number)
         minimums = cited(raw, "amounts_are_minimums", "autocall.amounts_are_minimums", as_bool)
         reviews = cited(raw, "review_dates", "autocall.review_dates", as_list(as_date))
-        payments = cited(raw, "payment_dates", "autocall.payment_dates", as_list(as_date))
+        payments = resolve_payments(raw, "autocall", reviews)
         amounts = cited(raw, "call_amounts", "autocall.call_amounts", as_list(as_number))
         if None not in (trigger, minimums, reviews, payments, amounts):
             lengths = (len(reviews.value), len(payments.value), len(amounts.value))
@@ -425,7 +526,7 @@ def to_termsheet(data: dict) -> TermSheet:
         amount = cited(raw, "amount", "coupon.amount", as_number)
         memory = cited(raw, "memory", "coupon.memory", as_bool)
         reviews = cited(raw, "review_dates", "coupon.review_dates", as_list(as_date))
-        payments = cited(raw, "payment_dates", "coupon.payment_dates", as_list(as_date))
+        payments = resolve_payments(raw, "coupon", reviews)
         if None not in (barrier, amount, memory, reviews, payments):
             lengths = (len(reviews.value), len(payments.value))
             if len(set(lengths)) != 1:
@@ -466,6 +567,12 @@ def to_termsheet(data: dict) -> TermSheet:
     if not isinstance(missing, list) or not all(isinstance(m, str) for m in missing):
         problems.append("missing_or_ambiguous: expected a list of strings")
         missing = []
+
+    if protection is not None:
+        unsupported_features.append(protection)
+        missing = list(missing) + [
+            "downside.level was 0 (principal protection); 1.0 is a placeholder, not a filing value"
+        ]
 
     if problems:
         raise ExtractionError(problems)
