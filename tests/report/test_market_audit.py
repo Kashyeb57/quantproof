@@ -8,6 +8,7 @@ network, no saved fixtures, deterministic.
 
 from __future__ import annotations
 
+import math
 import csv
 import json
 from pathlib import Path
@@ -325,3 +326,15 @@ def test_check_neutral() -> None:
     assert check_neutral("a factual risk analysis") == []
     # Whole words only: "buyer" does not flag "buy".
     assert check_neutral("buyer") == []
+
+
+def test_median_cost_is_per_1000_notional_across_note_sizes():
+    from quantproof.report.market_audit import aggregate, note_row
+
+    # $10 note with estimate $9.62 costs $0.38, i.e. $38 per $1,000; a
+    # $1,000 note with estimate $962.50 costs $37.50.  Median of 38 and 37.5.
+    small = {"status": "unsupported", "issue_price": 10.0, "estimated_value": 9.62, "notional": 10.0}
+    large = {"status": "unsupported", "issue_price": 1000.0, "estimated_value": 962.5, "notional": 1000.0}
+    rows = [note_row(small), note_row(large)]
+    assert math.isclose(rows[0]["cost_to_investor_per_1000"], 38.0)
+    assert math.isclose(aggregate(rows, {})["median_cost_to_investor"], 37.75)

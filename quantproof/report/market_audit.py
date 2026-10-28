@@ -159,6 +159,12 @@ def note_row(result: dict) -> dict:
         cost_to_investor_pct: float | None = cost_to_investor / float(issue_price) * 100.0
     else:
         cost_to_investor_pct = None
+    # Per $1,000 of notional, so $10 and $1,000 notes can share one median.
+    notional = result.get("notional")
+    if cost_to_investor is not None and notional:
+        cost_per_1000: float | None = cost_to_investor / float(notional) * 1000.0
+    else:
+        cost_per_1000 = None
 
     fair_value = result.get("fair_value")
     if not isinstance(fair_value, dict):
@@ -240,6 +246,7 @@ def note_row(result: dict) -> dict:
         "notional": result.get("notional"),
         "cost_to_investor": cost_to_investor,
         "cost_to_investor_pct": cost_to_investor_pct,
+        "cost_to_investor_per_1000": cost_per_1000,
         "range_low": range_low,
         "range_high": range_high,
         "base_value": base.get("price"),
@@ -292,7 +299,11 @@ def aggregate(rows: list[dict], run: dict) -> dict:
     def _total(field: str) -> float:
         return float(sum(float(row[field]) for row in rows if row.get(field) is not None))
 
-    costs = [float(row["cost_to_investor"]) for row in rows if row.get("cost_to_investor") is not None]
+    costs = [
+        float(row["cost_to_investor_per_1000"])
+        for row in rows
+        if row.get("cost_to_investor_per_1000") is not None
+    ]
     costs_pct = [
         float(row["cost_to_investor_pct"])
         for row in rows
@@ -417,7 +428,7 @@ def render_markdown(rows: list[dict], agg: dict) -> str:
     lines.append(f"- Share priced: {_format_pct_fraction(agg.get('share_priced'))}")
     lines.append(f"- Notes with a bank estimated value: {agg.get('n_with_estimate')}")
     lines.append(
-        f"- Median cost to investor ($, bank's figure): "
+        f"- Median cost to investor (per $1,000 notional, bank's figure): "
         f"{_format_money(agg.get('median_cost_to_investor'))}"
     )
     lines.append(
@@ -439,10 +450,6 @@ def render_markdown(rows: list[dict], agg: dict) -> str:
     lines.append(
         f"- Total model seconds: "
         f"{'' if total_model_seconds is None else f'{float(total_model_seconds):.1f}'}"
-    )
-    wall_seconds = agg.get("wall_seconds")
-    lines.append(
-        f"- Wall seconds: {'' if wall_seconds is None else f'{float(wall_seconds):.1f}'}"
     )
     issuers = agg.get("issuers") or []
     lines.append(f"- Issuers: {', '.join(str(name) for name in issuers)}")
