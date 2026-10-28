@@ -29,6 +29,8 @@ Reference: AGENTS.md rules 3, 5 and 8; project brief section 6;
 
 from __future__ import annotations
 
+import difflib
+
 import json
 import statistics
 from collections import Counter
@@ -604,13 +606,26 @@ def render_markdown(results: list[dict], summary: dict) -> str:
         if example.get("counterexample"):
             lines.append("Counterexample fed back to the model:")
             lines.append("")
-            lines.append(str(example["counterexample"]))
-            lines.append("")
+            lines += ["~~~text", str(example["counterexample"]), "~~~", ""]
         if example.get("feedback"):
-            lines.append("Feedback sent with the repair request:")
+            # The feedback repeats the previous code (shown above); show the
+            # part after it, the failed checks with their counterexamples.
+            feedback = str(example["feedback"])
+            marker = "Failed checks to fix:"
+            if marker in feedback:
+                feedback = feedback[feedback.index(marker):]
+            lines.append("Feedback sent with the repair request (after the previous code):")
             lines.append("")
-            lines.append(str(example["feedback"]))
+            lines += ["~~~text", feedback, "~~~", ""]
+        if example.get("wrong_code") and example.get("fixed_code"):
+            diff = difflib.unified_diff(
+                str(example["wrong_code"]).splitlines(),
+                str(example["fixed_code"]).splitlines(),
+                "attempt 1", "repaired", lineterm="", n=1,
+            )
+            lines.append("What the repair changed:")
             lines.append("")
+            lines += ["```diff", *diff, "```", ""]
         lines.append("The repaired code that passed the full battery was:")
         lines.append("")
         lines.append("```python")

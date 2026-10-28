@@ -56,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Prose only: AI-written code in ``` blocks may name variables "worst"
     # (the worst-of level), which is not language about a bank.
-    prose = re.sub(r"```.*?```", "", markdown, flags=re.DOTALL)
+    prose = re.sub(r"```.*?```|~~~.*?~~~", "", markdown, flags=re.DOTALL)
     banned = market_audit.check_neutral(prose)
     assert not banned, f"banned words in synthesis benchmark report: {banned}"
 
