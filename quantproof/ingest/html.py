@@ -309,7 +309,10 @@ def html_to_text(html: str) -> tuple[str, tuple[ImageRef, ...]]:
     joins a row's non-empty one-line cells with ' | ' (a row whose cells hold paragraphs is
     page layout and keeps its lines), records local img files in
     order while skipping http(s) tracking pixels, then normalises
-    unicode, collapses spaces per line and 3+ newlines to 2.
+    unicode, collapses spaces per line and 3+ newlines to 2, and drops a
+    Wingdings "o" sub-bullet glued to a line's first word ("oIf the
+    underlier ..." -> "If the underlier ..."; no English word starts with
+    "o" followed by a capitalised word).
     """
     parser = _FilingHTMLParser()
     parser.feed(html)
@@ -319,6 +322,7 @@ def html_to_text(html: str) -> tuple[str, tuple[ImageRef, ...]]:
     lines = text.split("\n")
     cleaned = [re.sub(r" +", " ", line).strip() for line in lines]
     text = "\n".join(cleaned)
+    text = re.sub(r"(?m)^o(?=[A-Z][a-z])", "", text)  # glued "o" sub-bullet
     text = re.sub(r"\n{3,}", "\n\n", text)
     text = text.strip()
     return text, images

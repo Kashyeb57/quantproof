@@ -245,3 +245,13 @@ def test_fixture_key_terms_are_separate_lines():
     # Each key term starts its own line, so a model (and a reader) sees one term per line.
     assert "Barrier Amount: With respect to each Index, 70.00% of its Initial Value" in lines
     assert any(line.startswith("Pricing Date: On or about November 25, 2025") for line in lines)
+
+
+def test_glued_o_sub_bullet_is_dropped():
+    from quantproof.ingest.html import html_to_text
+
+    text, _ = html_to_text("<p>oIf the underlier appreciates 5%, investors will receive $1,075</p>"
+                           "<p>oFor example</p><p>oil prices</p><p>OK</p>")
+    assert text.split("\n\n") == [
+        "If the underlier appreciates 5%, investors will receive $1,075",
+        "For example", "oil prices", "OK"]
