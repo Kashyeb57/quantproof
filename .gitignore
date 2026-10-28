@@ -14,6 +14,7 @@ build/
 dist/
 
 # Tools
+pytest_*.txt
 .pytest_cache/
 .coverage
 htmlcov/
