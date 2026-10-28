@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.013207,
+    "finish_reason": "stop",
+    "input_tokens": 8019,
+    "model": "muse-spark-1.3",
+    "output_tokens": 749,
+    "purpose": "extract_examples",
+    "seconds": 4.120801496999775,
+    "text": "{\"examples\": []}"
+  },
+  {
+    "cost_usd": 0.092212,
+    "finish_reason": "stop",
+    "input_tokens": 8663,
+    "model": "muse-wonder-1.0",
+    "output_tokens": 2878,
+    "purpose": "synthesis",
+    "seconds": 17.776339715000177,
+    "text": "```python\ndef cashflows(perf, terms):\n    import numpy as np\n\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    upside = terms[\"upside\"]\n\n    leverage = 1.0\n    cap = None\n    if upside is not None:\n        leverage = float(upside[\"leverage\"])\n        cap = upside[\"cap\"]\n\n    final_perf = np.min(perf[:, final_index, :], axis=1)\n    final_return = final_perf - 1.0\n    upside_return = leverage * np.maximum(final_return, 0.0)\n    if cap is not None:\n        upside_return = np.minimum(upside_return, float(cap))\n    maturity_amount = notional * (1.0 + upside_return)\n    maturity_amount = np.maximum(maturity_amount, notional)\n\n    alive = np.ones(n_paths, dtype=bool)\n    unpaid_coupons = np.zeros(n_paths, dtype=float)\n\n    for k in range(n_dates):\n        worst = np.min(perf[:, k, :], axis=1)\n        coupon_payment = np.zeros(n_paths, dtype=float)\n\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                meets_barrier = worst >= float(coupon[\"barrier\"])\n                if bool(coupon[\"memory\"]):\n                    previously_unpaid = unpaid_coupons.copy()\n                    unpaid_coupons[alive & ~meets_barrier] += coupon_amount\n                    paying = alive & meets_barrier\n                    coupon_payment[paying] = coupon_amount + previously_unpaid[paying]\n                    unpaid_coupons[paying] = 0.0\n                else:\n                    coupon_payment[alive & meets_barrier] = coupon_amount\n\n        called_now = np.zeros(n_paths, dtype=bool)\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called_now = alive & (worst >= float(autocall[\"trigger\"]))\n                if np.any(called_now):\n                    cash[called_now, k] = float(call_amount) + coupon_payment[called_now]\n                    alive[called_now] = False\n\n        if k == final_index:\n            cash[alive, k] += maturity_amount[alive] + coupon_payment[alive]\n            alive[:] = False\n        else:\n            cash[alive, k] += coupon_payment[alive]\n\n    return cash\n```"
+  }
+]
