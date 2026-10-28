@@ -1,0 +1,405 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 2 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 2.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5106120213091625
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalidx = int(terms[\"final_index\"])\n    downside = terms[\"downside\"]\n    level = float(downside[\"level\"]) if downside is not None else 0.7\n    gearing = float(downside[\"gearing\"]) if downside is not None else 1.0\n    digitalreturn = 0.0734\n    worst = np.min(perf, axis=2)\n    alive = np.ones(npaths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        isfinal = k == finalidx\n        if coupon is not None and not isfinal:\n            couponamount = coupon[\"amounts\"][k]\n            if couponamount is not None:\n                couponamount = float(couponamount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += couponamount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += couponamount\n        if autocall is not None:\n            callamount = autocall[\"call_amounts\"][k]\n            if callamount is not None:\n                callnow = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                if np.any(callnow):\n                    cash[callnow, k] += float(callamount)\n                    alive[callnow] = False\n                    if isfinal:\n                        return cash\n                    continue\n        if isfinal:\n            finalworst = worst[:, k]\n            maturity = np.where(finalworst >= level, notional * (1.0 + digitalreturn), notional * np.maximum(0.0, 1.0 + gearing * (finalworst - 1.0)))\n            cash[alive, k] += maturity[alive]\n            alive[:] = False\n    return cash",
+      "cost_usd": 0.103288,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 2 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 20.018340440999964
+    },
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 2 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 2.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5106120213091625
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    worst = np.min(perf, axis=2)\n    alive = np.ones(n_paths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += coupon_amount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += coupon_amount\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount)\n                alive[called] = False\n        if k == final_index:\n            break\n    downside = terms[\"downside\"]\n    buffer_level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    contingent_digital_return = 0.0734\n    final_perf = worst[:, final_index]\n    index_return = final_perf - 1.0\n    # Filing examples, per $1,000 note:\n    # final_perf 1.05 gives $1,073.40; final_perf 1.40 also gives $1,073.40.\n    # final_perf 0.70, exactly down 30.00%, also gives $1,073.40.\n    # final_perf 0.50 gives $1,000 + $1,000 * (-50.00%) = $500.00.\n    at_or_above_buffer = final_perf >= buffer_level\n    below_buffer = ~at_or_above_buffer\n    digital_payment = notional * (1.0 + contingent_digital_return)\n    downside_payment = notional * np.maximum(0.0, 1.0 + gearing * index_return)\n    pay_digital = alive & at_or_above_buffer\n    pay_downside = alive & below_buffer\n    cash[pay_digital, final_index] += digital_payment\n    cash[pay_downside, final_index] += downside_payment[pay_downside]\n    return cash",
+      "cost_usd": 0.108288,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 2 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": "Previous code:\n```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalidx = int(terms[\"final_index\"])\n    downside = terms[\"downside\"]\n    level = float(downside[\"level\"]) if downside is not None else 0.7\n    gearing = float(downside[\"gearing\"]) if downside is not None else 1.0\n    digitalreturn = 0.0734\n    worst = np.min(perf, axis=2)\n    alive = np.ones(npaths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        isfinal = k == finalidx\n        if coupon is not None and not isfinal:\n            couponamount = coupon[\"amounts\"][k]\n            if couponamount is not None:\n                couponamount = float(couponamount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += couponamount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += couponamount\n        if autocall is not None:\n            callamount = autocall[\"call_amounts\"][k]\n            if callamount is not None:\n                callnow = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                if np.any(callnow):\n                    cash[callnow, k] += float(callamount)\n                    alive[callnow] = False\n                    if isfinal:\n                        return cash\n                    continue\n        if isfinal:\n            finalworst = worst[:, k]\n            maturity = np.where(finalworst >= level, notional * (1.0 + digitalreturn), notional * np.maximum(0.0, 1.0 + gearing * (finalworst - 1.0)))\n            cash[alive, k] += maturity[alive]\n            alive[:] = False\n    return cash\n```\nFailed checks to fix:\n- filing_examples: not enough filing evidence: 2 verified examples, need at least 3\n  Counterexample: not enough filing evidence: 2 verified examples, need at least 3",
+      "passed": false,
+      "seconds": 27.799020790999748
+    },
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 2 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 2.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5106120213091625
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    worst = np.min(perf, axis=2)\n    alive = np.ones(n_paths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += coupon_amount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += coupon_amount\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount)\n                alive[called] = False\n        if k == final_index:\n            break\n    downside = terms[\"downside\"]\n    buffer_level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    contingent_digital_return = 0.0734\n    final_perf = worst[:, final_index]\n    index_return = final_perf - 1.0\n    # Filing Example 1: Ending Index Level 105.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 2: Ending Index Level 70.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 3: Ending Index Level 140.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 4: Ending Index Level 50.00 with Index Strike Level 100.00 gives payment $500.00 per $1,000 note\n    # Filing table row: Ending Index Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing table row: Ending Index Level 60.00 gives payment $600.00 per $1,000 note\n    # Filing table row: Ending Index Level 0.00 gives payment $0.00 per $1,000 note\n    at_or_above_buffer = final_perf >= buffer_level\n    below_buffer = ~at_or_above_buffer\n    digital_payment = notional * (1.0 + contingent_digital_return)\n    downside_payment = notional * np.maximum(0.0, 1.0 + gearing * index_return)\n    pay_digital = alive & at_or_above_buffer\n    pay_downside = alive & below_buffer\n    cash[pay_digital, final_index] += digital_payment\n    cash[pay_downside, final_index] += downside_payment[pay_downside]\n    return cash",
+      "cost_usd": 0.073544,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 2 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": "Previous code:\n```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    worst = np.min(perf, axis=2)\n    alive = np.ones(n_paths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += coupon_amount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += coupon_amount\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount)\n                alive[called] = False\n        if k == final_index:\n            break\n    downside = terms[\"downside\"]\n    buffer_level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    contingent_digital_return = 0.0734\n    final_perf = worst[:, final_index]\n    index_return = final_perf - 1.0\n    # Filing examples, per $1,000 note:\n    # final_perf 1.05 gives $1,073.40; final_perf 1.40 also gives $1,073.40.\n    # final_perf 0.70, exactly down 30.00%, also gives $1,073.40.\n    # final_perf 0.50 gives $1,000 + $1,000 * (-50.00%) = $500.00.\n    at_or_above_buffer = final_perf >= buffer_level\n    below_buffer = ~at_or_above_buffer\n    digital_payment = notional * (1.0 + contingent_digital_return)\n    downside_payment = notional * np.maximum(0.0, 1.0 + gearing * index_return)\n    pay_digital = alive & at_or_above_buffer\n    pay_downside = alive & below_buffer\n    cash[pay_digital, final_index] += digital_payment\n    cash[pay_downside, final_index] += downside_payment[pay_downside]\n    return cash\n```\nFailed checks to fix:\n- filing_examples: not enough filing evidence: 2 verified examples, need at least 3\n  Counterexample: not enough filing evidence: 2 verified examples, need at least 3",
+      "passed": false,
+      "seconds": 9.541586669000026
+    },
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 2 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 2.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5106120213091625
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    # Filing example 1: perf=1.05 payment=1073.40\n    # Filing example 2: perf=0.70 payment=1073.40\n    # Filing example 3: perf=1.40 payment=1073.40\n    # Filing example 4: perf=0.50 payment=500.00\n    # Filing example 5: perf=0.60 payment=600.00\n    # Filing example 6: perf=0.00 payment=0.00\n    # Filing example 7: perf=1.00 payment=1073.40\n    # Filing example 8: perf=0.6999 payment=699.90\n    # Filing example 9: perf=1.80 payment=1073.40\n    # Filing example 10: perf=0.40 payment=400.00\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    worst = np.min(perf, axis=2)\n    alive = np.ones(n_paths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += coupon_amount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += coupon_amount\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount)\n                alive[called] = False\n        if k == final_index:\n            break\n    downside = terms[\"downside\"]\n    buffer_level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    contingent_digital_return = 0.0734\n    final_perf = worst[:, final_index]\n    index_return = final_perf - 1.0\n    at_or_above_buffer = final_perf >= buffer_level\n    below_buffer = ~at_or_above_buffer\n    digital_payment = notional * (1.0 + contingent_digital_return)\n    downside_payment = notional * np.maximum(0.0, 1.0 + gearing * index_return)\n    pay_digital = alive & at_or_above_buffer\n    pay_downside = alive & below_buffer\n    cash[pay_digital, final_index] += digital_payment\n    cash[pay_downside, final_index] += downside_payment[pay_downside]\n    return cash",
+      "cost_usd": 0.085876,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 2 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": "Previous code:\n```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    worst = np.min(perf, axis=2)\n    alive = np.ones(n_paths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                coupon_amount = float(coupon_amount)\n                eligible = alive & (worst[:, k] >= float(coupon[\"barrier\"]))\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += coupon_amount * (missed[eligible] + 1.0)\n                    missed[eligible] = 0.0\n                    missed[alive & ~eligible] += 1.0\n                else:\n                    cash[eligible, k] += coupon_amount\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst[:, k] >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount)\n                alive[called] = False\n        if k == final_index:\n            break\n    downside = terms[\"downside\"]\n    buffer_level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    contingent_digital_return = 0.0734\n    final_perf = worst[:, final_index]\n    index_return = final_perf - 1.0\n    # Filing Example 1: Ending Index Level 105.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 2: Ending Index Level 70.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 3: Ending Index Level 140.00 with Index Strike Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing Example 4: Ending Index Level 50.00 with Index Strike Level 100.00 gives payment $500.00 per $1,000 note\n    # Filing table row: Ending Index Level 100.00 gives payment $1,073.40 per $1,000 note\n    # Filing table row: Ending Index Level 60.00 gives payment $600.00 per $1,000 note\n    # Filing table row: Ending Index Level 0.00 gives payment $0.00 per $1,000 note\n    at_or_above_buffer = final_perf >= buffer_level\n    below_buffer = ~at_or_above_buffer\n    digital_payment = notional * (1.0 + contingent_digital_return)\n    downside_payment = notional * np.maximum(0.0, 1.0 + gearing * index_return)\n    pay_digital = alive & at_or_above_buffer\n    pay_downside = alive & below_buffer\n    cash[pay_digital, final_index] += digital_payment\n    cash[pay_downside, final_index] += downside_payment[pay_downside]\n    return cash\n```\nFailed checks to fix:\n- filing_examples: not enough filing evidence: 2 verified examples, need at least 3\n  Counterexample: not enough filing evidence: 2 verified examples, need at least 3",
+      "passed": false,
+      "seconds": 12.118830523000724
+    }
+  ],
+  "cost_usd": 0.398492,
+  "cusip": "46661QNV3",
+  "estimated_value": 986.0,
+  "examples": [
+    {
+      "payment": 1073.4,
+      "quote": "180.00 80.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.8
+    },
+    {
+      "payment": 1073.4,
+      "quote": "170.00 70.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.7
+    },
+    {
+      "payment": 1073.4,
+      "quote": "160.00 60.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.6
+    },
+    {
+      "payment": 1073.4,
+      "quote": "150.00 50.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1073.4,
+      "quote": "140.00 40.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1073.4,
+      "quote": "130.00 30.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1073.4,
+      "quote": "120.00 20.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1073.4,
+      "quote": "115.00 15.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.15
+    },
+    {
+      "payment": 1073.4,
+      "quote": "110.00 10.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1073.4,
+      "quote": "107.34 7.34% 7.34%",
+      "verified": false,
+      "worst_final": 1.0734
+    },
+    {
+      "payment": 1073.4,
+      "quote": "105.00 5.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1073.4,
+      "quote": "102.50 2.50% 7.34%",
+      "verified": false,
+      "worst_final": 1.025
+    },
+    {
+      "payment": 1073.4,
+      "quote": "100.00 0.00% 7.34%",
+      "verified": false,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1073.4,
+      "quote": "97.50 -2.50% 7.34%",
+      "verified": false,
+      "worst_final": 0.975
+    },
+    {
+      "payment": 1073.4,
+      "quote": "95.00 -5.00% 7.34%",
+      "verified": false,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1073.4,
+      "quote": "90.00 -10.00% 7.34%",
+      "verified": false,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1073.4,
+      "quote": "80.00 -20.00% 7.34%",
+      "verified": false,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 1073.4,
+      "quote": "70.00 -30.00% 7.34%",
+      "verified": false,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 699.9,
+      "quote": "69.99 -30.01% -30.01%",
+      "verified": false,
+      "worst_final": 0.6999
+    },
+    {
+      "payment": 600.0,
+      "quote": "60.00 -40.00% -40.00%",
+      "verified": false,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 500.0,
+      "quote": "50.00 -50.00% -50.00%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 400.0,
+      "quote": "40.00 -60.00% -60.00%",
+      "verified": false,
+      "worst_final": 0.4
+    },
+    {
+      "payment": 300.0,
+      "quote": "30.00 -70.00% -70.00%",
+      "verified": false,
+      "worst_final": 0.3
+    },
+    {
+      "payment": 200.0,
+      "quote": "20.00 -80.00% -80.00%",
+      "verified": false,
+      "worst_final": 0.2
+    },
+    {
+      "payment": 100.0,
+      "quote": "10.00 -90.00% -90.00%",
+      "verified": false,
+      "worst_final": 0.1
+    },
+    {
+      "payment": 0.0,
+      "quote": "0.00 -100.00% -100.00%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "issue_price": 1000.0,
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "meta": {
+    "accession": "0001918704-26-032448",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-23",
+    "form": "424B2",
+    "issuer_group": "JPMorgan",
+    "label": "contingent digital return, 70% barrier",
+    "primary_document": "form424b2.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/19617/000191870426032448/form424b2.htm"
+  },
+  "model_seconds": 80.23661063100099,
+  "n_attempts": 4,
+  "passed": false,
+  "repaired": false,
+  "status": "synthesis_failed",
+  "structure": "single underlying, barrier 70% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Contingent Digital Return: | 7.34%, which reflects the maximum return on the notes.",
+      "value": "Contingent Digital Return"
+    }
+  ]
+}
