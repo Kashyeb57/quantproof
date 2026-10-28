@@ -1,7 +1,8 @@
 """Real audit replies that failed before the payment-lag / protection schema extension.
 
-Uses the saved recordings under data/market_audit (no network, no key): the
-model's first extraction reply for each note, and the saved filing.
+Uses the model's original (failing) first extraction reply for each note, frozen
+under tests/fixtures/audit_replies, and the saved filing under data/market_audit
+(no network, no key).
 """
 
 import copy
@@ -20,9 +21,11 @@ from quantproof.validation.quotes import verify_termsheet
 AUDIT = Path(__file__).resolve().parents[2] / "data" / "market_audit"
 
 
+REPLIES = Path(__file__).resolve().parents[1] / "fixtures" / "audit_replies"
+
+
 def _reply(accession: str) -> dict:
-    calls = json.loads((AUDIT / "calls" / f"{accession}.calls.json").read_text(encoding="utf-8"))
-    return json.loads(calls[0]["text"])
+    return json.loads((REPLIES / f"{accession}.reply.json").read_text(encoding="utf-8"))
 
 
 def _filing_text(accession: str) -> str:
