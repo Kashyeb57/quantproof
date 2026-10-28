@@ -1,0 +1,219 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0047058823529368965
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5018252208467413
+        }
+      ],
+      "code": "import numpy as np\n\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalindex = int(terms[\"final_index\"])\n    downside = terms[\"downside\"]\n    level = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    bufferamount = 1.0 - level\n    if level > 0.0 and abs(gearing - 1.0 / level) < 0.01:\n        gearing = 1.0 / level\n    digitalreturn = 0.0762\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    alive = np.ones(npaths, dtype=bool)\n    missed = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        if not np.any(alive):\n            break\n        worst = np.min(perf[:, k, :], axis=1)\n        if coupon is not None:\n            amount = coupon[\"amounts\"][k]\n            if amount is not None:\n                barrier = float(coupon[\"barrier\"])\n                meets = alive & (worst >= barrier)\n                if bool(coupon[\"memory\"]):\n                    paycount = np.where(meets, missed + 1.0, 0.0)\n                    cash[:, k] += np.where(meets, float(amount) * paycount, 0.0)\n                    missed = np.where(meets, 0.0, np.where(alive, missed + 1.0, missed))\n                else:\n                    cash[:, k] += np.where(meets, float(amount), 0.0)\n        called = np.zeros(npaths, dtype=bool)\n        if autocall is not None:\n            callamount = autocall[\"call_amounts\"][k]\n            if callamount is not None:\n                trigger = float(autocall[\"trigger\"])\n                called = alive & (worst >= trigger)\n                cash[:, k] += np.where(called, float(callamount), 0.0)\n                alive = alive & ~called\n        if k == finalindex and np.any(alive):\n            finalperf = perf[:, finalindex, 0]\n            downsidepay = notional * (1.0 + (finalperf - 1.0 + bufferamount) * gearing)\n            downsidepay = np.maximum(downsidepay, 0.0)\n            maturity = np.where(finalperf >= level, notional * (1.0 + digitalreturn), downsidepay)\n            cash[:, k] += np.where(alive, maturity, 0.0)\n            alive[:] = False\n    return cash",
+      "cost_usd": 0.124956,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 18.958616036999956
+    }
+  ],
+  "cost_usd": 0.137179,
+  "cusip": "06419TE79",
+  "estimated_value": 986.88,
+  "examples": [
+    {
+      "payment": 1076.2,
+      "quote": "150.00 50.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1076.2,
+      "quote": "140.00 40.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1076.2,
+      "quote": "130.00 30.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1076.2,
+      "quote": "120.00 20.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1076.2,
+      "quote": "110.00 10.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1076.2,
+      "quote": "107.62 7.62% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.0762
+    },
+    {
+      "payment": 1076.2,
+      "quote": "106.00 6.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.06
+    },
+    {
+      "payment": 1076.2,
+      "quote": "104.00 4.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.04
+    },
+    {
+      "payment": 1076.2,
+      "quote": "102.00 2.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.02
+    },
+    {
+      "payment": 1076.2,
+      "quote": "100.00 0.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1076.2,
+      "quote": "95.00 -5.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1076.2,
+      "quote": "90.00 -10.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1076.2,
+      "quote": "85.00 -15.00% $1,076.20 7.620%",
+      "verified": true,
+      "worst_final": 0.85
+    },
+    {
+      "payment": 988.24,
+      "quote": "84.00 -16.00% $988.24 -1.176%",
+      "verified": true,
+      "worst_final": 0.84
+    },
+    {
+      "payment": 941.18,
+      "quote": "80.00 -20.00% $941.18 -5.882%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 823.53,
+      "quote": "70.00 -30.00% $823.53 -17.647%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 705.88,
+      "quote": "60.00 -40.00% $705.88 -29.412%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 588.24,
+      "quote": "50.00 -50.00% $588.24 -41.176%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 294.12,
+      "quote": "25.00 -75.00% $294.12 -70.588%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 0.0,
+      "quote": "0.00 -100.00% $0.00 -100.000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 974.2524362877224,
+      "seed": 0,
+      "std_error": 0.6175723929322544
+    },
+    "high": 997.9831956048366,
+    "low": 949.1731523602556,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "The Bank of Nova Scotia",
+  "meta": {
+    "accession": "0001839882-26-051339",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-19",
+    "form": "424B2",
+    "issuer_group": "Bank of Nova Scotia",
+    "label": "digital return, 85% buffer",
+    "primary_document": "bns_424b2-34849.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/9631/000183988226051339/bns_424b2-34849.htm"
+  },
+  "model_seconds": 25.73693517799984,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "priced_ai",
+  "structure": "single underlying, buffer 85% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "If the Final Value of the S&P 500\u00ae Index (the \u201cReference Asset\u201d) is equal to or greater than 85.00% of the Initial Value (the \u201cBuffer Value\u201d), the Notes offer the opportunity to earn a fixed return equal to 7.62% of the Principal Amount (the \u201cDigital Return\u201d).",
+      "value": "Digital Return"
+    }
+  ]
+}
