@@ -165,11 +165,37 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
 - Local note: a test read the real local cost log (audit spend made "today" look capped); it now
   runs from a temp dir.
 
-## Next: Part B synthesis benchmark (checkpoint 2), budget $15
-8-10 real 424B2s with different structures (the audit already found digital, dual-directional /
-absolute-return, threshold settlement, step-down, buffered leverage), templates disabled, Wonder
-synthesis + sandbox + battery + repair (max 3), log every attempt, template agreement within 3 SE
-and filing examples to the cent where a template covers, `docs/SYNTHESIS_BENCHMARK.md`, app replay page.
+## Checkpoint 2 (Oct 28): gate, re-extraction, synthesis benchmark — done
+- **Plausibility gate** (`audit_run.plausibility_issues`): base > issue price +2%, or bank estimate
+  above our whole range -> status `needs_review` (not counted as priced). Test replays the 3 MS
+  misreads with `template_gaps` switched off: the gate alone stops all 3 (base 19-23% above issue).
+  Under the flat 25% vol it also holds 6 of the 8 template-priced audit notes (bank above our range).
+- **Schema extension**: payment dates stated as "N business days after" (cited lag, verified against
+  the review date; `core/calendar.py`, weekdays only, holidays not modelled); downside level 0 =
+  principal protection -> unsupported feature with the filing's quote. `--redo` re-ran the 10 failed
+  notes live ($1.30): **8 now extract** (34 -> 42); 1 GS invalid JSON again; TD review dates only
+  relative ("third business day prior to"). One protected Citi note came back as a 100% barrier and
+  the gate caught it (needs review). Audit now: 6 priced, 7 needs review, 29 unsupported, 2 failed.
+- **Synthesis benchmark** (`report/synth_run.py`, `scripts/synthesis_benchmark.py`, replay $0):
+  templates disabled; Muse Wonder 1.0 (medium), sandbox, battery, up to 3 repairs with a concrete
+  counterexample; repairs stop when only filing evidence is missing. 10 notes (8 unsupported + 2
+  template-covered): **9 of 10 pass the battery**, 8 first try, 1 repaired (BMO threshold settlement:
+  rounded gearing, cents off, fixed to 1/0.85). Coverage: templates 6 of 42; with proven AI payoffs
+  **12 of 42**. Generalisation: both template notes AI = template (diff $0.00, within 3 SE), filing
+  tables to the cent (AI and template). GS bearish note held by the gate: code correct (Black-Scholes
+  check $1,052.96 vs $1,053.43 +/- 0.48), value high because flat 25% vol (net long puts) — needs
+  real vols. MS 61781THB2 fails: filing has only 2 worked examples (battery needs 3).
+  `docs/SYNTHESIS_BENCHMARK.md`; app page "Synthesis replay".
+- Fixes found on the way (general): terms dict sent "DownsideKind.BARRIER" (now "barrier");
+  example verifier reads percent-of-principal, total-return and prose examples (cell by cell, signs
+  kept); ingest drops glued "o" bullets ("oIf the underlier"); audit replay unchanged by each.
+- **Not done: per-note Treasury rate.** `home.treasury.gov` is blocked by the network policy
+  (Joyeb to allow it); audit and benchmark still use the flat stated r 3.7%.
+- Spend since checkpoint 1: gate $0; re-extraction $1.67 of $2 ($1.30 redo + $0.36 draft); Part B
+  $3.24 of $15 ($2.39 benchmark calls incl. superseded runs kept in `superseded/`, $0.85 drafts).
+  Dev log $10.49 of $80.
+- Next checkpoint: Treasury rate per pricing date (once allowed); wire Muse's anchored vols from
+  `quantproof/market/` (do not edit it here); rerun gate; MS prose-examples note with 3+ examples.
 
 ## Day 7 app + polish (Oct 28, built by Muse Code on Joyeb's PC, reviewed and tested)
 - Code moved from `scripts/analyse.py` into `quantproof/report` (CLI re-exports; example byte-identical).
