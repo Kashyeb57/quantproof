@@ -1,0 +1,114 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 0 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5034611516711506
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    downside = terms[\"downside\"]\n    upside = terms[\"upside\"]\n    alive = np.ones(n_paths, dtype=bool)\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if not np.any(alive):\n            break\n        worst = np.min(perf[:, k, :], axis=1)\n        is_final = k == final_index\n        coupon_pay = np.zeros(n_paths, dtype=float)\n        if coupon is not None:\n            amount = coupon[\"amounts\"][k]\n            if amount is not None:\n                meets = worst >= float(coupon[\"barrier\"])\n                if bool(coupon[\"memory\"]):\n                    due = np.where(meets, missed + 1.0, 0.0)\n                    coupon_pay = alive * meets * float(amount) * due\n                    missed = np.where(meets, 0.0, missed + alive.astype(float))\n                else:\n                    coupon_pay = alive * meets * float(amount)\n        called = np.zeros(n_paths, dtype=bool)\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount) + coupon_pay[called]\n        if np.any(called):\n            alive = alive & ~called\n        if is_final:\n            if np.any(alive):\n                final_perf = np.min(perf[:, final_index, :], axis=1)\n                level = float(downside[\"level\"])\n                gearing = float(downside[\"gearing\"])\n                payoff = np.full(n_paths, notional, dtype=float)\n                up = final_perf > 1.0\n                down = final_perf < level\n                if upside is not None:\n                    leverage = float(upside[\"leverage\"])\n                    payoff = np.where(up, notional * (1.0 + leverage * (final_perf - 1.0)), payoff)\n                    cap = upside[\"cap\"]\n                    if cap is not None:\n                        payoff = np.where(up, np.minimum(payoff, notional * (1.0 + float(cap))), payoff)\n                payoff = np.where(down, notional * (1.0 + gearing * (final_perf - level)), payoff)\n                payoff = np.maximum(payoff, 0.10 * notional)\n                cash[alive, k] += payoff[alive] + coupon_pay[alive]\n            alive = np.zeros(n_paths, dtype=bool)\n        else:\n            if coupon is not None and coupon[\"amounts\"][k] is not None:\n                cash[:, k] += np.where(called, 0.0, coupon_pay)\n    return cash",
+      "cost_usd": 0.086576,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 0 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 18.804185050999877
+    }
+  ],
+  "cost_usd": 0.1042315,
+  "cusip": "61781LSA9",
+  "estimated_value": 972.8,
+  "examples": [
+    {
+      "payment": 1075.0,
+      "quote": "If the underlier appreciates 5%, investors will receive $1,075 per security, or 107.50% of the stated principal amount.",
+      "verified": false,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1222.0,
+      "quote": "If the underlier appreciates 100%, investors will receive only the maximum payment at maturity of $1,222.00 per security, or 122.20% of the stated principal amount.",
+      "verified": false,
+      "worst_final": 2.0
+    },
+    {
+      "payment": 1000.0,
+      "quote": "If the underlier depreciates 5%, investors will receive $1,000 per security.",
+      "verified": false,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 150.0,
+      "quote": "If the underlier depreciates 95%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.",
+      "verified": false,
+      "worst_final": 0.05
+    }
+  ],
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "issue_price": 1000.0,
+  "issuer": "Morgan Stanley Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-049404",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-02",
+    "form": "424B2",
+    "issuer_group": "Morgan Stanley",
+    "label": "minimum payment at maturity",
+    "primary_document": "ms18894_424b2-33431.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226049404/ms18894_424b2-33431.htm"
+  },
+  "model_seconds": 23.89082953199977,
+  "n_attempts": 1,
+  "passed": false,
+  "repaired": false,
+  "status": "synthesis_failed",
+  "structure": "single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Minimum payment at maturity: 10% of the stated principal amount",
+      "value": "Minimum payment at maturity"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.0176555,
+    "finish_reason": "stop",
+    "input_tokens": 7933,
+    "model": "muse-spark-1.3",
+    "output_tokens": 1821,
+    "purpose": "extract_examples",
+    "seconds": 5.086644480999894,
+    "text": "{\"examples\": [{\"worst_final\": 1.05, \"payment\": 1075, \"quote\": \"If the underlier appreciates 5%, investors will receive $1,075 per security, or 107.50% of the stated principal amount.\"}, {\"worst_final\": 2.0, \"payment\": 1222.0, \"quote\": \"If the underlier appreciates 100%, investors will receive only the maximum payment at maturity of $1,222.00 per security, or 122.20% of the stated principal amount.\"}, {\"worst_final\": 0.95, \"payment\": 1000, \"quote\": \"If the underlier depreciates 5%, investors will receive $1,000 per security.\"}, {\"worst_final\": 0.05, \"payment\": 150, \"quote\": \"If the underlier depreciates 95%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.\"}]}"
+  },
+  {
+    "cost_usd": 0.086576,
+    "finish_reason": "stop",
+    "input_tokens": 8509,
+    "model": "muse-wonder-1.0",
+    "output_tokens": 2627,
+    "purpose": "synthesis",
+    "seconds": 18.804185050999877,
+    "text": "```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    downside = terms[\"downside\"]\n    upside = terms[\"upside\"]\n    alive = np.ones(n_paths, dtype=bool)\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if not np.any(alive):\n            break\n        worst = np.min(perf[:, k, :], axis=1)\n        is_final = k == final_index\n        coupon_pay = np.zeros(n_paths, dtype=float)\n        if coupon is not None:\n            amount = coupon[\"amounts\"][k]\n            if amount is not None:\n                meets = worst >= float(coupon[\"barrier\"])\n                if bool(coupon[\"memory\"]):\n                    due = np.where(meets, missed + 1.0, 0.0)\n                    coupon_pay = alive * meets * float(amount) * due\n                    missed = np.where(meets, 0.0, missed + alive.astype(float))\n                else:\n                    coupon_pay = alive * meets * float(amount)\n        called = np.zeros(n_paths, dtype=bool)\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                called = alive & (worst >= float(autocall[\"trigger\"]))\n                cash[called, k] += float(call_amount) + coupon_pay[called]\n        if np.any(called):\n            alive = alive & ~called\n        if is_final:\n            if np.any(alive):\n                final_perf = np.min(perf[:, final_index, :], axis=1)\n                level = float(downside[\"level\"])\n                gearing = float(downside[\"gearing\"])\n                payoff = np.full(n_paths, notional, dtype=float)\n                up = final_perf > 1.0\n                down = final_perf < level\n                if upside is not None:\n                    leverage = float(upside[\"leverage\"])\n                    payoff = np.where(up, notional * (1.0 + leverage * (final_perf - 1.0)), payoff)\n                    cap = upside[\"cap\"]\n                    if cap is not None:\n                        payoff = np.where(up, np.minimum(payoff, notional * (1.0 + float(cap))), payoff)\n                payoff = np.where(down, notional * (1.0 + gearing * (final_perf - level)), payoff)\n                payoff = np.maximum(payoff, 0.10 * notional)\n                cash[alive, k] += payoff[alive] + coupon_pay[alive]\n            alive = np.zeros(n_paths, dtype=bool)\n        else:\n            if coupon is not None and coupon[\"amounts\"][k] is not None:\n                cash[:, k] += np.where(called, 0.0, coupon_pay)\n    return cash\n```"
+  }
+]

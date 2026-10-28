@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.0196804,
+    "finish_reason": "stop",
+    "input_tokens": 9211,
+    "model": "muse-spark-1.3",
+    "output_tokens": 4303,
+    "purpose": "extract_examples",
+    "seconds": 78.4356662780001,
+    "text": "{\"examples\": []}"
+  },
+  {
+    "cost_usd": 0.096952,
+    "finish_reason": "stop",
+    "input_tokens": 9853,
+    "model": "muse-wonder-1.0",
+    "output_tokens": 2877,
+    "purpose": "synthesis",
+    "seconds": 21.757650733000446,
+    "text": "```python\ndef cashflows(perf, terms):\n    import numpy as np\n    perf = np.asarray(perf, dtype=float)\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    downside = terms[\"downside\"]\n    upside = terms[\"upside\"]\n    worst = np.min(perf, axis=2)\n    called = np.zeros(n_paths, dtype=bool)\n    missed = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        if autocall is not None:\n            call_amount = autocall[\"call_amounts\"][k]\n            if call_amount is not None:\n                trigger = float(autocall[\"trigger\"])\n                can_call = (~called) & (worst[:, k] >= trigger)\n                cash[can_call, k] += float(call_amount)\n                called = called | can_call\n        if coupon is not None:\n            coupon_amount = coupon[\"amounts\"][k]\n            if coupon_amount is not None:\n                barrier = float(coupon[\"barrier\"])\n                eligible = (~called) & (worst[:, k] >= barrier)\n                if bool(coupon[\"memory\"]):\n                    cash[eligible, k] += missed[eligible] + float(coupon_amount)\n                    missed = np.where(eligible, 0.0, np.where(called, missed, missed + float(coupon_amount)))\n                else:\n                    cash[eligible, k] += float(coupon_amount)\n        if k == final_index:\n            active = ~called\n            final_perf = worst[:, k]\n            index_return = final_perf - 1.0\n            if upside is not None:\n                leverage = float(upside[\"leverage\"])\n                cap = upside[\"cap\"]\n                up_return = leverage * index_return\n                if cap is not None:\n                    up_return = np.minimum(up_return, float(cap))\n                payoff_up = notional * (1.0 + up_return)\n            else:\n                payoff_up = notional * (1.0 + index_return)\n            level = float(downside[\"level\"])\n            gearing = float(downside[\"gearing\"])\n            if downside[\"kind\"] == \"buffer\":\n                buffer_amount = 1.0 - level\n                payoff_down = np.where(final_perf >= level, notional, notional * (1.0 + (index_return + buffer_amount) * gearing))\n            else:\n                payoff_down = np.where(final_perf >= level, notional, notional * (1.0 + gearing * index_return))\n            payoff = np.where(index_return > 0.0, payoff_up, payoff_down)\n            payoff = np.maximum(payoff, 0.0)\n            cash[active, k] += payoff[active]\n    return cash\n```"
+  }
+]
