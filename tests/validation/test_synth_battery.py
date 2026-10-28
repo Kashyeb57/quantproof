@@ -275,6 +275,10 @@ def test_terms_from_termsheet_is_json_serialisable_and_aligned(ts):
     assert terms["payment_dates"][terms["final_index"]] == (
         ts.maturity_date.value.isoformat()
     )
+    # The documented contract (and the synthesis prompt) uses the plain enum
+    # values; str() of a str-Enum would give "DownsideKind.BARRIER".
+    assert terms["downside"]["kind"] in ("barrier", "buffer")
+    assert terms["downside"]["observation"] in ("final_only", "each_review", "daily")
 
 
 def test_price_cashflows_matches_direct_numpy_computation(ts, market):

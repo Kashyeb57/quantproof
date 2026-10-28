@@ -161,10 +161,10 @@ def terms_from_termsheet(ts: TermSheet) -> dict:
         "autocall": autocall,
         "coupon": coupon,
         "downside": {
-            "kind": str(ts.downside.kind.value),
+            "kind": ts.downside.kind.value.value,  # "barrier"/"buffer", not "DownsideKind.BARRIER"
             "level": float(ts.downside.level.value),
             "gearing": float(ts.downside.gearing.value),
-            "observation": str(ts.downside.observation.value),
+            "observation": ts.downside.observation.value.value,
         },
         "upside": upside,
         "unsupported_features": [str(c.value) for c in ts.unsupported_features],
