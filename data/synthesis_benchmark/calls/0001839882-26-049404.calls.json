@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.01774575,
+    "finish_reason": "stop",
+    "input_tokens": 7927,
+    "model": "muse-spark-1.3",
+    "output_tokens": 1844,
+    "purpose": "extract_examples",
+    "seconds": 6.236621277999802,
+    "text": "{\"examples\": [{\"worst_final\": 1.05, \"payment\": 1075, \"quote\": \"If the underlier appreciates 5%, investors will receive $1,075 per security, or 107.50% of the stated principal amount.\"}, {\"worst_final\": 2.0, \"payment\": 1222.0, \"quote\": \"If the underlier appreciates 100%, investors will receive only the maximum payment at maturity of $1,222.00 per security, or 122.20% of the stated principal amount.\"}, {\"worst_final\": 0.95, \"payment\": 1000, \"quote\": \"If the underlier depreciates 5%, investors will receive $1,000 per security.\"}, {\"worst_final\": 0.05, \"payment\": 150, \"quote\": \"If the underlier depreciates 95%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.\"}]}"
+  },
+  {
+    "cost_usd": 0.111052,
+    "finish_reason": "stop",
+    "input_tokens": 8503,
+    "model": "muse-wonder-1.0",
+    "output_tokens": 3852,
+    "purpose": "synthesis",
+    "seconds": 22.59211302699987,
+    "text": "```python\nimport numpy as np\n\n\ndef cashflows(perf, terms):\n    data = np.asarray(perf, dtype=float)\n    cash = np.zeros((data.shape[0], data.shape[1]), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalIndex = int(terms[\"final_index\"])\n    if data.shape[2] == 1:\n        levels = data[:, :, 0]\n    else:\n        levels = np.min(data, axis=2)\n    finalLevel = levels[:, finalIndex]\n    downsideInfo = terms[\"downside\"]\n    downsideLevel = float(downsideInfo[\"level\"])\n    downsideGearing = float(downsideInfo[\"gearing\"])\n    upsideInfo = terms[\"upside\"]\n    if upsideInfo is None:\n        leverage = 1.0\n        cap = None\n    else:\n        leverage = float(upsideInfo[\"leverage\"])\n        cap = upsideInfo[\"cap\"]\n    maturity = np.full(data.shape[0], notional, dtype=float)\n    upsidePayment = notional * (1.0 + leverage * (finalLevel - 1.0))\n    if cap is not None:\n        upsidePayment = np.minimum(upsidePayment, notional * (1.0 + float(cap)))\n    maturity = np.where(finalLevel > 1.0, upsidePayment, maturity)\n    if downsideInfo[\"kind\"] == \"buffer\":\n        downsidePayment = notional * (1.0 - downsideGearing * (downsideLevel - finalLevel))\n    else:\n        downsidePayment = notional * downsideGearing * finalLevel\n    downsidePayment = np.maximum(downsidePayment, 0.10 * notional)\n    maturity = np.where(finalLevel < downsideLevel, downsidePayment, maturity)\n    autocallInfo = terms[\"autocall\"]\n    couponInfo = terms[\"coupon\"]\n    alive = np.ones(data.shape[0], dtype=bool)\n    missedCoupons = np.zeros(data.shape[0], dtype=float)\n    for k in range(data.shape[1]):\n        couponPayment = np.zeros(data.shape[0], dtype=float)\n        if couponInfo is not None:\n            couponAmounts = couponInfo[\"amounts\"]\n            if couponAmounts[k] is not None:\n                couponAmount = float(couponAmounts[k])\n                couponBarrier = float(couponInfo[\"barrier\"])\n                couponEarned = levels[:, k] >= couponBarrier\n                if couponInfo[\"memory\"]:\n                    couponPayment = np.where(couponEarned, couponAmount * (missedCoupons + 1.0), 0.0)\n                    missedCoupons = np.where(couponEarned, 0.0, missedCoupons + 1.0)\n                else:\n                    couponPayment = np.where(couponEarned, couponAmount, 0.0)\n        called = np.zeros(data.shape[0], dtype=bool)\n        if autocallInfo is not None and k != finalIndex:\n            callAmounts = autocallInfo[\"call_amounts\"]\n            if callAmounts[k] is not None:\n                called = alive & (levels[:, k] >= float(autocallInfo[\"trigger\"]))\n                cash[called, k] += float(callAmounts[k]) + couponPayment[called]\n        if np.any(called):\n            alive = alive & ~called\n        if k == finalIndex:\n            cash[alive, k] += maturity[alive] + couponPayment[alive]\n        elif not np.any(called):\n            cash[alive, k] += couponPayment[alive]\n        else:\n            remaining = alive.copy()\n            cash[remaining, k] += couponPayment[remaining]\n    return cash\n```"
+  }
+]

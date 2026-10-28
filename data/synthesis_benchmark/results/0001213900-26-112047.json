@@ -1,0 +1,384 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "25 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0009999999999177334
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.4911004588140353
+        }
+      ],
+      "code": "def cashflows(perf, terms):\n    import numpy as np\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalindex = int(terms[\"final_index\"])\n    if perf.shape[2] == 1:\n        levels = perf[:, :, 0]\n    else:\n        levels = np.min(perf, axis=2)\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    downside = terms[\"downside\"]\n    upside = terms[\"upside\"]\n    called = np.zeros(npaths, dtype=bool)\n    missed = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        active = np.logical_not(called)\n        if np.any(active) == False:\n            break\n        couponpay = np.zeros(npaths, dtype=float)\n        if coupon is not None:\n            amounts = coupon[\"amounts\"]\n            if amounts[k] is not None:\n                amount = float(amounts[k])\n                barrier = float(coupon[\"barrier\"])\n                meets = levels[:, k] >= barrier\n                if coupon[\"memory\"]:\n                    couponpay = np.where(np.logical_and(active, meets), amount + missed, 0.0)\n                    missed = np.where(np.logical_and(active, np.logical_not(meets)), missed + amount, missed)\n                    missed = np.where(np.logical_and(active, meets), 0.0, missed)\n                else:\n                    couponpay = np.where(np.logical_and(active, meets), amount, 0.0)\n        iscall = np.zeros(npaths, dtype=bool)\n        if autocall is not None:\n            callamounts = autocall[\"call_amounts\"]\n            if callamounts[k] is not None:\n                trigger = float(autocall[\"trigger\"])\n                iscall = np.logical_and(active, levels[:, k] >= trigger)\n                cash[:, k] = cash[:, k] + np.where(iscall, float(callamounts[k]) + couponpay, 0.0)\n                called = np.logical_or(called, iscall)\n        cash[:, k] = cash[:, k] + np.where(np.logical_and(active, np.logical_not(iscall)), couponpay, 0.0)\n    remaining = np.logical_not(called)\n    if np.any(remaining):\n        finallevel = levels[:, finalindex]\n        indexreturn = finallevel - 1.0\n        payoff = np.full(npaths, notional, dtype=float)\n        if upside is not None:\n            leverage = float(upside[\"leverage\"])\n            upreturn = leverage * np.maximum(indexreturn, 0.0)\n            if upside[\"cap\"] is not None:\n                upreturn = np.minimum(upreturn, float(upside[\"cap\"]))\n            payoff = np.where(indexreturn > 0.0, notional * (1.0 + upreturn), payoff)\n        if downside is not None:\n            dlevel = float(downside[\"level\"])\n            gearing = float(downside[\"gearing\"])\n            if downside[\"kind\"] == \"buffer\":\n                bufferamount = 1.0 - dlevel\n                below = finallevel < dlevel\n                payoff = np.where(below, notional * (1.0 + (indexreturn + bufferamount) * gearing), payoff)\n            elif downside[\"kind\"] == \"barrier\":\n                if downside[\"observation\"] == \"final_only\":\n                    below = finallevel < dlevel\n                else:\n                    below = np.any(levels[:, :finalindex + 1] < dlevel, axis=1)\n                    below = np.logical_and(below, finallevel < 1.0)\n                payoff = np.where(below, notional * (1.0 + indexreturn * gearing), payoff)\n        payoff = np.maximum(payoff, 0.0)\n        cash[:, finalindex] = cash[:, finalindex] + np.where(remaining, payoff, 0.0)\n    return cash",
+      "cost_usd": 0.101932,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 18.2122588860002
+    }
+  ],
+  "cost_usd": 0.13741175,
+  "cusip": "46661QNW1",
+  "estimated_value": 995.3,
+  "examples": [
+    {
+      "payment": 1146.0,
+      "quote": "180.00 80.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.8
+    },
+    {
+      "payment": 1146.0,
+      "quote": "170.00 70.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.7
+    },
+    {
+      "payment": 1146.0,
+      "quote": "160.00 60.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.6
+    },
+    {
+      "payment": 1146.0,
+      "quote": "150.00 50.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1146.0,
+      "quote": "140.00 40.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1146.0,
+      "quote": "130.00 30.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1146.0,
+      "quote": "120.00 20.00% 14.60000%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1146.0,
+      "quote": "114.60 14.60% 14.60000%",
+      "verified": true,
+      "worst_final": 1.146
+    },
+    {
+      "payment": 1100.0,
+      "quote": "110.00 10.00% 10.00000%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1050.0,
+      "quote": "105.00 5.00% 5.00000%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1025.0,
+      "quote": "102.50 2.50% 2.50000%",
+      "verified": true,
+      "worst_final": 1.025
+    },
+    {
+      "payment": 1000.0,
+      "quote": "100.00 0.00% 0.00000%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1000.0,
+      "quote": "97.50 -2.50% 0.00000%",
+      "verified": true,
+      "worst_final": 0.975
+    },
+    {
+      "payment": 1000.0,
+      "quote": "95.00 -5.00% 0.00000%",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1000.0,
+      "quote": "90.00 -10.00% 0.00000%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 999.8889,
+      "quote": "89.99 -10.01% -0.01111%",
+      "verified": true,
+      "worst_final": 0.8999
+    },
+    {
+      "payment": 888.8889,
+      "quote": "80.00 -20.00% -11.11111%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 777.7778,
+      "quote": "70.00 -30.00% -22.22222%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 666.6667,
+      "quote": "60.00 -40.00% -33.33333%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 555.5556,
+      "quote": "50.00 -50.00% -44.44444%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 444.4444,
+      "quote": "40.00 -60.00% -55.55556%",
+      "verified": true,
+      "worst_final": 0.4
+    },
+    {
+      "payment": 333.3333,
+      "quote": "30.00 -70.00% -66.66667%",
+      "verified": true,
+      "worst_final": 0.3
+    },
+    {
+      "payment": 222.2222,
+      "quote": "20.00 -80.00% -77.77778%",
+      "verified": true,
+      "worst_final": 0.2
+    },
+    {
+      "payment": 111.1111,
+      "quote": "10.00 -90.00% -88.88889%",
+      "verified": true,
+      "worst_final": 0.1
+    },
+    {
+      "payment": 0.0,
+      "quote": "0.00 -100.00% -100.00000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 1000.71716397477,
+      "seed": 0,
+      "std_error": 0.2803356634431905
+    },
+    "high": 1011.3725701430973,
+    "low": 987.5245975910798,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "meta": {
+    "accession": "0001213900-26-112047",
+    "audit_status": "priced",
+    "filing_date": "2026-10-23",
+    "form": "424B2",
+    "issuer_group": "JPMorgan",
+    "label": "capped 1x upside with buffer (template)",
+    "primary_document": "ea0309400-01_424b2.htm",
+    "template_covered": true,
+    "url": "https://www.sec.gov/Archives/edgar/data/19617/000121390026112047/ea0309400-01_424b2.htm"
+  },
+  "model_seconds": 36.86396712900023,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "priced_ai",
+  "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
+  "template": {
+    "ai_price": 1000.71716397477,
+    "ai_se": 0.2803356634431905,
+    "combined_se": 0.39645449725821946,
+    "diff": 0.0,
+    "template_price": 1000.71716397477,
+    "template_se": 0.2803356634431905,
+    "within_3se": true
+  },
+  "template_examples": {
+    "max_error": 0.0009999999999177334,
+    "passed": true,
+    "rows": [
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.8
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.7
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.6
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.5
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.4
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.3
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.2
+      },
+      {
+        "expected": 1146.0,
+        "got": 1146.0,
+        "worst_final": 1.146
+      },
+      {
+        "expected": 1100.0,
+        "got": 1100.0,
+        "worst_final": 1.1
+      },
+      {
+        "expected": 1050.0,
+        "got": 1050.0,
+        "worst_final": 1.05
+      },
+      {
+        "expected": 1025.0,
+        "got": 1025.0,
+        "worst_final": 1.025
+      },
+      {
+        "expected": 1000.0,
+        "got": 1000.0,
+        "worst_final": 1.0
+      },
+      {
+        "expected": 1000.0,
+        "got": 1000.0,
+        "worst_final": 0.975
+      },
+      {
+        "expected": 1000.0,
+        "got": 1000.0,
+        "worst_final": 0.95
+      },
+      {
+        "expected": 1000.0,
+        "got": 1000.0,
+        "worst_final": 0.9
+      },
+      {
+        "expected": 999.8889,
+        "got": 999.8888890000001,
+        "worst_final": 0.8999
+      },
+      {
+        "expected": 888.8889,
+        "got": 888.889,
+        "worst_final": 0.8
+      },
+      {
+        "expected": 777.7778,
+        "got": 777.7779999999999,
+        "worst_final": 0.7
+      },
+      {
+        "expected": 666.6667,
+        "got": 666.6669999999999,
+        "worst_final": 0.6
+      },
+      {
+        "expected": 555.5556,
+        "got": 555.5559999999999,
+        "worst_final": 0.5
+      },
+      {
+        "expected": 444.4444,
+        "got": 444.445,
+        "worst_final": 0.4
+      },
+      {
+        "expected": 333.3333,
+        "got": 333.3339999999999,
+        "worst_final": 0.3
+      },
+      {
+        "expected": 222.2222,
+        "got": 222.22300000000007,
+        "worst_final": 0.2
+      },
+      {
+        "expected": 111.1111,
+        "got": 111.11199999999988,
+        "worst_final": 0.1
+      },
+      {
+        "expected": 0.0,
+        "got": 0.0009999999999177334,
+        "worst_final": 0.0
+      }
+    ]
+  },
+  "unsupported_features": []
+}

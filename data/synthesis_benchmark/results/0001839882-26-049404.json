@@ -1,0 +1,123 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "4 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 2.2737367544323206e-13
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5034611516711506
+        }
+      ],
+      "code": "import numpy as np\n\n\ndef cashflows(perf, terms):\n    data = np.asarray(perf, dtype=float)\n    cash = np.zeros((data.shape[0], data.shape[1]), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalIndex = int(terms[\"final_index\"])\n    if data.shape[2] == 1:\n        levels = data[:, :, 0]\n    else:\n        levels = np.min(data, axis=2)\n    finalLevel = levels[:, finalIndex]\n    downsideInfo = terms[\"downside\"]\n    downsideLevel = float(downsideInfo[\"level\"])\n    downsideGearing = float(downsideInfo[\"gearing\"])\n    upsideInfo = terms[\"upside\"]\n    if upsideInfo is None:\n        leverage = 1.0\n        cap = None\n    else:\n        leverage = float(upsideInfo[\"leverage\"])\n        cap = upsideInfo[\"cap\"]\n    maturity = np.full(data.shape[0], notional, dtype=float)\n    upsidePayment = notional * (1.0 + leverage * (finalLevel - 1.0))\n    if cap is not None:\n        upsidePayment = np.minimum(upsidePayment, notional * (1.0 + float(cap)))\n    maturity = np.where(finalLevel > 1.0, upsidePayment, maturity)\n    if downsideInfo[\"kind\"] == \"buffer\":\n        downsidePayment = notional * (1.0 - downsideGearing * (downsideLevel - finalLevel))\n    else:\n        downsidePayment = notional * downsideGearing * finalLevel\n    downsidePayment = np.maximum(downsidePayment, 0.10 * notional)\n    maturity = np.where(finalLevel < downsideLevel, downsidePayment, maturity)\n    autocallInfo = terms[\"autocall\"]\n    couponInfo = terms[\"coupon\"]\n    alive = np.ones(data.shape[0], dtype=bool)\n    missedCoupons = np.zeros(data.shape[0], dtype=float)\n    for k in range(data.shape[1]):\n        couponPayment = np.zeros(data.shape[0], dtype=float)\n        if couponInfo is not None:\n            couponAmounts = couponInfo[\"amounts\"]\n            if couponAmounts[k] is not None:\n                couponAmount = float(couponAmounts[k])\n                couponBarrier = float(couponInfo[\"barrier\"])\n                couponEarned = levels[:, k] >= couponBarrier\n                if couponInfo[\"memory\"]:\n                    couponPayment = np.where(couponEarned, couponAmount * (missedCoupons + 1.0), 0.0)\n                    missedCoupons = np.where(couponEarned, 0.0, missedCoupons + 1.0)\n                else:\n                    couponPayment = np.where(couponEarned, couponAmount, 0.0)\n        called = np.zeros(data.shape[0], dtype=bool)\n        if autocallInfo is not None and k != finalIndex:\n            callAmounts = autocallInfo[\"call_amounts\"]\n            if callAmounts[k] is not None:\n                called = alive & (levels[:, k] >= float(autocallInfo[\"trigger\"]))\n                cash[called, k] += float(callAmounts[k]) + couponPayment[called]\n        if np.any(called):\n            alive = alive & ~called\n        if k == finalIndex:\n            cash[alive, k] += maturity[alive] + couponPayment[alive]\n        elif not np.any(called):\n            cash[alive, k] += couponPayment[alive]\n        else:\n            remaining = alive.copy()\n            cash[remaining, k] += couponPayment[remaining]\n    return cash",
+      "cost_usd": 0.111052,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 22.59211302699987
+    }
+  ],
+  "cost_usd": 0.12879775,
+  "cusip": "61781LSA9",
+  "estimated_value": 972.8,
+  "examples": [
+    {
+      "payment": 1075.0,
+      "quote": "If the underlier appreciates 5%, investors will receive $1,075 per security, or 107.50% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1222.0,
+      "quote": "If the underlier appreciates 100%, investors will receive only the maximum payment at maturity of $1,222.00 per security, or 122.20% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 2.0
+    },
+    {
+      "payment": 1000.0,
+      "quote": "If the underlier depreciates 5%, investors will receive $1,000 per security.",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 150.0,
+      "quote": "If the underlier depreciates 95%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 0.05
+    }
+  ],
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 964.4534821112644,
+      "seed": 0,
+      "std_error": 0.4438738589651915
+    },
+    "high": 991.6982481350028,
+    "low": 935.812534726022,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "Morgan Stanley Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-049404",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-02",
+    "form": "424B2",
+    "issuer_group": "Morgan Stanley",
+    "label": "minimum payment at maturity",
+    "primary_document": "ms18894_424b2-33431.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226049404/ms18894_424b2-33431.htm"
+  },
+  "model_seconds": 28.82873430499967,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "priced_ai",
+  "structure": "single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Minimum payment at maturity: 10% of the stated principal amount",
+      "value": "Minimum payment at maturity"
+    }
+  ]
+}
