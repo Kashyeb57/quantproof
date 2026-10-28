@@ -1,0 +1,382 @@
+{
+  "meta": {
+    "issuer_group": "Morgan Stanley",
+    "accession": "0001839882-26-049407",
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226049407/ms18885_424b2-33340.htm",
+    "filing_date": "2026-10-02",
+    "form": "424B2",
+    "primary_document": "ms18885_424b2-33340.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Upside payment']",
+  "termsheet": {
+    "issuer": "Morgan Stanley Finance LLC",
+    "underlying_names": [
+      "EURO STOXX 50\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "61781LRR3",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-09-30",
+    "issue_date": "2026-10-05",
+    "maturity_date": "2031-10-03",
+    "final_review_date": "2031-09-30",
+    "estimated_value": 957.5,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Morgan Stanley Finance LLC",
+        "quote": "Issuer: | Morgan Stanley Finance LLC",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "FINAL TERMS",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "EURO STOXX 50\u00ae Index",
+        "quote": "Underlier: | EURO STOXX 50\u00ae Index\u202c\u202c (the \u201cunderlying index\u201d)",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SX5E",
+        "quote": "Bloomberg Ticker Symbol: SX5E",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 6269.02,
+        "quote": "Initial level: | 6,269.02, which is the closing level of the underlier on the strike date",
+        "section": "Terms continued from the previous page",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 6269.02,
+        "quote": "The closing level of the underlier on September 30, 2026 was 6,269.02.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-09-30",
+        "quote": "The closing level of the underlier on September 30, 2026 was 6,269.02.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: | EURO STOXX 50\u00ae Index\u202c\u202c (the \u201cunderlying index\u201d)",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Stated principal amount: | $1,000 per security",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Issue price: | $1,000 per security (see \u201cCommissions and issue price\u201d below)",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-09-30",
+        "quote": "Pricing date: | September 30, 2026",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-05",
+        "quote": "Original issue date: | October 5, 2026",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2031-10-03",
+        "quote": "Maturity date: | October 3, 2031",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2031-09-30",
+        "quote": "Observation date: | September 30, 2031, subject to postponement for non-trading days and certain market disruption events",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "If, however, the final level is less than the downside threshold level, investors will lose 1% for every 1% decline in the level of the underlier over the term of the securities.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.75,
+        "quote": "Downside threshold level: | 4,701.765, which is 75% of the initial level*",
+        "section": "Terms continued from the previous page",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "The amount payable on the securities is not linked to the value of the underlier at any time other than the observation date.",
+        "section": "Risk Factors",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "Morgan Stanley",
+        "quote": "Guarantor: | Morgan Stanley",
+        "section": "FINAL TERMS",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "61781LRR3",
+        "quote": "CUSIP: | 61781LRR3",
+        "section": "Terms continued from the previous page",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "stated principal amount + the greater of (i) stated principal amount \u00d7 underlier percent change and (ii) upside payment",
+        "section": "Terms continued from the previous page",
+        "verified": false
+      },
+      {
+        "path": "estimated_value",
+        "value": 957.5,
+        "quote": "Estimated value on the pricing date: | $957.50 per security.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 30.0,
+        "quote": "Selected dealers and their financial advisors will collectively receive from the agent, MS & Co., a fixed sales commission of $30 for each security they sell.",
+        "section": "Supplemental information regarding plan of distribution; conflicts of interest",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Upside payment",
+        "quote": "Upside payment: | $413 per security (41.30% of the stated principal amount)",
+        "section": "Terms continued from the previous page",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing",
+      "upside.leverage"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Morgan Stanley Finance LLC",
+      "quote": "Issuer: | Morgan Stanley Finance LLC",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "FINAL TERMS",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "EURO STOXX 50\u00ae Index",
+      "quote": "Underlier: | EURO STOXX 50\u00ae Index\u202c\u202c (the \u201cunderlying index\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SX5E",
+      "quote": "Bloomberg Ticker Symbol: SX5E",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 6269.02,
+      "quote": "Initial level: | 6,269.02, which is the closing level of the underlier on the strike date",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 6269.02,
+      "quote": "The closing level of the underlier on September 30, 2026 was 6,269.02.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-09-30",
+      "quote": "The closing level of the underlier on September 30, 2026 was 6,269.02.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: | EURO STOXX 50\u00ae Index\u202c\u202c (the \u201cunderlying index\u201d)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Stated principal amount: | $1,000 per security",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Issue price: | $1,000 per security (see \u201cCommissions and issue price\u201d below)",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-09-30",
+      "quote": "Pricing date: | September 30, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-05",
+      "quote": "Original issue date: | October 5, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2031-10-03",
+      "quote": "Maturity date: | October 3, 2031",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2031-09-30",
+      "quote": "Observation date: | September 30, 2031, subject to postponement for non-trading days and certain market disruption events",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "If, however, the final level is less than the downside threshold level, investors will lose 1% for every 1% decline in the level of the underlier over the term of the securities.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.75,
+      "quote": "Downside threshold level: | 4,701.765, which is 75% of the initial level*",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "The amount payable on the securities is not linked to the value of the underlier at any time other than the observation date.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "Morgan Stanley",
+      "quote": "Guarantor: | Morgan Stanley",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "61781LRR3",
+      "quote": "CUSIP: | 61781LRR3",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "stated principal amount + the greater of (i) stated principal amount \u00d7 underlier percent change and (ii) upside payment",
+      "verified": false
+    },
+    {
+      "path": "estimated_value",
+      "value": 957.5,
+      "quote": "Estimated value on the pricing date: | $957.50 per security.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 30.0,
+      "quote": "Selected dealers and their financial advisors will collectively receive from the agent, MS & Co., a fixed sales commission of $30 for each security they sell.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Upside payment",
+      "quote": "Upside payment: | $413 per security (41.30% of the stated principal amount)",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 24,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "upside.leverage",
+        "first": 1.0,
+        "second": null,
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 957.5,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "61781LRR3",
+  "issuer": "Morgan Stanley Finance LLC",
+  "underlyings": [
+    "EURO STOXX 50\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-09-30",
+  "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
+  "seconds": 78.81907837099993,
+  "cost_usd": 0.1179545,
+  "model_seconds": 78.73515053599999
+}
