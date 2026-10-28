@@ -43,6 +43,23 @@ def test_note_defaults_use_the_treasury_rate_for_38582():
     assert defaults["rho"] == 0.6
 
 
+def test_month_routing_and_missing_month_says_so(tmp_path: Path):
+    import shutil
+
+    for month in ("2026-09", "2026-10"):
+        shutil.copy(
+            ROOT / "docs" / "data" / f"treasury_daily_par_yield_curve_{month}.csv",
+            tmp_path / f"treasury_daily_par_yield_curve_{month}.csv",
+        )
+    rate, label = demo.treasury_par_rate_for(
+        date(2026, 10, 19), date(2028, 10, 19), tmp_path
+    )
+    assert 0.02 < rate < 0.06
+    assert label.startswith("U.S. Treasury par yield, 2026-10-19")
+    with pytest.raises(ValueError, match="no Treasury curve file for 2026-11"):
+        demo.treasury_par_rate_for(date(2026, 11, 2), date(2028, 11, 2), tmp_path)
+
+
 def test_missing_curve_date_raises():
     with pytest.raises(ValueError, match="no Treasury curve row"):
         demo.treasury_par_rate(date(2025, 1, 1), date(2030, 1, 1))

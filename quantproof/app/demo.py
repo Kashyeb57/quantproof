@@ -76,6 +76,25 @@ APP_BATTERY_PATHS = 4_000
 APP_SEED = 0
 
 TREASURY_CSV = ROOT / "docs" / "data" / "treasury_daily_par_yield_curve_2025-11.csv"
+TREASURY_DATA_DIR = ROOT / "docs" / "data"
+
+
+def treasury_par_rate_for(
+    pricing_date: date, maturity_date: date, data_dir: Path | None = None
+) -> tuple[float, str]:
+    """Treasury par yield from the monthly curve file for the pricing date.
+
+    Formula: same interpolation as :func:`treasury_par_rate`, reading
+    ``treasury_daily_par_yield_curve_YYYY-MM.csv`` under ``data_dir``
+    for the pricing date's month. Raises ``ValueError`` naming the
+    missing month file or the missing curve row, so callers can say so
+    in the row instead of silently substituting a rate.
+    """
+    directory = Path(data_dir) if data_dir is not None else TREASURY_DATA_DIR
+    path = directory / f"treasury_daily_par_yield_curve_{pricing_date:%Y-%m}.csv"
+    if not path.is_file():
+        raise ValueError(f"no Treasury curve file for {pricing_date:%Y-%m} at {path}")
+    return treasury_par_rate(pricing_date, maturity_date, path)
 
 _TENOR_YEARS = {
     "1 Mo": 1 / 12, "1.5 Month": 1.5 / 12, "2 Mo": 2 / 12, "3 Mo": 0.25,
