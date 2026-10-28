@@ -89,8 +89,13 @@ def live(out: Path, budget_usd: float, only: list[str] | None) -> int:
                 chat=guard, template_covered=covered)
         except synth_run.BudgetExceeded as exc:
             spent += sum(float(c.get("cost_usd", 0.0) or 0.0) for c in recorder.calls)
+            _write_json(out / "partial" / f"{accession}.calls.json", recorder.calls)
             print(f"{accession}: stopped by the budget guard ({exc}); spent ${spent:.2f}")
             break
+        except Exception:
+            # Keep what was paid for, then stop: a crash is a bug to fix, not a result.
+            _write_json(out / "partial" / f"{accession}.calls.json", recorder.calls)
+            raise
         cost = sum(float(c.get("cost_usd", 0.0) or 0.0) for c in recorder.calls)
         spent += cost
         result["cost_usd"] = cost
