@@ -365,3 +365,41 @@ def test_plausibility_gate_alone_catches_the_morgan_stanley_misreads(accession, 
     assert result["status"] == "needs_review"
     assert result["reason"].startswith("plausibility gate:")
     assert "exceeds the issue price" in result["reason"]
+
+
+def test_market_audit_script_redo_keeps_previous_recording(tmp_path, monkeypatch):
+    """--redo re-runs a saved note through the (mocked) live client, keeps the old calls."""
+    script = ROOT / "scripts" / "market_audit.py"
+    spec = importlib.util.spec_from_file_location("market_audit_script_redo", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    out = tmp_path / "audit"
+    accession = "00019617-26-38582"
+    for sub in ("filings", "calls", "results"):
+        (out / sub).mkdir(parents=True)
+    (out / "filings" / f"{accession}.htm.gz").write_bytes(
+        gzip.compress((F / "filings" / f"{STEM}.htm").read_bytes())
+    )
+    (out / "calls" / f"{accession}.calls.json").write_text('[{"old": true}]', encoding="utf-8")
+    (out / "results" / f"{accession}.json").write_text(
+        json.dumps({"meta": {"accession": accession, "issuer_group": "JPMorgan"},
+                    "status": "extraction_failed", "reason": "old schema"}),
+        encoding="utf-8",
+    )
+    fake_live = Replay(_calls())  # stands in for the Meta API: no network
+    monkeypatch.setattr(module.meta_client, "chat", lambda messages, log_path=None, **kw: fake_live(messages, **kw))
+
+    assert module._redo([accession], out, budget_usd=2.0) == 0
+    result = json.loads((out / "results" / f"{accession}.json").read_text(encoding="utf-8"))
+    assert result["status"] == "needs_review"
+    assert result["previous_status"] == "extraction_failed"
+    assert result["previous_reason"] == "old schema"
+    assert json.loads((out / "calls" / f"{accession}.calls.prev.json").read_text()) == [{"old": True}]
+    assert len(json.loads((out / "calls" / f"{accession}.calls.json").read_text())) == len(_calls())
+
+    # A budget below one note's worst case stops before any call.
+    (out / "results" / f"{accession}.json").write_text(json.dumps(
+        {"meta": {"accession": accession}, "status": "extraction_failed"}), encoding="utf-8")
+    assert module._redo([accession], out, budget_usd=0.001) == 0
+    assert json.loads((out / "results" / f"{accession}.json").read_text())["status"] == "extraction_failed"

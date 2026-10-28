@@ -131,10 +131,57 @@ def _replay(out: Path) -> int:
             )
         result["cost_usd"] = old.get("cost_usd", 0.0)
         result["model_seconds"] = old.get("model_seconds", 0.0)
+        for key in ("previous_status", "previous_reason"):  # set by --redo
+            if key in old:
+                result[key] = old[key]
         _write_json(result_path, result)
         replayed += 1
         print(f"replayed {accession}: {result.get('status')}")
     print(f"Replayed {replayed} note(s); spend $0.00 (replay, no network).")
+    return 0
+
+
+def _redo(accessions: list[str], out: Path, budget_usd: float) -> int:
+    """Re-run named notes live from their saved filings (no EDGAR call).
+
+    Used after a schema change: only the listed notes are re-extracted.  The
+    previous recording is kept as ``calls/<acc>.calls.prev.json`` so the old
+    failure stays on record; the hard budget guard is the same as the live
+    run's (pre-flight worst case per note).
+    """
+    spent = 0.0
+    for accession in accessions:
+        result_path = out / "results" / f"{accession}.json"
+        old = json.loads(result_path.read_text(encoding="utf-8"))
+        raw = gzip.decompress((out / "filings" / f"{accession}.htm.gz").read_bytes())
+        filing = read_filing(raw)
+        worst = live.estimate_live_cost(len(filing.text))
+        if spent + worst > budget_usd:
+            print(f"budget guard: spent ${spent:.2f} + worst-case ${worst:.2f} for "
+                  f"{accession} would exceed budget ${budget_usd:.2f}; stopped")
+            break
+        calls_path = out / "calls" / f"{accession}.calls.json"
+        if calls_path.exists():
+            prev = calls_path.with_name(f"{accession}.calls.prev.json")
+            prev.write_text(calls_path.read_text(encoding="utf-8"), encoding="utf-8")
+        recorder = Recorder(functools.partial(meta_client.chat, log_path=AUDIT_COST_LOG))
+        try:
+            result = audit_note(filing, chat=recorder, meta=old["meta"])
+        except Exception as exc:  # API failure: record it, keep going
+            result = {"meta": old["meta"], "status": "api_error",
+                      "reason": f"{type(exc).__name__}: {str(exc)[:400]}"}
+        cost = sum(float(call.get("cost_usd", 0.0) or 0.0) for call in recorder.calls)
+        result["cost_usd"] = cost
+        result["model_seconds"] = sum(
+            float(call.get("seconds", 0.0) or 0.0) for call in recorder.calls
+        )
+        result["previous_status"] = old.get("status")
+        result["previous_reason"] = old.get("reason")
+        spent += cost
+        _write_json(calls_path, recorder.calls)
+        _write_json(result_path, result)
+        print(f"{accession}: {old.get('status')} -> {result.get('status')} ${cost:.4f}")
+    print(f"Redo spent ${spent:.2f} of ${budget_usd:.2f} budget.")
     return 0
 
 
@@ -292,12 +339,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--per-other", type=int, default=3)
     parser.add_argument("--replay", action="store_true",
                         help="replay saved recordings offline at zero cost")
+    parser.add_argument("--redo", nargs="+", metavar="ACCESSION",
+                        help="re-run these saved notes live (after a schema change)")
     parser.add_argument("--out", type=Path, default=Path("data/market_audit"))
     args = parser.parse_args(argv)
 
     out = Path(args.out)
     if args.replay:
         return _replay(out)
+    if args.redo:
+        return _redo(list(args.redo), out, float(args.budget_usd))
     return _live(args, out)
 
 
