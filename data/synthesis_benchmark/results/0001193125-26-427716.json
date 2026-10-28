@@ -1,0 +1,183 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "13 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 4.547473508864641e-13
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.497896680713492
+        }
+      ],
+      "code": "import numpy as np\n\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    result = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalindex = int(terms[\"final_index\"])\n    upside = terms[\"upside\"]\n    if upside is None:\n        leverage = 1.0\n        cap = None\n    else:\n        leverage = float(upside[\"leverage\"])\n        cap = upside[\"cap\"]\n        if cap is not None:\n            cap = float(cap)\n    downside = terms[\"downside\"]\n    if downside is None:\n        gearing = 1.0\n    else:\n        gearing = float(downside[\"gearing\"])\n    finallevel = perf[:, finalindex, 0]\n    bearishreturn = 1.0 - finallevel\n    positivepayment = notional * (1.0 + leverage * bearishreturn)\n    if cap is not None:\n        positivepayment = np.minimum(positivepayment, notional * (1.0 + cap))\n    negativepayment = notional * (1.0 + gearing * bearishreturn)\n    negativepayment = np.maximum(negativepayment, 0.0)\n    maturitypayment = np.where(bearishreturn > 0.0, positivepayment, negativepayment)\n    alive = np.ones(npaths, dtype=bool)\n    autocall = terms[\"autocall\"]\n    if autocall is not None:\n        trigger = float(autocall[\"trigger\"])\n        callamounts = autocall[\"call_amounts\"]\n        for k in range(ndates):\n            if k == finalindex:\n                continue\n            amount = callamounts[k]\n            if amount is None:\n                continue\n            worst = np.min(perf[:, k, :], axis=1)\n            called = alive & (worst >= trigger)\n            result[called, k] = result[called, k] + float(amount)\n            alive[called] = False\n    result[alive, finalindex] = result[alive, finalindex] + maturitypayment[alive]\n    return result",
+      "cost_usd": 0.111192,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 15.777628906000245
+    }
+  ],
+  "cost_usd": 0.13806325,
+  "cusip": "40058MG51",
+  "estimated_value": 962.0,
+  "examples": [
+    {
+      "payment": 0.0,
+      "quote": "215.000% 0.000%",
+      "verified": true,
+      "worst_final": 2.15
+    },
+    {
+      "payment": 0.0,
+      "quote": "200.000% 0.000%",
+      "verified": true,
+      "worst_final": 2.0
+    },
+    {
+      "payment": 250.0,
+      "quote": "175.000% 25.000%",
+      "verified": true,
+      "worst_final": 1.75
+    },
+    {
+      "payment": 500.0,
+      "quote": "150.000% 50.000%",
+      "verified": false,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 750.0,
+      "quote": "125.000% 75.000%",
+      "verified": true,
+      "worst_final": 1.25
+    },
+    {
+      "payment": 1000.0,
+      "quote": "100.000% 100.000%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1250.0,
+      "quote": "90.000% 125.000%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1500.0,
+      "quote": "80.000% 150.000%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 1750.0,
+      "quote": "70.000% 175.000%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 2100.0,
+      "quote": "56.000% 210.000%",
+      "verified": true,
+      "worst_final": 0.56
+    },
+    {
+      "payment": 2100.0,
+      "quote": "35.000% 210.000%",
+      "verified": true,
+      "worst_final": 0.35
+    },
+    {
+      "payment": 2100.0,
+      "quote": "20.000% 210.000%",
+      "verified": true,
+      "worst_final": 0.2
+    },
+    {
+      "payment": 2100.0,
+      "quote": "10.000% 210.000%",
+      "verified": true,
+      "worst_final": 0.1
+    },
+    {
+      "payment": 2100.0,
+      "quote": "0.000% 210.000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 1053.4276219762846,
+      "seed": 0,
+      "std_error": 0.47803309400884403
+    },
+    "high": 1094.429960140374,
+    "low": 1011.4200902484722,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": "base value 1053.43 exceeds the issue price 1000.00 by 5.3% (more than 2%)",
+  "issue_price": 1000.0,
+  "issuer": "GS Finance Corp.",
+  "meta": {
+    "accession": "0001193125-26-427716",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-21",
+    "form": "424B2",
+    "issuer_group": "Goldman Sachs",
+    "label": "bearish (inverse) exposure",
+    "primary_document": "gs-20261021.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526427716/gs-20261021.htm"
+  },
+  "model_seconds": 22.446596165999836,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "needs_review",
+  "structure": "single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "By purchasing this note, you are taking the bearish view that the value of the index will decline, such that the final index level will be less than the initial index level, but not by more than 44%.",
+      "value": "bearish view"
+    }
+  ]
+}
