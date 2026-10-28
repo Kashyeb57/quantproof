@@ -36,7 +36,13 @@ from quantproof.payoffs.synthesized import (
 from quantproof.payoffs.worst_of import observation_dates, pathwise_cashflows
 from quantproof.registry.sandbox import SandboxError, static_check
 from quantproof.validation.battery import CheckResult
-from quantproof.validation.quotes import normalise_for_match, value_in_quote, verify_quote
+from quantproof.validation.quotes import (
+    _find_bounded,
+    normalise_for_match,
+    percent_forms,
+    value_in_quote,
+    verify_quote,
+)
 
 
 @dataclass
@@ -154,15 +160,33 @@ def _example_perf(ts: TermSheet, examples: list[PayoutExample]) -> np.ndarray:
     return perf
 
 
-def _citation_verified(cited: Cited, filing_text: str | None) -> bool:
-    """Whether a cited value's quote is verified (see check_filing_examples)."""
+def _citation_verified(
+    cited: Cited, filing_text: str | None, notional: float | None = None
+) -> bool:
+    """Whether a cited value's quote is verified (see check_filing_examples).
+
+    The quote must be in the filing and state this payment: in currency
+    ("$1,212.00"), or, when ``notional`` is given, as a percentage of the
+    principal amount ("121.200%" for 1212.0 on 1000; bounded match, so
+    "21.200%" never matches inside "121.200%").
+    """
     if cited.citation is None:
         return False
     if filing_text is None:
         return cited.citation.verified is True
     found, _reason = verify_quote(cited.citation.quote, normalise_for_match(filing_text))
-    # The quote must be in the filing AND state this payment (not another row's).
-    return found and value_in_quote(cited.value, cited.citation.quote) is not False
+    if not found:
+        return False
+    # The quote must state this payment (not another row's).
+    if value_in_quote(cited.value, cited.citation.quote) is not False:
+        return True
+    if notional:
+        quote = normalise_for_match(cited.citation.quote)
+        return any(
+            _find_bounded(normalise_for_match(form), quote) is not None
+            for form in percent_forms(float(cited.value) / float(notional))
+        )
+    return False
 
 
 def _failed(name: str, detail: str, error: str | None) -> CheckResult:
@@ -351,7 +375,10 @@ def check_filing_examples(
     Tolerance: $0.01, because the filing states payments to the cent.
     """
     tolerance = 0.01  # filing states hypothetical payments to the cent
-    verified = [ex for ex in examples if _citation_verified(ex.payment, filing_text)]
+    verified = [
+        ex for ex in examples
+        if _citation_verified(ex.payment, filing_text, notional=float(ts.notional.value))
+    ]
     if len(verified) < 3:
         return CheckResult(
             name="filing_examples",

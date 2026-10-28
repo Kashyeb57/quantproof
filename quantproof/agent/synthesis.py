@@ -27,7 +27,13 @@ from quantproof.ingest.html import Filing
 from quantproof.payoffs.synthesized import terms_from_termsheet
 from quantproof.registry.sandbox import static_check  # noqa: F401  (re-exported for reviewers)
 from quantproof.validation.battery import CheckResult
-from quantproof.validation.quotes import normalise_for_match, value_in_quote, verify_quote
+from quantproof.validation.quotes import (
+    _find_bounded,
+    normalise_for_match,
+    percent_forms,
+    value_in_quote,
+    verify_quote,
+)
 from quantproof.validation.synth_battery import (
     PayoutExample,
     battery_passed,
@@ -95,7 +101,10 @@ the initial value (hypothetical tables use an initial value of $100.00, so
 a final value of $165.00 is 1.65). payment is the payment at maturity per
 note stated in that row. quote is the whole table row copied verbatim,
 with cells separated by single spaces. Do not compute, infer or guess any
-number: copy each row as the filing states it. Reply JSON only."""
+number: copy each row as the filing states it, except one conversion: when
+the table states the payment as a percentage of the principal amount, give
+payment in currency per note (121.200% of a $1,000 note is 1212.0). Reply
+JSON only."""
 
 
 @dataclass
@@ -106,6 +115,88 @@ class Attempt:
     results: list[CheckResult] = field(default_factory=list)
     passed: bool = False
     error: str | None = None
+    feedback_sent: str | None = None
+    counterexamples: dict[str, str] = field(default_factory=dict)
+    cost_usd: float = 0.0
+    seconds: float = 0.0
+
+
+def counterexample(r: CheckResult) -> str | None:
+    """Concrete failing input(s) for a failed check, or None.
+
+    Formula: no pricing formula; this renders the diagnostic ``data``
+    already computed by the battery for check ``r`` into a short text
+    naming the concrete input on which the code disagreed, so the next
+    synthesis attempt sees WHERE it is wrong, not only that it failed.
+
+    Intuition: a check name plus a pass/fail detail rarely tells the
+    model which payment is wrong; one filing row (``final/initial``,
+    filing payment, code payment) or one mismatched path does.
+
+    Reference: ``quantproof.validation.synth_battery`` check ``data``.
+
+    Never raises: missing or malformed ``data`` gives ``data["error"]``
+    when present, else None.
+    """
+    try:
+        data = getattr(r, "data", None) or {}
+        if not isinstance(data, dict):
+            return None
+        name = getattr(r, "name", None)
+        if name == "filing_examples":
+            rows = data.get("rows")
+            if not rows:
+                return getattr(r, "detail", None) or None
+            lines: list[str] = []
+            for row in rows:
+                try:
+                    worst_final = float(row["worst_final"])
+                    expected = float(row["expected"])
+                    got = float(row["got"])
+                    other = float(row.get("other_columns_max_abs") or 0.0)
+                except (KeyError, TypeError, ValueError, AttributeError):
+                    continue
+                if abs(got - expected) > 0.01 or other > 0.01:
+                    lines.append(
+                        f"final/initial {worst_final:.4f}: the filing pays "
+                        f"{expected:.2f}, your code paid {got:.2f} at maturity "
+                        f"(max other column {other:.2f})"
+                    )
+            return "\n".join(lines) if lines else None
+        if name == "called_paths_match_template":
+            rows = data.get("rows") or []
+            lines = []
+            for row in list(rows)[:5]:
+                if isinstance(row, dict):
+                    lines.append(", ".join(f"{k}={v}" for k, v in row.items()))
+                else:
+                    lines.append(str(row))
+            return "\n".join(lines) if lines else (data.get("error") or None)
+        if name == "output_sanity":
+            problems = data.get("problems")
+            if problems:
+                return "; ".join(str(p) for p in problems)
+            return data.get("error") or None
+        if name == "determinism":
+            if "max_abs_diff" in data:
+                return f"max abs diff {data['max_abs_diff']}"
+            return data.get("error") or None
+        if name == "convergence":
+            if "ratios" in data:
+                return f"ratios {data['ratios']}"
+            if "ratio" in data:
+                return f"ratios {data['ratio']}"
+            return data.get("error") or None
+        if name == "static_safety":
+            problems = data.get("problems")
+            if problems:
+                if isinstance(problems, (list, tuple)):
+                    return "; ".join(str(p) for p in problems)
+                return str(problems)
+            return data.get("error") or None
+        return data.get("error") or None
+    except Exception:
+        return None
 
 
 @dataclass
@@ -239,7 +330,10 @@ def extract_code(text) -> str:
     return candidate.strip()
 
 
-def extract_examples(filing, *, chat=client.chat, model="muse-spark-1.3", max_tokens=8000) -> list[PayoutExample]:
+def extract_examples(
+    filing, *, chat=client.chat, model="muse-spark-1.3", max_tokens=8000,
+    notional: float | None = None,
+) -> list[PayoutExample]:
     """Extract the filing's hypothetical payment table as verified examples.
 
     Each row becomes a PayoutExample whose payment citation is verified
@@ -248,7 +342,11 @@ def extract_examples(filing, *, chat=client.chat, model="muse-spark-1.3", max_to
     and the normalised quote contains the final value as
     ``f"${worst_final*100:,.2f}"`` or the return as
     ``f"{(worst_final-1)*100:.2f}%"`` (hypothetical tables use an initial
-    value of $100.00).  Bad rows are skipped, never raise.  A reply that did
+    value of $100.00).  When ``notional`` is given, tables stated in percent
+    also verify: the payment may appear as ``payment / notional`` in a
+    percent spelling ("121.200%" for 1212.0 on 1000) and the final value as
+    ``worst_final`` in a percent spelling ("150.000%" for 1.5).  Bad rows are
+    skipped, never raise.  A reply that did
     not finish with "stop" or cannot be parsed gives [] -- the battery then
     fails for lack of evidence, which is the safe outcome.
     """
@@ -304,7 +402,20 @@ def extract_examples(filing, *, chat=client.chat, model="muse-spark-1.3", max_to
             or final_str in quote
             or return_str in quote
         )
-        verified = bool(found and value_in_quote(payment, quote) is True and in_quote)
+        payment_shown = value_in_quote(payment, quote) is True
+        if notional:
+            # Percent tables: "150.000% | 121.200%" (final level, payment as
+            # shares of the initial level and of the principal amount).
+            # Bounded match, so "21.200%" never matches inside "121.200%".
+            payment_shown = payment_shown or any(
+                _find_bounded(normalise_for_match(form), normalised_quote) is not None
+                for form in percent_forms(payment / float(notional))
+            )
+            in_quote = in_quote or any(
+                _find_bounded(normalise_for_match(form), normalised_quote) is not None
+                for form in percent_forms(worst_final)
+            )
+        verified = bool(found and payment_shown and in_quote)
         examples.append(
             PayoutExample(
                 worst_final=worst_final,
@@ -350,7 +461,7 @@ def synthesise_payoff(filing, ts, market, *, examples=None, chat=client.chat,
             )
         except Exception as exc:  # Model problems are attempts, never crashes.
             error = f"{type(exc).__name__}: {exc}"
-            attempts.append(Attempt(code="", results=[], passed=False, error=error))
+            attempts.append(Attempt(code="", results=[], passed=False, error=error, feedback_sent=feedback))
             feedback = (
                 f"Previous attempt failed: the chat call raised {error}. "
                 "No code was received; write the complete payoff now."
@@ -362,7 +473,7 @@ def synthesise_payoff(filing, ts, market, *, examples=None, chat=client.chat,
                 "chat did not finish with 'stop' "
                 f"(finish_reason={getattr(result, 'finish_reason', None)!r}); reply not trusted"
             )
-            attempts.append(Attempt(code="", results=[], passed=False, error=error))
+            attempts.append(Attempt(code="", results=[], passed=False, error=error, feedback_sent=feedback, cost_usd=getattr(result, "cost_usd", 0.0), seconds=getattr(result, "seconds", 0.0)))
             feedback = (
                 f"Previous attempt failed: {error}. "
                 "Reply with exactly one complete ```python code block and nothing else."
@@ -377,7 +488,7 @@ def synthesise_payoff(filing, ts, market, *, examples=None, chat=client.chat,
             )
         except Exception as exc:  # A battery crash on model code is a failed attempt.
             error = f"{type(exc).__name__}: {exc}"
-            attempts.append(Attempt(code=code, results=[], passed=False, error=error))
+            attempts.append(Attempt(code=code, results=[], passed=False, error=error, feedback_sent=feedback, cost_usd=getattr(result, "cost_usd", 0.0), seconds=getattr(result, "seconds", 0.0)))
             feedback = (
                 f"Previous attempt failed: the proof battery raised {error}.\n"
                 "Previous code:\n```python\n" + code + "\n```"
@@ -385,14 +496,24 @@ def synthesise_payoff(filing, ts, market, *, examples=None, chat=client.chat,
             continue
 
         passed = battery_passed(results)
-        attempts.append(Attempt(code=code, results=list(results), passed=bool(passed), error=None))
+        counterexamples: dict[str, str] = {}
+        for r in results:
+            if not r.passed:
+                ce = counterexample(r)
+                if ce is not None:
+                    counterexamples[r.name] = ce
+        attempts.append(Attempt(code=code, results=list(results), passed=bool(passed), error=None, feedback_sent=feedback, counterexamples=counterexamples, cost_usd=getattr(result, "cost_usd", 0.0), seconds=getattr(result, "seconds", 0.0)))
         if passed:
             passed_code = code
             break
         failed = [r for r in results if not r.passed]
         feedback_lines = ["Previous code:\n```python\n" + code + "\n```", "Failed checks to fix:"]
         for r in failed:
-            feedback_lines.append(f"- {r.name}: {r.detail}")
+            line = f"- {r.name}: {r.detail}"
+            ce = counterexamples.get(r.name)
+            if ce is not None:
+                line += f"\n  Counterexample: {ce}"
+            feedback_lines.append(line)
         feedback = "\n".join(feedback_lines)
 
     registered: str | None = None
