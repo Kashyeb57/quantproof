@@ -193,3 +193,13 @@ def test_payment_in_quote_when_level_return_and_payment_coincide():
     assert payment_in_quote(500.0, "50.00 -50.00% -50.00%", 1000.0, 0.5) is True
     assert payment_in_quote(1000.0, "50.00 -50.00% 0.00%", 1000.0, 0.5) is True
     assert payment_in_quote(700.0, "50.00 -50.00% -50.00%", 1000.0, 0.5) is False
+
+
+def test_prose_worked_example_verifies():
+    """MS states examples as sentences, not a table (0001839882-26-049404)."""
+    acc = "0001839882-26-049404"
+    filing = read_filing(gzip.decompress((AUDIT / "filings" / f"{acc}.htm.gz").read_bytes()))
+    quote = "the underlier appreciates 5%, investors will receive $1,075 per security"
+    ex = extract_examples(filing, chat=_reply([(1.05, 1075.0, quote), (1.05, 1100.0, quote)]),
+                          notional=1000.0)
+    assert [e.payment.citation.verified for e in ex] == [True, False]

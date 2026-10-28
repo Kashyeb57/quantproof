@@ -91,7 +91,14 @@ The terms dictionary (the function's second argument) has exactly these keys:
 
 Reply with exactly one ```python code block and nothing else."""
 
-EXAMPLES_PROMPT: str = """Find the filing's hypothetical payment-at-maturity table.
+EXAMPLES_PROMPT: str = """Find the filing's hypothetical payment-at-maturity examples.
+
+They are usually a table (titled for example "Hypothetical Payment at
+Maturity" or "What Is the Total Return on the Notes at Maturity"), and
+sometimes worked examples written as sentences ("If the underlier
+appreciates 5%, investors will receive $1,075 per security").  Use the
+table when there is one; otherwise use the sentences, one example each, with
+the sentence copied verbatim as the quote.
 
 Reply with JSON only, in exactly this form:
 {"examples": [{"worst_final": <final value / initial value, e.g. 1.65>, "payment": <payment at maturity per note>, "quote": "<the table row verbatim, cells separated by single spaces>"}]}
@@ -411,10 +418,12 @@ def extract_examples(
         )
         payment_shown = payment_in_quote(payment, quote, notional, worst_final)
         if notional:
-            # Percent tables state the final level as a share of the initial level.
+            # Percent tables state the final level as a share of the initial
+            # level ("150.000%"); prose states the underlier's move ("appreciates
+            # 5%", "declines 20%": the sign is in the verb, not the number).
             in_quote = in_quote or any(
                 _find_bounded(normalise_for_match(form), normalised_quote) is not None
-                for form in percent_forms(worst_final)
+                for form in percent_forms(worst_final) | percent_forms(abs(worst_final - 1.0))
             )
         verified = bool(found and payment_shown and in_quote)
         examples.append(
