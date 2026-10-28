@@ -1,0 +1,201 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "17 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 1.1368683772161603e-13
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5034213871526515
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perfarray = np.asarray(perf, dtype=float)\n    npaths = perfarray.shape[0]\n    ndates = perfarray.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalindex = int(terms[\"final_index\"])\n    downside = terms[\"downside\"]\n    bufferlevel = float(downside[\"level\"])\n    gearing = float(downside[\"gearing\"])\n    upside = terms[\"upside\"]\n    leverage = 1.0\n    cap = None\n    if upside is not None:\n        leverage = float(upside[\"leverage\"])\n        if upside[\"cap\"] is not None:\n            cap = float(upside[\"cap\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    called = np.zeros(npaths, dtype=bool)\n    memorycount = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        active = np.logical_not(called)\n        worst = np.min(perfarray[:, k, :], axis=1)\n        coupondue = np.zeros(npaths, dtype=float)\n        if coupon is not None:\n            if coupon[\"amounts\"][k] is not None:\n                couponamount = float(coupon[\"amounts\"][k])\n                couponbarrier = float(coupon[\"barrier\"])\n                meets = worst >= couponbarrier\n                if bool(coupon[\"memory\"]):\n                    memorycount = memorycount + 1.0\n                    coupondue = np.where(meets, couponamount * memorycount, 0.0)\n                    memorycount = np.where(meets, 0.0, memorycount)\n                else:\n                    coupondue = np.where(meets, couponamount, 0.0)\n        iscalldate = False\n        callamount = 0.0\n        if autocall is not None:\n            if autocall[\"call_amounts\"][k] is not None:\n                iscalldate = True\n                callamount = float(autocall[\"call_amounts\"][k])\n        if iscalldate:\n            trigger = float(autocall[\"trigger\"])\n            triggered = worst >= trigger\n            callpay = np.logical_and(active, triggered)\n            cash[:, k] = cash[:, k] + np.where(callpay, callamount + coupondue, 0.0)\n            otherpay = np.logical_and(active, np.logical_not(triggered))\n            if k == finalindex:\n                pct = worst - 1.0\n                payoff = np.empty(npaths, dtype=float)\n                upmask = worst > 1.0\n                midmask = np.logical_and(worst <= 1.0, worst >= bufferlevel)\n                downmask = worst < bufferlevel\n                payoff[upmask] = notional * (1.0 + pct[upmask] * leverage)\n                if cap is not None:\n                    payoff[upmask] = np.minimum(payoff[upmask], notional * (1.0 + cap))\n                payoff[midmask] = notional * (1.0 + np.abs(pct[midmask]))\n                payoff[downmask] = notional * (1.0 + gearing * (pct[downmask] + (1.0 - bufferlevel)))\n                cash[:, k] = cash[:, k] + np.where(otherpay, payoff + coupondue, 0.0)\n            else:\n                cash[:, k] = cash[:, k] + np.where(otherpay, coupondue, 0.0)\n            called = np.logical_or(called, callpay)\n        elif k == finalindex:\n            pct = worst - 1.0\n            payoff = np.empty(npaths, dtype=float)\n            upmask = worst > 1.0\n            midmask = np.logical_and(worst <= 1.0, worst >= bufferlevel)\n            downmask = worst < bufferlevel\n            payoff[upmask] = notional * (1.0 + pct[upmask] * leverage)\n            if cap is not None:\n                payoff[upmask] = np.minimum(payoff[upmask], notional * (1.0 + cap))\n            payoff[midmask] = notional * (1.0 + np.abs(pct[midmask]))\n            payoff[downmask] = notional * (1.0 + gearing * (pct[downmask] + (1.0 - bufferlevel)))\n            cash[:, k] = cash[:, k] + np.where(active, payoff + coupondue, 0.0)\n        else:\n            cash[:, k] = cash[:, k] + np.where(active, coupondue, 0.0)\n    return cash",
+      "cost_usd": 0.143828,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 19.5071544729999
+    }
+  ],
+  "cost_usd": 0.17897825,
+  "cusip": "89115NKY9",
+  "estimated_value": 983.6,
+  "examples": [
+    {
+      "payment": 1286.5,
+      "quote": "40.00% $1,286.50 28.65%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1286.5,
+      "quote": "30.00% $1,286.50 28.65%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1286.5,
+      "quote": "22.92% $1,286.50 28.65%",
+      "verified": true,
+      "worst_final": 1.2292
+    },
+    {
+      "payment": 1250.0,
+      "quote": "20.00% $1,250.00 25.00%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1125.0,
+      "quote": "10.00% $1,125.00 12.50%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1062.5,
+      "quote": "5.00% $1,062.50 6.25%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1000.0,
+      "quote": "0.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1100.0,
+      "quote": "-10.00% $1,100.00 10.00%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1200.0,
+      "quote": "-20.00% $1,200.00 20.00%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 1300.0,
+      "quote": "-30.00% $1,300.00 30.00%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 900.0,
+      "quote": "-40.00% $900.00 -10.00%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 800.0,
+      "quote": "-50.00% $800.00 -20.00%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 700.0,
+      "quote": "-60.00% $700.00 -30.00%",
+      "verified": true,
+      "worst_final": 0.4
+    },
+    {
+      "payment": 600.0,
+      "quote": "-70.00% $600.00 -40.00%",
+      "verified": true,
+      "worst_final": 0.3
+    },
+    {
+      "payment": 500.0,
+      "quote": "-80.00% $500.00 -50.00%",
+      "verified": true,
+      "worst_final": 0.2
+    },
+    {
+      "payment": 400.0,
+      "quote": "-90.00% $400.00 -60.00%",
+      "verified": true,
+      "worst_final": 0.1
+    },
+    {
+      "payment": 300.0,
+      "quote": "-100.00% $300.00 -70.00%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 991.8085104981545,
+      "seed": 0,
+      "std_error": 0.7955300140076109
+    },
+    "high": 1022.1578271632432,
+    "low": 954.5491123378824,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "TD",
+  "meta": {
+    "accession": "0001140361-26-040730",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "issuer_group": "Toronto-Dominion",
+    "label": "contingent absolute return",
+    "primary_document": "ef20084380_424b2.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/947263/000114036126040730/ef20084380_424b2.htm"
+  },
+  "model_seconds": 29.976895420999426,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "priced_ai",
+  "structure": "single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Principal Amount + (Principal Amount \u00d7 Contingent Absolute Return)",
+      "value": "Contingent Absolute Return"
+    }
+  ]
+}
