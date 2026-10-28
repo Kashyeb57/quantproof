@@ -7,28 +7,445 @@
     "form": "424B2",
     "primary_document": "gs-20261026.htm"
   },
-  "status": "extraction_failed",
-  "reason": "autocall.payment_dates.value: expected list, got NoneType",
-  "termsheet": null,
-  "fields": [],
-  "quotes": {
-    "checked": 0,
-    "verified": 0
+  "status": "unsupported",
+  "reason": "unsupported features: ['absolute value of the percentage decline']",
+  "termsheet": {
+    "issuer": "GS Finance Corp.",
+    "underlying_names": [
+      "The Class A common stock of Palantir Technologies Inc."
+    ],
+    "n_underlyings": 1,
+    "cusip": "38151R602",
+    "is_preliminary": false,
+    "notional": 10.0,
+    "issue_price": 10.0,
+    "pricing_date": "2026-10-22",
+    "issue_date": "2026-10-29",
+    "maturity_date": "2028-10-30",
+    "final_review_date": "2028-10-23",
+    "estimated_value": 9.69,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "GS Finance Corp.",
+        "quote": "The notes are being issued by GS Finance Corp. (\u201cGSFC\u201d)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "October 22, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "The Class A common stock of Palantir Technologies Inc.",
+        "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "PLTR",
+        "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 196.19,
+        "quote": "Starting Value: | $196.19, which is the Closing Market Price of the Market Measure on the pricing date.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 196.19,
+        "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+        "section": "The Market Measure",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-22",
+        "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+        "section": "The Market Measure",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 10.0,
+        "quote": "$10 principal amount per unit",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 10.0,
+        "quote": "Public offering price | $ 10.00 | $5,950,000",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-22",
+        "quote": "October 22, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-29",
+        "quote": "October 29, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-10-30",
+        "quote": "Maturity Date: | October 30, 2028, subject to postponement as described beginning on page PS-25 of the accompanying product supplement.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-10-23",
+        "quote": "Final Calculation Day/Maturity Valuation Period: | October 23, 2028, subject to postponement in the event of Market Disruption Events and non-Market Measure Business Days, as described beginning on page PS-25 of the accompanying product supplement.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc....If the Ending Value is less than the Threshold Value, your notes are subject to 1-to-1 downside exposure to decreases in the Market Measure from the Starting Value",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.6,
+        "quote": "Threshold Value: | $117.71, which is 60.00% of the Starting Value (rounded to the nearest one-hundredth)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Payments on the notes will not reflect changes in the value of the Market Measure other than on the Call Observation Date or the Final Calculation Day.",
+        "section": "Risk Factors",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "The Goldman Sachs Group, Inc.",
+        "quote": "and are fully and unconditionally guaranteed by The Goldman Sachs Group, Inc. (\u201cGSG\u201d).",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "38151R602",
+        "quote": "CUSIP No. 38151R602",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "value": 1.0,
+        "quote": "Call Value: | $196.19, which is 100.00% of the Starting Value",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "value": "2027-10-29",
+        "quote": "Call Observation Date: | October 29, 2027.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "value": "2027-11-05",
+        "quote": "Call Payment Date: | The fifth business day following the Call Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "value": 12.925,
+        "quote": "Call Payment (per Unit): | $12.925 per unit, which is equal to the principal amount plus the Call Premium due on the Call Payment Date.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.5,
+        "quote": "Participation Rate: | 150.00%.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 9.69,
+        "quote": "The estimated value of your notes at the time the terms of your notes are set on the pricing date is equal to approximately $9.69 per $10 principal amount.",
+        "section": "Estimated Value of Your Notes",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.1,
+        "quote": "The underwriting discount reflects a sales commission of $0.10 per note and a structuring fee of $0.05 per note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "absolute value of the percentage decline",
+        "quote": "A positive return equal to the absolute value of the percentage decline in the value of the Market Measure only if the Market Measure does not decline by more than 40.00% (e.g., if the negative return of the Market Measure is -5.00%, you will receive a positive return of +5.00%)",
+        "section": "Cover",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
   },
-  "crosscheck": null,
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "GS Finance Corp.",
+      "quote": "The notes are being issued by GS Finance Corp. (\u201cGSFC\u201d)",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "The Class A common stock of Palantir Technologies Inc.",
+      "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "PLTR",
+      "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 196.19,
+      "quote": "Starting Value: | $196.19, which is the Closing Market Price of the Market Measure on the pricing date.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 196.19,
+      "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-22",
+      "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc.",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 10.0,
+      "quote": "$10 principal amount per unit",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 10.0,
+      "quote": "Public offering price | $ 10.00 | $5,950,000",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-22",
+      "quote": "October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-29",
+      "quote": "October 29, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-10-30",
+      "quote": "Maturity Date: | October 30, 2028, subject to postponement as described beginning on page PS-25 of the accompanying product supplement.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-10-23",
+      "quote": "Final Calculation Day/Maturity Valuation Period: | October 23, 2028, subject to postponement in the event of Market Disruption Events and non-Market Measure Business Days, as described beginning on page PS-25 of the accompanying product supplement.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc....If the Ending Value is less than the Threshold Value, your notes are subject to 1-to-1 downside exposure to decreases in the Market Measure from the Starting Value",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.6,
+      "quote": "Threshold Value: | $117.71, which is 60.00% of the Starting Value (rounded to the nearest one-hundredth)",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Payments on the notes will not reflect changes in the value of the Market Measure other than on the Call Observation Date or the Final Calculation Day.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "The Goldman Sachs Group, Inc.",
+      "quote": "and are fully and unconditionally guaranteed by The Goldman Sachs Group, Inc. (\u201cGSG\u201d).",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "38151R602",
+      "quote": "CUSIP No. 38151R602",
+      "verified": true
+    },
+    {
+      "path": "autocall.trigger",
+      "value": 1.0,
+      "quote": "Call Value: | $196.19, which is 100.00% of the Starting Value",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].review_date",
+      "value": "2027-10-29",
+      "quote": "Call Observation Date: | October 29, 2027.",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].payment_date",
+      "value": "2027-11-05",
+      "quote": "Call Payment Date: | The fifth business day following the Call Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement.",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].call_amount",
+      "value": 12.925,
+      "quote": "Call Payment (per Unit): | $12.925 per unit, which is equal to the principal amount plus the Call Premium due on the Call Payment Date.",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.5,
+      "quote": "Participation Rate: | 150.00%.",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 9.69,
+      "quote": "The estimated value of your notes at the time the terms of your notes are set on the pricing date is equal to approximately $9.69 per $10 principal amount.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.1,
+      "quote": "The underwriting discount reflects a sales commission of $0.10 per note and a structuring fee of $0.05 per note.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "absolute value of the percentage decline",
+      "quote": "A positive return equal to the absolute value of the percentage decline in the value of the Market Measure only if the Market Measure does not decline by more than 40.00% (e.g., if the negative return of the Market Measure is -5.00%, you will receive a positive return of +5.00%)",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 28,
+    "verified": 27
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "The Class A common stock of Palantir Technologies Inc.",
+        "second": "Class A Common Stock of Palantir Technologies Inc.",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "first": "PLTR",
+        "second": "PLTR UW",
+        "status": "resolved_second"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "absolute value of the percentage decline"
+        ],
+        "second": [
+          "Absolute Return Barrier"
+        ],
+        "status": "resolved_second"
+      }
+    ]
+  },
   "battery": null,
   "fair_value": null,
   "loss_odds": null,
-  "estimated_value": null,
-  "issue_price": null,
-  "notional": null,
-  "cusip": null,
-  "issuer": null,
-  "underlyings": [],
+  "estimated_value": 9.69,
+  "issue_price": 10.0,
+  "notional": 10.0,
+  "cusip": "38151R602",
+  "issuer": "GS Finance Corp.",
+  "underlyings": [
+    "The Class A common stock of Palantir Technologies Inc."
+  ],
   "is_preliminary": false,
-  "pricing_date": null,
-  "structure": null,
-  "seconds": 0.0008871439995346009,
-  "cost_usd": 0.05781525,
-  "model_seconds": 40.41759659500008
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
+  "seconds": 0.09154387800026598,
+  "cost_usd": 0.1820313,
+  "model_seconds": 99.30860452199977,
+  "previous_status": "extraction_failed",
+  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType"
 }

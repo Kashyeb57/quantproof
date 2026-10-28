@@ -8,7 +8,7 @@
     "primary_document": "gs-20261023.htm"
   },
   "status": "extraction_failed",
-  "reason": "autocall.payment_dates.value: expected list, got NoneType; coupon.payment_dates.value: expected list, got NoneType",
+  "reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7687 (char 7686)",
   "termsheet": null,
   "fields": [],
   "quotes": {
@@ -28,7 +28,9 @@
   "is_preliminary": false,
   "pricing_date": null,
   "structure": null,
-  "seconds": 0.001109464999899501,
-  "cost_usd": 0.0852575,
-  "model_seconds": 196.7467098290001
+  "seconds": 0.0021386580001490074,
+  "cost_usd": 0.09358,
+  "model_seconds": 57.674124146000395,
+  "previous_status": "extraction_failed",
+  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType; coupon.payment_dates.value: expected list, got NoneType"
 }

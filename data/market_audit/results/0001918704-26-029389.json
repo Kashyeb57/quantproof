@@ -7,28 +7,385 @@
     "form": "424B2",
     "primary_document": "form424b2.htm"
   },
-  "status": "extraction_failed",
-  "reason": "downside level must be a fraction of initial in (0, 1]",
-  "termsheet": null,
-  "fields": [],
-  "quotes": {
-    "checked": 0,
-    "verified": 0
+  "status": "unsupported",
+  "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+  "termsheet": {
+    "issuer": "Citigroup Global Markets Holdings Inc.",
+    "underlying_names": [
+      "Dow Jones Industrial AverageTM"
+    ],
+    "n_underlyings": 1,
+    "cusip": "17334CU51",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-09-25",
+    "issue_date": "2026-09-30",
+    "maturity_date": "2029-06-28",
+    "final_review_date": "2029-06-25",
+    "estimated_value": 950.6,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Citigroup Global Markets Holdings Inc.",
+        "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement No. 2026-USNCH33929",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "Dow Jones Industrial AverageTM",
+        "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 51828.62,
+        "quote": "Initial underlying value: | 51,828.62, the closing value of the underlying on the pricing date",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 51828.62,
+        "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-09-25",
+        "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Stated principal amount: | $1,000 per security",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per security: | $1,000.00 | $22.50 | $977.50",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-09-25",
+        "quote": "Pricing date: | September 25, 2026",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-09-30",
+        "quote": "Issue date: | September 30, 2026",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-06-28",
+        "quote": "Maturity date: | June 28, 2029",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-06-25",
+        "quote": "Valuation date: | June 25, 2029, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "If the final underlying value is less than or equal to the initial underlying value:",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 1.0,
+        "quote": "$0",
+        "section": "KEY TERMS",
+        "verified": false
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final underlying value: | The closing value of the underlying on the valuation date",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "Citigroup Inc.",
+        "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "17334CU51",
+        "quote": "CUSIP / ISIN: | 17334CU51 / US17334CU511",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "Upside participation rate: | 100.00%",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.175,
+        "quote": "Maximum return at maturity: | $175.00 per security (17.50% of the stated principal amount).",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 950.6,
+        "quote": "On the date of this pricing supplement, the estimated value of the securities is $950.60 per security, which is less than the issue price.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 22.5,
+        "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+        "section": "Supplemental Plan of Distribution",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "principal protection (no loss of principal at maturity)",
+        "quote": "$0",
+        "section": "KEY TERMS",
+        "verified": false
+      }
+    ],
+    "unverified": [
+      "downside.level",
+      "downside.gearing",
+      "unsupported_features[0]"
+    ]
   },
-  "crosscheck": null,
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Citigroup Global Markets Holdings Inc.",
+      "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement No. 2026-USNCH33929",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "Dow Jones Industrial AverageTM",
+      "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 51828.62,
+      "quote": "Initial underlying value: | 51,828.62, the closing value of the underlying on the pricing date",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 51828.62,
+      "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-09-25",
+      "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Stated principal amount: | $1,000 per security",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per security: | $1,000.00 | $22.50 | $977.50",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-09-25",
+      "quote": "Pricing date: | September 25, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-09-30",
+      "quote": "Issue date: | September 30, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-06-28",
+      "quote": "Maturity date: | June 28, 2029",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-06-25",
+      "quote": "Valuation date: | June 25, 2029, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "If the final underlying value is less than or equal to the initial underlying value:",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 1.0,
+      "quote": "$0",
+      "verified": false
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final underlying value: | The closing value of the underlying on the valuation date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "Citigroup Inc.",
+      "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "17334CU51",
+      "quote": "CUSIP / ISIN: | 17334CU51 / US17334CU511",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "Upside participation rate: | 100.00%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.175,
+      "quote": "Maximum return at maturity: | $175.00 per security (17.50% of the stated principal amount).",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 950.6,
+      "quote": "On the date of this pricing supplement, the estimated value of the securities is $950.60 per security, which is less than the issue price.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 22.5,
+      "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "principal protection (no loss of principal at maturity)",
+      "quote": "$0",
+      "verified": false
+    }
+  ],
+  "quotes": {
+    "checked": 24,
+    "verified": 21
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "downside.kind",
+        "first": "buffer",
+        "second": "barrier",
+        "status": "unresolved"
+      },
+      {
+        "path": "underlyings[0].name",
+        "first": "Dow Jones Industrial AverageTM",
+        "second": "The Dow Jones Industrial AverageTM",
+        "status": "resolved_second"
+      }
+    ]
+  },
   "battery": null,
   "fair_value": null,
   "loss_odds": null,
-  "estimated_value": null,
-  "issue_price": null,
-  "notional": null,
-  "cusip": null,
-  "issuer": null,
-  "underlyings": [],
+  "estimated_value": 950.6,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "17334CU51",
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "underlyings": [
+    "Dow Jones Industrial AverageTM"
+  ],
   "is_preliminary": false,
-  "pricing_date": null,
-  "structure": null,
-  "seconds": 0.0013145879993317067,
-  "cost_usd": 0.0503295,
-  "model_seconds": 31.70117862699999
+  "pricing_date": "2026-09-25",
+  "structure": "single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity",
+  "seconds": 0.03159726500052784,
+  "cost_usd": 0.13518515,
+  "model_seconds": 96.8501157210003,
+  "previous_status": "extraction_failed",
+  "previous_reason": "downside level must be a fraction of initial in (0, 1]"
 }

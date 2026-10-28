@@ -340,7 +340,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-19",
   "structure": "single underlying, buffer 85% at maturity",
-  "seconds": 0.053324881999287754,
+  "seconds": 0.058062629000232846,
   "cost_usd": 0.10016385,
   "model_seconds": 54.28086164199976
 }

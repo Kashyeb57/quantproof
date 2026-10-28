@@ -7,28 +7,1095 @@
     "form": "424B2",
     "primary_document": "o1016268424b2.htm"
   },
-  "status": "extraction_failed",
-  "reason": "autocall.payment_dates.value: expected list, got NoneType",
-  "termsheet": null,
-  "fields": [],
-  "quotes": {
-    "checked": 0,
-    "verified": 0
+  "status": "priced",
+  "reason": null,
+  "termsheet": {
+    "issuer": "Bank of Montreal",
+    "underlying_names": [
+      "Russell 2000\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "06368N326",
+    "is_preliminary": false,
+    "notional": 10.0,
+    "issue_price": 10.0,
+    "pricing_date": "2026-10-15",
+    "issue_date": "2026-10-22",
+    "maturity_date": "2029-10-26",
+    "final_review_date": "2029-10-23",
+    "estimated_value": 9.59,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Bank of Montreal",
+        "quote": "The notes are being issued by Bank of Montreal (\u201cBMO\u201d).",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Date ... October 15, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "Russell 2000\u00ae Index",
+        "quote": "Automatic call of the notes at $11.00 per unit if the Observation Level of the Russell 2000\u00ae Index (the \u201cIndex\u201d) on the Observation Date is at or above the Starting Value",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "RTY",
+        "quote": "The Russell 2000\u00ae Index (Bloomberg symbol: \u201cRTY\u201d), a price return index",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 2767.269,
+        "quote": "Starting Value: 2,767.269",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 2767.269,
+        "quote": "On the pricing date, the closing level of the Index was 2,767.269.",
+        "section": "The Index",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-15",
+        "quote": "October 15, 2026 ... On the pricing date, the closing level of the Index was 2,767.269.",
+        "section": "The Index",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "The notes will be automatically called if the Observation Level of the Market Measure, which is the Russell 2000\u00ae Index (the \u201cIndex\u201d), is greater than or equal to the Call Level on the Observation Date.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 10.0,
+        "quote": "$10 principal amount per unit",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 10.0,
+        "quote": "Public offering price | $ 10.00 | $10,549,490.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-15",
+        "quote": "Pricing Date ... October 15, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-22",
+        "quote": "Settlement Date ... October 22, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-10-26",
+        "quote": "Linked to the Russell 2000\u00ae Index, due October 26, 2029",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-10-23",
+        "quote": "Maturity Valuation Period: October 17, 2029, October 18, 2029, October 19, 2029, October 22, 2029 and October 23, 2029",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "1-to-1 downside exposure to decreases in the Index, with up to 100% of your principal at risk",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 1.0,
+        "quote": "Threshold Value: | 2,767.269 (100.00% of the Starting Value)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "If the Ending Value is less than the Starting Value, you will lose all or a portion of the principal amount of your notes.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "cusip",
+        "value": "06368N326",
+        "quote": "CUSIP No. 06368N326",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "value": 1.0,
+        "quote": "Call Level: | 2,767.269 (100% of the Starting Value)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "value": "2027-10-22",
+        "quote": "Observation Date: October 22, 2027.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "value": "2027-10-29",
+        "quote": "Call Settlement Date: The fifth business day following the Observation Date, subject to postponement if the Observation Date is postponed, as described on page PS-25 of product supplement EQUITY LIRN-1",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "value": 11.0,
+        "quote": "$11.00, representing a Call Premium of 10.00% of the principal amount, if automatically called on the Observation Date",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 2.11,
+        "quote": "Participation Rate: 211.00%",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 9.59,
+        "quote": "The estimated initial value of the notes determined by us as of the pricing date, which we refer to as the initial estimated value, is $9.59 per unit",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.2,
+        "quote": "Underwriting discount | $ 0.20 | $210,989.80 ... will receive a selling concession in connection with the sale of the notes in an amount up to the full amount of underwriting discount set forth on the cover of this term sheet.",
+        "section": "Supplement to the Plan of Distribution",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
   },
-  "crosscheck": null,
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": null,
-  "issue_price": null,
-  "notional": null,
-  "cusip": null,
-  "issuer": null,
-  "underlyings": [],
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Bank of Montreal",
+      "quote": "The notes are being issued by Bank of Montreal (\u201cBMO\u201d).",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Date ... October 15, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "Russell 2000\u00ae Index",
+      "quote": "Automatic call of the notes at $11.00 per unit if the Observation Level of the Russell 2000\u00ae Index (the \u201cIndex\u201d) on the Observation Date is at or above the Starting Value",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "RTY",
+      "quote": "The Russell 2000\u00ae Index (Bloomberg symbol: \u201cRTY\u201d), a price return index",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 2767.269,
+      "quote": "Starting Value: 2,767.269",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 2767.269,
+      "quote": "On the pricing date, the closing level of the Index was 2,767.269.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-15",
+      "quote": "October 15, 2026 ... On the pricing date, the closing level of the Index was 2,767.269.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "The notes will be automatically called if the Observation Level of the Market Measure, which is the Russell 2000\u00ae Index (the \u201cIndex\u201d), is greater than or equal to the Call Level on the Observation Date.",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 10.0,
+      "quote": "$10 principal amount per unit",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 10.0,
+      "quote": "Public offering price | $ 10.00 | $10,549,490.00",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-15",
+      "quote": "Pricing Date ... October 15, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-22",
+      "quote": "Settlement Date ... October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-10-26",
+      "quote": "Linked to the Russell 2000\u00ae Index, due October 26, 2029",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-10-23",
+      "quote": "Maturity Valuation Period: October 17, 2029, October 18, 2029, October 19, 2029, October 22, 2029 and October 23, 2029",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "1-to-1 downside exposure to decreases in the Index, with up to 100% of your principal at risk",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 1.0,
+      "quote": "Threshold Value: | 2,767.269 (100.00% of the Starting Value)",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "If the Ending Value is less than the Starting Value, you will lose all or a portion of the principal amount of your notes.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "cusip",
+      "value": "06368N326",
+      "quote": "CUSIP No. 06368N326",
+      "verified": true
+    },
+    {
+      "path": "autocall.trigger",
+      "value": 1.0,
+      "quote": "Call Level: | 2,767.269 (100% of the Starting Value)",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].review_date",
+      "value": "2027-10-22",
+      "quote": "Observation Date: October 22, 2027.",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].payment_date",
+      "value": "2027-10-29",
+      "quote": "Call Settlement Date: The fifth business day following the Observation Date, subject to postponement if the Observation Date is postponed, as described on page PS-25 of product supplement EQUITY LIRN-1",
+      "verified": true
+    },
+    {
+      "path": "autocall.observations[0].call_amount",
+      "value": 11.0,
+      "quote": "$11.00, representing a Call Premium of 10.00% of the principal amount, if automatically called on the Observation Date",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 2.11,
+      "quote": "Participation Rate: 211.00%",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 9.59,
+      "quote": "The estimated initial value of the notes determined by us as of the pricing date, which we refer to as the initial estimated value, is $9.59 per unit",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.2,
+      "quote": "Underwriting discount | $ 0.20 | $210,989.80 ... will receive a selling concession in connection with the sale of the notes in an amount up to the full amount of underwriting discount set forth on the cover of this term sheet.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 26,
+    "verified": 25
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": [
+    {
+      "name": "bsm_known_values",
+      "passed": true,
+      "value": 4.759422392871532,
+      "reference": 4.76,
+      "tolerance": 0.005,
+      "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81"
+    },
+    {
+      "name": "put_call_parity",
+      "passed": true,
+      "value": 3.325524483300075,
+      "reference": 3.3255244833000717,
+      "tolerance": 1e-10,
+      "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03"
+    },
+    {
+      "name": "determinism",
+      "passed": true,
+      "value": 9.474287068547932,
+      "reference": 9.474287068547932,
+      "tolerance": 0.0,
+      "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical"
+    },
+    {
+      "name": "barrier_removed",
+      "passed": true,
+      "value": 7.543228068678018,
+      "reference": 7.548684040732871,
+      "tolerance": 0.04902773129889747,
+      "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form"
+    },
+    {
+      "name": "barrier_at_maturity",
+      "passed": true,
+      "value": 7.543228068678018,
+      "reference": 7.54868404073287,
+      "tolerance": 0.04902773129889747,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form"
+    },
+    {
+      "name": "never_callable",
+      "passed": true,
+      "value": 7.567495706565699,
+      "reference": 7.54868404073287,
+      "tolerance": 0.04937033124292105,
+      "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons"
+    },
+    {
+      "name": "zero_coupon_no_downside",
+      "passed": true,
+      "value": 8.777322391748038,
+      "reference": 8.777322391748037,
+      "tolerance": 9.999999999999999e-06,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)"
+    },
+    {
+      "name": "zero_vol",
+      "passed": true,
+      "value": 4.388661195874019,
+      "reference": 4.388661195874018,
+      "tolerance": 9.999999999999999e-06,
+      "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)"
+    },
+    {
+      "name": "spread_monotonicity",
+      "passed": true,
+      "value": 9.292871291105167,
+      "reference": 9.474287068547932,
+      "tolerance": 0.0,
+      "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing"
+    },
+    {
+      "name": "convergence",
+      "passed": true,
+      "value": 0.5275370777749486,
+      "reference": 0.5,
+      "tolerance": 0.1,
+      "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]"
+    },
+    {
+      "name": "quotes",
+      "passed": false,
+      "value": 25.0,
+      "reference": 26.0,
+      "tolerance": 0.0,
+      "detail": "25/26 verified"
+    }
+  ],
+  "fair_value": {
+    "low": 9.207750615944688,
+    "high": 9.763600914840644,
+    "base": {
+      "price": 9.47916816489307,
+      "measure": "risk_neutral",
+      "model": "montecarlo.worst_of_note",
+      "greeks": {},
+      "inputs": {
+        "rate": 0.037,
+        "spread": 0.006,
+        "vols": [
+          0.25
+        ],
+        "dividend_yields": [
+          0.01
+        ],
+        "correlation": [
+          [
+            1.0
+          ]
+        ],
+        "n_dates": 2,
+        "antithetic": true
+      },
+      "seed": 0,
+      "paths": 20000,
+      "std_error": 0.023545048520306113,
+      "version": "0.1.0"
+    },
+    "points": [
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.763600914840644,
+        "std_error": 0.04460991010041877
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.763600914840644,
+        "std_error": 0.04460991010041877
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.671056554096207,
+        "std_error": 0.04384461363565455
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.671056554096207,
+        "std_error": 0.04384461363565455
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.579523485956575,
+        "std_error": 0.04292550911008452
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.579523485956575,
+        "std_error": 0.04292550911008452
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.717059657773772,
+        "std_error": 0.04428228902771199
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.717059657773772,
+        "std_error": 0.04428228902771199
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.624782662633748,
+        "std_error": 0.04351966680608637
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.624782662633748,
+        "std_error": 0.04351966680608637
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.533548564009863,
+        "std_error": 0.04260381150142928
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.533548564009863,
+        "std_error": 0.04260381150142928
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.67079941284702,
+        "std_error": 0.04395741327747091
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.67079941284702,
+        "std_error": 0.04395741327747091
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.578788882875015,
+        "std_error": 0.04319733791065822
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.578788882875015,
+        "std_error": 0.04319733791065822
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.487852512872003,
+        "std_error": 0.042284604822584754
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.487852512872003,
+        "std_error": 0.042284604822584754
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.60149417512488,
+        "std_error": 0.0551073525055932
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.60149417512488,
+        "std_error": 0.0551073525055932
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.520338169449959,
+        "std_error": 0.05384801023669215
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.520338169449959,
+        "std_error": 0.05384801023669215
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.432793168005926,
+        "std_error": 0.05226215184711542
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.432793168005926,
+        "std_error": 0.05226215184711542
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.555222488050545,
+        "std_error": 0.054691894879331134
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.555222488050545,
+        "std_error": 0.054691894879331134
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.474287068547932,
+        "std_error": 0.05343758271680771
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.474287068547932,
+        "std_error": 0.05343758271680771
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.387063236319813,
+        "std_error": 0.051861302940886776
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.387063236319813,
+        "std_error": 0.051861302940886776
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.509232252531959,
+        "std_error": 0.05427959517503373
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.509232252531959,
+        "std_error": 0.05427959517503373
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.428516770376893,
+        "std_error": 0.0530303375043593
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.428516770376893,
+        "std_error": 0.0530303375043593
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.341612563133658,
+        "std_error": 0.051463654708226565
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.341612563133658,
+        "std_error": 0.051463654708226565
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.449795247221404,
+        "std_error": 0.0644686121805436
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.449795247221404,
+        "std_error": 0.0644686121805436
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.385514593798069,
+        "std_error": 0.06308081465463225
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.385514593798069,
+        "std_error": 0.06308081465463225
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.29833929275861,
+        "std_error": 0.061596785058362406
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.29833929275861,
+        "std_error": 0.061596785058362406
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.403819161809627,
+        "std_error": 0.06397373320204948
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.403819161809627,
+        "std_error": 0.06397373320204948
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.33973627353595,
+        "std_error": 0.06259232732584875
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.33973627353595,
+        "std_error": 0.06259232732584875
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.252905510993012,
+        "std_error": 0.061119748696946495
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.252905510993012,
+        "std_error": 0.061119748696946495
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.358124499437924,
+        "std_error": 0.06348276255224973
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.358124499437924,
+        "std_error": 0.06348276255224973
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 9.294238628567596,
+        "std_error": 0.06210776869082176
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 9.294238628567596,
+        "std_error": 0.06210776869082176
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 9.207750615944688,
+        "std_error": 0.0606466200530988
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 9.207750615944688,
+        "std_error": 0.0606466200530988
+      }
+    ],
+    "sensitivities": {
+      "vol": [
+        9.624782662633748,
+        9.33973627353595
+      ],
+      "correlation": [
+        9.474287068547932,
+        9.474287068547932
+      ],
+      "spread": [
+        9.520338169449959,
+        9.428516770376893
+      ],
+      "dividend": [
+        9.555222488050545,
+        9.387063236319813
+      ],
+      "skew": [
+        9.474287068547932,
+        9.474287068547932
+      ]
+    },
+    "bank_estimate": 9.59,
+    "bank_position": "inside range",
+    "preliminary": false,
+    "n_paths": 4000,
+    "seed": 0,
+    "grid": {
+      "vol_shifts": [
+        -0.05,
+        0.0,
+        0.05
+      ],
+      "correlation_shifts": [
+        -0.25,
+        0.0,
+        0.25
+      ],
+      "spread_shifts": [
+        -0.0025,
+        0.0,
+        0.0025
+      ],
+      "dividend_shifts": [
+        -0.005,
+        0.0,
+        0.005
+      ],
+      "skew_per_10pct": [
+        0.0,
+        0.02
+      ]
+    },
+    "assumptions": [
+      "risk-free rate r = 0.037 per year, as of 2026-10-15",
+      "issuer credit spread = 0.006 per year",
+      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
+      "correlation: single underlying, correlation matrix [[1]]",
+      "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 1",
+      "measure: risk-neutral (for estimated value)",
+      "discounting at r + issuer spread",
+      "the bank's estimated value is a comparison point, not a calibration target"
+    ]
+  },
+  "loss_odds": {
+    "measure": "real_world",
+    "drifts": [
+      0.087
+    ],
+    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.037)",
+    "prob_loss": 0.25115,
+    "prob_loss_over_20": 0.1551,
+    "prob_loss_over_50": 0.02435,
+    "prob_called": 0.57325,
+    "expected_cash": 11.161808239575915,
+    "quantiles": {
+      "p05": 5.800953969022062,
+      "p25": 9.96641791284374,
+      "p50": 11.0,
+      "p75": 11.0,
+      "p95": 19.14356112302788
+    },
+    "std_errors": {
+      "prob_loss": 0.0030665426582716896,
+      "prob_loss_over_20": 0.002559726450228618,
+      "prob_loss_over_50": 0.0010898870927761278,
+      "expected_cash": 0.030695645067443437,
+      "prob_called": 0.0034973878645354734
+    },
+    "n_paths": 20000,
+    "seed": 0,
+    "excludes_issuer_default": true
+  },
+  "estimated_value": 9.59,
+  "issue_price": 10.0,
+  "notional": 10.0,
+  "cusip": "06368N326",
+  "issuer": "Bank of Montreal",
+  "underlyings": [
+    "Russell 2000\u00ae Index"
+  ],
   "is_preliminary": false,
-  "pricing_date": null,
-  "structure": null,
-  "seconds": 0.001659831999859307,
-  "cost_usd": 0.07427405000000001,
-  "model_seconds": 39.996991172000435
+  "pricing_date": "2026-10-15",
+  "structure": "single underlying, autocall, upside leverage 2.11x, barrier 100% at maturity",
+  "seconds": 0.3385569550000582,
+  "cost_usd": 0.10780275,
+  "model_seconds": 59.34996959700038,
+  "previous_status": "extraction_failed",
+  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType"
 }

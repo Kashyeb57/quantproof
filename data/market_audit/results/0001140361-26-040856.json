@@ -8,7 +8,7 @@
     "primary_document": "ef20084388_424b2.htm"
   },
   "status": "extraction_failed",
-  "reason": "autocall.review_dates.value: expected list, got NoneType; autocall.payment_dates.value: expected list, got NoneType; autocall.call_amounts.value: expected list, got NoneType",
+  "reason": "autocall.review_dates: expected cited field, got null; autocall.call_amounts: expected cited field, got null",
   "termsheet": null,
   "fields": [],
   "quotes": {
@@ -28,7 +28,9 @@
   "is_preliminary": false,
   "pricing_date": null,
   "structure": null,
-  "seconds": 0.00168941299943981,
-  "cost_usd": 0.0714818,
-  "model_seconds": 33.61189300499973
+  "seconds": 0.00176408400056971,
+  "cost_usd": 0.07867025,
+  "model_seconds": 57.10230798300017,
+  "previous_status": "extraction_failed",
+  "previous_reason": "autocall.review_dates.value: expected list, got NoneType; autocall.payment_dates.value: expected list, got NoneType; autocall.call_amounts.value: expected list, got NoneType"
 }

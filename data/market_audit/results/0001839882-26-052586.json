@@ -7,28 +7,405 @@
     "form": "424B2",
     "primary_document": "r10734wfc_424b2-35823.htm"
   },
-  "status": "extraction_failed",
-  "reason": "downside level must be a fraction of initial in (0, 1]",
-  "termsheet": null,
-  "fields": [],
-  "quotes": {
-    "checked": 0,
-    "verified": 0
+  "status": "unsupported",
+  "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+  "termsheet": {
+    "issuer": "Wells Fargo Finance LLC",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "95001HTK7",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-23",
+    "issue_date": "2026-10-28",
+    "maturity_date": "2028-10-26",
+    "final_review_date": "2028-10-23",
+    "estimated_value": 988.71,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Wells Fargo Finance LLC",
+        "quote": "Issuer: | Wells Fargo Finance LLC.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "PRICING SUPPLEMENT No. 320 dated October 23, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7623.68,
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 7623.68,
+        "quote": "The closing level on October 23, 2026 was 7,623.68.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-23",
+        "quote": "The closing level on October 23, 2026 was 7,623.68.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "\u25a0 Linked to the S&P 500\u00ae Index (the \u201cUnderlier\u201d)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per note.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original Offering Price: | $1,000 per note.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-23",
+        "quote": "Pricing Date: | October 23, 2026.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-28",
+        "quote": "Issue Date: | October 28, 2026.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-10-26",
+        "quote": "October 26, 2028, subject to postponement.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-10-23",
+        "quote": "Calculation Day: | October 23, 2028, subject to postponement.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "if the ending value is less than or equal to the starting value: $1,000",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 1.0,
+        "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+        "section": "Hypothetical Returns",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "The \u201cending value\u201d will be the closing value of the Underlier on the calculation day.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "Wells Fargo & Company",
+        "quote": "Guarantor: | Wells Fargo & Company.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "95001HTK7",
+        "quote": "CUSIP: | 95001HTK7",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.5,
+        "quote": "Upside Participation Rate: | 150%.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.1615,
+        "quote": "The \u201cmaximum return\u201d is 16.15% of the principal amount per note ($161.50 per note).",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 988.71,
+        "quote": "The current estimated value of the notes is $988.71 per note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 7.5,
+        "quote": "Per Note | $1,000.00 | $7.50 | $992.50",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "principal protection (no loss of principal at maturity)",
+        "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+        "section": "Hypothetical Returns",
+        "verified": false
+      }
+    ],
+    "unverified": [
+      "downside.gearing",
+      "unsupported_features[0]"
+    ]
   },
-  "crosscheck": null,
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Wells Fargo Finance LLC",
+      "quote": "Issuer: | Wells Fargo Finance LLC.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "PRICING SUPPLEMENT No. 320 dated October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "S&P 500\u00ae Index SPX 7,623.68",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "S&P 500\u00ae Index SPX 7,623.68",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7623.68,
+      "quote": "S&P 500\u00ae Index SPX 7,623.68",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 7623.68,
+      "quote": "The closing level on October 23, 2026 was 7,623.68.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-23",
+      "quote": "The closing level on October 23, 2026 was 7,623.68.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "\u25a0 Linked to the S&P 500\u00ae Index (the \u201cUnderlier\u201d)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per note.",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original Offering Price: | $1,000 per note.",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-23",
+      "quote": "Pricing Date: | October 23, 2026.",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-28",
+      "quote": "Issue Date: | October 28, 2026.",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-10-26",
+      "quote": "October 26, 2028, subject to postponement.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-10-23",
+      "quote": "Calculation Day: | October 23, 2028, subject to postponement.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "if the ending value is less than or equal to the starting value: $1,000",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 1.0,
+      "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "The \u201cending value\u201d will be the closing value of the Underlier on the calculation day.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "Wells Fargo & Company",
+      "quote": "Guarantor: | Wells Fargo & Company.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "95001HTK7",
+      "quote": "CUSIP: | 95001HTK7",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.5,
+      "quote": "Upside Participation Rate: | 150%.",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.1615,
+      "quote": "The \u201cmaximum return\u201d is 16.15% of the principal amount per note ($161.50 per note).",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 988.71,
+      "quote": "The current estimated value of the notes is $988.71 per note.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 7.5,
+      "quote": "Per Note | $1,000.00 | $7.50 | $992.50",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "principal protection (no loss of principal at maturity)",
+      "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+      "verified": false
+    }
+  ],
+  "quotes": {
+    "checked": 25,
+    "verified": 23
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": "2026-10-23",
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": 7623.68,
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "principal protection (no loss of principal at maturity)"
+        ],
+        "second": [],
+        "status": "resolved_second"
+      }
+    ]
+  },
   "battery": null,
   "fair_value": null,
   "loss_odds": null,
-  "estimated_value": null,
-  "issue_price": null,
-  "notional": null,
-  "cusip": null,
-  "issuer": null,
-  "underlyings": [],
+  "estimated_value": 988.71,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "95001HTK7",
+  "issuer": "Wells Fargo Finance LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
   "is_preliminary": false,
-  "pricing_date": null,
-  "structure": null,
-  "seconds": 0.0016149100001712213,
-  "cost_usd": 0.0625493,
-  "model_seconds": 37.935925775000214
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
+  "seconds": 0.03803542900004686,
+  "cost_usd": 0.16305895,
+  "model_seconds": 83.99760456499916,
+  "previous_status": "extraction_failed",
+  "previous_reason": "downside level must be a fraction of initial in (0, 1]"
 }

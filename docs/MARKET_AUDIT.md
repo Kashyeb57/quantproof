@@ -5,29 +5,29 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 ## Aggregate
 
 - Notes read: 44
-- Notes extracted: 34
-- Notes priced: 2
-- Needs review (plausibility gate; not counted as priced): 6
-- Share priced: 5.9%
-- Notes with a bank estimated value: 34
-- Median cost to investor (per $1,000 notional, bank's figure): 15.96
-- Median cost to investor (%, bank's figure): 1.6%
-- Bank estimated value within our range (priced notes): 2 of 2 (100.0%)
+- Notes extracted: 42
+- Notes priced: 6
+- Needs review (plausibility gate; not counted as priced): 7
+- Share priced: 14.3%
+- Notes with a bank estimated value: 42
+- Median cost to investor (per $1,000 notional, bank's figure): 19.15
+- Median cost to investor (%, bank's figure): 1.9%
+- Bank estimated value within our range (priced notes): 6 of 6 (100.0%)
 - Quote verification rate: 95.2%
-- Total model cost (USD): 4.8835
-- Total model seconds: 2634.2
+- Total model cost (USD): 5.4949
+- Total model seconds: 2817.6
 - Issuers: Bank of America, Bank of Montreal, Bank of Nova Scotia, Citigroup, Goldman Sachs, JPMorgan, Morgan Stanley, Royal Bank of Canada, Toronto-Dominion, UBS, Wells Fargo
-- Status counts: extraction_failed: 10, needs_review: 6, priced: 2, unsupported: 26
+- Status counts: extraction_failed: 2, needs_review: 7, priced: 6, unsupported: 29
 - Skipped: 190
 
 ## Per-note results
 
 | Issuer | CUSIP | Underlyings | Structure | Issue price ($) | Bank's estimated value ($) | Cost to investor ($, bank's figure) | Our range low ($) | Our range high ($) | Real-world P(loss) | Quotes verified | Status | Reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Bank of America |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.payment_dates.value: expected list, got NoneType |
-| Bank of America |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.payment_dates.value: expected list, got NoneType |
+| Bank of America | 09712D598 | The TJX Companies, Inc. | single underlying, autocall, upside leverage 1.6x, barrier 100% at maturity | 10.00 | 9.56 | 0.44 | 9.31 | 9.94 | 25.2% | 96.0% | priced |  |
+| Bank of America | 09712D887 | First Trust Nasdaq Cybersecurity ETF | single underlying, autocall, barrier 100% at maturity | 10.00 | 9.51 | 0.49 | 9.26 | 10.06 | 22.7% | 96.7% | priced |  |
 | Bank of America | 09712D317 | iShares Semiconductor ETF | single underlying, upside leverage 1x, cap 40.05%, buffer 75% at maturity | 10.00 | 9.79 | 0.21 |  |  |  | 95.7% | unsupported | unsupported features: ['Absolute Return Buffer'] |
-| Bank of Montreal |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.payment_dates.value: expected list, got NoneType |
+| Bank of Montreal | 06368N326 | Russell 2000® Index | single underlying, autocall, upside leverage 2.11x, barrier 100% at maturity | 10.00 | 9.59 | 0.41 | 9.21 | 9.76 | 25.1% | 96.2% | priced |  |
 | Bank of Montreal | 06376MPD0 | S&P 500® Index | single underlying, buffer 85% at maturity | 1000.00 | 997.53 | 2.47 |  |  |  | 100.0% | unsupported | unsupported features: ['threshold settlement amount'] |
 | Bank of Montreal | 06376MPC2 | S&P 500® Index | single underlying, upside leverage 1.4x, cap 25.9%, buffer 87.5% at maturity | 1000.00 | 996.26 | 3.74 | 908.60 | 988.37 | 25.9% | 95.0% | needs_review | plausibility gate: bank's estimated value 996.26 is above our whole range (high 988.37) |
 | Bank of Nova Scotia | 06419TE79 | S&P 500® Index | single underlying, buffer 85% at maturity | 1000.00 | 986.88 | 13.12 |  |  |  | 95.0% | unsupported | unsupported features: ['Digital Return'] |
@@ -37,15 +37,15 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 | Citigroup | 17334DCA8 | S&P 500® Index | single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity | 1000.00 | 968.70 | 31.30 |  |  |  | 95.5% | unsupported | unsupported features: ['Absolute return amount'] |
 | Citigroup | 17334DBW1 | Boston Scientific Corporation | single underlying, barrier 60% at maturity | 1000.00 | 971.60 | 28.40 |  |  |  | 95.7% | unsupported | unsupported features: ['digital return'] |
 | Citigroup | 17334CUE2 | S&P 500® Index | single underlying, upside leverage 1x, cap 11.15%, barrier 80% at maturity | 1000.00 | 977.60 | 22.40 | 900.72 | 972.86 | 13.7% | 95.2% | needs_review | plausibility gate: bank's estimated value 977.60 is above our whole range (high 972.86) |
-| Citigroup |  |  |  |  |  |  |  |  |  |  | extraction_failed | downside level must be a fraction of initial in (0, 1] |
-| Citigroup |  |  |  |  |  |  |  |  |  |  | extraction_failed | downside level must be a fraction of initial in (0, 1] |
+| Citigroup | 17334CU51 | Dow Jones Industrial AverageTM | single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity | 1000.00 | 950.60 | 49.40 |  |  |  | 87.5% | unsupported | unsupported features: ['principal protection (no loss of principal at maturity)'] |
+| Citigroup | 17334DA77 | MSCI ACWI Index | single underlying, upside leverage 1x, cap 12.85%, barrier 100% at maturity | 1000.00 | 966.30 | 33.70 | 821.85 | 895.08 | 39.8% | 90.9% | needs_review | plausibility gate: bank's estimated value 966.30 is above our whole range (high 895.08) |
 | Goldman Sachs | 40058MC55 | S&P 500® Index | single underlying, upside leverage 1.75x, buffer 80% at maturity | 1000.00 | 998.00 | 2.00 |  |  |  | 95.2% | unsupported | unsupported features: ['Company’s redemption right'] |
 | Goldman Sachs | 40058LYL8 | Russell 2000® Index | single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity | 1000.00 | 969.00 | 31.00 | 911.60 | 973.57 | 42.0% | 95.5% | priced |  |
-| Goldman Sachs |  |  |  |  |  |  |  |  |  |  | extraction_failed | reply is not valid JSON: Expecting ',' delimiter: line 1 column 7252 (char 7251) |
+| Goldman Sachs | 38151R701 | the common stock of Constellation Energy Corporation; the common stock of Quanta Services, Inc.; the common stock of Vistra Corp. | worst-of 3, autocall, contingent coupon (memory), barrier 80% at maturity | 10.00 | 9.48 | 0.52 | 8.09 | 10.31 | 22.7% | 98.7% | priced |  |
 | Goldman Sachs | 40058MG51 | S&P 500® Index | single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity | 1000.00 | 962.00 | 38.00 |  |  |  | 82.6% | unsupported | unsupported features: ['bearish view'] |
-| Goldman Sachs |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.payment_dates.value: expected list, got NoneType; coupon.payment_dates.value: expected list, got NoneType |
+| Goldman Sachs |  |  |  |  |  |  |  |  |  |  | extraction_failed | reply is not valid JSON: Expecting ',' delimiter: line 1 column 7687 (char 7686) |
 | Goldman Sachs | 40058MD88 | S&P 500® Index | single underlying, upside leverage 1x, barrier 100% at maturity | 1000.00 | 961.00 | 39.00 |  |  |  | 95.2% | unsupported | unsupported features: ['Company’s redemption right'] |
-| Goldman Sachs |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.payment_dates.value: expected list, got NoneType |
+| Goldman Sachs | 38151R602 | The Class A common stock of Palantir Technologies Inc. | single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity | 10.00 | 9.69 | 0.31 |  |  |  | 96.4% | unsupported | unsupported features: ['absolute value of the percentage decline'] |
 | JPMorgan | 46661QNW1 | TOPIX® Index | single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity | 1000.00 | 995.30 | 4.70 | 982.99 | 1011.37 | 23.2% | 95.8% | priced |  |
 | JPMorgan | 46661PHE0 | S&P 500® Index | single underlying, buffer 90% at maturity | 1000.00 | 986.70 | 13.30 |  |  |  | 100.0% | unsupported | unsupported features: ['Contingent Digital Return'] |
 | JPMorgan | 46661QLX1 | S&P 500® Index | single underlying, buffer 90% at maturity | 1000.00 | 988.30 | 11.70 |  |  |  | 100.0% | unsupported | unsupported features: ['Contingent Digital Return'] |
@@ -61,13 +61,13 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 | Royal Bank of Canada | 78018DG43 | S&P 500® Index | single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity | 1000.00 | 984.08 | 15.92 | 902.69 | 960.02 | 42.1% | 85.7% | needs_review | plausibility gate: bank's estimated value 984.08 is above our whole range (high 960.02) |
 | Toronto-Dominion | 89115NMK7 | S&P 500® Index | single underlying, buffer 87.5% at maturity | 1000.00 | 995.20 | 4.80 |  |  |  | 100.0% | unsupported | unsupported features: ['Threshold Settlement Amount'] |
 | Toronto-Dominion | 89115NKY9 | S&P 500® Index | single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity | 1000.00 | 983.60 | 16.40 |  |  |  | 100.0% | unsupported | unsupported features: ['Contingent Absolute Return'] |
-| Toronto-Dominion |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.review_dates.value: expected list, got NoneType; autocall.payment_dates.value: expected list, got NoneType; autocall.call_amounts.value: expected list, got NoneType |
+| Toronto-Dominion |  |  |  |  |  |  |  |  |  |  | extraction_failed | autocall.review_dates: expected cited field, got null; autocall.call_amounts: expected cited field, got null |
 | UBS | 90266F3B0 | S&P 500® Index | single underlying, upside leverage 1.4x, cap 24.08%, buffer 87.5% at maturity | 1000.00 | 996.70 | 3.30 | 910.43 | 987.55 | 25.8% | 95.7% | needs_review | plausibility gate: bank's estimated value 996.70 is above our whole range (high 987.55) |
 | UBS | 90266F6G6 | MSCI EAFE® Index | single underlying, buffer 85% at maturity | 1000.00 | 996.20 | 3.80 |  |  |  | 100.0% | unsupported | unsupported features: ['maximum settlement amount'] |
 | UBS | 90266F6R2 | EURO STOXX 50® Index; TOPIX; FTSE® 100 Index; Swiss Market Index; S&P/ASX 200 Index | worst-of 5, upside leverage 1x, buffer 90% at maturity | 1000.00 | 996.00 | 4.00 |  |  |  | 100.0% | unsupported | unsupported features: ['Threshold settlement amount'] |
 | Wells Fargo | 95001HTE1 | S&P 500® Index | single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity | 1000.00 | 995.25 | 4.75 | 897.01 | 993.24 | 23.8% | 95.8% | needs_review | plausibility gate: bank's estimated value 995.25 is above our whole range (high 993.24) |
 | Wells Fargo | 95001HTH4 | S&P 500® Index | single underlying, buffer 85% at maturity | 1000.00 | 994.42 | 5.58 |  |  |  | 100.0% | unsupported | unsupported features: ['Threshold Settlement Amount'] |
-| Wells Fargo |  |  |  |  |  |  |  |  |  |  | extraction_failed | downside level must be a fraction of initial in (0, 1] |
+| Wells Fargo | 95001HTK7 | S&P 500® Index | single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity | 1000.00 | 988.71 | 11.29 |  |  |  | 92.0% | unsupported | unsupported features: ['principal protection (no loss of principal at maturity)'] |
 
 ## Assumptions
 

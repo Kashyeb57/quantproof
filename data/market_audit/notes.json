@@ -1,79 +1,614 @@
 [
   {
-    "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "battery": [
+      {
+        "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81",
+        "name": "bsm_known_values",
+        "passed": true,
+        "reference": 4.76,
+        "tolerance": 0.005,
+        "value": 4.759422392871532
+      },
+      {
+        "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03",
+        "name": "put_call_parity",
+        "passed": true,
+        "reference": 3.3255244833000717,
+        "tolerance": 1e-10,
+        "value": 3.325524483300075
+      },
+      {
+        "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
+        "name": "determinism",
+        "passed": true,
+        "reference": 9.613335942102792,
+        "tolerance": 0.0,
+        "value": 9.613335942102792
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
+        "name": "barrier_removed",
+        "passed": true,
+        "reference": 7.559858908875214,
+        "tolerance": 0.04892560139767192,
+        "value": 7.554422885808106
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
+        "name": "barrier_at_maturity",
+        "passed": true,
+        "reference": 7.5598589088752135,
+        "tolerance": 0.04892560139767192,
+        "value": 7.554422885808106
+      },
+      {
+        "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
+        "name": "never_callable",
+        "passed": true,
+        "reference": 7.5598589088752135,
+        "tolerance": 0.04925986305924519,
+        "value": 7.578565287269535
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
+        "name": "zero_coupon_no_downside",
+        "passed": true,
+        "reference": 8.78456366216263,
+        "tolerance": 9.999999999999999e-06,
+        "value": 8.784563662162629
+      },
+      {
+        "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
+        "name": "zero_vol",
+        "passed": true,
+        "reference": 4.392281831081315,
+        "tolerance": 9.999999999999999e-06,
+        "value": 4.392281831081316
+      },
+      {
+        "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
+        "name": "spread_monotonicity",
+        "passed": true,
+        "reference": 9.613335942102792,
+        "tolerance": 0.0,
+        "value": 9.434992383942
+      },
+      {
+        "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
+        "name": "convergence",
+        "passed": true,
+        "reference": 0.5,
+        "tolerance": 0.1,
+        "value": 0.5276500399964422
+      },
+      {
+        "detail": "24/25 verified",
+        "name": "quotes",
+        "passed": false,
+        "reference": 25.0,
+        "tolerance": 0.0,
+        "value": 24.0
+      }
+    ],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "The TJX Companies, Inc.",
+          "path": "underlyings[0].name",
+          "second": "The Common Stock of The TJX Companies, Inc.",
+          "status": "resolved_first"
+        }
+      ],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "Issuer: | BofA Finance LLC (\u201cBofA Finance\u201d)",
+        "value": "BofA Finance LLC",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "October 22, 2026",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Market Measure: | The Common Stock of The TJX Companies, Inc. (NYSE symbol: \u201cTJX\u201c)",
+        "value": "The TJX Companies, Inc.",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "Market Measure: | The Common Stock of The TJX Companies, Inc. (NYSE symbol: \u201cTJX\u201c)",
+        "value": "TJX",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Starting Value: | $147.38",
+        "value": 147.38,
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "Market Measure: | The Common Stock of The TJX Companies, Inc. (NYSE symbol: \u201cTJX\u201c)",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "Principal Amount: | $10.00 per unit",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Public offering price | $10.00 | $1,312,700",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "October 22, 2026",
+        "value": "2026-10-22",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "October 29, 2026",
+        "value": "2026-10-29",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "October 26, 2029",
+        "value": "2029-10-26",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Calculation Day: | October 19, 2029",
+        "value": "2029-10-19",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "If the Ending Value is less than the Starting Value, at maturity, you will lose all or a portion of the principal amount of your notes.",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "Threshold Value: | $147.38 (100.00% of the Starting Value).",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "Because the Threshold Value is equal to the Starting Value, you will lose all or a portion of your investment if the Ending Value is less than the Starting Value.",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "Guarantor: | Bank of America Corporation (\u201cBAC\u201d)",
+        "value": "Bank of America Corporation",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP No. 09712D598",
+        "value": "09712D598",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "quote": "Call Level: | $147.38 (100.00% of the Starting Value).",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "quote": "Observation Date: | October 29, 2027.",
+        "value": "2027-10-29",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "quote": "Call Settlement Date: | Approximately the fifth business day following the Observation Date",
+        "value": "2027-11-05",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "quote": "Call Amount (per Unit): | $11.70 if automatically called on the Observation Date.",
+        "value": 11.7,
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Participation Rate: | 160.00%.",
+        "value": 1.6,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The initial estimated value of the notes as of the pricing date is $9.561 per unit",
+        "value": 9.561,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "Underwriting discount | $0.20 | $26,254...it will receive a selling concession in connection with the sale of the notes in an amount up to the full amount of underwriting discount set forth on the cover of this term sheet.",
+        "value": 0.2,
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001918704-26-032653",
-      "bank_in_range": null,
-      "base_std_error": null,
-      "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.069145,
-      "crosscheck_agreed": null,
-      "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "bank_in_range": true,
+      "base_std_error": 0.019224714453031554,
+      "base_value": 9.615519423838807,
+      "cost_to_investor": 0.43900000000000006,
+      "cost_to_investor_pct": 4.390000000000001,
+      "cost_to_investor_per_1000": 43.900000000000006,
+      "cost_usd": 0.10060625,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
+      "cusip": "09712D598",
+      "estimated_value": 9.561,
       "filing_date": "2026-10-26",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 10.0,
+      "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
-      "model_seconds": 40.446272173000125,
-      "notional": null,
-      "pricing_date": null,
-      "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
-      "range_high": null,
-      "range_low": null,
-      "reason": "autocall.payment_dates.value: expected list, got NoneType",
-      "seconds": 0.0012391109994496219,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "model_seconds": 52.65263955000046,
+      "notional": 10.0,
+      "pricing_date": "2026-10-22",
+      "prob_loss": 0.25185,
+      "quote_verification_rate": 0.96,
+      "quotes_checked": 25,
+      "quotes_verified": 24,
+      "range_high": 9.93815879049275,
+      "range_low": 9.313790993361994,
+      "reason": null,
+      "seconds": 0.19348579799952859,
+      "status": "priced",
+      "structure": "single underlying, autocall, upside leverage 1.6x, barrier 100% at maturity",
+      "supported": true,
+      "underlyings": "The TJX Companies, Inc.",
       "url": "https://www.sec.gov/Archives/edgar/data/1682472/000191870426032653/bofa-424b2.htm"
     }
   },
   {
-    "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "battery": [
+      {
+        "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81",
+        "name": "bsm_known_values",
+        "passed": true,
+        "reference": 4.76,
+        "tolerance": 0.005,
+        "value": 4.759422392871532
+      },
+      {
+        "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03",
+        "name": "put_call_parity",
+        "passed": true,
+        "reference": 3.3255244833000717,
+        "tolerance": 1e-10,
+        "value": 3.325524483300075
+      },
+      {
+        "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
+        "name": "determinism",
+        "passed": true,
+        "reference": 9.640086273936872,
+        "tolerance": 0.0,
+        "value": 9.640086273936872
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
+        "name": "barrier_removed",
+        "passed": true,
+        "reference": 7.559858908875214,
+        "tolerance": 0.04892560139767192,
+        "value": 7.554422885808106
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
+        "name": "barrier_at_maturity",
+        "passed": true,
+        "reference": 7.5598589088752135,
+        "tolerance": 0.04892560139767192,
+        "value": 7.554422885808106
+      },
+      {
+        "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
+        "name": "never_callable",
+        "passed": true,
+        "reference": 7.5598589088752135,
+        "tolerance": 0.049357614883998605,
+        "value": 7.555817769127332
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
+        "name": "zero_coupon_no_downside",
+        "passed": true,
+        "reference": 8.78456366216263,
+        "tolerance": 9.999999999999999e-06,
+        "value": 8.784563662162629
+      },
+      {
+        "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
+        "name": "zero_vol",
+        "passed": true,
+        "reference": 4.392281831081315,
+        "tolerance": 9.999999999999999e-06,
+        "value": 4.392281831081316
+      },
+      {
+        "detail": "all vols scaled by (0.8, 1.0, 1.2), same seed; each price must be <= previous + 2 SE (short-put note)",
+        "name": "vol_monotonicity",
+        "passed": true,
+        "reference": 9.926949431436752,
+        "tolerance": 0.07823784145273617,
+        "value": 9.360604229583503
+      },
+      {
+        "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
+        "name": "spread_monotonicity",
+        "passed": true,
+        "reference": 9.640086273936872,
+        "tolerance": 0.0,
+        "value": 9.474412380512048
+      },
+      {
+        "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
+        "name": "convergence",
+        "passed": true,
+        "reference": 0.5,
+        "tolerance": 0.1,
+        "value": 0.5276500399964422
+      },
+      {
+        "detail": "29/30 verified",
+        "name": "quotes",
+        "passed": false,
+        "reference": 30.0,
+        "tolerance": 0.0,
+        "value": 29.0
+      }
+    ],
+    "crosscheck": {
+      "agreed": true,
+      "diffs": [],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "BofA Finance LLC (\u201cBofA Finance\u201d)",
+        "value": "BofA Finance LLC",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "Pricing Date\nSettlement Date\nMaturity Date\nOctober 22, 2026\nOctober 29, 2026\nOctober 26, 2029",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Market Measure: | The First Trust Nasdaq Cybersecurity ETF (Bloomberg symbol: \"CIBR\")",
+        "value": "First Trust Nasdaq Cybersecurity ETF",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "Market Measure: | The First Trust Nasdaq Cybersecurity ETF (Bloomberg symbol: \"CIBR\")",
+        "value": "CIBR",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Starting Value: | $102.81",
+        "value": 102.81,
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "Market Measure: | The First Trust Nasdaq Cybersecurity ETF (Bloomberg symbol: \"CIBR\")",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "Principal Amount: | $10.00 per unit",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Public offering price | $10.00 | $16,248,450.00",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "October 22, 2026",
+        "value": "2026-10-22",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "October 29, 2026",
+        "value": "2026-10-29",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "October 26, 2029",
+        "value": "2029-10-26",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Observation Dates: | October 29, 2027, October 20, 2028 and October 19, 2029 (the final Observation Date).",
+        "value": "2029-10-19",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "If not called, 1-to-1 downside exposure to decreases in the Underlying Fund, with up to 100% of your principal at risk",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "Threshold Value: | $102.81 (100.00% of the Starting Value).",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "if the Ending Value is less than the Threshold Value, you will lose all or a portion of the principal amount of your notes.",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "Bank of America Corporation (\u201cBAC\u201d)",
+        "value": "Bank of America Corporation",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP No. 09712D887",
+        "value": "09712D887",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "quote": "Call Level: | $102.81 (100% of the Starting Value).",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "quote": "Observation Dates: | October 29, 2027, October 20, 2028 and October 19, 2029 (the final Observation Date).",
+        "value": "2027-10-29",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "quote": "Approximately the fifth business day following the applicable Observation Date, subject to postponement as described on page PS-26 of the accompanying product supplement; provided however, that the Call Settlement Date related to the final Observation Date will be the maturity date.",
+        "value": "2027-11-05",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "quote": "$11.603, representing a Call Premium of 16.03% of the principal amount, if called on the first Observation Date;\n\n$13.206, representing a Call Premium of 32.06% of the principal amount, if called on the second Observation Date;\n\n$14.809, representing a Call Premium of 48.09% of the principal amount, if called on the final Observation Date.",
+        "value": 11.603,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].review_date",
+        "quote": "Observation Dates: | October 29, 2027, October 20, 2028 and October 19, 2029 (the final Observation Date).",
+        "value": "2028-10-20",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].payment_date",
+        "quote": "Approximately the fifth business day following the applicable Observation Date, subject to postponement as described on page PS-26 of the accompanying product supplement; provided however, that the Call Settlement Date related to the final Observation Date will be the maturity date.",
+        "value": "2028-10-27",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].call_amount",
+        "quote": "$11.603, representing a Call Premium of 16.03% of the principal amount, if called on the first Observation Date;\n\n$13.206, representing a Call Premium of 32.06% of the principal amount, if called on the second Observation Date;\n\n$14.809, representing a Call Premium of 48.09% of the principal amount, if called on the final Observation Date.",
+        "value": 13.206,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].review_date",
+        "quote": "Observation Dates: | October 29, 2027, October 20, 2028 and October 19, 2029 (the final Observation Date).",
+        "value": "2029-10-19",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].payment_date",
+        "quote": "Approximately the fifth business day following the applicable Observation Date, subject to postponement as described on page PS-26 of the accompanying product supplement; provided however, that the Call Settlement Date related to the final Observation Date will be the maturity date.",
+        "value": "2029-10-26",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].call_amount",
+        "quote": "$11.603, representing a Call Premium of 16.03% of the principal amount, if called on the first Observation Date;\n\n$13.206, representing a Call Premium of 32.06% of the principal amount, if called on the second Observation Date;\n\n$14.809, representing a Call Premium of 48.09% of the principal amount, if called on the final Observation Date.",
+        "value": 14.809,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The initial estimated value of the notes as of the pricing date is $9.506 per unit",
+        "value": 9.506,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "Underwriting discount | $0.20 | $324,969.00...will receive a selling concession in connection with the sale of the notes in an amount up to the full amount of underwriting discount set forth on the cover of this term sheet.",
+        "value": 0.2,
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001918704-26-032657",
-      "bank_in_range": null,
-      "base_std_error": null,
-      "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.06347155,
-      "crosscheck_agreed": null,
+      "bank_in_range": true,
+      "base_std_error": 0.016633207359374517,
+      "base_value": 9.678382489680184,
+      "cost_to_investor": 0.4939999999999998,
+      "cost_to_investor_pct": 4.939999999999998,
+      "cost_to_investor_per_1000": 49.39999999999998,
+      "cost_usd": 0.0988585,
+      "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cusip": "09712D887",
+      "estimated_value": 9.506,
       "filing_date": "2026-10-26",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 10.0,
+      "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
-      "model_seconds": 33.76910468899996,
-      "notional": null,
-      "pricing_date": null,
-      "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
-      "range_high": null,
-      "range_low": null,
-      "reason": "autocall.payment_dates.value: expected list, got NoneType",
-      "seconds": 0.0018246059999000863,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "model_seconds": 52.09226791999936,
+      "notional": 10.0,
+      "pricing_date": "2026-10-22",
+      "prob_loss": 0.22725,
+      "quote_verification_rate": 0.9666666666666667,
+      "quotes_checked": 30,
+      "quotes_verified": 29,
+      "range_high": 10.057329433278646,
+      "range_low": 9.255546507016893,
+      "reason": null,
+      "seconds": 0.2579824180002106,
+      "status": "priced",
+      "structure": "single underlying, autocall, barrier 100% at maturity",
+      "supported": true,
+      "underlyings": "First Trust Nasdaq Cybersecurity ETF",
       "url": "https://www.sec.gov/Archives/edgar/data/1682472/000191870426032657/bofa-424b2.htm"
     }
   },
@@ -265,7 +800,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Return Buffer']",
-      "seconds": 0.05404322399954253,
+      "seconds": 0.030601017000662978,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 40.05%, buffer 75% at maturity",
       "supported": false,
@@ -274,41 +809,292 @@
     }
   },
   {
-    "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "battery": [
+      {
+        "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81",
+        "name": "bsm_known_values",
+        "passed": true,
+        "reference": 4.76,
+        "tolerance": 0.005,
+        "value": 4.759422392871532
+      },
+      {
+        "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03",
+        "name": "put_call_parity",
+        "passed": true,
+        "reference": 3.3255244833000717,
+        "tolerance": 1e-10,
+        "value": 3.325524483300075
+      },
+      {
+        "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
+        "name": "determinism",
+        "passed": true,
+        "reference": 9.474287068547932,
+        "tolerance": 0.0,
+        "value": 9.474287068547932
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
+        "name": "barrier_removed",
+        "passed": true,
+        "reference": 7.548684040732871,
+        "tolerance": 0.04902773129889747,
+        "value": 7.543228068678018
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
+        "name": "barrier_at_maturity",
+        "passed": true,
+        "reference": 7.54868404073287,
+        "tolerance": 0.04902773129889747,
+        "value": 7.543228068678018
+      },
+      {
+        "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
+        "name": "never_callable",
+        "passed": true,
+        "reference": 7.54868404073287,
+        "tolerance": 0.04937033124292105,
+        "value": 7.567495706565699
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
+        "name": "zero_coupon_no_downside",
+        "passed": true,
+        "reference": 8.777322391748037,
+        "tolerance": 9.999999999999999e-06,
+        "value": 8.777322391748038
+      },
+      {
+        "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
+        "name": "zero_vol",
+        "passed": true,
+        "reference": 4.388661195874018,
+        "tolerance": 9.999999999999999e-06,
+        "value": 4.388661195874019
+      },
+      {
+        "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
+        "name": "spread_monotonicity",
+        "passed": true,
+        "reference": 9.474287068547932,
+        "tolerance": 0.0,
+        "value": 9.292871291105167
+      },
+      {
+        "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
+        "name": "convergence",
+        "passed": true,
+        "reference": 0.5,
+        "tolerance": 0.1,
+        "value": 0.5275370777749486
+      },
+      {
+        "detail": "25/26 verified",
+        "name": "quotes",
+        "passed": false,
+        "reference": 26.0,
+        "tolerance": 0.0,
+        "value": 25.0
+      }
+    ],
+    "crosscheck": {
+      "agreed": true,
+      "diffs": [],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "The notes are being issued by Bank of Montreal (\u201cBMO\u201d).",
+        "value": "Bank of Montreal",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "Pricing Date ... October 15, 2026",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Automatic call of the notes at $11.00 per unit if the Observation Level of the Russell 2000\u00ae Index (the \u201cIndex\u201d) on the Observation Date is at or above the Starting Value",
+        "value": "Russell 2000\u00ae Index",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "The Russell 2000\u00ae Index (Bloomberg symbol: \u201cRTY\u201d), a price return index",
+        "value": "RTY",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Starting Value: 2,767.269",
+        "value": 2767.269,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "quote": "On the pricing date, the closing level of the Index was 2,767.269.",
+        "value": 2767.269,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "quote": "October 15, 2026 ... On the pricing date, the closing level of the Index was 2,767.269.",
+        "value": "2026-10-15",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "The notes will be automatically called if the Observation Level of the Market Measure, which is the Russell 2000\u00ae Index (the \u201cIndex\u201d), is greater than or equal to the Call Level on the Observation Date.",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "$10 principal amount per unit",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Public offering price | $ 10.00 | $10,549,490.00",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "Pricing Date ... October 15, 2026",
+        "value": "2026-10-15",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "Settlement Date ... October 22, 2026",
+        "value": "2026-10-22",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "Linked to the Russell 2000\u00ae Index, due October 26, 2029",
+        "value": "2029-10-26",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Maturity Valuation Period: October 17, 2029, October 18, 2029, October 19, 2029, October 22, 2029 and October 23, 2029",
+        "value": "2029-10-23",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "1-to-1 downside exposure to decreases in the Index, with up to 100% of your principal at risk",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "Threshold Value: | 2,767.269 (100.00% of the Starting Value)",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "If the Ending Value is less than the Starting Value, you will lose all or a portion of the principal amount of your notes.",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP No. 06368N326",
+        "value": "06368N326",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "quote": "Call Level: | 2,767.269 (100% of the Starting Value)",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "quote": "Observation Date: October 22, 2027.",
+        "value": "2027-10-22",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "quote": "Call Settlement Date: The fifth business day following the Observation Date, subject to postponement if the Observation Date is postponed, as described on page PS-25 of product supplement EQUITY LIRN-1",
+        "value": "2027-10-29",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "quote": "$11.00, representing a Call Premium of 10.00% of the principal amount, if automatically called on the Observation Date",
+        "value": 11.0,
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Participation Rate: 211.00%",
+        "value": 2.11,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The estimated initial value of the notes determined by us as of the pricing date, which we refer to as the initial estimated value, is $9.59 per unit",
+        "value": 9.59,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "Underwriting discount | $ 0.20 | $210,989.80 ... will receive a selling concession in connection with the sale of the notes in an amount up to the full amount of underwriting discount set forth on the cover of this term sheet.",
+        "value": 0.2,
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001214659-26-013052",
-      "bank_in_range": null,
-      "base_std_error": null,
-      "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.07427405000000001,
-      "crosscheck_agreed": null,
+      "bank_in_range": true,
+      "base_std_error": 0.023545048520306113,
+      "base_value": 9.47916816489307,
+      "cost_to_investor": 0.41000000000000014,
+      "cost_to_investor_pct": 4.100000000000001,
+      "cost_to_investor_per_1000": 41.000000000000014,
+      "cost_usd": 0.10780275,
+      "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cusip": "06368N326",
+      "estimated_value": 9.59,
       "filing_date": "2026-10-19",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 10.0,
+      "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
-      "model_seconds": 39.996991172000435,
-      "notional": null,
-      "pricing_date": null,
-      "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
-      "range_high": null,
-      "range_low": null,
-      "reason": "autocall.payment_dates.value: expected list, got NoneType",
-      "seconds": 0.001659831999859307,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "model_seconds": 59.34996959700038,
+      "notional": 10.0,
+      "pricing_date": "2026-10-15",
+      "prob_loss": 0.25115,
+      "quote_verification_rate": 0.9615384615384616,
+      "quotes_checked": 26,
+      "quotes_verified": 25,
+      "range_high": 9.763600914840644,
+      "range_low": 9.207750615944688,
+      "reason": null,
+      "seconds": 0.3385569550000582,
+      "status": "priced",
+      "structure": "single underlying, autocall, upside leverage 2.11x, barrier 100% at maturity",
+      "supported": true,
+      "underlyings": "Russell 2000\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/927971/000121465926013052/o1016268424b2.htm"
     }
   },
@@ -481,7 +1267,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['threshold settlement amount']",
-      "seconds": 0.053324881999287754,
+      "seconds": 0.058062629000232846,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -746,7 +1532,7 @@
       "range_high": 988.3699948279474,
       "range_low": 908.5956269705242,
       "reason": "plausibility gate: bank's estimated value 996.26 is above our whole range (high 988.37)",
-      "seconds": 0.20549589700021897,
+      "seconds": 0.25949847899937595,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1.4x, cap 25.9%, buffer 87.5% at maturity",
       "supported": null,
@@ -911,7 +1697,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
-      "seconds": 0.040067904999887105,
+      "seconds": 0.06774610499996925,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -1083,7 +1869,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
-      "seconds": 0.056629152999448706,
+      "seconds": 0.059033756999269826,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -1260,7 +2046,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Reference Asset Return']",
-      "seconds": 0.06827942199925019,
+      "seconds": 0.04383925599995564,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 20.1%, barrier 75% at maturity",
       "supported": false,
@@ -1446,7 +2232,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['modified inverse exposure']",
-      "seconds": 0.03451130200028274,
+      "seconds": 0.04755578299955232,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 100%, barrier 100% at maturity",
       "supported": false,
@@ -1642,7 +2428,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute return amount']",
-      "seconds": 0.05218470999989222,
+      "seconds": 0.03266792799968243,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity",
       "supported": false,
@@ -1825,7 +2611,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['digital return']",
-      "seconds": 0.05848701099967002,
+      "seconds": 0.03097491600055946,
       "status": "unsupported",
       "structure": "single underlying, barrier 60% at maturity",
       "supported": false,
@@ -2090,7 +2876,7 @@
       "range_high": 972.8593834767246,
       "range_low": 900.7234062101136,
       "reason": "plausibility gate: bank's estimated value 977.60 is above our whole range (high 972.86)",
-      "seconds": 0.19185463800022262,
+      "seconds": 0.1622729380005694,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1x, cap 11.15%, barrier 80% at maturity",
       "supported": null,
@@ -2100,79 +2886,461 @@
   },
   {
     "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "buffer",
+          "path": "downside.kind",
+          "second": "barrier",
+          "status": "unresolved"
+        },
+        {
+          "first": "Dow Jones Industrial AverageTM",
+          "path": "underlyings[0].name",
+          "second": "The Dow Jones Industrial AverageTM",
+          "status": "resolved_second"
+        }
+      ],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+        "value": "Citigroup Global Markets Holdings Inc.",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "Pricing Supplement No. 2026-USNCH33929",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+        "value": "Dow Jones Industrial AverageTM",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Initial underlying value: | 51,828.62, the closing value of the underlying on the pricing date",
+        "value": 51828.62,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+        "value": 51828.62,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "quote": "The closing value of the Dow Jones Industrial AverageTM on September 25, 2026 was 51,828.62.",
+        "value": "2026-09-25",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "Underlying: | The Dow Jones Industrial AverageTM",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "Stated principal amount: | $1,000 per security",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Per security: | $1,000.00 | $22.50 | $977.50",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "Pricing date: | September 25, 2026",
+        "value": "2026-09-25",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "Issue date: | September 30, 2026",
+        "value": "2026-09-30",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "Maturity date: | June 28, 2029",
+        "value": "2029-06-28",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Valuation date: | June 25, 2029, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+        "value": "2029-06-25",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "If the final underlying value is less than or equal to the initial underlying value:",
+        "value": "buffer",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "$0",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "downside.observation",
+        "quote": "Final underlying value: | The closing value of the underlying on the valuation date",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+        "value": "Citigroup Inc.",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP / ISIN: | 17334CU51 / US17334CU511",
+        "value": "17334CU51",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Upside participation rate: | 100.00%",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "quote": "Maximum return at maturity: | $175.00 per security (17.50% of the stated principal amount).",
+        "value": 0.175,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "On the date of this pricing supplement, the estimated value of the securities is $950.60 per security, which is less than the issue price.",
+        "value": 950.6,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+        "value": 22.5,
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "quote": "$0",
+        "value": "principal protection (no loss of principal at maturity)",
+        "verified": false
+      }
+    ],
     "row": {
       "accession": "0001918704-26-029389",
       "bank_in_range": null,
       "base_std_error": null,
       "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.0503295,
-      "crosscheck_agreed": null,
-      "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cost_to_investor": 49.39999999999998,
+      "cost_to_investor_pct": 4.939999999999998,
+      "cost_to_investor_per_1000": 49.39999999999998,
+      "cost_usd": 0.13518515,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 2,
+      "cusip": "17334CU51",
+      "estimated_value": 950.6,
       "filing_date": "2026-09-29",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 1000.0,
+      "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 31.70117862699999,
-      "notional": null,
-      "pricing_date": null,
+      "model_seconds": 96.8501157210003,
+      "notional": 1000.0,
+      "pricing_date": "2026-09-25",
       "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
+      "quote_verification_rate": 0.875,
+      "quotes_checked": 24,
+      "quotes_verified": 21,
       "range_high": null,
       "range_low": null,
-      "reason": "downside level must be a fraction of initial in (0, 1]",
-      "seconds": 0.0013145879993317067,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+      "seconds": 0.03159726500052784,
+      "status": "unsupported",
+      "structure": "single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity",
+      "supported": false,
+      "underlyings": "Dow Jones Industrial AverageTM",
       "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426029389/form424b2.htm"
     }
   },
   {
-    "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "battery": [
+      {
+        "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81",
+        "name": "bsm_known_values",
+        "passed": true,
+        "reference": 4.76,
+        "tolerance": 0.005,
+        "value": 4.759422392871532
+      },
+      {
+        "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03",
+        "name": "put_call_parity",
+        "passed": true,
+        "reference": 3.3255244833000717,
+        "tolerance": 1e-10,
+        "value": 3.325524483300075
+      },
+      {
+        "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
+        "name": "determinism",
+        "passed": true,
+        "reference": 858.0781755563829,
+        "tolerance": 0.0,
+        "value": 858.0781755563829
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
+        "name": "barrier_removed",
+        "passed": true,
+        "reference": 808.4436013634404,
+        "tolerance": 4.514416017384033,
+        "value": 807.9706969152363
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
+        "name": "barrier_at_maturity",
+        "passed": true,
+        "reference": 808.4436013634404,
+        "tolerance": 4.514416017384033,
+        "value": 807.9706969152363
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
+        "name": "zero_coupon_no_downside",
+        "passed": true,
+        "reference": 916.9458595438357,
+        "tolerance": 0.001,
+        "value": 916.9458595438355
+      },
+      {
+        "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
+        "name": "zero_vol",
+        "passed": true,
+        "reference": 458.47292977191785,
+        "tolerance": 0.001,
+        "value": 458.47292977191773
+      },
+      {
+        "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
+        "name": "spread_monotonicity",
+        "passed": true,
+        "reference": 858.0781755563829,
+        "tolerance": 0.0,
+        "value": 840.9488397457462
+      },
+      {
+        "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
+        "name": "convergence",
+        "passed": true,
+        "reference": 0.5,
+        "tolerance": 0.1,
+        "value": 0.5320866516851945
+      },
+      {
+        "detail": "20/22 verified",
+        "name": "quotes",
+        "passed": false,
+        "reference": 22.0,
+        "tolerance": 0.0,
+        "value": 20.0
+      }
+    ],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [],
+      "error": "downside.level.quote: empty quote",
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "Issuer: Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+        "value": "Citigroup Global Markets Holdings Inc.",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "Filed Pursuant to Rule 424(b)(2)",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Underlying: The MSCI ACWI Index",
+        "value": "MSCI ACWI Index",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "The MSCI ACWI Index is reported by Bloomberg L.P. under the ticker symbol \u201cMXWD.\u201d",
+        "value": "MXWD",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Initial underlying value: 1,133.88, the closing value of the underlying on the pricing date",
+        "value": 1133.88,
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "Underlying: The MSCI ACWI Index",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "Stated principal amount: $1,000 per security",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Per security: $1,000.00 $22.50 $977.50",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "Pricing date: October 14, 2026",
+        "value": "2026-10-14",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "Issue date: October 19, 2026",
+        "value": "2026-10-19",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "Maturity date: October 19, 2028",
+        "value": "2028-10-19",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Valuation date: October 16, 2028, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+        "value": "2028-10-16",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "If the final underlying value is less than or equal to the initial underlying value:",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "If the final underlying value is less than or equal to the initial underlying value:",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "downside.observation",
+        "quote": "Final underlying value: The closing value of the underlying on the valuation date",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+        "value": "Citigroup Inc.",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP / ISIN: 17334DA77 / US17334DA776",
+        "value": "17334DA77",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Upside participation rate: 100.00%",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "quote": "Maximum return at maturity: $128.50 per security (12.85% of the stated principal amount).",
+        "value": 0.1285,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "On the date of this pricing supplement, the estimated value of the securities is $966.30 per security, which is less than the issue price.",
+        "value": 966.3,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+        "value": 22.5,
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001918704-26-031667",
       "bank_in_range": null,
-      "base_std_error": null,
-      "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.06081025,
-      "crosscheck_agreed": null,
+      "base_std_error": 0.5740255223596299,
+      "base_value": 858.1172028132336,
+      "cost_to_investor": 33.700000000000045,
+      "cost_to_investor_pct": 3.370000000000004,
+      "cost_to_investor_per_1000": 33.700000000000045,
+      "cost_usd": 0.108509,
+      "crosscheck_agreed": false,
       "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cusip": "17334DA77",
+      "estimated_value": 966.3,
       "filing_date": "2026-10-16",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 1000.0,
+      "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 43.177483117000065,
-      "notional": null,
-      "pricing_date": null,
-      "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
-      "range_high": null,
-      "range_low": null,
-      "reason": "downside level must be a fraction of initial in (0, 1]",
-      "seconds": 0.0013179490006223205,
-      "status": "extraction_failed",
-      "structure": null,
+      "model_seconds": 99.86089177899885,
+      "notional": 1000.0,
+      "pricing_date": "2026-10-14",
+      "prob_loss": 0.3982,
+      "quote_verification_rate": 0.9090909090909091,
+      "quotes_checked": 22,
+      "quotes_verified": 20,
+      "range_high": 895.0832251983485,
+      "range_low": 821.8508221567678,
+      "reason": "plausibility gate: bank's estimated value 966.30 is above our whole range (high 895.08)",
+      "seconds": 0.14320442600001115,
+      "status": "needs_review",
+      "structure": "single underlying, upside leverage 1x, cap 12.85%, barrier 100% at maturity",
       "supported": null,
-      "underlyings": "",
+      "underlyings": "MSCI ACWI Index",
       "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426031667/form424b2.htm"
     }
   },
@@ -2362,7 +3530,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
-      "seconds": 0.0394312650005304,
+      "seconds": 0.04408098099975177,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.75x, buffer 80% at maturity",
       "supported": false,
@@ -2627,7 +3795,7 @@
       "range_high": 973.5732891850173,
       "range_low": 911.5985997335954,
       "reason": null,
-      "seconds": 0.21678720500040072,
+      "seconds": 0.2099040220000461,
       "status": "priced",
       "structure": "single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity",
       "supported": true,
@@ -2636,41 +3804,691 @@
     }
   },
   {
-    "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "battery": [
+      {
+        "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81",
+        "name": "bsm_known_values",
+        "passed": true,
+        "reference": 4.76,
+        "tolerance": 0.005,
+        "value": 4.759422392871532
+      },
+      {
+        "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03",
+        "name": "put_call_parity",
+        "passed": true,
+        "reference": 3.3255244833000717,
+        "tolerance": 1e-10,
+        "value": 3.325524483300075
+      },
+      {
+        "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
+        "name": "determinism",
+        "passed": true,
+        "reference": 9.48320500999449,
+        "tolerance": 0.0,
+        "value": 9.48320500999449
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
+        "name": "barrier_removed",
+        "passed": true,
+        "reference": 7.55583534915852,
+        "tolerance": 0.04894733003842796,
+        "value": 7.550394565028802
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
+        "name": "barrier_at_maturity",
+        "passed": true,
+        "reference": 7.732948018527769,
+        "tolerance": 0.06129040107134663,
+        "value": 7.728740428576524
+      },
+      {
+        "detail": "single asset; autocall trigger set to 1e6 (never reached); coupon memory set to False; upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
+        "name": "never_callable",
+        "passed": true,
+        "reference": 10.92747485693068,
+        "tolerance": 0.0915183131818157,
+        "value": 10.928806902403345
+      },
+      {
+        "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
+        "name": "zero_coupon_no_downside",
+        "passed": true,
+        "reference": 8.781459529329595,
+        "tolerance": 9.999999999999999e-06,
+        "value": 8.781459529329595
+      },
+      {
+        "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
+        "name": "zero_vol",
+        "passed": true,
+        "reference": 3.5125838117318384,
+        "tolerance": 9.999999999999999e-06,
+        "value": 3.512583811731837
+      },
+      {
+        "detail": "underlying 0 duplicated into two identical assets with correlation [[1,1],[1,1]], all features kept; compared with the N=1 note",
+        "name": "correlation_one",
+        "passed": true,
+        "reference": 10.398229749079247,
+        "tolerance": 0.13304073374808412,
+        "value": 10.437151497263889
+      },
+      {
+        "detail": "uniform off-diagonal rho in (0.0, 0.25, 0.5, 0.75, 0.95), same seed (common random numbers); each price must be >= previous - 2 SE",
+        "name": "correlation_monotonicity",
+        "passed": true,
+        "reference": 8.803942932683944,
+        "tolerance": 0.06938073703897095,
+        "value": 10.058501921459996
+      },
+      {
+        "detail": "all vols scaled by (0.8, 1.0, 1.2), same seed; each price must be <= previous + 2 SE (short-put note)",
+        "name": "vol_monotonicity",
+        "passed": true,
+        "reference": 10.137505282932773,
+        "tolerance": 0.07316682301503832,
+        "value": 8.910678263114017
+      },
+      {
+        "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
+        "name": "spread_monotonicity",
+        "passed": true,
+        "reference": 9.48320500999449,
+        "tolerance": 0.0,
+        "value": 9.312366038108081
+      },
+      {
+        "detail": "coupon amount x (1.0, 1.5), same seed; prices must be strictly increasing",
+        "name": "coupon_monotonicity",
+        "passed": true,
+        "reference": 9.48320500999449,
+        "tolerance": 0.0,
+        "value": 10.44782925630199
+      },
+      {
+        "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
+        "name": "convergence",
+        "passed": true,
+        "reference": 0.5,
+        "tolerance": 0.1,
+        "value": 0.527063462765294
+      },
+      {
+        "detail": "77/78 verified",
+        "name": "quotes",
+        "passed": false,
+        "reference": 78.0,
+        "tolerance": 0.0,
+        "value": 77.0
+      }
+    ],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "the common stock of Constellation Energy Corporation",
+          "path": "underlyings[0].name",
+          "second": "Constellation Energy Corporation",
+          "status": "resolved_first"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_date",
+          "second": "2026-10-16",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_level",
+          "second": 271.37,
+          "status": "resolved_second"
+        },
+        {
+          "first": "the common stock of Quanta Services, Inc.",
+          "path": "underlyings[1].name",
+          "second": "Quanta Services, Inc.",
+          "status": "resolved_first"
+        },
+        {
+          "first": null,
+          "path": "underlyings[1].reference_date",
+          "second": "2026-10-16",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[1].reference_level",
+          "second": 631.86,
+          "status": "resolved_second"
+        },
+        {
+          "first": "the common stock of Vistra Corp.",
+          "path": "underlyings[2].name",
+          "second": "Vistra Corp.",
+          "status": "resolved_first"
+        },
+        {
+          "first": null,
+          "path": "underlyings[2].reference_date",
+          "second": "2026-10-16",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[2].reference_level",
+          "second": 152.02,
+          "status": "resolved_second"
+        }
+      ],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "Company (Issuer): | GS Finance Corp. (\u201cGSFC\u201d)",
+        "value": "GS Finance Corp.",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "Filed Pursuant to Rule 424(b)(2)",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "the common stock of Constellation Energy Corporation | CEG UW | Nasdaq Stock Market LLC | 33.34% | $271.37 | 0.12285809 | 33.34",
+        "value": "the common stock of Constellation Energy Corporation",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "the common stock of Constellation Energy Corporation | CEG UW | Nasdaq Stock Market LLC | 33.34% | $271.37 | 0.12285809 | 33.34",
+        "value": "CEG UW",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "the common stock of Constellation Energy Corporation | CEG UW | Nasdaq Stock Market LLC | 33.34% | $271.37 | 0.12285809 | 33.34",
+        "value": 271.37,
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].name",
+        "quote": "the common stock of Quanta Services, Inc. | PWR UN | New York Stock Exchange | 33.33% | $631.86 | 0.05274903 | 33.33",
+        "value": "the common stock of Quanta Services, Inc.",
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].ticker",
+        "quote": "the common stock of Quanta Services, Inc. | PWR UN | New York Stock Exchange | 33.33% | $631.86 | 0.05274903 | 33.33",
+        "value": "PWR UN",
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].initial_level",
+        "quote": "the common stock of Quanta Services, Inc. | PWR UN | New York Stock Exchange | 33.33% | $631.86 | 0.05274903 | 33.33",
+        "value": 631.86,
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].name",
+        "quote": "the common stock of Vistra Corp. | VST UN | New York Stock Exchange | 33.33% | $152.02 | 0.21924747 | 33.33",
+        "value": "the common stock of Vistra Corp.",
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].ticker",
+        "quote": "the common stock of Vistra Corp. | VST UN | New York Stock Exchange | 33.33% | $152.02 | 0.21924747 | 33.33",
+        "value": "VST UN",
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].initial_level",
+        "quote": "the common stock of Vistra Corp. | VST UN | New York Stock Exchange | 33.33% | $152.02 | 0.21924747 | 33.33",
+        "value": 152.02,
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "The Basket is comprised of the common stock of Constellation Energy Corporation, the common stock of Quanta Services, Inc. and the common stock of Vistra Corp.",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "$10 principal amount per unit",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Public offering price | $ 10.00 | $5,000,000",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "October 16, 2026",
+        "value": "2026-10-16",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "October 23, 2026",
+        "value": "2026-10-23",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "October 23, 2029",
+        "value": "2029-10-23",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Final Calculation Day/Maturity Valuation Period: | October 16, 2029 (which will also be the final Coupon Observation Date)",
+        "value": "2029-10-16",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "Autocallable Contingent Coupon (with Memory) Barrier Notes Linked to a Basket of Three Stocks",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "Threshold Value: | 80.00, which is 80% of the Starting Value",
+        "value": 0.8,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "Ending Value: | The value of the Market Measure on the Final Calculation Day...If the Ending Value is less than the Threshold Value:",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "Guarantor: | The Goldman Sachs Group, Inc. (\u201cGSG\u201d)",
+        "value": "The Goldman Sachs Group, Inc.",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP No. 38151R701",
+        "value": "38151R701",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "quote": "Call Value: | 100.00, which is 100% of the Starting Value",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2027-10-18",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2027-10-25",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2028-01-18",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-01-25",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[1].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2028-04-17",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-04-24",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[2].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[3].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2028-07-17",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[3].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-07-24",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[3].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[4].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2028-10-16",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[4].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-10-23",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[4].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[5].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2029-01-16",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[5].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-01-23",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[5].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[6].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2029-04-16",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[6].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-04-23",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[6].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[7].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)...Call Observation Dates: | The Coupon Observation Dates beginning on October 18, 2027 and ending on July 16, 2029",
+        "value": "2029-07-16",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[7].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-07-23",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[7].call_amount",
+        "quote": "Principal Amount: | $10.00 per unit...Call Payment: | The principal amount plus the Contingent Coupon Payment (with Memory) otherwise due on the applicable Call Payment Date.",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "coupon.barrier",
+        "quote": "Coupon Barrier: | 80.00, which is 80% of the Starting Value",
+        "value": 0.8,
+        "verified": true
+      },
+      {
+        "path": "coupon.amount",
+        "quote": "The Contingent Coupon Payment (with Memory) applicable to a single Coupon Payment Date is $0.36625 per unit (equal to a contingent rate of 14.65% per annum).",
+        "value": 0.36625,
+        "verified": true
+      },
+      {
+        "path": "coupon.memory",
+        "quote": "(i) the product of the Contingent Coupon Payment (with Memory) applicable to a single Coupon Payment Date and the number of Coupon Payment Dates that have occurred up to the relevant Coupon Payment Date (inclusive of the relevant Coupon Payment Date) minus (ii) the sum of all Contingent Coupon Payments (with Memory) previously paid.",
+        "value": true,
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[0].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2027-01-19",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[0].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2027-01-26",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[1].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2027-04-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[1].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2027-04-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[2].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2027-07-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[2].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2027-07-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[3].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2027-10-18",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[3].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2027-10-25",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[4].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2028-01-18",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[4].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-01-25",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[5].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2028-04-17",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[5].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-04-24",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[6].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2028-07-17",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[6].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-07-24",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[7].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2028-10-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[7].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2028-10-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[8].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2029-01-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[8].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-01-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[9].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2029-04-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[9].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-04-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[10].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2029-07-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[10].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-07-23",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[11].review_date",
+        "quote": "January 19, 2027, April 16, 2027, July 16, 2027, October 18, 2027, January 18, 2028, April 17, 2028, July 17, 2028, October 16, 2028, January 16, 2029, April 16, 2029, July 16, 2029 and October 16, 2029 (the final Coupon Observation Date)",
+        "value": "2029-10-16",
+        "verified": true
+      },
+      {
+        "path": "coupon.observations[11].payment_date",
+        "quote": "The fifth business day following the applicable Coupon Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement",
+        "value": "2029-10-23",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The estimated value of your notes at the time the terms of your notes are set on the pricing date is equal to approximately $9.48 per $10 principal amount.",
+        "value": 9.48,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "The underwriting discount reflects a sales commission of $0.10 per note and a structuring fee of $0.05 per note.",
+        "value": 0.1,
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001193125-26-426871",
-      "bank_in_range": null,
-      "base_std_error": null,
-      "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.09369125,
-      "crosscheck_agreed": null,
-      "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "bank_in_range": true,
+      "base_std_error": 0.01592126970475878,
+      "base_value": 9.517134744394678,
+      "cost_to_investor": 0.5199999999999996,
+      "cost_to_investor_pct": 5.199999999999996,
+      "cost_to_investor_per_1000": 51.99999999999996,
+      "cost_usd": 0.2319227,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 9,
+      "cusip": "38151R701",
+      "estimated_value": 9.48,
       "filing_date": "2026-10-20",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 10.0,
+      "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 114.71938823300002,
-      "notional": null,
-      "pricing_date": null,
-      "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
-      "range_high": null,
-      "range_low": null,
-      "reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7252 (char 7251)",
-      "seconds": 0.0010145579999516485,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "model_seconds": 137.00566761199934,
+      "notional": 10.0,
+      "pricing_date": "2026-10-16",
+      "prob_loss": 0.2267,
+      "quote_verification_rate": 0.9871794871794872,
+      "quotes_checked": 78,
+      "quotes_verified": 77,
+      "range_high": 10.314621728959146,
+      "range_low": 8.085850221378614,
+      "reason": null,
+      "seconds": 3.4054756080004154,
+      "status": "priced",
+      "structure": "worst-of 3, autocall, contingent coupon (memory), barrier 80% at maturity",
+      "supported": true,
+      "underlyings": "the common stock of Constellation Energy Corporation; the common stock of Quanta Services, Inc.; the common stock of Vistra Corp.",
       "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526426871/gs-20261020.htm"
     }
   },
@@ -2858,7 +4676,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['bearish view']",
-      "seconds": 0.04421475100025418,
+      "seconds": 0.08976265199999034,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity",
       "supported": false,
@@ -2878,7 +4696,7 @@
       "cost_to_investor": null,
       "cost_to_investor_pct": null,
       "cost_to_investor_per_1000": null,
-      "cost_usd": 0.0852575,
+      "cost_usd": 0.09358,
       "crosscheck_agreed": null,
       "crosscheck_diffs": 0,
       "cusip": null,
@@ -2887,7 +4705,7 @@
       "issue_price": null,
       "issuer": null,
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 196.7467098290001,
+      "model_seconds": 57.674124146000395,
       "notional": null,
       "pricing_date": null,
       "prob_loss": null,
@@ -2896,8 +4714,8 @@
       "quotes_verified": 0,
       "range_high": null,
       "range_low": null,
-      "reason": "autocall.payment_dates.value: expected list, got NoneType; coupon.payment_dates.value: expected list, got NoneType",
-      "seconds": 0.001109464999899501,
+      "reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7687 (char 7686)",
+      "seconds": 0.0021386580001490074,
       "status": "extraction_failed",
       "structure": null,
       "supported": null,
@@ -3091,7 +4909,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
-      "seconds": 0.036564271000315784,
+      "seconds": 0.0708893689998149,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
       "supported": false,
@@ -3101,40 +4919,237 @@
   },
   {
     "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "The Class A common stock of Palantir Technologies Inc.",
+          "path": "underlyings[0].name",
+          "second": "Class A Common Stock of Palantir Technologies Inc.",
+          "status": "resolved_first"
+        },
+        {
+          "first": "PLTR",
+          "path": "underlyings[0].ticker",
+          "second": "PLTR UW",
+          "status": "resolved_second"
+        },
+        {
+          "first": [
+            "absolute value of the percentage decline"
+          ],
+          "path": "unsupported_features",
+          "second": [
+            "Absolute Return Barrier"
+          ],
+          "status": "resolved_second"
+        }
+      ],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "The notes are being issued by GS Finance Corp. (\u201cGSFC\u201d)",
+        "value": "GS Finance Corp.",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "October 22, 2026",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+        "value": "The Class A common stock of Palantir Technologies Inc.",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "Market Measure: | The Class A common stock of Palantir Technologies Inc., which is the \u201cUnderlying Company\u201d (current Bloomberg ticker: \u201cPLTR UW\u201d).",
+        "value": "PLTR",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "Starting Value: | $196.19, which is the Closing Market Price of the Market Measure on the pricing date.",
+        "value": 196.19,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+        "value": 196.19,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "quote": "On October 22, 2026, the Closing Market Price of the Class A common stock of Palantir Technologies Inc. was $196.19.",
+        "value": "2026-10-22",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc.",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "$10 principal amount per unit",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Public offering price | $ 10.00 | $5,950,000",
+        "value": 10.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "October 22, 2026",
+        "value": "2026-10-22",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "October 29, 2026",
+        "value": "2026-10-29",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "Maturity Date: | October 30, 2028, subject to postponement as described beginning on page PS-25 of the accompanying product supplement.",
+        "value": "2028-10-30",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Final Calculation Day/Maturity Valuation Period: | October 23, 2028, subject to postponement in the event of Market Disruption Events and non-Market Measure Business Days, as described beginning on page PS-25 of the accompanying product supplement.",
+        "value": "2028-10-23",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "Autocallable Leveraged Index Return Notes\u00ae with Absolute Return Barrier Linked to the Class A Common Stock of Palantir Technologies Inc....If the Ending Value is less than the Threshold Value, your notes are subject to 1-to-1 downside exposure to decreases in the Market Measure from the Starting Value",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "Threshold Value: | $117.71, which is 60.00% of the Starting Value (rounded to the nearest one-hundredth)",
+        "value": 0.6,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "Payments on the notes will not reflect changes in the value of the Market Measure other than on the Call Observation Date or the Final Calculation Day.",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "and are fully and unconditionally guaranteed by The Goldman Sachs Group, Inc. (\u201cGSG\u201d).",
+        "value": "The Goldman Sachs Group, Inc.",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP No. 38151R602",
+        "value": "38151R602",
+        "verified": true
+      },
+      {
+        "path": "autocall.trigger",
+        "quote": "Call Value: | $196.19, which is 100.00% of the Starting Value",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].review_date",
+        "quote": "Call Observation Date: | October 29, 2027.",
+        "value": "2027-10-29",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].payment_date",
+        "quote": "Call Payment Date: | The fifth business day following the Call Observation Date, subject to postponement as described beginning on page PS-24 of the accompanying product supplement.",
+        "value": "2027-11-05",
+        "verified": true
+      },
+      {
+        "path": "autocall.observations[0].call_amount",
+        "quote": "Call Payment (per Unit): | $12.925 per unit, which is equal to the principal amount plus the Call Premium due on the Call Payment Date.",
+        "value": 12.925,
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Participation Rate: | 150.00%.",
+        "value": 1.5,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The estimated value of your notes at the time the terms of your notes are set on the pricing date is equal to approximately $9.69 per $10 principal amount.",
+        "value": 9.69,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "The underwriting discount reflects a sales commission of $0.10 per note and a structuring fee of $0.05 per note.",
+        "value": 0.1,
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "quote": "A positive return equal to the absolute value of the percentage decline in the value of the Market Measure only if the Market Measure does not decline by more than 40.00% (e.g., if the negative return of the Market Measure is -5.00%, you will receive a positive return of +5.00%)",
+        "value": "absolute value of the percentage decline",
+        "verified": true
+      }
+    ],
     "row": {
       "accession": "0001193125-26-432141",
       "bank_in_range": null,
       "base_std_error": null,
       "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.05781525,
-      "crosscheck_agreed": null,
-      "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cost_to_investor": 0.3100000000000005,
+      "cost_to_investor_pct": 3.100000000000005,
+      "cost_to_investor_per_1000": 31.00000000000005,
+      "cost_usd": 0.1820313,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 3,
+      "cusip": "38151R602",
+      "estimated_value": 9.69,
       "filing_date": "2026-10-26",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 10.0,
+      "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 40.41759659500008,
-      "notional": null,
-      "pricing_date": null,
+      "model_seconds": 99.30860452199977,
+      "notional": 10.0,
+      "pricing_date": "2026-10-22",
       "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
+      "quote_verification_rate": 0.9642857142857143,
+      "quotes_checked": 28,
+      "quotes_verified": 27,
       "range_high": null,
       "range_low": null,
-      "reason": "autocall.payment_dates.value: expected list, got NoneType",
-      "seconds": 0.0008871439995346009,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "reason": "unsupported features: ['absolute value of the percentage decline']",
+      "seconds": 0.09154387800026598,
+      "status": "unsupported",
+      "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
+      "supported": false,
+      "underlyings": "The Class A common stock of Palantir Technologies Inc.",
       "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526432141/gs-20261026.htm"
     }
   },
@@ -3400,7 +5415,7 @@
       "range_high": 1011.3725701430973,
       "range_low": 982.9914297010911,
       "reason": null,
-      "seconds": 0.17818819099920802,
+      "seconds": 0.25083636900035344,
       "status": "priced",
       "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
       "supported": true,
@@ -3596,7 +5611,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.043258566000076826,
+      "seconds": 0.02872418400056631,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
       "supported": false,
@@ -3786,7 +5801,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.05002890200012189,
+      "seconds": 0.02593629700004385,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
       "supported": false,
@@ -3969,7 +5984,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.051298136000696104,
+      "seconds": 0.02911904200027493,
       "status": "unsupported",
       "structure": "single underlying, barrier 70% at maturity",
       "supported": false,
@@ -4165,7 +6180,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Index Return']",
-      "seconds": 0.04398073100037436,
+      "seconds": 0.028549500999361044,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity",
       "supported": false,
@@ -4348,7 +6363,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.02700756900048873,
+      "seconds": 0.029549730999860913,
       "status": "unsupported",
       "structure": "single underlying, barrier 90% at maturity",
       "supported": false,
@@ -4618,7 +6633,7 @@
       "range_high": 9.561154598886931,
       "range_low": 9.035662719934228,
       "reason": "plausibility gate: bank's estimated value 9.80 is above our whole range (high 9.56)",
-      "seconds": 0.2759386839998115,
+      "seconds": 0.23913538199940376,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 3x, cap 13.25%, barrier 100% at maturity",
       "supported": null,
@@ -4801,7 +6816,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "excess-return index underlying is not modelled by the template (no financing in its drift): S&P 500\u00ae Futures Excess Return Index",
-      "seconds": 0.030166356000336236,
+      "seconds": 0.034727522999673965,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.3x, barrier 100% at maturity",
       "supported": false,
@@ -5005,7 +7020,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Minimum payment at maturity']",
-      "seconds": 0.03197108299991669,
+      "seconds": 0.056281967000359145,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity",
       "supported": false,
@@ -5201,7 +7216,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Upside payment']",
-      "seconds": 0.027581128999372595,
+      "seconds": 0.046280415000182984,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
       "supported": false,
@@ -5384,7 +7399,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
-      "seconds": 0.02651572800004942,
+      "seconds": 0.04447307900045416,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.09x, barrier 100% at maturity",
       "supported": false,
@@ -5567,7 +7582,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
-      "seconds": 0.04970983300063381,
+      "seconds": 0.030068617000324593,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.03x, barrier 100% at maturity",
       "supported": false,
@@ -5819,7 +7834,7 @@
       "range_high": 960.019523796268,
       "range_low": 902.6874360736585,
       "reason": "plausibility gate: bank's estimated value 984.08 is above our whole range (high 960.02)",
-      "seconds": 0.1780500140002914,
+      "seconds": 0.18717009900046833,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity",
       "supported": null,
@@ -5996,7 +8011,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
-      "seconds": 0.04905200200028048,
+      "seconds": 0.046715473999938695,
       "status": "unsupported",
       "structure": "single underlying, buffer 87.5% at maturity",
       "supported": false,
@@ -6180,7 +8195,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Absolute Return']",
-      "seconds": 0.05541927800004487,
+      "seconds": 0.050650170000153594,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity",
       "supported": false,
@@ -6200,7 +8215,7 @@
       "cost_to_investor": null,
       "cost_to_investor_pct": null,
       "cost_to_investor_per_1000": null,
-      "cost_usd": 0.0714818,
+      "cost_usd": 0.07867025,
       "crosscheck_agreed": null,
       "crosscheck_diffs": 0,
       "cusip": null,
@@ -6209,7 +8224,7 @@
       "issue_price": null,
       "issuer": null,
       "issuer_group": "Toronto-Dominion",
-      "model_seconds": 33.61189300499973,
+      "model_seconds": 57.10230798300017,
       "notional": null,
       "pricing_date": null,
       "prob_loss": null,
@@ -6218,8 +8233,8 @@
       "quotes_verified": 0,
       "range_high": null,
       "range_low": null,
-      "reason": "autocall.review_dates.value: expected list, got NoneType; autocall.payment_dates.value: expected list, got NoneType; autocall.call_amounts.value: expected list, got NoneType",
-      "seconds": 0.00168941299943981,
+      "reason": "autocall.review_dates: expected cited field, got null; autocall.call_amounts: expected cited field, got null",
+      "seconds": 0.00176408400056971,
       "status": "extraction_failed",
       "structure": null,
       "supported": null,
@@ -6502,7 +8517,7 @@
       "range_high": 987.5459194239234,
       "range_low": 910.4296026881476,
       "reason": "plausibility gate: bank's estimated value 996.70 is above our whole range (high 987.55)",
-      "seconds": 0.204379849000361,
+      "seconds": 0.29341634800039174,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1.4x, cap 24.08%, buffer 87.5% at maturity",
       "supported": null,
@@ -6702,7 +8717,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['maximum settlement amount']",
-      "seconds": 0.049517053000272426,
+      "seconds": 0.051703237999390694,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -6945,7 +8960,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold settlement amount']",
-      "seconds": 0.07331783300014649,
+      "seconds": 0.10235713600013696,
       "status": "unsupported",
       "structure": "worst-of 5, upside leverage 1x, buffer 90% at maturity",
       "supported": false,
@@ -7228,7 +9243,7 @@
       "range_high": 993.237060810927,
       "range_low": 897.0074819947647,
       "reason": "plausibility gate: bank's estimated value 995.25 is above our whole range (high 993.24)",
-      "seconds": 0.25174265400073637,
+      "seconds": 0.18016832600005728,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity",
       "supported": null,
@@ -7411,7 +9426,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
-      "seconds": 0.05184538200046518,
+      "seconds": 0.02978401299969846,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -7421,40 +9436,217 @@
   },
   {
     "battery": null,
-    "crosscheck": null,
-    "fields": [],
+    "crosscheck": {
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "2026-10-23",
+          "path": "underlyings[0].reference_date",
+          "second": null,
+          "status": "resolved_first"
+        },
+        {
+          "first": 7623.68,
+          "path": "underlyings[0].reference_level",
+          "second": null,
+          "status": "resolved_first"
+        },
+        {
+          "first": [
+            "principal protection (no loss of principal at maturity)"
+          ],
+          "path": "unsupported_features",
+          "second": [],
+          "status": "resolved_second"
+        }
+      ],
+      "error": null,
+      "second_model": "muse-spark-1.2"
+    },
+    "fields": [
+      {
+        "path": "issuer",
+        "quote": "Issuer: | Wells Fargo Finance LLC.",
+        "value": "Wells Fargo Finance LLC",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "quote": "PRICING SUPPLEMENT No. 320 dated October 23, 2026",
+        "value": false,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "value": "S&P 500\u00ae Index",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "value": "SPX",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "quote": "S&P 500\u00ae Index SPX 7,623.68",
+        "value": 7623.68,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "quote": "The closing level on October 23, 2026 was 7,623.68.",
+        "value": 7623.68,
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "quote": "The closing level on October 23, 2026 was 7,623.68.",
+        "value": "2026-10-23",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "quote": "\u25a0 Linked to the S&P 500\u00ae Index (the \u201cUnderlier\u201d)",
+        "value": "worst_of",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "quote": "Principal Amount: | $1,000 per note.",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "quote": "Original Offering Price: | $1,000 per note.",
+        "value": 1000.0,
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "quote": "Pricing Date: | October 23, 2026.",
+        "value": "2026-10-23",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "quote": "Issue Date: | October 28, 2026.",
+        "value": "2026-10-28",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "quote": "October 26, 2028, subject to postponement.",
+        "value": "2028-10-26",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "quote": "Calculation Day: | October 23, 2028, subject to postponement.",
+        "value": "2028-10-23",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "quote": "if the ending value is less than or equal to the starting value: $1,000",
+        "value": "barrier",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+        "value": 1.0,
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "quote": "The \u201cending value\u201d will be the closing value of the Underlier on the calculation day.",
+        "value": "final_only",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "quote": "",
+        "value": 1.0,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "quote": "Guarantor: | Wells Fargo & Company.",
+        "value": "Wells Fargo & Company",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "quote": "CUSIP: | 95001HTK7",
+        "value": "95001HTK7",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "quote": "Upside Participation Rate: | 150%.",
+        "value": 1.5,
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "quote": "The \u201cmaximum return\u201d is 16.15% of the principal amount per note ($161.50 per note).",
+        "value": 0.1615,
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "quote": "The current estimated value of the notes is $988.71 per note.",
+        "value": 988.71,
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "quote": "Per Note | $1,000.00 | $7.50 | $992.50",
+        "value": 7.5,
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+        "value": "principal protection (no loss of principal at maturity)",
+        "verified": false
+      }
+    ],
     "row": {
       "accession": "0001839882-26-052586",
       "bank_in_range": null,
       "base_std_error": null,
       "base_value": null,
-      "cost_to_investor": null,
-      "cost_to_investor_pct": null,
-      "cost_to_investor_per_1000": null,
-      "cost_usd": 0.0625493,
-      "crosscheck_agreed": null,
-      "crosscheck_diffs": 0,
-      "cusip": null,
-      "estimated_value": null,
+      "cost_to_investor": 11.289999999999964,
+      "cost_to_investor_pct": 1.1289999999999962,
+      "cost_to_investor_per_1000": 11.289999999999964,
+      "cost_usd": 0.16305895,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 3,
+      "cusip": "95001HTK7",
+      "estimated_value": 988.71,
       "filing_date": "2026-10-27",
-      "issue_price": null,
-      "issuer": null,
+      "issue_price": 1000.0,
+      "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
-      "model_seconds": 37.935925775000214,
-      "notional": null,
-      "pricing_date": null,
+      "model_seconds": 83.99760456499916,
+      "notional": 1000.0,
+      "pricing_date": "2026-10-23",
       "prob_loss": null,
-      "quote_verification_rate": null,
-      "quotes_checked": 0,
-      "quotes_verified": 0,
+      "quote_verification_rate": 0.92,
+      "quotes_checked": 25,
+      "quotes_verified": 23,
       "range_high": null,
       "range_low": null,
-      "reason": "downside level must be a fraction of initial in (0, 1]",
-      "seconds": 0.0016149100001712213,
-      "status": "extraction_failed",
-      "structure": null,
-      "supported": null,
-      "underlyings": "",
+      "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+      "seconds": 0.03803542900004686,
+      "status": "unsupported",
+      "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
+      "supported": false,
+      "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052586/r10734wfc_424b2-35823.htm"
     }
   }
