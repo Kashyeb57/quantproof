@@ -53,8 +53,12 @@ def test_budget_line_recomputes_from_guard_state_on_rerun():
     assert "Live runs remaining in this session: 1 of 3" in rendered
 
 
-def test_app_shows_remaining_runs_in_live_mode():
+def test_app_shows_remaining_runs_in_live_mode(monkeypatch, tmp_path):
     from streamlit.testing.v1 import AppTest
+
+    # The cost log path is relative (.cache/meta_calls.jsonl): run from an
+    # empty directory so real local spend cannot make "today" look capped.
+    monkeypatch.chdir(tmp_path)
 
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
     assert not at.exception

@@ -25,6 +25,7 @@ never printed here.
 from __future__ import annotations
 
 import argparse
+import functools
 import datetime
 import gzip
 import json
@@ -48,6 +49,10 @@ from quantproof.report.audit_run import (  # noqa: E402
     is_preliminary_text,
     select_candidates,
 )
+
+# Audit calls are logged apart from the app's cost log, so an audit run never
+# counts against the app's daily or lifetime caps.
+AUDIT_COST_LOG = Path(".cache") / "audit_calls.jsonl"
 
 # Ordered: group -> EDGAR CIK for the EFTS `ciks` filter.  These are the
 # parent companies; finance subsidiaries are co-filers and appear in the
@@ -234,7 +239,7 @@ def _live(args: argparse.Namespace, out: Path) -> int:
             "form": ref.form,
             "primary_document": ref.primary_document,
         }
-        recorder = Recorder(meta_client.chat)
+        recorder = Recorder(functools.partial(meta_client.chat, log_path=AUDIT_COST_LOG))
         try:
             result = audit_note(filing, chat=recorder, meta=meta)
         except Exception as exc:  # API failure: record it, keep the audit going
