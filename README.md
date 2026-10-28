@@ -39,17 +39,17 @@ The maths checks compare the Monte Carlo engine against independent closed forms
 
 From the generated example report ([docs/examples/jpm_38582_analysis.md](docs/examples/jpm_38582_analysis.md); worst-of autocallable on the Russell 2000 and S&P 500, based on preliminary terms):
 
-- Issue price: $1,000.00. Bank's estimated value: $954.00. Our estimated value range under the stated assumptions: $778.01 - $974.81, with the bank's value inside the range.
-- Base estimated value: $907.67 +- $1.46 (1.96 SE, SE = $0.74; seed 0, 100,000 paths).
-- The assumption that moves the estimated value most is volatility ($954.06 to $862.46 across its stated range).
-- Real-world loss odds (separate REAL-WORLD measure, not a value; drift = risk-free rate + 5.0% equity risk premium): P(loss) 9.85% (SE 0.09%), P(loss > 50%) 3.49% (SE 0.06%), P(called early) 82.29% (SE 0.12%), expected cash $1,082.13 (SE $0.66). Issuer default is not simulated: if the issuer defaults, you can lose money regardless of the index.
+- Issue price: $1,000.00. Bank's estimated value: $954.00. Our estimated value range under the stated assumptions: $774.88 - $974.06, with the bank's value inside the range.
+- Base estimated value: $904.66 +- $1.46 (1.96 SE, SE = $0.74; seed 0, 100,000 paths).
+- The assumption that moves the estimated value most is volatility ($951.33 to $859.93 across its stated range).
+- Real-world loss odds (separate REAL-WORLD measure, not a value; drift = risk-free rate + 5.0% equity risk premium): P(loss) 10.17% (SE 0.10%), P(loss > 50%) 3.42% (SE 0.06%), P(called early) 81.72% (SE 0.12%), expected cash $1,080.84 (SE $0.66). Issuer default is not simulated: if the issuer defaults, you can lose money regardless of the index.
 
 ## Methodology
 
 - **Two measures, never mixed.** Fair value uses a risk-neutral simulation. "How likely am I to lose money?" uses a separate real-world simulation with a stated, adjustable drift assumption, labelled as such everywhere. Risk-neutral probabilities are never presented as real-world odds.
 - **Issuer credit risk.** A structured note is unsecured debt of the bank, so cash flows are discounted at the risk-free rate plus an issuer credit spread. Banks value their own notes with an internal funding rate, usually below the market credit spread; our value can therefore legitimately differ from theirs, and the report states which rate is used and why. The bank's estimated value is a comparison point, never a calibration target.
 - **Risk-free rate.** The real U.S. Treasury par yield for the filing's pricing date, interpolated to the note's maturity (see Data sources). For the 38582 note: U.S. Treasury par yield, 2025-11-25, 5.01y interpolated between 5 Yr and 7 Yr, r = 0.035515 per year.
-- **Volatility, skew, dividends, correlation** are inputs with stated ranges, not point estimates. These notes are economically short a downside put, so a single flat volatility would understate the put and overstate the note; a stated skew adjustment (extra volatility at the downside level) is included in the range. For worst-of notes, lower correlation makes the worst performer worse and the note worth less, so correlation is varied over its range too.
+- **Volatility, skew, dividends, correlation** are inputs with stated ranges, not point estimates. For index underlyings the range is centred on the 30-day implied-volatility close on the pricing date (VIX/VXN/RVX via FRED), a stated simplification; single stocks and other underlyings keep stated volatilities. These notes are economically short a downside put, so a single flat volatility would understate the put and overstate the note; a stated skew adjustment (extra volatility at the downside level) is included in the range. For worst-of notes, lower correlation makes the worst performer worse and the note worth less, so correlation is varied over its range too.
 - **Pricing-date inputs.** All inputs are as of the filing's pricing date; the initial level comes from the filing itself.
 - **Preliminary terms.** Many filings are preliminary (amounts are minimums, dates "on or about"). The note is priced on the stated minimum terms and labelled as based on preliminary terms.
 - **A range, not "the true value".** One set of assumptions gives one over-precise number. The range over the stated assumption grid, with the standard error, seed and path count, is the honest output.
@@ -91,7 +91,7 @@ Offline end-to-end analysis of the saved JPMorgan filing:
 ```bash
 python scripts/analyse.py tests/fixtures/filings/jpm_424b2-38582.htm \
     --reply tests/fixtures/extractions/jpm_424b2-38582.reply.json \
-    --rate 0.035515 --spread 0.006 --vols 0.24,0.17 \
+    --rate 0.035515 --spread 0.006 --vols 0.2336,0.1856 \
     --dividends 0.012,0.013 --corr 0.6 --battery \
     --out report.md
 ```

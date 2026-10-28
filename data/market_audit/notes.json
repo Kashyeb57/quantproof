@@ -21,57 +21,57 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 9.613335942102792,
+        "reference": 9.595199459967946,
         "tolerance": 0.0,
-        "value": 9.613335942102792
+        "value": 9.595199459967946
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 7.559858908875214,
-        "tolerance": 0.04892560139767192,
-        "value": 7.554422885808106
+        "reference": 7.425620092597996,
+        "tolerance": 0.04886203107073117,
+        "value": 7.420258814804028
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 7.5598589088752135,
-        "tolerance": 0.04892560139767192,
-        "value": 7.554422885808106
+        "reference": 7.425620092597996,
+        "tolerance": 0.04886203107073117,
+        "value": 7.420258814804028
       },
       {
         "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
         "name": "never_callable",
         "passed": true,
-        "reference": 7.5598589088752135,
-        "tolerance": 0.04925986305924519,
-        "value": 7.578565287269535
+        "reference": 7.425620092597996,
+        "tolerance": 0.04918815101068211,
+        "value": 7.44429959474053
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 8.78456366216263,
+        "reference": 8.5185312783235,
         "tolerance": 9.999999999999999e-06,
-        "value": 8.784563662162629
+        "value": 8.518531278323504
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 4.392281831081315,
+        "reference": 4.25926563916175,
         "tolerance": 9.999999999999999e-06,
-        "value": 4.392281831081316
+        "value": 4.25926563916175
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 9.613335942102792,
+        "reference": 9.595199459967946,
         "tolerance": 0.0,
-        "value": 9.434992383942
+        "value": 9.419105668998899
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -79,7 +79,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5276500399964422
+        "value": 0.5273452534869427
       },
       {
         "detail": "24/25 verified",
@@ -258,8 +258,8 @@
     "row": {
       "accession": "0001918704-26-032653",
       "bank_in_range": true,
-      "base_std_error": 0.019224714453031554,
-      "base_value": 9.615519423838807,
+      "base_std_error": 0.019405030441679048,
+      "base_value": 9.594880080926862,
       "cost_to_investor": 0.43900000000000006,
       "cost_to_investor_pct": 4.390000000000001,
       "cost_to_investor_per_1000": 43.900000000000006,
@@ -269,20 +269,21 @@
       "cusip": "09712D598",
       "estimated_value": 9.561,
       "filing_date": "2026-10-26",
+      "inputs": "r 0.0472 (U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr); vol [0.25]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
       "model_seconds": 52.65263955000046,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
-      "prob_loss": 0.25185,
+      "prob_loss": 0.23415,
       "quote_verification_rate": 0.96,
       "quotes_checked": 25,
       "quotes_verified": 24,
-      "range_high": 9.93815879049275,
-      "range_low": 9.313790993361994,
+      "range_high": 9.912878389450118,
+      "range_low": 9.28185297992729,
       "reason": null,
-      "seconds": 0.19348579799952859,
+      "seconds": 0.37561849993653595,
       "status": "priced",
       "structure": "single underlying, autocall, upside leverage 1.6x, barrier 100% at maturity",
       "supported": true,
@@ -312,65 +313,65 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 9.640086273936872,
+        "reference": 9.596496045794686,
         "tolerance": 0.0,
-        "value": 9.640086273936872
+        "value": 9.596496045794686
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 7.559858908875214,
-        "tolerance": 0.04892560139767192,
-        "value": 7.554422885808106
+        "reference": 7.425620092597996,
+        "tolerance": 0.04886203107073117,
+        "value": 7.420258814804028
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 7.5598589088752135,
-        "tolerance": 0.04892560139767192,
-        "value": 7.554422885808106
+        "reference": 7.425620092597996,
+        "tolerance": 0.04886203107073117,
+        "value": 7.420258814804028
       },
       {
         "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
         "name": "never_callable",
         "passed": true,
-        "reference": 7.5598589088752135,
-        "tolerance": 0.049357614883998605,
-        "value": 7.555817769127332
+        "reference": 7.425620092597996,
+        "tolerance": 0.04928977278776757,
+        "value": 7.4216066065658
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 8.78456366216263,
+        "reference": 8.5185312783235,
         "tolerance": 9.999999999999999e-06,
-        "value": 8.784563662162629
+        "value": 8.518531278323504
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 4.392281831081315,
+        "reference": 4.25926563916175,
         "tolerance": 9.999999999999999e-06,
-        "value": 4.392281831081316
+        "value": 4.25926563916175
       },
       {
         "detail": "all vols scaled by (0.8, 1.0, 1.2), same seed; each price must be <= previous + 2 SE (short-put note)",
         "name": "vol_monotonicity",
         "passed": true,
-        "reference": 9.926949431436752,
-        "tolerance": 0.07823784145273617,
-        "value": 9.360604229583503
+        "reference": 9.911724861709772,
+        "tolerance": 0.07719378205814154,
+        "value": 9.313381795870843
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 9.640086273936872,
+        "reference": 9.596496045794686,
         "tolerance": 0.0,
-        "value": 9.474412380512048
+        "value": 9.433607664246082
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -378,7 +379,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5276500399964422
+        "value": 0.5273452534869427
       },
       {
         "detail": "29/30 verified",
@@ -580,8 +581,8 @@
     "row": {
       "accession": "0001918704-26-032657",
       "bank_in_range": true,
-      "base_std_error": 0.016633207359374517,
-      "base_value": 9.678382489680184,
+      "base_std_error": 0.016257272284140745,
+      "base_value": 9.638408562418292,
       "cost_to_investor": 0.4939999999999998,
       "cost_to_investor_pct": 4.939999999999998,
       "cost_to_investor_per_1000": 49.39999999999998,
@@ -591,20 +592,21 @@
       "cusip": "09712D887",
       "estimated_value": 9.506,
       "filing_date": "2026-10-26",
+      "inputs": "r 0.0472 (U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr); vol [0.25]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
       "model_seconds": 52.09226791999936,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
-      "prob_loss": 0.22725,
+      "prob_loss": 0.20875,
       "quote_verification_rate": 0.9666666666666667,
       "quotes_checked": 30,
       "quotes_verified": 29,
-      "range_high": 10.057329433278646,
-      "range_low": 9.255546507016893,
+      "range_high": 10.033539284794024,
+      "range_low": 9.217034737650549,
       "reason": null,
-      "seconds": 0.2579824180002106,
+      "seconds": 0.5319338999688625,
       "status": "priced",
       "structure": "single underlying, autocall, barrier 100% at maturity",
       "supported": true,
@@ -787,6 +789,7 @@
       "cusip": "09712D317",
       "estimated_value": 9.792,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
@@ -800,7 +803,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Return Buffer']",
-      "seconds": 0.030601017000662978,
+      "seconds": 0.09739869995974004,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 40.05%, buffer 75% at maturity",
       "supported": false,
@@ -830,57 +833,57 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 9.474287068547932,
+        "reference": 9.60078757600491,
         "tolerance": 0.0,
-        "value": 9.474287068547932
+        "value": 9.60078757600491
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 7.548684040732871,
-        "tolerance": 0.04902773129889747,
-        "value": 7.543228068678018
+        "reference": 7.656397255238098,
+        "tolerance": 0.04357884556373703,
+        "value": 7.652975271724653
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 7.54868404073287,
-        "tolerance": 0.04902773129889747,
-        "value": 7.543228068678018
+        "reference": 7.656397255238098,
+        "tolerance": 0.04357884556373703,
+        "value": 7.652975271724653
       },
       {
         "detail": "single asset; autocall trigger set to 1e6 (never reached); upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
         "name": "never_callable",
         "passed": true,
-        "reference": 7.54868404073287,
-        "tolerance": 0.04937033124292105,
-        "value": 7.567495706565699
+        "reference": 7.656397255238098,
+        "tolerance": 0.04361816674822518,
+        "value": 7.672666986346985
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 8.777322391748037,
+        "reference": 8.47620985531764,
         "tolerance": 9.999999999999999e-06,
-        "value": 8.777322391748038
+        "value": 8.476209855317638
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 4.388661195874018,
+        "reference": 4.23810492765882,
         "tolerance": 9.999999999999999e-06,
-        "value": 4.388661195874019
+        "value": 4.238104927658819
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 9.474287068547932,
+        "reference": 9.60078757600491,
         "tolerance": 0.0,
-        "value": 9.292871291105167
+        "value": 9.421445051925067
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -888,7 +891,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5275370777749486
+        "value": 0.5316519846271885
       },
       {
         "detail": "25/26 verified",
@@ -1066,8 +1069,8 @@
     "row": {
       "accession": "0001214659-26-013052",
       "bank_in_range": true,
-      "base_std_error": 0.023545048520306113,
-      "base_value": 9.47916816489307,
+      "base_std_error": 0.019587185127575256,
+      "base_value": 9.596155598070114,
       "cost_to_investor": 0.41000000000000014,
       "cost_to_investor_pct": 4.100000000000001,
       "cost_to_investor_per_1000": 41.000000000000014,
@@ -1077,20 +1080,21 @@
       "cusip": "06368N326",
       "estimated_value": 9.59,
       "filing_date": "2026-10-19",
+      "inputs": "r 0.0485 (U.S. Treasury par yield, 2026-10-15, 3.03y interpolated between 3 Yr and 5 Yr); vol [0.21]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 10.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
       "model_seconds": 59.34996959700038,
       "notional": 10.0,
       "pricing_date": "2026-10-15",
-      "prob_loss": 0.25115,
+      "prob_loss": 0.18355,
       "quote_verification_rate": 0.9615384615384616,
       "quotes_checked": 26,
       "quotes_verified": 25,
-      "range_high": 9.763600914840644,
-      "range_low": 9.207750615944688,
+      "range_high": 9.878135689617373,
+      "range_low": 9.309231547226398,
       "reason": null,
-      "seconds": 0.3385569550000582,
+      "seconds": 0.5022110000718385,
       "status": "priced",
       "structure": "single underlying, autocall, upside leverage 2.11x, barrier 100% at maturity",
       "supported": true,
@@ -1254,6 +1258,7 @@
       "cusip": "06376MPD0",
       "estimated_value": 997.53,
       "filing_date": "2026-10-21",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
@@ -1267,7 +1272,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['threshold settlement amount']",
-      "seconds": 0.058062629000232846,
+      "seconds": 0.06962999980896711,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -1297,49 +1302,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 955.7478312266853,
+        "reference": 984.1549396884867,
         "tolerance": 0.0,
-        "value": 955.7478312266853
+        "value": 984.1549396884867
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 819.7451967248451,
-        "tolerance": 4.404370525672591,
-        "value": 819.2900090010451
+        "reference": 851.1628730631357,
+        "tolerance": 3.265788803854946,
+        "value": 850.9663018826672
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 828.7826489086927,
-        "tolerance": 5.150849596931883,
-        "value": 829.1705121272793
+        "reference": 862.655191495111,
+        "tolerance": 3.738850124014795,
+        "value": 862.6888652643448
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 924.6477121393259,
+        "reference": 906.9891012635011,
         "tolerance": 0.001,
-        "value": 924.6477121393256
+        "value": 906.9891012635012
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 404.5333740609551,
+        "reference": 396.80773180278175,
         "tolerance": 0.001,
-        "value": 404.533374060955
+        "value": 396.8077318027817
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 955.7478312266853,
+        "reference": 984.1549396884867,
         "tolerance": 0.0,
-        "value": 938.492557049219
+        "value": 966.3867975461849
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -1347,7 +1352,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.531972089332613
+        "value": 0.5264973794992877
       },
       {
         "detail": "19/20 verified",
@@ -1507,9 +1512,9 @@
     ],
     "row": {
       "accession": "0001214659-26-013157",
-      "bank_in_range": null,
-      "base_std_error": 0.5077889098679288,
-      "base_value": 955.9618075748734,
+      "bank_in_range": true,
+      "base_std_error": 0.3413553021081516,
+      "base_value": 984.4158691962327,
       "cost_to_investor": 3.740000000000009,
       "cost_to_investor_pct": 0.3740000000000009,
       "cost_to_investor_per_1000": 3.740000000000009,
@@ -1519,23 +1524,24 @@
       "cusip": "06376MPC2",
       "estimated_value": 996.26,
       "filing_date": "2026-10-23",
+      "inputs": "r 0.0476 (U.S. Treasury par yield, 2026-10-21, 1.82y interpolated between 1 Yr and 2 Yr); vol [0.17]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
       "model_seconds": 61.790191471000526,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
-      "prob_loss": 0.25905,
+      "prob_loss": 0.11275,
       "quote_verification_rate": 0.95,
       "quotes_checked": 20,
       "quotes_verified": 19,
-      "range_high": 988.3699948279474,
-      "range_low": 908.5956269705242,
-      "reason": "plausibility gate: bank's estimated value 996.26 is above our whole range (high 988.37)",
-      "seconds": 0.25949847899937595,
-      "status": "needs_review",
+      "range_high": 1010.0897640863102,
+      "range_low": 942.3054655890639,
+      "reason": null,
+      "seconds": 0.4562508000526577,
+      "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 25.9%, buffer 87.5% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/927971/000121465926013157/y1022262424b2.htm"
     }
@@ -1684,6 +1690,7 @@
       "cusip": "06419TE79",
       "estimated_value": 986.88,
       "filing_date": "2026-10-19",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
@@ -1697,7 +1704,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
-      "seconds": 0.06774610499996925,
+      "seconds": 0.09619660000316799,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -1856,6 +1863,7 @@
       "cusip": "06419TL48",
       "estimated_value": 987.59,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
@@ -1869,7 +1877,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
-      "seconds": 0.059033756999269826,
+      "seconds": 0.11736869998276234,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -2033,6 +2041,7 @@
       "cusip": "06419TK64",
       "estimated_value": 967.25,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
@@ -2046,7 +2055,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Reference Asset Return']",
-      "seconds": 0.04383925599995564,
+      "seconds": 0.11372069991193712,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 20.1%, barrier 75% at maturity",
       "supported": false,
@@ -2219,6 +2228,7 @@
       "cusip": "17334DTT9",
       "estimated_value": 969.7,
       "filing_date": "2026-10-09",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
@@ -2232,7 +2242,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['modified inverse exposure']",
-      "seconds": 0.04755578299955232,
+      "seconds": 0.05880070012062788,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 100%, barrier 100% at maturity",
       "supported": false,
@@ -2415,6 +2425,7 @@
       "cusip": "17334DCA8",
       "estimated_value": 968.7,
       "filing_date": "2026-09-22",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
@@ -2428,7 +2439,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute return amount']",
-      "seconds": 0.03266792799968243,
+      "seconds": 0.09168830001726747,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity",
       "supported": false,
@@ -2598,6 +2609,7 @@
       "cusip": "17334DBW1",
       "estimated_value": 971.6,
       "filing_date": "2026-09-28",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
@@ -2611,7 +2623,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['digital return']",
-      "seconds": 0.03097491600055946,
+      "seconds": 0.08082919986918569,
       "status": "unsupported",
       "structure": "single underlying, barrier 60% at maturity",
       "supported": false,
@@ -2641,49 +2653,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 946.4708437687482,
+        "reference": 983.1939762488203,
         "tolerance": 0.0,
-        "value": 946.4708437687482
+        "value": 983.1939762488203
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 873.0466678391847,
-        "tolerance": 3.6991153366898204,
-        "value": 872.6899478301818
+        "reference": 907.4313080544238,
+        "tolerance": 2.430844095857525,
+        "value": 907.280705550118
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 902.5193915495377,
-        "tolerance": 4.894458221411164,
-        "value": 902.5660536612147
+        "reference": 938.0303212658185,
+        "tolerance": 2.346340767694655,
+        "value": 938.3173240431836
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 957.2345303041773,
+        "reference": 949.4331537368134,
         "tolerance": 0.001,
-        "value": 957.2345303041769
+        "value": 949.433153736813
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 382.8938121216709,
+        "reference": 379.7732614947254,
         "tolerance": 0.001,
-        "value": 382.89381212167086
+        "value": 379.7732614947254
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 946.4708437687482,
+        "reference": 983.1939762488203,
         "tolerance": 0.0,
-        "value": 936.8992780223424
+        "value": 973.251033106839
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -2691,7 +2703,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5224919736162434
+        "value": 0.5912186731186567
       },
       {
         "detail": "20/21 verified",
@@ -2851,9 +2863,9 @@
     ],
     "row": {
       "accession": "0001918704-26-029357",
-      "bank_in_range": null,
-      "base_std_error": 0.6734814875011307,
-      "base_value": 946.6612532881006,
+      "bank_in_range": true,
+      "base_std_error": 0.3431406018850663,
+      "base_value": 983.1614123892291,
       "cost_to_investor": 22.399999999999977,
       "cost_to_investor_pct": 2.239999999999998,
       "cost_to_investor_per_1000": 22.399999999999977,
@@ -2863,23 +2875,24 @@
       "cusip": "17334CUE2",
       "estimated_value": 977.6,
       "filing_date": "2026-09-29",
+      "inputs": "r 0.0451 (U.S. Treasury par yield, 2026-09-25, 1.02y interpolated between 1 Yr and 2 Yr); vol [0.15]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
       "model_seconds": 48.487300693999714,
       "notional": 1000.0,
       "pricing_date": "2026-09-25",
-      "prob_loss": 0.13745,
+      "prob_loss": 0.0221,
       "quote_verification_rate": 0.9523809523809523,
       "quotes_checked": 21,
       "quotes_verified": 20,
-      "range_high": 972.8593834767246,
-      "range_low": 900.7234062101136,
-      "reason": "plausibility gate: bank's estimated value 977.60 is above our whole range (high 972.86)",
-      "seconds": 0.1622729380005694,
-      "status": "needs_review",
+      "range_high": 996.4916264530378,
+      "range_low": 942.4260967756142,
+      "reason": null,
+      "seconds": 0.5208121000323445,
+      "status": "priced",
       "structure": "single underlying, upside leverage 1x, cap 11.15%, barrier 80% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426029357/form424b2.htm"
     }
@@ -3065,6 +3078,7 @@
       "cusip": "17334CU51",
       "estimated_value": 950.6,
       "filing_date": "2026-09-29",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
@@ -3078,7 +3092,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
-      "seconds": 0.03159726500052784,
+      "seconds": 0.07880000001750886,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity",
       "supported": false,
@@ -3108,49 +3122,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 858.0781755563829,
+        "reference": 849.4479126569315,
         "tolerance": 0.0,
-        "value": 858.0781755563829
+        "value": 849.4479126569315
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 808.4436013634404,
-        "tolerance": 4.514416017384033,
-        "value": 807.9706969152363
+        "reference": 798.0965832727389,
+        "tolerance": 4.5085373427403495,
+        "value": 797.6306815159278
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 808.4436013634404,
-        "tolerance": 4.514416017384033,
-        "value": 807.9706969152363
+        "reference": 798.0965832727389,
+        "tolerance": 4.5085373427403495,
+        "value": 797.6306815159278
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 916.9458595438357,
+        "reference": 896.439829029866,
         "tolerance": 0.001,
-        "value": 916.9458595438355
+        "value": 896.4398290298662
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 458.47292977191785,
+        "reference": 448.219914514933,
         "tolerance": 0.001,
-        "value": 458.47292977191773
+        "value": 448.2199145149331
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 858.0781755563829,
+        "reference": 849.4479126569315,
         "tolerance": 0.0,
-        "value": 840.9488397457462
+        "value": 832.4908579688663
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -3158,7 +3172,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5320866516851945
+        "value": 0.5317502391843238
       },
       {
         "detail": "20/22 verified",
@@ -3312,8 +3326,8 @@
     "row": {
       "accession": "0001918704-26-031667",
       "bank_in_range": null,
-      "base_std_error": 0.5740255223596299,
-      "base_value": 858.1172028132336,
+      "base_std_error": 0.6029307371094662,
+      "base_value": 849.4882211867906,
       "cost_to_investor": 33.700000000000045,
       "cost_to_investor_pct": 3.370000000000004,
       "cost_to_investor_per_1000": 33.700000000000045,
@@ -3323,20 +3337,21 @@
       "cusip": "17334DA77",
       "estimated_value": 966.3,
       "filing_date": "2026-10-16",
+      "inputs": "r 0.0482 (U.S. Treasury par yield, 2026-10-14, 2.02y interpolated between 2 Yr and 3 Yr); vol [0.25]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
       "model_seconds": 99.86089177899885,
       "notional": 1000.0,
       "pricing_date": "2026-10-14",
-      "prob_loss": 0.3982,
+      "prob_loss": 0.3731,
       "quote_verification_rate": 0.9090909090909091,
       "quotes_checked": 22,
       "quotes_verified": 20,
-      "range_high": 895.0832251983485,
-      "range_low": 821.8508221567678,
-      "reason": "plausibility gate: bank's estimated value 966.30 is above our whole range (high 895.08)",
-      "seconds": 0.14320442600001115,
+      "range_high": 886.0792151069096,
+      "range_low": 813.6437744090292,
+      "reason": "plausibility gate: bank's estimated value 966.30 is above our whole range (high 886.08)",
+      "seconds": 0.2674741998780519,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1x, cap 12.85%, barrier 100% at maturity",
       "supported": null,
@@ -3517,6 +3532,7 @@
       "cusip": "40058MC55",
       "estimated_value": 998.0,
       "filing_date": "2026-10-16",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
@@ -3530,7 +3546,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
-      "seconds": 0.04408098099975177,
+      "seconds": 0.10211950005032122,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.75x, buffer 80% at maturity",
       "supported": false,
@@ -3560,49 +3576,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 942.134616338247,
+        "reference": 947.4387978964716,
         "tolerance": 0.0,
-        "value": 942.134616338247
+        "value": 947.4387978964716
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 852.7806794005928,
-        "tolerance": 4.005439663652856,
-        "value": 852.3836773640367
+        "reference": 855.1792543889604,
+        "tolerance": 3.807946209275038,
+        "value": 854.8151840166913
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 852.7806794005928,
-        "tolerance": 4.005439663652856,
-        "value": 852.3836773640367
+        "reference": 855.1792543889603,
+        "tolerance": 3.807946209275038,
+        "value": 854.8151840166913
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 945.5779944615624,
+        "reference": 935.244340300141,
         "tolerance": 0.001,
-        "value": 945.5779944615624
+        "value": 935.2443403001412
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 472.7889972307812,
+        "reference": 467.6221701500705,
         "tolerance": 0.001,
-        "value": 472.78899723078126
+        "value": 467.6221701500706
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 942.134616338247,
+        "reference": 947.4387978964716,
         "tolerance": 0.0,
-        "value": 929.9533936660702
+        "value": 935.1889954103976
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -3610,7 +3626,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5367117223329773
+        "value": 0.5377685056069809
       },
       {
         "detail": "21/22 verified",
@@ -3771,8 +3787,8 @@
     "row": {
       "accession": "0001193125-26-426561",
       "bank_in_range": true,
-      "base_std_error": 0.502517243394507,
-      "base_value": 942.1190399530165,
+      "base_std_error": 0.5018342501882805,
+      "base_value": 947.4621346175202,
       "cost_to_investor": 31.0,
       "cost_to_investor_pct": 3.1,
       "cost_to_investor_per_1000": 31.0,
@@ -3782,20 +3798,21 @@
       "cusip": "40058LYL8",
       "estimated_value": 969.0,
       "filing_date": "2026-10-20",
+      "inputs": "r 0.0454 (U.S. Treasury par yield, 2026-10-16, 1.30y interpolated between 1 Yr and 2 Yr); vol [0.23]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
       "model_seconds": 73.385759194,
       "notional": 1000.0,
       "pricing_date": "2026-10-16",
-      "prob_loss": 0.41955,
+      "prob_loss": 0.38685,
       "quote_verification_rate": 0.9545454545454546,
       "quotes_checked": 22,
       "quotes_verified": 21,
-      "range_high": 973.5732891850173,
-      "range_low": 911.5985997335954,
+      "range_high": 979.4459494230449,
+      "range_low": 916.5546926890147,
       "reason": null,
-      "seconds": 0.2099040220000461,
+      "seconds": 0.34776520007289946,
       "status": "priced",
       "structure": "single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity",
       "supported": true,
@@ -3825,89 +3842,89 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 9.48320500999449,
+        "reference": 9.472864447474713,
         "tolerance": 0.0,
-        "value": 9.48320500999449
+        "value": 9.472864447474713
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 7.55583534915852,
-        "tolerance": 0.04894733003842796,
-        "value": 7.550394565028802
+        "reference": 7.40787487687354,
+        "tolerance": 0.048841351133713434,
+        "value": 7.40255653682641
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 7.732948018527769,
-        "tolerance": 0.06129040107134663,
-        "value": 7.728740428576524
+        "reference": 7.574563103003771,
+        "tolerance": 0.058903125966694156,
+        "value": 7.569503204244372
       },
       {
         "detail": "single asset; autocall trigger set to 1e6 (never reached); coupon memory set to False; upside removed; downside set to BARRIER at the term-sheet level, FINAL_ONLY, gearing 1; MC vs barrier closed form plus digital coupons",
         "name": "never_callable",
         "passed": true,
-        "reference": 10.92747485693068,
-        "tolerance": 0.0915183131818157,
-        "value": 10.928806902403345
+        "reference": 10.780026764961981,
+        "tolerance": 0.08935305115590293,
+        "value": 10.77647542264454
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 8.781459529329595,
+        "reference": 8.489023414370822,
         "tolerance": 9.999999999999999e-06,
-        "value": 8.781459529329595
+        "value": 8.489023414370822
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 3.5125838117318384,
+        "reference": 3.3956093657483284,
         "tolerance": 9.999999999999999e-06,
-        "value": 3.512583811731837
+        "value": 3.395609365748328
       },
       {
         "detail": "underlying 0 duplicated into two identical assets with correlation [[1,1],[1,1]], all features kept; compared with the N=1 note",
         "name": "correlation_one",
         "passed": true,
-        "reference": 10.398229749079247,
-        "tolerance": 0.13304073374808412,
-        "value": 10.437151497263889
+        "reference": 10.325615813031025,
+        "tolerance": 0.12539702107186199,
+        "value": 10.363352440584858
       },
       {
         "detail": "uniform off-diagonal rho in (0.0, 0.25, 0.5, 0.75, 0.95), same seed (common random numbers); each price must be >= previous - 2 SE",
         "name": "correlation_monotonicity",
         "passed": true,
-        "reference": 8.803942932683944,
-        "tolerance": 0.06938073703897095,
-        "value": 10.058501921459996
+        "reference": 8.84960302552999,
+        "tolerance": 0.06626870450588337,
+        "value": 10.014468992202998
       },
       {
         "detail": "all vols scaled by (0.8, 1.0, 1.2), same seed; each price must be <= previous + 2 SE (short-put note)",
         "name": "vol_monotonicity",
         "passed": true,
-        "reference": 10.137505282932773,
-        "tolerance": 0.07316682301503832,
-        "value": 8.910678263114017
+        "reference": 10.085643214694501,
+        "tolerance": 0.07241187395732003,
+        "value": 8.888351219117041
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 9.48320500999449,
+        "reference": 9.472864447474713,
         "tolerance": 0.0,
-        "value": 9.312366038108081
+        "value": 9.306027924342665
       },
       {
         "detail": "coupon amount x (1.0, 1.5), same seed; prices must be strictly increasing",
         "name": "coupon_monotonicity",
         "passed": true,
-        "reference": 9.48320500999449,
+        "reference": 9.472864447474713,
         "tolerance": 0.0,
-        "value": 10.44782925630199
+        "value": 10.43758046424665
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -3915,7 +3932,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.527063462765294
+        "value": 0.5295181066617274
       },
       {
         "detail": "77/78 verified",
@@ -4460,8 +4477,8 @@
     "row": {
       "accession": "0001193125-26-426871",
       "bank_in_range": true,
-      "base_std_error": 0.01592126970475878,
-      "base_value": 9.517134744394678,
+      "base_std_error": 0.01557284668586814,
+      "base_value": 9.496452184685818,
       "cost_to_investor": 0.5199999999999996,
       "cost_to_investor_pct": 5.199999999999996,
       "cost_to_investor_per_1000": 51.99999999999996,
@@ -4471,20 +4488,21 @@
       "cusip": "38151R701",
       "estimated_value": 9.48,
       "filing_date": "2026-10-20",
+      "inputs": "r 0.0482 (U.S. Treasury par yield, 2026-10-16, 3.02y interpolated between 3 Yr and 5 Yr); vol [0.25; 0.25; 0.25]; rho 0.60 (no pair with two confirmed FRED closes series: stated 0.6)",
       "issue_price": 10.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
       "model_seconds": 137.00566761199934,
       "notional": 10.0,
       "pricing_date": "2026-10-16",
-      "prob_loss": 0.2267,
+      "prob_loss": 0.2024,
       "quote_verification_rate": 0.9871794871794872,
       "quotes_checked": 78,
       "quotes_verified": 77,
-      "range_high": 10.314621728959146,
-      "range_low": 8.085850221378614,
+      "range_high": 10.270717878776512,
+      "range_low": 8.1020551500792,
       "reason": null,
-      "seconds": 3.4054756080004154,
+      "seconds": 6.404709900030866,
       "status": "priced",
       "structure": "worst-of 3, autocall, contingent coupon (memory), barrier 80% at maturity",
       "supported": true,
@@ -4663,6 +4681,7 @@
       "cusip": "40058MG51",
       "estimated_value": 962.0,
       "filing_date": "2026-10-21",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
@@ -4676,7 +4695,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['bearish view']",
-      "seconds": 0.08976265199999034,
+      "seconds": 0.13603590009734035,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity",
       "supported": false,
@@ -4702,6 +4721,7 @@
       "cusip": null,
       "estimated_value": null,
       "filing_date": "2026-10-23",
+      "inputs": "",
       "issue_price": null,
       "issuer": null,
       "issuer_group": "Goldman Sachs",
@@ -4715,7 +4735,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7687 (char 7686)",
-      "seconds": 0.0021386580001490074,
+      "seconds": 0.0007821999024599791,
       "status": "extraction_failed",
       "structure": null,
       "supported": null,
@@ -4896,6 +4916,7 @@
       "cusip": "40058MD88",
       "estimated_value": 961.0,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
@@ -4909,7 +4930,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
-      "seconds": 0.0708893689998149,
+      "seconds": 0.07135359989479184,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
       "supported": false,
@@ -5132,6 +5153,7 @@
       "cusip": "38151R602",
       "estimated_value": 9.69,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 10.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
@@ -5145,7 +5167,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['absolute value of the percentage decline']",
-      "seconds": 0.09154387800026598,
+      "seconds": 0.12384050013497472,
       "status": "unsupported",
       "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
       "supported": false,
@@ -5175,49 +5197,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 1000.5501166683438,
+        "reference": 998.9451458651591,
         "tolerance": 0.0,
-        "value": 1000.5501166683438
+        "value": 998.9451458651591
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 915.3699006299437,
-        "tolerance": 2.8731246305367444,
-        "value": 915.1094863514484
+        "reference": 913.6986753464607,
+        "tolerance": 2.8731992966786,
+        "value": 913.4382243040704
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 926.2814659027086,
-        "tolerance": 3.5118215455091204,
-        "value": 926.0122652851796
+        "reference": 924.4963802845984,
+        "tolerance": 3.4893562682747237,
+        "value": 924.3367426330874
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 978.2107542828799,
+        "reference": 974.9376588479851,
         "tolerance": 0.001,
-        "value": 978.2107542828799
+        "value": 974.9376588479848
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 440.1948394272959,
+        "reference": 438.7219464815933,
         "tolerance": 0.001,
-        "value": 440.19483942729585
+        "value": 438.7219464815934
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 1000.5501166683438,
+        "reference": 998.9451458651591,
         "tolerance": 0.0,
-        "value": 995.4371194528219
+        "value": 993.8403503489934
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -5225,7 +5247,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5401261507497492
+        "value": 0.5403590640066682
       },
       {
         "detail": "23/24 verified",
@@ -5391,8 +5413,8 @@
     "row": {
       "accession": "0001213900-26-112047",
       "bank_in_range": true,
-      "base_std_error": 0.2803356634431905,
-      "base_value": 1000.71716397477,
+      "base_std_error": 0.2828096223046712,
+      "base_value": 999.1166012320384,
       "cost_to_investor": 4.7000000000000455,
       "cost_to_investor_pct": 0.4700000000000045,
       "cost_to_investor_per_1000": 4.7000000000000455,
@@ -5402,20 +5424,21 @@
       "cusip": "46661QNW1",
       "estimated_value": 995.3,
       "filing_date": "2026-10-23",
+      "inputs": "r 0.0435 (U.S. Treasury par yield, 2026-10-21, 0.51y interpolated between 0.5 Yr and 1 Yr); vol [0.25]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
       "model_seconds": 47.25493465799991,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
-      "prob_loss": 0.2325,
+      "prob_loss": 0.22685,
       "quote_verification_rate": 0.9583333333333334,
       "quotes_checked": 24,
       "quotes_verified": 23,
-      "range_high": 1011.3725701430973,
-      "range_low": 982.9914297010911,
+      "range_high": 1009.7543671584012,
+      "range_low": 981.3853529809702,
       "reason": null,
-      "seconds": 0.25083636900035344,
+      "seconds": 0.2614698999095708,
       "status": "priced",
       "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
       "supported": true,
@@ -5598,6 +5621,7 @@
       "cusip": "46661PHE0",
       "estimated_value": 986.7,
       "filing_date": "2026-10-19",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
@@ -5611,7 +5635,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.02872418400056631,
+      "seconds": 0.058459899853914976,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
       "supported": false,
@@ -5788,6 +5812,7 @@
       "cusip": "46661QLX1",
       "estimated_value": 988.3,
       "filing_date": "2026-10-21",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
@@ -5801,7 +5826,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.02593629700004385,
+      "seconds": 0.050818199990317225,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
       "supported": false,
@@ -5971,6 +5996,7 @@
       "cusip": "46661QNV3",
       "estimated_value": 986.0,
       "filing_date": "2026-10-23",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
@@ -5984,7 +6010,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.02911904200027493,
+      "seconds": 0.07399670011363924,
       "status": "unsupported",
       "structure": "single underlying, barrier 70% at maturity",
       "supported": false,
@@ -6167,6 +6193,7 @@
       "cusip": "46661QN84",
       "estimated_value": 989.3,
       "filing_date": "2026-10-27",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
@@ -6180,7 +6207,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Index Return']",
-      "seconds": 0.028549500999361044,
+      "seconds": 0.11562720010988414,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity",
       "supported": false,
@@ -6350,6 +6377,7 @@
       "cusip": "46661QQZ1",
       "estimated_value": 943.3,
       "filing_date": "2026-10-27",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
@@ -6363,7 +6391,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
-      "seconds": 0.029549730999860913,
+      "seconds": 0.08211379987187684,
       "status": "unsupported",
       "structure": "single underlying, barrier 90% at maturity",
       "supported": false,
@@ -6393,49 +6421,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 9.295438019930511,
+        "reference": 9.696483510480284,
         "tolerance": 0.0,
-        "value": 9.295438019930511
+        "value": 9.696483510480284
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 8.713217713733949,
-        "tolerance": 0.037249514917606884,
-        "value": 8.709617732373825
+        "reference": 9.062093504587825,
+        "tolerance": 0.024519720101842328,
+        "value": 9.060566714149129
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 8.713217713733949,
-        "tolerance": 0.037249514917606884,
-        "value": 8.709617732373825
+        "reference": 9.062093504587825,
+        "tolerance": 0.024519720101842328,
+        "value": 9.060566714149129
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 9.56220137308295,
+        "reference": 9.486570033795683,
         "tolerance": 9.999999999999999e-06,
-        "value": 9.562201373082953
+        "value": 9.486570033795687
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 4.781100686541475,
+        "reference": 4.7432850168978415,
         "tolerance": 9.999999999999999e-06,
-        "value": 4.7811006865414765
+        "value": 4.743285016897843
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 9.295438019930511,
+        "reference": 9.696483510480284,
         "tolerance": 0.0,
-        "value": 9.199165610322774
+        "value": 9.5960574917952
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -6443,7 +6471,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5389799104054452
+        "value": 0.548390343890794
       },
       {
         "detail": "22/24 verified",
@@ -6608,9 +6636,9 @@
     ],
     "row": {
       "accession": "0001839882-26-046903",
-      "bank_in_range": null,
-      "base_std_error": 0.005040998178683607,
-      "base_value": 9.295842502464968,
+      "bank_in_range": true,
+      "base_std_error": 0.003739573764384255,
+      "base_value": 9.697388390117572,
       "cost_to_investor": 0.20199999999999996,
       "cost_to_investor_pct": 2.0199999999999996,
       "cost_to_investor_per_1000": 20.199999999999996,
@@ -6620,23 +6648,24 @@
       "cusip": "61780K566",
       "estimated_value": 9.798,
       "filing_date": "2026-09-23",
+      "inputs": "r 0.0446 (U.S. Treasury par yield, 2026-09-21, 1.04y interpolated between 1 Yr and 2 Yr); vol [0.15]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 10.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
       "model_seconds": 50.869425513000124,
       "notional": 10.0,
       "pricing_date": "2026-09-21",
-      "prob_loss": 0.42835,
+      "prob_loss": 0.30865,
       "quote_verification_rate": 0.9166666666666666,
       "quotes_checked": 24,
       "quotes_verified": 22,
-      "range_high": 9.561154598886931,
-      "range_low": 9.035662719934228,
-      "reason": "plausibility gate: bank's estimated value 9.80 is above our whole range (high 9.56)",
-      "seconds": 0.23913538199940376,
-      "status": "needs_review",
+      "range_high": 9.985919447839667,
+      "range_low": 9.426584715812714,
+      "reason": null,
+      "seconds": 0.4993208998348564,
+      "status": "priced",
       "structure": "single underlying, upside leverage 3x, cap 13.25%, barrier 100% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226046903/ms18827_424b2-31846.htm"
     }
@@ -6803,6 +6832,7 @@
       "cusip": "61781L3Q1",
       "estimated_value": 948.9,
       "filing_date": "2026-10-02",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
@@ -6816,7 +6846,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "excess-return index underlying is not modelled by the template (no financing in its drift): S&P 500\u00ae Futures Excess Return Index",
-      "seconds": 0.034727522999673965,
+      "seconds": 0.08361860015429556,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.3x, barrier 100% at maturity",
       "supported": false,
@@ -7007,6 +7037,7 @@
       "cusip": "61781LSA9",
       "estimated_value": 972.8,
       "filing_date": "2026-10-02",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
@@ -7020,7 +7051,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Minimum payment at maturity']",
-      "seconds": 0.056281967000359145,
+      "seconds": 0.08936410001479089,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity",
       "supported": false,
@@ -7203,6 +7234,7 @@
       "cusip": "61781LRR3",
       "estimated_value": 957.5,
       "filing_date": "2026-10-02",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
@@ -7216,7 +7248,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Upside payment']",
-      "seconds": 0.046280415000182984,
+      "seconds": 0.08629010012373328,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
       "supported": false,
@@ -7386,6 +7418,7 @@
       "cusip": "61781LV72",
       "estimated_value": 984.0,
       "filing_date": "2026-10-20",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
@@ -7399,7 +7432,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
-      "seconds": 0.04447307900045416,
+      "seconds": 0.06375490012578666,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.09x, barrier 100% at maturity",
       "supported": false,
@@ -7569,6 +7602,7 @@
       "cusip": "61781THB2",
       "estimated_value": 981.9,
       "filing_date": "2026-10-27",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
@@ -7582,7 +7616,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
-      "seconds": 0.030068617000324593,
+      "seconds": 0.07413029996678233,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.03x, barrier 100% at maturity",
       "supported": false,
@@ -7612,49 +7646,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 931.2423990072347,
+        "reference": 956.4303197013878,
         "tolerance": 0.0,
-        "value": 931.2423990072347
+        "value": 956.4303197013878
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 855.6792115519031,
-        "tolerance": 3.9668663720452306,
-        "value": 855.2874776324677
+        "reference": 877.8829439249611,
+        "tolerance": 3.1628629055873283,
+        "value": 877.6349564571776
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 855.6792115519031,
-        "tolerance": 3.9668663720452306,
-        "value": 855.2874776324677
+        "reference": 877.8829439249611,
+        "tolerance": 3.1628629055873283,
+        "value": 877.6349564571776
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 947.3620250750458,
+        "reference": 937.0593450919378,
         "tolerance": 0.001,
-        "value": 947.3620250750461
+        "value": 937.0593450919373
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 473.6810125375229,
+        "reference": 468.5296725459689,
         "tolerance": 0.001,
-        "value": 473.68101253752303
+        "value": 468.52967254596894
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 931.2423990072347,
+        "reference": 956.4303197013878,
         "tolerance": 0.0,
-        "value": 919.6050322174352
+        "value": 944.4781894599856
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -7662,7 +7696,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5370365636334526
+        "value": 0.5420718052420187
       },
       {
         "detail": "18/21 verified",
@@ -7809,9 +7843,9 @@
     ],
     "row": {
       "accession": "0000950103-26-015961",
-      "bank_in_range": null,
-      "base_std_error": 0.4363375658355406,
-      "base_value": 931.4531729249541,
+      "bank_in_range": true,
+      "base_std_error": 0.3546024158929712,
+      "base_value": 956.6124930185532,
       "cost_to_investor": 15.919999999999959,
       "cost_to_investor_pct": 1.5919999999999959,
       "cost_to_investor_per_1000": 15.919999999999959,
@@ -7821,23 +7855,24 @@
       "cusip": "78018DG43",
       "estimated_value": 984.08,
       "filing_date": "2026-10-21",
+      "inputs": "r 0.0457 (U.S. Treasury par yield, 2026-10-19, 1.26y interpolated between 1 Yr and 2 Yr); vol [0.18]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "Royal Bank of Canada",
       "issuer_group": "Royal Bank of Canada",
       "model_seconds": 46.363996329999736,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
-      "prob_loss": 0.421,
+      "prob_loss": 0.33995,
       "quote_verification_rate": 0.8571428571428571,
       "quotes_checked": 21,
       "quotes_verified": 18,
-      "range_high": 960.019523796268,
-      "range_low": 902.6874360736585,
-      "reason": "plausibility gate: bank's estimated value 984.08 is above our whole range (high 960.02)",
-      "seconds": 0.18717009900046833,
-      "status": "needs_review",
+      "range_high": 985.0473018429988,
+      "range_low": 927.8812386296527,
+      "reason": null,
+      "seconds": 0.5295070998836309,
+      "status": "priced",
       "structure": "single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/1000275/000095010326015961/dp255335_424b2-spbeln1018spx.htm"
     }
@@ -7998,6 +8033,7 @@
       "cusip": "89115NMK7",
       "estimated_value": 995.2,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "The Toronto-Dominion Bank",
       "issuer_group": "Toronto-Dominion",
@@ -8011,7 +8047,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
-      "seconds": 0.046715473999938695,
+      "seconds": 0.14969490002840757,
       "status": "unsupported",
       "structure": "single underlying, buffer 87.5% at maturity",
       "supported": false,
@@ -8182,6 +8218,7 @@
       "cusip": "89115NKY9",
       "estimated_value": 983.6,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "TD",
       "issuer_group": "Toronto-Dominion",
@@ -8195,7 +8232,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Absolute Return']",
-      "seconds": 0.050650170000153594,
+      "seconds": 0.1488430998288095,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity",
       "supported": false,
@@ -8221,6 +8258,7 @@
       "cusip": null,
       "estimated_value": null,
       "filing_date": "2026-10-27",
+      "inputs": "",
       "issue_price": null,
       "issuer": null,
       "issuer_group": "Toronto-Dominion",
@@ -8234,7 +8272,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "autocall.review_dates: expected cited field, got null; autocall.call_amounts: expected cited field, got null",
-      "seconds": 0.00176408400056971,
+      "seconds": 0.0010494000744074583,
       "status": "extraction_failed",
       "structure": null,
       "supported": null,
@@ -8264,49 +8302,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 956.0553869450025,
+        "reference": 977.4137121980712,
         "tolerance": 0.0,
-        "value": 956.0553869450025
+        "value": 977.4137121980712
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 825.1832962907517,
-        "tolerance": 4.34655684887971,
-        "value": 824.7370982605861
+        "reference": 848.4378904779194,
+        "tolerance": 3.5009816273742906,
+        "value": 848.1835139010082
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 834.4719363417994,
-        "tolerance": 5.107215341678615,
-        "value": 834.9632793036892
+        "reference": 859.6316152784841,
+        "tolerance": 4.037195519331422,
+        "value": 859.4917670110523
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 928.2494350713058,
+        "reference": 912.3544674793891,
         "tolerance": 0.001,
-        "value": 928.2494350713058
+        "value": 912.354467479389
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 406.10912784369634,
+        "reference": 399.1550795222327,
         "tolerance": 0.001,
-        "value": 406.1091278436963
+        "value": 399.15507952223277
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 956.0553869450025,
+        "reference": 977.4137121980712,
         "tolerance": 0.0,
-        "value": 939.6437170628828
+        "value": 960.6354047883829
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -8314,7 +8352,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5334342006124816
+        "value": 0.5289420411931578
       },
       {
         "detail": "22/23 verified",
@@ -8492,9 +8530,9 @@
     ],
     "row": {
       "accession": "0001839882-26-051951",
-      "bank_in_range": null,
-      "base_std_error": 0.5101639032254718,
-      "base_value": 956.2899546019466,
+      "bank_in_range": true,
+      "base_std_error": 0.3808028835449435,
+      "base_value": 977.7093371906154,
       "cost_to_investor": 3.2999999999999545,
       "cost_to_investor_pct": 0.32999999999999546,
       "cost_to_investor_per_1000": 3.2999999999999545,
@@ -8504,23 +8542,24 @@
       "cusip": "90266F3B0",
       "estimated_value": 996.7,
       "filing_date": "2026-10-21",
+      "inputs": "r 0.0470 (U.S. Treasury par yield, 2026-10-19, 1.73y interpolated between 1 Yr and 2 Yr); vol [0.18]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
       "model_seconds": 69.50727032699933,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
-      "prob_loss": 0.25785,
+      "prob_loss": 0.1428,
       "quote_verification_rate": 0.9565217391304348,
       "quotes_checked": 23,
       "quotes_verified": 22,
-      "range_high": 987.5459194239234,
-      "range_low": 910.4296026881476,
-      "reason": "plausibility gate: bank's estimated value 996.70 is above our whole range (high 987.55)",
-      "seconds": 0.29341634800039174,
-      "status": "needs_review",
+      "range_high": 1004.2694715139056,
+      "range_low": 935.5674498946918,
+      "reason": null,
+      "seconds": 0.5550025999546051,
+      "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 24.08%, buffer 87.5% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/1114446/000183988226051951/ubs_424b2-35076.htm"
     }
@@ -8704,6 +8743,7 @@
       "cusip": "90266F6G6",
       "estimated_value": 996.2,
       "filing_date": "2026-10-22",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
@@ -8717,7 +8757,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['maximum settlement amount']",
-      "seconds": 0.051703237999390694,
+      "seconds": 0.14791009994223714,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -8947,6 +8987,7 @@
       "cusip": "90266F6R2",
       "estimated_value": 996.0,
       "filing_date": "2026-10-23",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
@@ -8960,7 +9001,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold settlement amount']",
-      "seconds": 0.10235713600013696,
+      "seconds": 0.1988868999760598,
       "status": "unsupported",
       "structure": "worst-of 5, upside leverage 1x, buffer 90% at maturity",
       "supported": false,
@@ -8990,49 +9031,49 @@
         "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical",
         "name": "determinism",
         "passed": true,
-        "reference": 954.8757895024161,
+        "reference": 975.6438542629071,
         "tolerance": 0.0,
-        "value": 954.8757895024161
+        "value": 975.6438542629071
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form",
         "name": "barrier_removed",
         "passed": true,
-        "reference": 788.4667658175626,
-        "tolerance": 4.686122683036708,
-        "value": 787.9643028600038
+        "reference": 810.2681670711063,
+        "tolerance": 3.9200155893012747,
+        "value": 809.9818126399782
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form",
         "name": "barrier_at_maturity",
         "passed": true,
-        "reference": 799.7597640829802,
-        "tolerance": 5.601538858521386,
-        "value": 800.2327654113618
+        "reference": 823.3316648714098,
+        "tolerance": 4.532586223478799,
+        "value": 823.0965664131043
       },
       {
         "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)",
         "name": "zero_coupon_no_downside",
         "passed": true,
-        "reference": 902.903383751676,
+        "reference": 882.2061004610609,
         "tolerance": 0.001,
-        "value": 902.9033837516762
+        "value": 882.2061004610605
       },
       {
         "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)",
         "name": "zero_vol",
         "passed": true,
-        "reference": 383.7339380944623,
+        "reference": 374.9375926959509,
         "tolerance": 0.001,
-        "value": 383.73393809446225
+        "value": 374.93759269595085
       },
       {
         "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing",
         "name": "spread_monotonicity",
         "passed": true,
-        "reference": 954.8757895024161,
+        "reference": 975.6438542629071,
         "tolerance": 0.0,
-        "value": 932.4614815499401
+        "value": 952.7420464657014
       },
       {
         "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]",
@@ -9040,7 +9081,7 @@
         "passed": true,
         "reference": 0.5,
         "tolerance": 0.1,
-        "value": 0.5285409911254736
+        "value": 0.5236947320690878
       },
       {
         "detail": "23/24 verified",
@@ -9218,9 +9259,9 @@
     ],
     "row": {
       "accession": "0001839882-26-052422",
-      "bank_in_range": null,
-      "base_std_error": 0.517349712443619,
-      "base_value": 955.1839173579674,
+      "bank_in_range": true,
+      "base_std_error": 0.4326097428563385,
+      "base_value": 976.0066010130632,
       "cost_to_investor": 4.75,
       "cost_to_investor_pct": 0.475,
       "cost_to_investor_per_1000": 4.75,
@@ -9230,23 +9271,24 @@
       "cusip": "95001HTE1",
       "estimated_value": 995.25,
       "filing_date": "2026-10-26",
+      "inputs": "r 0.0468 (U.S. Treasury par yield, 2026-10-22, 2.38y interpolated between 2 Yr and 3 Yr); vol [0.19]; rho 0.00 (single underlying: rho 0.0)",
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
       "model_seconds": 50.140530011999545,
       "notional": 1000.0,
       "pricing_date": "2026-10-22",
-      "prob_loss": 0.23845,
+      "prob_loss": 0.12935,
       "quote_verification_rate": 0.9583333333333334,
       "quotes_checked": 24,
       "quotes_verified": 23,
-      "range_high": 993.237060810927,
-      "range_low": 897.0074819947647,
-      "reason": "plausibility gate: bank's estimated value 995.25 is above our whole range (high 993.24)",
-      "seconds": 0.18016832600005728,
-      "status": "needs_review",
+      "range_high": 1008.8616068750737,
+      "range_low": 922.4487601464241,
+      "reason": null,
+      "seconds": 0.46507090004161,
+      "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity",
-      "supported": null,
+      "supported": true,
       "underlyings": "S&P 500\u00ae Index",
       "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052422/r10723wfc_424b2-35603.htm"
     }
@@ -9413,6 +9455,7 @@
       "cusip": "95001HTH4",
       "estimated_value": 994.42,
       "filing_date": "2026-10-26",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
@@ -9426,7 +9469,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
-      "seconds": 0.02978401299969846,
+      "seconds": 0.0927263000048697,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
       "supported": false,
@@ -9629,6 +9672,7 @@
       "cusip": "95001HTK7",
       "estimated_value": 988.71,
       "filing_date": "2026-10-27",
+      "inputs": "",
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
@@ -9642,7 +9686,7 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
-      "seconds": 0.03803542900004686,
+      "seconds": 0.10295820003375411,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
       "supported": false,

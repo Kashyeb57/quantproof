@@ -179,6 +179,19 @@ def note_defaults(stem: str, ts: TermSheet) -> dict:
             defaults["rate_label"] = label
         except (OSError, ValueError):
             pass
+        try:
+            from quantproof.market.anchored import anchored_inputs
+            from quantproof.market.sources import SourceError
+
+            market, _report = anchored_inputs(
+                [u.name.value for u in ts.underlyings],
+                ts.pricing_date.value,
+                ts.maturity_date.value,
+            )
+            defaults["vols"] = market["vols"]
+            defaults["vol_labels"] = _report["vol_labels"]
+        except (OSError, ValueError, SourceError):
+            pass
     return defaults
 
 

@@ -97,9 +97,9 @@ The flagged fields above have no verified quote in the filing text; they are fla
 
 ## Estimated value (risk-neutral)
 
-Estimated value range under these assumptions: $778.01 - $974.81
+Estimated value range under these assumptions: $774.88 - $974.06
 
-Base estimated value: $907.67 +- $1.46 (1.96 SE, SE = $0.74), seed 0, paths 100000.
+Base estimated value: $904.66 +- $1.46 (1.96 SE, SE = $0.74), seed 0, paths 100000.
 
 Grid paths per point: 20000, seed: 0.
 
@@ -111,19 +111,19 @@ Position of the bank's estimated value: inside range.
 
 | Assumption | Low-shift value | High-shift value |
 | --- | --- | --- |
-| Volatility | $954.06 | $862.46 |
-| Correlation | $894.25 | $914.84 |
-| Issuer credit spread | $911.47 | $900.93 |
-| Dividend yields | $916.26 | $895.39 |
-| Skew | $906.18 | $854.03 |
+| Volatility | $951.33 | $859.93 |
+| Correlation | $891.12 | $912.32 |
+| Issuer credit spread | $908.73 | $898.18 |
+| Dividend yields | $914.09 | $892.70 |
+| Skew | $903.43 | $851.24 |
 
-The assumption that moves the estimated value most is Volatility: $954.06 to $862.46 across its stated range.
+The assumption that moves the estimated value most is Volatility: $951.33 to $859.93 across its stated range.
 
 Assumptions:
 
 - risk-free rate r = 0.035515 per year, as of 2025-11-25
 - issuer credit spread = 0.006 per year
-- volatilities = (0.24, 0.17) per year (grid shifts (-0.05, 0.0, 0.05))
+- volatilities = (0.2336, 0.1856) per year (grid shifts (-0.05, 0.0, 0.05))
 - dividend yields = (0.012, 0.013) per year (grid shifts (-0.005, 0.0, 0.005))
 - correlation: ((1.0, 0.6), (0.6, 1.0)) (grid blends towards independence / perfect correlation)
 - skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 0.7
@@ -144,12 +144,12 @@ Drift: real-world drift = r + 5.0% equity risk premium (r = 0.035515)
 
 Real-world drifts: 0.0855, 0.0855
 
-- P(loss): 9.85% (SE 0.09%)
-- P(loss > 20%): 9.85% (SE 0.09%)
-- P(loss > 50%): 3.49% (SE 0.06%)
-- P(called early): 82.29% (SE 0.12%)
-- Expected cash: $1,082.13 (SE $0.66)
-- p05: $552.30
+- P(loss): 10.17% (SE 0.10%)
+- P(loss > 20%): 10.17% (SE 0.10%)
+- P(loss > 50%): 3.42% (SE 0.06%)
+- P(called early): 81.72% (SE 0.12%)
+- Expected cash: $1,080.84 (SE $0.66)
+- p05: $552.03
 - p50: $1,097.50
 - p95: $1,365.62
 - Paths: 100000, seed: 0, measure: real_world
@@ -162,11 +162,11 @@ Cells are P(loss) as percent under the real-world measure, for each drift (rows)
 
 | Drift | 0.75x | 1.00x | 1.25x | 1.50x |
 | --- | --- | --- | --- | --- |
-| -0.1000 | 78.48% | 72.08% | 68.42% | 66.11% |
-| -0.0500 | 54.36% | 53.70% | 53.53% | 53.95% |
-| 0.0000 | 27.27% | 33.76% | 37.94% | 41.22% |
-| 0.0500 | 9.71% | 17.54% | 24.04% | 29.11% |
-| 0.1000 | 2.53% | 7.52% | 13.43% | 18.98% |
+| -0.1000 | 77.27% | 71.30% | 67.62% | 65.55% |
+| -0.0500 | 54.12% | 53.50% | 53.46% | 53.90% |
+| 0.0000 | 27.96% | 34.22% | 38.39% | 41.49% |
+| 0.0500 | 10.08% | 18.09% | 24.53% | 29.64% |
+| 0.1000 | 2.44% | 7.62% | 13.89% | 19.54% |
 
 ## Proof battery
 
@@ -174,17 +174,17 @@ Cells are P(loss) as percent under the real-world measure, for each drift (rows)
 | --- | --- | --- | --- | --- |
 | bsm_known_values | True | 4.759422 | 4.760000 | 0.005000 |
 | put_call_parity | True | 3.325524 | 3.325524 | 0.000000 |
-| determinism | True | 906.176847 | 906.176847 | 0.000000 |
-| barrier_removed | True | 675.504767 | 675.950901 | 2.251044 |
-| barrier_at_maturity | True | 706.989201 | 707.338619 | 3.093234 |
-| never_callable | True | 707.238316 | 707.338619 | 3.105482 |
+| determinism | True | 903.431170 | 903.431170 | 0.000000 |
+| barrier_removed | True | 680.137560 | 680.584296 | 2.239169 |
+| barrier_at_maturity | True | 712.155984 | 712.497624 | 3.052773 |
+| never_callable | True | 712.505860 | 712.497624 | 3.065980 |
 | zero_coupon_no_downside | True | 812.090332 | 812.090332 | 0.001000 |
 | zero_vol | True | 284.231616 | 284.231616 | 0.001000 |
-| correlation_one | True | 951.610249 | 954.943863 | 6.907937 |
-| correlation_monotonicity | True | 943.027594 | 864.729310 | 3.291549 |
-| vol_monotonicity | True | 869.335503 | 946.557125 | 3.581961 |
-| spread_monotonicity | True | 885.440629 | 906.176847 | 0.000000 |
-| convergence | True | 0.504799 | 0.500000 | 0.100000 |
+| correlation_one | True | 955.551135 | 958.437762 | 6.792433 |
+| correlation_monotonicity | True | 944.134014 | 859.222769 | 3.249622 |
+| vol_monotonicity | True | 866.694287 | 943.690497 | 3.583441 |
+| spread_monotonicity | True | 882.699363 | 903.431170 | 0.000000 |
+| convergence | True | 0.502940 | 0.500000 | 0.100000 |
 | quotes | False | 77.000000 | 78.000000 | 0.000000 |
 
 ## Limitations

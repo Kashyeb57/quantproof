@@ -443,7 +443,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-22",
   "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
-  "seconds": 0.09154387800026598,
+  "seconds": 0.12384050013497472,
   "cost_usd": 0.1820313,
   "model_seconds": 99.30860452199977,
   "previous_status": "extraction_failed",

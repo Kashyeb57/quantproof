@@ -355,7 +355,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-09-24",
   "structure": "single underlying, barrier 60% at maturity",
-  "seconds": 0.03097491600055946,
+  "seconds": 0.08082919986918569,
   "cost_usd": 0.07628275000000001,
   "model_seconds": 35.50623447500038
 }

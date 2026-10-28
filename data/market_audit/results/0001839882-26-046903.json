@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "ms18827_424b2-31846.htm"
   },
-  "status": "needs_review",
-  "reason": "plausibility gate: bank's estimated value 9.80 is above our whole range (high 9.56)",
+  "status": "priced",
+  "reason": null,
   "termsheet": {
     "issuer": "Morgan Stanley Finance LLC",
     "underlying_names": [
@@ -375,55 +375,55 @@
     {
       "name": "determinism",
       "passed": true,
-      "value": 9.295438019930511,
-      "reference": 9.295438019930511,
+      "value": 9.696483510480284,
+      "reference": 9.696483510480284,
       "tolerance": 0.0,
       "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical"
     },
     {
       "name": "barrier_removed",
       "passed": true,
-      "value": 8.709617732373825,
-      "reference": 8.713217713733949,
-      "tolerance": 0.037249514917606884,
+      "value": 9.060566714149129,
+      "reference": 9.062093504587825,
+      "tolerance": 0.024519720101842328,
       "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form"
     },
     {
       "name": "barrier_at_maturity",
       "passed": true,
-      "value": 8.709617732373825,
-      "reference": 8.713217713733949,
-      "tolerance": 0.037249514917606884,
+      "value": 9.060566714149129,
+      "reference": 9.062093504587825,
+      "tolerance": 0.024519720101842328,
       "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form"
     },
     {
       "name": "zero_coupon_no_downside",
       "passed": true,
-      "value": 9.562201373082953,
-      "reference": 9.56220137308295,
+      "value": 9.486570033795687,
+      "reference": 9.486570033795683,
       "tolerance": 9.999999999999999e-06,
       "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)"
     },
     {
       "name": "zero_vol",
       "passed": true,
-      "value": 4.7811006865414765,
-      "reference": 4.781100686541475,
+      "value": 4.743285016897843,
+      "reference": 4.7432850168978415,
       "tolerance": 9.999999999999999e-06,
       "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)"
     },
     {
       "name": "spread_monotonicity",
       "passed": true,
-      "value": 9.199165610322774,
-      "reference": 9.295438019930511,
+      "value": 9.5960574917952,
+      "reference": 9.696483510480284,
       "tolerance": 0.0,
       "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing"
     },
     {
       "name": "convergence",
       "passed": true,
-      "value": 0.5389799104054452,
+      "value": 0.548390343890794,
       "reference": 0.5,
       "tolerance": 0.1,
       "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]"
@@ -438,18 +438,18 @@
     }
   ],
   "fair_value": {
-    "low": 9.035662719934228,
-    "high": 9.561154598886931,
+    "low": 9.426584715812714,
+    "high": 9.985919447839667,
     "base": {
-      "price": 9.295842502464968,
+      "price": 9.697388390117572,
       "measure": "risk_neutral",
       "model": "montecarlo.worst_of_note",
       "greeks": {},
       "inputs": {
-        "rate": 0.037,
+        "rate": 0.044627397260273975,
         "spread": 0.006,
         "vols": [
-          0.25
+          0.1487
         ],
         "dividend_yields": [
           0.01
@@ -464,7 +464,7 @@
       },
       "seed": 0,
       "paths": 20000,
-      "std_error": 0.005040998178683607,
+      "std_error": 0.003739573764384255,
       "version": "0.1.0"
     },
     "points": [
@@ -474,8 +474,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.561154598886931,
-        "std_error": 0.010077909528294302
+        "price": 9.985919447839667,
+        "std_error": 0.007207943702348604
       },
       {
         "vol_shift": -0.05,
@@ -483,8 +483,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.561154598886931,
-        "std_error": 0.010077909528294302
+        "price": 9.985919447839667,
+        "std_error": 0.007207943702348604
       },
       {
         "vol_shift": -0.05,
@@ -492,8 +492,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.528780926957422,
-        "std_error": 0.009799921080556218
+        "price": 9.944380194372927,
+        "std_error": 0.006621646718778213
       },
       {
         "vol_shift": -0.05,
@@ -501,8 +501,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.528780926957422,
-        "std_error": 0.009799921080556218
+        "price": 9.944380194372927,
+        "std_error": 0.006621646718778213
       },
       {
         "vol_shift": -0.05,
@@ -510,8 +510,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.495949772866998,
-        "std_error": 0.009533818405512087
+        "price": 9.90222739901105,
+        "std_error": 0.0060302361457808176
       },
       {
         "vol_shift": -0.05,
@@ -519,8 +519,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.495949772866998,
-        "std_error": 0.009533818405512087
+        "price": 9.90222739901105,
+        "std_error": 0.0060302361457808176
       },
       {
         "vol_shift": -0.05,
@@ -528,8 +528,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.536301758752835,
-        "std_error": 0.010051713458373857
+        "price": 9.959962492844085,
+        "std_error": 0.007189207693985043
       },
       {
         "vol_shift": -0.05,
@@ -537,8 +537,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.536301758752835,
-        "std_error": 0.010051713458373857
+        "price": 9.959962492844085,
+        "std_error": 0.007189207693985043
       },
       {
         "vol_shift": -0.05,
@@ -546,8 +546,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.504012237506666,
-        "std_error": 0.009774447601446256
+        "price": 9.918531214665789,
+        "std_error": 0.006604434704724446
       },
       {
         "vol_shift": -0.05,
@@ -555,8 +555,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.504012237506666,
-        "std_error": 0.009774447601446256
+        "price": 9.918531214665789,
+        "std_error": 0.006604434704724446
       },
       {
         "vol_shift": -0.05,
@@ -564,8 +564,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.471266423258367,
-        "std_error": 0.00950903662186356
+        "price": 9.876487989405879,
+        "std_error": 0.006014561418073831
       },
       {
         "vol_shift": -0.05,
@@ -573,8 +573,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.471266423258367,
-        "std_error": 0.00950903662186356
+        "price": 9.876487989405879,
+        "std_error": 0.006014561418073831
       },
       {
         "vol_shift": -0.05,
@@ -582,8 +582,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.511513519986314,
-        "std_error": 0.010025585481352772
+        "price": 9.934073009203154,
+        "std_error": 0.0071705203871685365
       },
       {
         "vol_shift": -0.05,
@@ -591,8 +591,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.511513519986314,
-        "std_error": 0.010025585481352772
+        "price": 9.934073009203154,
+        "std_error": 0.0071705203871685365
       },
       {
         "vol_shift": -0.05,
@@ -600,8 +600,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.479307930685941,
-        "std_error": 0.009749040336965232
+        "price": 9.892749425647143,
+        "std_error": 0.0065872674308146886
       },
       {
         "vol_shift": -0.05,
@@ -609,8 +609,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.479307930685941,
-        "std_error": 0.009749040336965232
+        "price": 9.892749425647143,
+        "std_error": 0.0065872674308146886
       },
       {
         "vol_shift": -0.05,
@@ -618,8 +618,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.446647234451182,
-        "std_error": 0.009484319254881544
+        "price": 9.85081548567755,
+        "std_error": 0.005998927434557078
       },
       {
         "vol_shift": -0.05,
@@ -627,8 +627,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.446647234451182,
-        "std_error": 0.009484319254881544
+        "price": 9.85081548567755,
+        "std_error": 0.005998927434557078
       },
       {
         "vol_shift": 0.0,
@@ -636,8 +636,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.34977204737386,
-        "std_error": 0.011597597986807954
+        "price": 9.75672976183553,
+        "std_error": 0.00883268402252588
       },
       {
         "vol_shift": 0.0,
@@ -645,8 +645,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.34977204737386,
-        "std_error": 0.011597597986807954
+        "price": 9.75672976183553,
+        "std_error": 0.00883268402252588
       },
       {
         "vol_shift": 0.0,
@@ -654,8 +654,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.319663137898669,
-        "std_error": 0.011340260852303418
+        "price": 9.721753805049948,
+        "std_error": 0.008399966914192371
       },
       {
         "vol_shift": 0.0,
@@ -663,8 +663,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.319663137898669,
-        "std_error": 0.011340260852303418
+        "price": 9.721753805049948,
+        "std_error": 0.008399966914192371
       },
       {
         "vol_shift": 0.0,
@@ -672,8 +672,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.289208104625043,
-        "std_error": 0.01108222329115467
+        "price": 9.686517489870155,
+        "std_error": 0.008013100552105206
       },
       {
         "vol_shift": 0.0,
@@ -681,8 +681,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.289208104625043,
-        "std_error": 0.01108222329115467
+        "price": 9.686517489870155,
+        "std_error": 0.008013100552105206
       },
       {
         "vol_shift": 0.0,
@@ -690,8 +690,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.325468665645182,
-        "std_error": 0.011567451706280365
+        "price": 9.731368552318978,
+        "std_error": 0.008809724736417026
       },
       {
         "vol_shift": 0.0,
@@ -699,8 +699,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.325468665645182,
-        "std_error": 0.011567451706280365
+        "price": 9.731368552318978,
+        "std_error": 0.008809724736417026
       },
       {
         "vol_shift": 0.0,
@@ -708,8 +708,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.295438019930511,
-        "std_error": 0.011310783482480938
+        "price": 9.696483510480284,
+        "std_error": 0.008378132413694445
       },
       {
         "vol_shift": 0.0,
@@ -717,8 +717,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.295438019930511,
-        "std_error": 0.011310783482480938
+        "price": 9.696483510480284,
+        "std_error": 0.008378132413694445
       },
       {
         "vol_shift": 0.0,
@@ -726,8 +726,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.265062150116213,
-        "std_error": 0.011053416652695176
+        "price": 9.66133878701141,
+        "std_error": 0.00799227165482714
       },
       {
         "vol_shift": 0.0,
@@ -735,8 +735,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.265062150116213,
-        "std_error": 0.011053416652695176
+        "price": 9.66133878701141,
+        "std_error": 0.00799227165482714
       },
       {
         "vol_shift": 0.0,
@@ -744,8 +744,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.301228457046339,
-        "std_error": 0.011537383786653947
+        "price": 9.706073265602775,
+        "std_error": 0.008786825129655609
       },
       {
         "vol_shift": 0.0,
@@ -753,8 +753,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.301228457046339,
-        "std_error": 0.011537383786653947
+        "price": 9.706073265602775,
+        "std_error": 0.008786825129655609
       },
       {
         "vol_shift": 0.0,
@@ -762,8 +762,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.271275871656844,
-        "std_error": 0.011281382734822884
+        "price": 9.671278902390696,
+        "std_error": 0.008356354668826256
       },
       {
         "vol_shift": 0.0,
@@ -771,8 +771,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.271275871656844,
-        "std_error": 0.011281382734822884
+        "price": 9.671278902390696,
+        "std_error": 0.008356354668826256
       },
       {
         "vol_shift": 0.0,
@@ -780,8 +780,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.240978959527897,
-        "std_error": 0.011024684892930826
+        "price": 9.636225532553322,
+        "std_error": 0.007971496899258515
       },
       {
         "vol_shift": 0.0,
@@ -789,8 +789,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.240978959527897,
-        "std_error": 0.011024684892930826
+        "price": 9.636225532553322,
+        "std_error": 0.007971496899258515
       },
       {
         "vol_shift": 0.05,
@@ -798,8 +798,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.140000508626912,
-        "std_error": 0.01280004346828036
+        "price": 9.53884786735342,
+        "std_error": 0.01040693514515869
       },
       {
         "vol_shift": 0.05,
@@ -807,8 +807,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.140000508626912,
-        "std_error": 0.01280004346828036
+        "price": 9.53884786735342,
+        "std_error": 0.01040693514515869
       },
       {
         "vol_shift": 0.05,
@@ -816,8 +816,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.111598248868656,
-        "std_error": 0.012545925882227124
+        "price": 9.507591628831614,
+        "std_error": 0.010104036031957008
       },
       {
         "vol_shift": 0.05,
@@ -825,8 +825,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.111598248868656,
-        "std_error": 0.012545925882227124
+        "price": 9.507591628831614,
+        "std_error": 0.010104036031957008
       },
       {
         "vol_shift": 0.05,
@@ -834,8 +834,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.082820309003214,
-        "std_error": 0.012288552532345728
+        "price": 9.475782546910544,
+        "std_error": 0.009821604306022542
       },
       {
         "vol_shift": 0.05,
@@ -843,8 +843,8 @@
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.082820309003214,
-        "std_error": 0.012288552532345728
+        "price": 9.475782546910544,
+        "std_error": 0.009821604306022542
       },
       {
         "vol_shift": 0.05,
@@ -852,8 +852,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.116242397708705,
-        "std_error": 0.012766771604434152
+        "price": 9.514053010345414,
+        "std_error": 0.010379883820679668
       },
       {
         "vol_shift": 0.05,
@@ -861,8 +861,8 @@
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.116242397708705,
-        "std_error": 0.012766771604434152
+        "price": 9.514053010345414,
+        "std_error": 0.010379883820679668
       },
       {
         "vol_shift": 0.05,
@@ -870,8 +870,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.087913965521578,
-        "std_error": 0.012513314560334938
+        "price": 9.482878017900235,
+        "std_error": 0.010077772049964642
       },
       {
         "vol_shift": 0.05,
@@ -879,8 +879,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.087913965521578,
-        "std_error": 0.012513314560334938
+        "price": 9.482878017900235,
+        "std_error": 0.010077772049964642
       },
       {
         "vol_shift": 0.05,
@@ -888,8 +888,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.05921082975343,
-        "std_error": 0.01225661021529529
+        "price": 9.451151619092343,
+        "std_error": 0.009796074464500433
       },
       {
         "vol_shift": 0.05,
@@ -897,8 +897,8 @@
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.05921082975343,
-        "std_error": 0.01225661021529529
+        "price": 9.451151619092343,
+        "std_error": 0.009796074464500433
       },
       {
         "vol_shift": 0.05,
@@ -906,8 +906,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.09254604256763,
-        "std_error": 0.012733586225991416
+        "price": 9.48932260398623,
+        "std_error": 0.01035290281221068
       },
       {
         "vol_shift": 0.05,
@@ -915,8 +915,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.09254604256763,
-        "std_error": 0.012733586225991416
+        "price": 9.48932260398623,
+        "std_error": 0.01035290281221068
       },
       {
         "vol_shift": 0.05,
@@ -924,8 +924,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.0,
-        "price": 9.064291246047526,
-        "std_error": 0.012480788006862841
+        "price": 9.458228646430237,
+        "std_error": 0.010051576337399254
       },
       {
         "vol_shift": 0.05,
@@ -933,8 +933,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
         "skew_per_10pct": 0.02,
-        "price": 9.064291246047526,
-        "std_error": 0.012480788006862841
+        "price": 9.458228646430237,
+        "std_error": 0.010051576337399254
       },
       {
         "vol_shift": 0.05,
@@ -942,8 +942,8 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.0,
-        "price": 9.035662719934228,
-        "std_error": 0.012224750927683504
+        "price": 9.426584715812714,
+        "std_error": 0.009770610984113212
       },
       {
         "vol_shift": 0.05,
@@ -951,34 +951,34 @@
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
         "skew_per_10pct": 0.02,
-        "price": 9.035662719934228,
-        "std_error": 0.012224750927683504
+        "price": 9.426584715812714,
+        "std_error": 0.009770610984113212
       }
     ],
     "sensitivities": {
       "vol": [
-        9.504012237506666,
-        9.087913965521578
+        9.918531214665789,
+        9.482878017900235
       ],
       "correlation": [
-        9.295438019930511,
-        9.295438019930511
+        9.696483510480284,
+        9.696483510480284
       ],
       "spread": [
-        9.319663137898669,
-        9.271275871656844
+        9.721753805049948,
+        9.671278902390696
       ],
       "dividend": [
-        9.325468665645182,
-        9.265062150116213
+        9.731368552318978,
+        9.66133878701141
       ],
       "skew": [
-        9.295438019930511,
-        9.295438019930511
+        9.696483510480284,
+        9.696483510480284
       ]
     },
     "bank_estimate": 9.798,
-    "bank_position": "above range",
+    "bank_position": "inside range",
     "preliminary": false,
     "n_paths": 4000,
     "seed": 0,
@@ -1009,9 +1009,9 @@
       ]
     },
     "assumptions": [
-      "risk-free rate r = 0.037 per year, as of 2026-09-21",
+      "risk-free rate r = 0.0446274 per year, as of 2026-09-21",
       "issuer credit spread = 0.006 per year",
-      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "volatilities = (0.1487,) per year (grid shifts (-0.05, 0.0, 0.05))",
       "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
       "correlation: single underlying, correlation matrix [[1]]",
       "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 1",
@@ -1023,26 +1023,26 @@
   "loss_odds": {
     "measure": "real_world",
     "drifts": [
-      0.087
+      0.09462739726027397
     ],
-    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.037)",
-    "prob_loss": 0.42835,
-    "prob_loss_over_20": 0.139,
-    "prob_loss_over_50": 0.0022,
+    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.0446274)",
+    "prob_loss": 0.30865,
+    "prob_loss_over_20": 0.0229,
+    "prob_loss_over_50": 0.0,
     "prob_called": null,
-    "expected_cash": 10.029679789978731,
+    "expected_cash": 10.575237667206888,
     "quantiles": {
-      "p05": 6.949873679035171,
-      "p25": 8.852935505165412,
+      "p05": 8.446817827979363,
+      "p25": 9.75467461974151,
       "p50": 11.325000000000001,
       "p75": 11.325000000000001,
       "p95": 11.325000000000001
     },
     "std_errors": {
-      "prob_loss": 0.0034990447089169926,
-      "prob_loss_over_20": 0.0024462113563631415,
-      "prob_loss_over_50": 0.00033129744943177574,
-      "expected_cash": 0.011292458546925947
+      "prob_loss": 0.003266383148836033,
+      "prob_loss_over_20": 0.0010577237351974285,
+      "prob_loss_over_50": 0.0,
+      "expected_cash": 0.007550536556917594
     },
     "n_paths": 20000,
     "seed": 0,
@@ -1059,7 +1059,22 @@
   "is_preliminary": false,
   "pricing_date": "2026-09-21",
   "structure": "single underlying, upside leverage 3x, cap 13.25%, barrier 100% at maturity",
-  "seconds": 0.23913538199940376,
+  "seconds": 0.4993208998348564,
+  "market_inputs": {
+    "rate": 0.044627397260273975,
+    "rate_label": "U.S. Treasury par yield, 2026-09-21, 1.04y interpolated between 1 Yr and 2 Yr",
+    "vols": [
+      0.1487
+    ],
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 14.87 on 2026-09-21 via FRED)"
+    ],
+    "rho": 0.0,
+    "corr_label": "single underlying: rho 0.0",
+    "spread": 0.006,
+    "dividend": 0.01,
+    "erp": 0.05
+  },
   "cost_usd": 0.08095849999999999,
   "model_seconds": 50.869425513000124
 }

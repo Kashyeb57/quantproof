@@ -457,6 +457,11 @@ def run() -> None:
     _caption(
         "Volatilities, dividend yields and correlation are stated "
         "assumptions (ranges you can edit), not market data."
+        if "vol_labels" not in defaults
+        else "Volatilities: "
+        + "; ".join(str(label) for label in defaults["vol_labels"])
+        + ". Dividend yields and correlation are stated assumptions "
+        "(ranges you can edit), not market data."
     )
     vols: list[float] = []
     dividends: list[float] = []

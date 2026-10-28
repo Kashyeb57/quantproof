@@ -32,12 +32,31 @@ def test_catalogue_is_the_four_saved_filings():
 
 
 def test_38582_defaults_match_the_example_report():
+    # Static stated defaults (the Treasury rate and implied vols are
+    # layered on by note_defaults; tested separately with fakes).
     defaults = demo.DEFAULT_INPUTS[STEM]
     assert defaults["rate"] == 0.037
     assert defaults["spread"] == 0.006
     assert defaults["vols"] == (0.24, 0.17)
     assert defaults["dividends"] == (0.012, 0.013)
     assert defaults["rho"] == 0.6
+
+
+def test_note_defaults_layer_implied_vols(monkeypatch):
+    import quantproof.market.anchored as anchored_module
+
+    def _fake(names, pricing_date, maturity_date, **kwargs):
+        vols = tuple(0.2336 if "Russell" in name else 0.1856 for name in names)
+        return (
+            {"rate": 0.035515, "vols": vols},
+            {"vol_labels": [f"{name}: implied" for name in names]},
+        )
+
+    monkeypatch.setattr(anchored_module, "anchored_inputs", _fake)
+    note = demo.load_note(STEM)
+    defaults = demo.note_defaults(note.stem, note.termsheet)
+    assert defaults["vols"] == (0.2336, 0.1856)
+    assert all("implied" in label for label in defaults["vol_labels"])
 
 
 def test_maths_gate_ignores_quotes_but_not_maths_failures():

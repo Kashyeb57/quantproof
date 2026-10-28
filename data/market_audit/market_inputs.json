@@ -1,0 +1,201 @@
+{
+  "0000950103-26-015961": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04569534246575342,
+    "rate_label": "U.S. Treasury par yield, 2026-10-19, 1.26y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 18.44 on 2026-10-19 via FRED)"
+    ],
+    "vols": [
+      0.1844
+    ]
+  },
+  "0001193125-26-426561": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04544383561643836,
+    "rate_label": "U.S. Treasury par yield, 2026-10-16, 1.30y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "Russell 2000\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (RVX 23.21 on 2026-10-16 via FRED)"
+    ],
+    "vols": [
+      0.2321
+    ]
+  },
+  "0001193125-26-426871": {
+    "corr_label": "no pair with two confirmed FRED closes series: stated 0.6",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04820767123287671,
+    "rate_label": "U.S. Treasury par yield, 2026-10-16, 3.02y interpolated between 3 Yr and 5 Yr",
+    "rho": 0.6,
+    "spread": 0.006,
+    "vol_labels": [
+      "the common stock of Constellation Energy Corporation: stated 0.25 (not anchored)",
+      "the common stock of Quanta Services, Inc.: stated 0.25 (not anchored)",
+      "the common stock of Vistra Corp.: stated 0.25 (not anchored)"
+    ],
+    "vols": [
+      0.25,
+      0.25,
+      0.25
+    ]
+  },
+  "0001213900-26-112047": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04354191780821918,
+    "rate_label": "U.S. Treasury par yield, 2026-10-21, 0.51y interpolated between 0.5 Yr and 1 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "TOPIX\u00ae Index: stated 0.25 (not anchored)"
+    ],
+    "vols": [
+      0.25
+    ]
+  },
+  "0001214659-26-013052": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.048509863013698626,
+    "rate_label": "U.S. Treasury par yield, 2026-10-15, 3.03y interpolated between 3 Yr and 5 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "Russell 2000\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (RVX 20.56 on 2026-10-15 via FRED)"
+    ],
+    "vols": [
+      0.20559999999999998
+    ]
+  },
+  "0001214659-26-013157": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04758356164383561,
+    "rate_label": "U.S. Treasury par yield, 2026-10-21, 1.82y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 16.68 on 2026-10-21 via FRED)"
+    ],
+    "vols": [
+      0.1668
+    ]
+  },
+  "0001839882-26-046903": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.044627397260273975,
+    "rate_label": "U.S. Treasury par yield, 2026-09-21, 1.04y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 14.87 on 2026-09-21 via FRED)"
+    ],
+    "vols": [
+      0.1487
+    ]
+  },
+  "0001839882-26-051951": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04697506849315068,
+    "rate_label": "U.S. Treasury par yield, 2026-10-19, 1.73y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 18.44 on 2026-10-19 via FRED)"
+    ],
+    "vols": [
+      0.1844
+    ]
+  },
+  "0001839882-26-052422": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.0467627397260274,
+    "rate_label": "U.S. Treasury par yield, 2026-10-22, 2.38y interpolated between 2 Yr and 3 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 19.03 on 2026-10-22 via FRED)"
+    ],
+    "vols": [
+      0.19030000000000002
+    ]
+  },
+  "0001918704-26-029357": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04505095890410959,
+    "rate_label": "U.S. Treasury par yield, 2026-09-25, 1.02y interpolated between 1 Yr and 2 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 14.87 on 2026-09-25 via FRED)"
+    ],
+    "vols": [
+      0.1487
+    ]
+  },
+  "0001918704-26-031667": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.04821643835616438,
+    "rate_label": "U.S. Treasury par yield, 2026-10-14, 2.02y interpolated between 2 Yr and 3 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "MSCI ACWI Index: stated 0.25 (not anchored)"
+    ],
+    "vols": [
+      0.25
+    ]
+  },
+  "0001918704-26-032653": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.047204109589041095,
+    "rate_label": "U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "The TJX Companies, Inc.: stated 0.25 (not anchored)"
+    ],
+    "vols": [
+      0.25
+    ]
+  },
+  "0001918704-26-032657": {
+    "corr_label": "single underlying: rho 0.0",
+    "dividend": 0.01,
+    "erp": 0.05,
+    "rate": 0.047204109589041095,
+    "rate_label": "U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr",
+    "rho": 0.0,
+    "spread": 0.006,
+    "vol_labels": [
+      "First Trust Nasdaq Cybersecurity ETF: stated 0.25 (not anchored)"
+    ],
+    "vols": [
+      0.25
+    ]
+  }
+}

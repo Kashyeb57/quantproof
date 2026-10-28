@@ -32,7 +32,17 @@ def test_interpolation_between_5y_and_7y():
     assert "interpolated between 5 Yr and 7 Yr" in label
 
 
-def test_note_defaults_use_the_treasury_rate_for_38582():
+def test_note_defaults_use_the_treasury_rate_for_38582(monkeypatch):
+    # Pin the implied-vol layer to fail: the Treasury rate (committed
+    # CSV) must still apply while vols fall back to stated, so this
+    # passes with or without the local FRED cache.
+    import quantproof.market.anchored as anchored_module
+    from quantproof.market.sources import SourceError
+
+    def _no_fred(names, pricing_date, maturity_date, **kwargs):
+        raise SourceError("no FRED here")
+
+    monkeypatch.setattr(anchored_module, "anchored_inputs", _no_fred)
     note = demo.load_note("jpm_424b2-38582")
     defaults = demo.note_defaults(note.stem, note.termsheet)
     assert defaults["rate"] == pytest.approx(0.035515, abs=1e-6)
