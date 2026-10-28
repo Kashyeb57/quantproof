@@ -293,3 +293,20 @@ def test_market_audit_script_replay(tmp_path):
     assert replayed["model_seconds"] == 40.0
     # An api_error result has no complete recording and is left untouched.
     assert api_error_path.read_text(encoding="utf-8") == api_error_text
+
+
+def test_template_gaps_principal_protection_and_excess_return():
+    from types import SimpleNamespace
+
+    from quantproof.report.audit_run import template_gaps
+
+    def ts_with(name):
+        return SimpleNamespace(underlyings=[SimpleNamespace(name=SimpleNamespace(value=name))])
+
+    protected = "Under no circumstances will the payment at maturity be less than the stated principal amount."
+    reason = template_gaps(ts_with("S&P 500® Index"), protected)
+    assert reason.startswith("principal protection is not modelled")
+    assert "Under no circumstances" in reason  # the filing's own wording is kept
+    reason = template_gaps(ts_with("S&P 500® Futures Excess Return Index"), "no floor here")
+    assert reason.startswith("excess-return index underlying")
+    assert template_gaps(ts_with("S&P 500® Index"), "no floor here") is None

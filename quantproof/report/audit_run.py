@@ -234,6 +234,41 @@ def _structure_label(ts: Any) -> str:
     return ", ".join(parts)
 
 
+_PROTECTION_PHRASES = (
+    "under no circumstances will the payment at maturity be less than",
+    "principal protected",
+    "full principal protection",
+)
+
+
+def template_gaps(ts: Any, filing_text: str) -> str | None:
+    """Features the worst-of template cannot represent, found in the filing.
+
+    The template has no principal-protection payoff (a floor at par) and
+    simulates total-return underlyings (drift r - q).  So a note is not
+    priced when the filing text guarantees principal (the extractor can
+    only map that to a barrier at 100%, which loses 1:1 below par), or when
+    an underlying is an excess-return index (its risk-neutral drift is
+    -fee, not r - q, because the futures carry no financing).  Returns the
+    reason with the filing's own wording, or None.
+    """
+    collapsed = " ".join(filing_text.split())
+    lowered = collapsed.lower()
+    for phrase in _PROTECTION_PHRASES:
+        at = lowered.find(phrase)
+        if at >= 0:
+            quote = collapsed[at : at + 160]
+            return f"principal protection is not modelled by the template: \"{quote}\""
+    for underlying in ts.underlyings:
+        name = str(underlying.name.value)
+        if "excess return" in name.lower():
+            return (
+                "excess-return index underlying is not modelled by the template "
+                f"(no financing in its drift): {name}"
+            )
+    return None
+
+
 def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
     """Run the per-note audit pipeline on one filing; never raises for
     note-level problems.
@@ -376,6 +411,9 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
         check_supported(ts)
     except UnsupportedTermSheet as exc:
         return finish("unsupported", str(exc))
+    gap = template_gaps(ts, filing.text)
+    if gap is not None:
+        return finish("unsupported", gap)
 
     # Step d: market inputs from the stated assumptions, proof battery gate.
     n = ts.n_underlyings
