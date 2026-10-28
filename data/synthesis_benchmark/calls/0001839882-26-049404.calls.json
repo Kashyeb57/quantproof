@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.01560675,
+    "finish_reason": "stop",
+    "input_tokens": 7841,
+    "model": "muse-spark-1.3",
+    "output_tokens": 1366,
+    "purpose": "extract_examples",
+    "seconds": 6.757494342999962,
+    "text": "{\"examples\": []}"
+  },
+  {
+    "cost_usd": 0.091736,
+    "finish_reason": "stop",
+    "input_tokens": 8509,
+    "model": "muse-wonder-1.0",
+    "output_tokens": 2885,
+    "purpose": "synthesis",
+    "seconds": 15.140972183000486,
+    "text": "```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    npaths = perf.shape[0]\n    ndates = perf.shape[1]\n    cash = np.zeros((npaths, ndates), dtype=float)\n    notional = float(terms[\"notional\"])\n    finalindex = int(terms[\"final_index\"])\n    autocall = terms[\"autocall\"]\n    coupon = terms[\"coupon\"]\n    downside = terms[\"downside\"]\n    upside = terms[\"upside\"]\n    alive = np.ones(npaths, dtype=bool)\n    missed = np.zeros(npaths, dtype=float)\n    for k in range(ndates):\n        if not np.any(alive):\n            break\n        worst = np.min(perf[:, k, :], axis=1)\n        coupondue = np.zeros(npaths, dtype=float)\n        if coupon is not None:\n            amounts = coupon[\"amounts\"]\n            if amounts[k] is not None:\n                amount = float(amounts[k])\n                barrier = float(coupon[\"barrier\"])\n                meets = worst >= barrier\n                if bool(coupon[\"memory\"]):\n                    paymask = alive & meets\n                    coupondue[paymask] = amount + missed[paymask]\n                    missed[alive & meets] = 0.0\n                    missed[alive & (~meets)] = missed[alive & (~meets)] + amount\n                else:\n                    coupondue[alive & meets] = amount\n        called = np.zeros(npaths, dtype=bool)\n        if autocall is not None and k != finalindex:\n            callamounts = autocall[\"call_amounts\"]\n            if callamounts[k] is not None:\n                trigger = float(autocall[\"trigger\"])\n                called = alive & (worst >= trigger)\n                if np.any(called):\n                    cash[called, k] = float(callamounts[k])\n        if np.any(called):\n            alive[called] = False\n        remaining = alive.copy()\n        if k == finalindex:\n            if np.any(remaining):\n                finalperf = perf[:, k, 0] if perf.shape[2] == 1 else np.min(perf[:, k, :], axis=1)\n                level = float(downside[\"level\"])\n                gearing = float(downside[\"gearing\"])\n                payoff = np.full(npaths, notional, dtype=float)\n                upmask = finalperf > 1.0\n                downmask = finalperf < level\n                if upside is not None:\n                    leverage = float(upside[\"leverage\"])\n                    cap = upside[\"cap\"]\n                    upreturn = leverage * (finalperf - 1.0)\n                    if cap is not None:\n                        upreturn = np.minimum(upreturn, float(cap))\n                    payoff[upmask] = notional * (1.0 + upreturn[upmask])\n                else:\n                    payoff[upmask] = notional * (1.0 + (finalperf[upmask] - 1.0))\n                if str(downside[\"kind\"]) == \"buffer\":\n                    payoff[downmask] = notional * (1.0 - gearing * (level - finalperf[downmask]))\n                else:\n                    payoff[downmask] = notional * (1.0 - gearing * (1.0 - finalperf[downmask]))\n                payoff = np.maximum(payoff, 0.10 * notional)\n                if upside is not None and upside[\"cap\"] is not None:\n                    payoff = np.minimum(payoff, notional * (1.0 + float(upside[\"cap\"])))\n                cash[remaining, k] = payoff[remaining] + coupondue[remaining]\n            alive[:] = False\n        else:\n            if np.any(remaining):\n                cash[remaining, k] = cash[remaining, k] + coupondue[remaining]\n    return cash\n```"
+  }
+]
