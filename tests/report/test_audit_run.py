@@ -27,6 +27,7 @@ from quantproof.agent.client import ChatResult  # noqa: E402
 from quantproof.agent.costs import Usage  # noqa: E402
 from quantproof.ingest.edgar import FilingRef  # noqa: E402
 from quantproof.ingest.html import read_filing  # noqa: E402
+from quantproof.report import audit_run  # noqa: E402
 from quantproof.report.audit_run import (  # noqa: E402
     Recorder,
     Replay,
@@ -80,7 +81,13 @@ def priced():
 
 def test_priced_replay(priced):
     replay, result = priced
-    assert result["status"] == "priced"
+    # Priced, then stopped by the plausibility gate: under the flat 25% vol
+    # assumption our range is $750-944, below the bank's $954.
+    assert result["status"] == "needs_review"
+    assert result["reason"] == (
+        "plausibility gate: bank's estimated value 954.00 is above our whole "
+        "range (high 943.76)"
+    )
     assert replay.remaining == 0
     assert result["estimated_value"] == 954.0
     assert result["issue_price"] == 1000.0
@@ -287,7 +294,7 @@ def test_market_audit_script_replay(tmp_path):
     assert module._replay(out) == 0
 
     replayed = json.loads(result_path.read_text(encoding="utf-8"))
-    assert replayed["status"] == "priced"
+    assert replayed["status"] == "needs_review"  # plausibility gate, see test_priced_replay
     # Recorded cost / model time are kept: replay itself spends $0.
     assert replayed["cost_usd"] == 0.12
     assert replayed["model_seconds"] == 40.0
@@ -310,3 +317,51 @@ def test_template_gaps_principal_protection_and_excess_return():
     reason = template_gaps(ts_with("S&P 500® Futures Excess Return Index"), "no floor here")
     assert reason.startswith("excess-return index underlying")
     assert template_gaps(ts_with("S&P 500® Index"), "no floor here") is None
+
+
+# --- plausibility gate -------------------------------------------------------
+
+def _fv(low, base, high):
+    return {"low": low, "high": high, "base": {"price": base, "std_error": 1.0}}
+
+
+def test_plausibility_gate_flags_premium_and_bank_above_range():
+    # 2% premium: 1020.00 on a 1000 note is the edge (not flagged), 1020.01 is.
+    assert audit_run.plausibility_issues(_fv(950, 1020.0, 1030), 1000.0, 990.0) is None
+    reason = audit_run.plausibility_issues(_fv(950, 1020.01, 1030), 1000.0, 990.0)
+    assert "exceeds the issue price" in reason
+    # Bank above our whole range.
+    reason = audit_run.plausibility_issues(_fv(900, 930, 960), 1000.0, 984.08)
+    assert "above our whole range" in reason and "exceeds" not in reason
+    # Bank below our range is not a plausibility issue (our value can exceed
+    # the bank's: it is a comparison point, not a target).
+    assert audit_run.plausibility_issues(_fv(960, 980, 1000), 1000.0, 950.0) is None
+    # Units follow the note: a $10 note.
+    assert audit_run.plausibility_issues(_fv(9.0, 9.3, 9.56), 10.0, 9.798) is not None
+
+
+MS_MISREADS = {
+    # accession: why template_gaps rejects it today
+    "0001839882-26-049277": "excess-return index",
+    "0001839882-26-051777": "principal protection",
+    "0001839882-26-052733": "principal protection",
+}
+
+
+@pytest.mark.parametrize("accession", sorted(MS_MISREADS))
+def test_plausibility_gate_alone_catches_the_morgan_stanley_misreads(accession, monkeypatch):
+    """Switch off template_gaps: the gate must still stop these three notes.
+
+    Replays the saved audit recordings (no network, $0).  These notes were
+    priced at ~$1,100-1,330 against bank values of $949-984 before
+    template_gaps existed.
+    """
+    audit = ROOT / "data" / "market_audit"
+    old = json.loads((audit / "results" / f"{accession}.json").read_text(encoding="utf-8"))
+    filing = read_filing(gzip.decompress((audit / "filings" / f"{accession}.htm.gz").read_bytes()))
+    calls = json.loads((audit / "calls" / f"{accession}.calls.json").read_text(encoding="utf-8"))
+    monkeypatch.setattr(audit_run, "template_gaps", lambda ts, text: None)
+    result = audit_run.audit_note(filing, chat=audit_run.Replay(calls), meta=old["meta"])
+    assert result["status"] == "needs_review"
+    assert result["reason"].startswith("plausibility gate:")
+    assert "exceeds the issue price" in result["reason"]

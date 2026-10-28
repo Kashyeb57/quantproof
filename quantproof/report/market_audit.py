@@ -312,6 +312,8 @@ def aggregate(rows: list[dict], run: dict) -> dict:
 
     n_with_estimate = sum(1 for row in rows if row.get("estimated_value") is not None)
     n_priced = sum(1 for row in rows if row.get("status") == "priced")
+    # Priced but stopped by the plausibility gate: not counted as priced.
+    n_needs_review = sum(1 for row in rows if row.get("status") == "needs_review")
     share_priced = (n_priced / notes_extracted) if notes_extracted else None
 
     n_bank_in_range = sum(1 for row in rows if row.get("bank_in_range") is True)
@@ -334,6 +336,7 @@ def aggregate(rows: list[dict], run: dict) -> dict:
         "median_cost_to_investor_pct": statistics.median(costs_pct) if costs_pct else None,
         "n_with_estimate": n_with_estimate,
         "n_priced": n_priced,
+        "n_needs_review": n_needs_review,
         "share_priced": share_priced,
         "n_bank_in_range": n_bank_in_range,
         "share_bank_in_range": share_bank_in_range,
@@ -425,6 +428,9 @@ def render_markdown(rows: list[dict], agg: dict) -> str:
     lines.append(f"- Notes read: {agg.get('notes_read')}")
     lines.append(f"- Notes extracted: {agg.get('notes_extracted')}")
     lines.append(f"- Notes priced: {agg.get('n_priced')}")
+    lines.append(
+        f"- Needs review (plausibility gate; not counted as priced): {agg.get('n_needs_review')}"
+    )
     lines.append(f"- Share priced: {_format_pct_fraction(agg.get('share_priced'))}")
     lines.append(f"- Notes with a bank estimated value: {agg.get('n_with_estimate')}")
     lines.append(

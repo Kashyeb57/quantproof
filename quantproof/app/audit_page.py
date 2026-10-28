@@ -175,6 +175,12 @@ def render(st) -> None:
             f"{status}: {count}" for status, count in status_counts.items()
         )
         st.markdown(demo.escape_dollars(f"Status counts: {counts_text}"))
+    st.caption(
+        "needs_review: priced, then stopped by the plausibility gate (base value "
+        "more than 2% above the issue price, or the bank's estimate above our "
+        "whole range). These rows are not counted as priced until a person "
+        "reviews them."
+    )
 
     st.dataframe(data["table"], use_container_width=True, hide_index=True)
 

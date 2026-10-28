@@ -269,6 +269,42 @@ def template_gaps(ts: Any, filing_text: str) -> str | None:
     return None
 
 
+# A note whose base value is more than this fraction above its issue price is
+# implausible for a bank-issued note (issue price includes the bank's costs).
+PLAUSIBILITY_MAX_PREMIUM = 0.02
+
+
+def plausibility_issues(
+    fair_value: dict, issue_price: float | None, estimated_value: float | None
+) -> str | None:
+    """Reasons a priced note needs human review before it counts as priced.
+
+    Two tests: (1) the base value exceeds the issue price by more than
+    PLAUSIBILITY_MAX_PREMIUM (2%); a bank's issue price already includes its
+    fees and hedging costs, so a value well above it usually means a misread
+    term (e.g. principal protection read as a 100% barrier); (2) the bank's
+    estimated value lies above our whole fair-value range, so no assumption
+    in our grid reproduces it.  This only flags rows; it never changes the
+    assumptions (the bank's figure is a comparison point, not a target).
+    Returns the joined reasons, or None.
+    """
+    reasons = []
+    base = float(fair_value["base"]["price"])
+    high = float(fair_value["high"])
+    if issue_price and base > issue_price * (1.0 + PLAUSIBILITY_MAX_PREMIUM):
+        premium = (base / issue_price - 1.0) * 100.0
+        reasons.append(
+            f"base value {base:.2f} exceeds the issue price {issue_price:.2f} "
+            f"by {premium:.1f}% (more than {PLAUSIBILITY_MAX_PREMIUM:.0%})"
+        )
+    if estimated_value is not None and estimated_value > high:
+        reasons.append(
+            f"bank's estimated value {estimated_value:.2f} is above our whole "
+            f"range (high {high:.2f})"
+        )
+    return "; ".join(reasons) if reasons else None
+
+
 def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
     """Run the per-note audit pipeline on one filing; never raises for
     note-level problems.
@@ -468,6 +504,11 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
         return finish("pricing_error", f"pricing raised: {str(exc)[:400]}")
     result["fair_value"] = priced["fair_value"]
     result["loss_odds"] = priced["loss_odds"]
+    issue = plausibility_issues(
+        result["fair_value"], result.get("issue_price"), result.get("estimated_value")
+    )
+    if issue is not None:
+        return finish("needs_review", "plausibility gate: " + issue)
     return finish("priced", None)
 
 
