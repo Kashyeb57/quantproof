@@ -1,0 +1,358 @@
+{
+  "meta": {
+    "issuer_group": "Goldman Sachs",
+    "accession": "0001193125-26-424207",
+    "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526424207/gs-20261016.htm",
+    "filing_date": "2026-10-16",
+    "form": "424B2",
+    "primary_document": "gs-20261016.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Company\u2019s redemption right']",
+  "termsheet": {
+    "issuer": "GS Finance Corp.",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "40058MC55",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-14",
+    "issue_date": "2026-10-19",
+    "maturity_date": "2031-10-17",
+    "final_review_date": "2031-10-14",
+    "estimated_value": 998.0,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "GS Finance Corp.",
+        "quote": "Company (Issuer): GS Finance Corp.",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement No. 27,464 dated October 14, 2026.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX Index",
+        "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7718.94,
+        "quote": "Initial underlier level: 7,718.94, which is an intra-day level or the closing level of the underlier on the trade date",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Authorized denominations: $1,000 or any integral multiple of $1,000 in excess thereof",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original issue price: 100% of the face amount ... on the stated maturity date the company will pay, for each $1,000 of the outstanding face amount, an amount in cash equal to the cash settlement amount",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-14",
+        "quote": "Trade date: October 14, 2026",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-19",
+        "quote": "Original issue date: October 19, 2026",
+        "section": "PS-3",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2031-10-17",
+        "quote": "Stated maturity date: October 17, 2031, unless that day is not a business day, in which case the stated maturity date will be postponed to the next following business day.",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2031-10-14",
+        "quote": "Determination date: October 14, 2031, unless the calculation agent determines that a market disruption event occurs or is continuing on such day or such day is not a trading day.",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "if the final underlier level is less than the buffer level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the sum of the underlier return plus the buffer amount",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.8,
+        "quote": "Buffer level: 80% of the initial underlier level",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final underlier level: the closing level of the underlier on the determination date, subject to adjustment as provided in \u201c\u2014 Consequences of a market disruption event or a non-trading day\u201d and \u201c\u2014 Discontinuance or modification of the underlier\u201d below",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "The Goldman Sachs Group, Inc.",
+        "quote": "Guarantor: The Goldman Sachs Group, Inc.",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "40058MC55",
+        "quote": "CUSIP / ISIN: 40058MC55 / US40058MC555",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.75,
+        "quote": "the return on your notes will be positive and will equal 1.75 times the index return",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 998.0,
+        "quote": "The estimated value of your notes at the time the terms of your notes are set on the trade date is equal to approximately $998 per $1,000 face amount.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Company\u2019s redemption right",
+        "quote": "Company\u2019s redemption right: the company may redeem this note, at its option, in whole but not in part, on each call payment date",
+        "section": "TERMS AND CONDITIONS",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "GS Finance Corp.",
+      "quote": "Company (Issuer): GS Finance Corp.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement No. 27,464 dated October 14, 2026.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX Index",
+      "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7718.94,
+      "quote": "Initial underlier level: 7,718.94, which is an intra-day level or the closing level of the underlier on the trade date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: the S&P 500\u00ae Index (current Bloomberg symbol: \u201cSPX Index\u201d), or any successor underlier, as it may be modified, replaced or adjusted from time to time as provided herein",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Authorized denominations: $1,000 or any integral multiple of $1,000 in excess thereof",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original issue price: 100% of the face amount ... on the stated maturity date the company will pay, for each $1,000 of the outstanding face amount, an amount in cash equal to the cash settlement amount",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-14",
+      "quote": "Trade date: October 14, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-19",
+      "quote": "Original issue date: October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2031-10-17",
+      "quote": "Stated maturity date: October 17, 2031, unless that day is not a business day, in which case the stated maturity date will be postponed to the next following business day.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2031-10-14",
+      "quote": "Determination date: October 14, 2031, unless the calculation agent determines that a market disruption event occurs or is continuing on such day or such day is not a trading day.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "if the final underlier level is less than the buffer level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the sum of the underlier return plus the buffer amount",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.8,
+      "quote": "Buffer level: 80% of the initial underlier level",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final underlier level: the closing level of the underlier on the determination date, subject to adjustment as provided in \u201c\u2014 Consequences of a market disruption event or a non-trading day\u201d and \u201c\u2014 Discontinuance or modification of the underlier\u201d below",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "The Goldman Sachs Group, Inc.",
+      "quote": "Guarantor: The Goldman Sachs Group, Inc.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "40058MC55",
+      "quote": "CUSIP / ISIN: 40058MC55 / US40058MC555",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.75,
+      "quote": "the return on your notes will be positive and will equal 1.75 times the index return",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 998.0,
+      "quote": "The estimated value of your notes at the time the terms of your notes are set on the trade date is equal to approximately $998 per $1,000 face amount.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Company\u2019s redemption right",
+      "quote": "Company\u2019s redemption right: the company may redeem this note, at its option, in whole but not in part, on each call payment date",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 21,
+    "verified": 20
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "max_selling_commission",
+        "first": null,
+        "second": 0.0,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "first": "SPX Index",
+        "second": "SPX",
+        "status": "resolved_first"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Company\u2019s redemption right"
+        ],
+        "second": [
+          "Company's redemption right"
+        ],
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 998.0,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "40058MC55",
+  "issuer": "GS Finance Corp.",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-14",
+  "structure": "single underlying, upside leverage 1.75x, buffer 80% at maturity",
+  "seconds": 62.644819234000124,
+  "cost_usd": 0.17133955,
+  "model_seconds": 62.56635889800009
+}

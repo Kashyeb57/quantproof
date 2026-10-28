@@ -1,0 +1,374 @@
+{
+  "meta": {
+    "issuer_group": "JPMorgan",
+    "accession": "0001918704-26-032694",
+    "url": "https://www.sec.gov/Archives/edgar/data/19617/000191870426032694/form424b2.htm",
+    "filing_date": "2026-10-27",
+    "form": "424B2",
+    "primary_document": "form424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Absolute Index Return']",
+  "termsheet": {
+    "issuer": "JPMorgan Chase Financial Company LLC",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "46661QN84",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-23",
+    "issue_date": "2026-10-28",
+    "maturity_date": "2028-01-27",
+    "final_review_date": "2028-01-24",
+    "estimated_value": 989.3,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "JPMorgan Chase Financial Company LLC",
+        "quote": "Issuer: JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "The notes priced on October 23, 2026 and are expected to settle on or about October 28, 2026.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7623.68,
+        "quote": "Initial Value: The closing level of the Index on the Pricing Date, which was 7,623.68",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Minimum denominations of $1,000 and integral multiples thereof",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per note | $1,000 | $5 | $995",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-23",
+        "quote": "The notes priced on October 23, 2026 and are expected to settle on or about October 28, 2026.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-28",
+        "quote": "Original Issue Date (Settlement Date): On or about October 28, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-01-27",
+        "quote": "Maturity Date*: January 27, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-01-24",
+        "quote": "Observation Date*: January 24, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "Buffer Amount: 20.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.8,
+        "quote": "Buffer Amount: 20.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final Value: The closing level of the Index on the Observation Date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "JPMorgan Chase & Co.",
+        "quote": "Guarantor: JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "46661QN84",
+        "quote": "CUSIP: 46661QN84",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "$1,000 + ($1,000 \u00d7 Index Return), subject to the Maximum Upside Return",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.1,
+        "quote": "Maximum Upside Return: 10.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 989.3,
+        "quote": "The estimated value of the notes, when the terms of the notes were set, was $989.30 per $1,000 principal amount note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 5.0,
+        "quote": "will pay all of the selling commissions of $5.00 per $1,000 principal amount note it receives from us to other affiliated or unaffiliated dealers.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Absolute Index Return",
+        "quote": "Absolute Index Return: The absolute value of the Index Return.",
+        "section": "Key Terms",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "JPMorgan Chase Financial Company LLC",
+      "quote": "Issuer: JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "The notes priced on October 23, 2026 and are expected to settle on or about October 28, 2026.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7623.68,
+      "quote": "Initial Value: The closing level of the Index on the Pricing Date, which was 7,623.68",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Index: The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Minimum denominations of $1,000 and integral multiples thereof",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per note | $1,000 | $5 | $995",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-23",
+      "quote": "The notes priced on October 23, 2026 and are expected to settle on or about October 28, 2026.",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-28",
+      "quote": "Original Issue Date (Settlement Date): On or about October 28, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-01-27",
+      "quote": "Maturity Date*: January 27, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-01-24",
+      "quote": "Observation Date*: January 24, 2028",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "Buffer Amount: 20.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.8,
+      "quote": "Buffer Amount: 20.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final Value: The closing level of the Index on the Observation Date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "JPMorgan Chase & Co.",
+      "quote": "Guarantor: JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "46661QN84",
+      "quote": "CUSIP: 46661QN84",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "$1,000 + ($1,000 \u00d7 Index Return), subject to the Maximum Upside Return",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.1,
+      "quote": "Maximum Upside Return: 10.00%",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 989.3,
+      "quote": "The estimated value of the notes, when the terms of the notes were set, was $989.30 per $1,000 principal amount note.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 5.0,
+      "quote": "will pay all of the selling commissions of $5.00 per $1,000 principal amount note it receives from us to other affiliated or unaffiliated dealers.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Absolute Index Return",
+      "quote": "Absolute Index Return: The absolute value of the Index Return.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 23,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-10-23",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 7623.68,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 989.3,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "46661QN84",
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity",
+  "seconds": 60.622134165000034,
+  "cost_usd": 0.1283405,
+  "model_seconds": 60.591341418999946
+}

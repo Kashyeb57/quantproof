@@ -1,0 +1,1064 @@
+{
+  "meta": {
+    "issuer_group": "JPMorgan",
+    "accession": "0001213900-26-112047",
+    "url": "https://www.sec.gov/Archives/edgar/data/19617/000121390026112047/ea0309400-01_424b2.htm",
+    "filing_date": "2026-10-23",
+    "form": "424B2",
+    "primary_document": "ea0309400-01_424b2.htm"
+  },
+  "status": "priced",
+  "reason": null,
+  "termsheet": {
+    "issuer": "JPMorgan Chase Financial Company LLC",
+    "underlying_names": [
+      "TOPIX\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "46661QNW1",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-21",
+    "issue_date": "2026-10-26",
+    "maturity_date": "2027-04-26",
+    "final_review_date": "2027-04-21",
+    "estimated_value": 995.3,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "JPMorgan Chase Financial Company LLC",
+        "quote": "Issuer: | JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Dated October 21, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "TOPIX\u00ae Index",
+        "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "TPX",
+        "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 4043.73,
+        "quote": "Initial Index Level: | 4,043.73, which was the closing level of the Index on the Pricing Date.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 4043.73,
+        "quote": "The closing level of the Index on October 21, 2026 was 4,043.73.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-21",
+        "quote": "The closing level of the Index on October 21, 2026 was 4,043.73.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "$1,000 + ($1,000 \u00d7 Index Return), subject to the Maximum Return",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per note | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-21",
+        "quote": "Pricing Date: | October 21, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-26",
+        "quote": "Original Issue Date: | On or about October 26, 2026 (Settlement Date)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2027-04-26",
+        "quote": "Maturity Date*: | April 26, 2027",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2027-04-21",
+        "quote": "Valuation Date*: | April 21, 2027",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "Buffer Amount: | 10.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.9,
+        "quote": "Buffer Amount: | 10.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Ending Index Level: | The closing level of the Index on the Valuation Date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.11111,
+        "quote": "Downside Leverage Factor: | 1.11111",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "guarantor",
+        "value": "JPMorgan Chase & Co.",
+        "quote": "Guarantor: | JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "46661QNW1",
+        "quote": "CUSIP: | 46661QNW1",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "The notes are designed for investors who seek unleveraged exposure to any appreciation of the TOPIX\u00ae Index, up to a maximum return of 14.60%, at maturity.",
+        "section": "General",
+        "verified": false
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.146,
+        "quote": "Maximum Return: | 14.60%. For example, assuming a Maximum Return of 14.60%, if the Index Return is equal to or greater than 14.60%, you will receive the Maximum Return of 14.60%, which entitles you to a maximum payment at maturity of $1,146.00 per $1,000",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 995.3,
+        "quote": "The estimated value of the notes, when the terms of the notes were set, was $995.30 per $1,000 principal amount note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Per note | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "upside.leverage"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "JPMorgan Chase Financial Company LLC",
+      "quote": "Issuer: | JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Dated October 21, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "TOPIX\u00ae Index",
+      "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "TPX",
+      "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 4043.73,
+      "quote": "Initial Index Level: | 4,043.73, which was the closing level of the Index on the Pricing Date.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 4043.73,
+      "quote": "The closing level of the Index on October 21, 2026 was 4,043.73.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-21",
+      "quote": "The closing level of the Index on October 21, 2026 was 4,043.73.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Index: | The TOPIX\u00ae Index (Bloomberg ticker: TPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "$1,000 + ($1,000 \u00d7 Index Return), subject to the Maximum Return",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per note | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-21",
+      "quote": "Pricing Date: | October 21, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-26",
+      "quote": "Original Issue Date: | On or about October 26, 2026 (Settlement Date)",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2027-04-26",
+      "quote": "Maturity Date*: | April 26, 2027",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2027-04-21",
+      "quote": "Valuation Date*: | April 21, 2027",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "Buffer Amount: | 10.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.9,
+      "quote": "Buffer Amount: | 10.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Ending Index Level: | The closing level of the Index on the Valuation Date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.11111,
+      "quote": "Downside Leverage Factor: | 1.11111",
+      "verified": true
+    },
+    {
+      "path": "guarantor",
+      "value": "JPMorgan Chase & Co.",
+      "quote": "Guarantor: | JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "46661QNW1",
+      "quote": "CUSIP: | 46661QNW1",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "The notes are designed for investors who seek unleveraged exposure to any appreciation of the TOPIX\u00ae Index, up to a maximum return of 14.60%, at maturity.",
+      "verified": false
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.146,
+      "quote": "Maximum Return: | 14.60%. For example, assuming a Maximum Return of 14.60%, if the Index Return is equal to or greater than 14.60%, you will receive the Maximum Return of 14.60%, which entitles you to a maximum payment at maturity of $1,146.00 per $1,000",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 995.3,
+      "quote": "The estimated value of the notes, when the terms of the notes were set, was $995.30 per $1,000 principal amount note.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Per note | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 24,
+    "verified": 23
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": [
+    {
+      "name": "bsm_known_values",
+      "passed": true,
+      "value": 4.759422392871532,
+      "reference": 4.76,
+      "tolerance": 0.005,
+      "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81"
+    },
+    {
+      "name": "put_call_parity",
+      "passed": true,
+      "value": 3.325524483300075,
+      "reference": 3.3255244833000717,
+      "tolerance": 1e-10,
+      "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03"
+    },
+    {
+      "name": "determinism",
+      "passed": true,
+      "value": 1000.5501166683438,
+      "reference": 1000.5501166683438,
+      "tolerance": 0.0,
+      "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical"
+    },
+    {
+      "name": "barrier_removed",
+      "passed": true,
+      "value": 915.1094863514484,
+      "reference": 915.3699006299437,
+      "tolerance": 2.8731246305367444,
+      "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form"
+    },
+    {
+      "name": "barrier_at_maturity",
+      "passed": true,
+      "value": 926.0122652851796,
+      "reference": 926.2814659027086,
+      "tolerance": 3.5118215455091204,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form"
+    },
+    {
+      "name": "zero_coupon_no_downside",
+      "passed": true,
+      "value": 978.2107542828799,
+      "reference": 978.2107542828799,
+      "tolerance": 0.001,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)"
+    },
+    {
+      "name": "zero_vol",
+      "passed": true,
+      "value": 440.19483942729585,
+      "reference": 440.1948394272959,
+      "tolerance": 0.001,
+      "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)"
+    },
+    {
+      "name": "spread_monotonicity",
+      "passed": true,
+      "value": 995.4371194528219,
+      "reference": 1000.5501166683438,
+      "tolerance": 0.0,
+      "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing"
+    },
+    {
+      "name": "convergence",
+      "passed": true,
+      "value": 0.5401261507497492,
+      "reference": 0.5,
+      "tolerance": 0.1,
+      "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]"
+    },
+    {
+      "name": "quotes",
+      "passed": false,
+      "value": 23.0,
+      "reference": 24.0,
+      "tolerance": 0.0,
+      "detail": "23/24 verified"
+    }
+  ],
+  "fair_value": {
+    "low": 982.9914297010911,
+    "high": 1011.3725701430973,
+    "base": {
+      "price": 1000.71716397477,
+      "measure": "risk_neutral",
+      "model": "montecarlo.worst_of_note",
+      "greeks": {},
+      "inputs": {
+        "rate": 0.037,
+        "spread": 0.006,
+        "vols": [
+          0.25
+        ],
+        "dividend_yields": [
+          0.01
+        ],
+        "correlation": [
+          [
+            1.0
+          ]
+        ],
+        "n_dates": 1,
+        "antithetic": true
+      },
+      "seed": 0,
+      "paths": 20000,
+      "std_error": 0.2803356634431905,
+      "version": "0.1.0"
+    },
+    "points": [
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1011.3725701430973,
+        "std_error": 0.4973790865953699
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1008.4249320687552,
+        "std_error": 0.5468641012358152
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 1010.0093942651788,
+        "std_error": 0.49378391991973186
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 1007.0661104069565,
+        "std_error": 0.5420326340502952
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1008.6355990465803,
+        "std_error": 0.48909253944564446
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1005.7003632604486,
+        "std_error": 0.5363721770315609
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1010.0780112148901,
+        "std_error": 0.49674244036205895
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1007.1341461232241,
+        "std_error": 0.5461641140840272
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 1008.7165802048429,
+        "std_error": 0.49315187550701184
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 1005.777063755891,
+        "std_error": 0.5413388311862425
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1007.3445434468929,
+        "std_error": 0.48846650000938674
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1004.4130647684837,
+        "std_error": 0.5356856195639009
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1008.7851093247202,
+        "std_error": 0.4961066090372098
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1005.845012386305,
+        "std_error": 0.5454650229172044
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 1007.4254209491098,
+        "std_error": 0.4925206401124139
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 1004.4896670871374,
+        "std_error": 0.5406459163912543
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1006.0551404009753,
+        "std_error": 0.4878412619048692
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 1003.1274140211829,
+        "std_error": 0.5349999408911834
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1003.1721329197087,
+        "std_error": 0.632634109906961
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 999.1860386400958,
+        "std_error": 0.692320083512548
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 1001.8324642417691,
+        "std_error": 0.6266727624753957
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 997.859398819482,
+        "std_error": 0.6858681422727531
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1000.4786264534197,
+        "std_error": 0.6199407764679246
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 996.5238067897601,
+        "std_error": 0.6788498169244701
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1001.8880705676755,
+        "std_error": 0.6318243369712042
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 997.9070784967745,
+        "std_error": 0.6914339124102789
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 1000.5501166683438,
+        "std_error": 0.6258706200763664
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 996.582136777805,
+        "std_error": 0.6849902296682748
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 999.1980117950922,
+        "std_error": 0.619147251024553
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 995.248254308573,
+        "std_error": 0.6779808877905831
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 1000.605651818041,
+        "std_error": 0.6310156005464375
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 996.6297554250144,
+        "std_error": 0.6905488756088068
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 999.269410502397,
+        "std_error": 0.6250695044212249
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 995.3065096341155,
+        "std_error": 0.6841134407936998
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 997.9190363261083,
+        "std_error": 0.6183547412953487
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 993.9743345371326,
+        "std_error": 0.6771130708877389
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 992.6930664581756,
+        "std_error": 0.7829574934192509
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 988.0976925633472,
+        "std_error": 0.8426701505288441
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 991.3775279548391,
+        "std_error": 0.775721373237226
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 986.8083601556822,
+        "std_error": 0.8354304159603536
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 990.0575267350883,
+        "std_error": 0.7681471077353185
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 985.512731597443,
+        "std_error": 0.8278788350685417
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 991.4224173323339,
+        "std_error": 0.7819553062496212
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 986.8329255253526,
+        "std_error": 0.8415915310377632
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 990.1085627209332,
+        "std_error": 0.7747284483160136
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 985.5452434657682,
+        "std_error": 0.834361063344112
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 988.790251105404,
+        "std_error": 0.7671638778892146
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 984.2512733146949,
+        "std_error": 0.8268191484910618
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 990.153394639934,
+        "std_error": 0.7809544018815887
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 985.5697773917159,
+        "std_error": 0.840514292181805
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 988.841221765084,
+        "std_error": 0.7737367943407018
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 984.2837435677629,
+        "std_error": 0.8332930795013747
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 987.5245975910798,
+        "std_error": 0.7661819065792957
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 982.9914297010911,
+        "std_error": 0.8257608183145368
+      }
+    ],
+    "sensitivities": {
+      "vol": [
+        1008.7165802048429,
+        990.1085627209332
+      ],
+      "correlation": [
+        1000.5501166683438,
+        1000.5501166683438
+      ],
+      "spread": [
+        1001.8324642417691,
+        999.269410502397
+      ],
+      "dividend": [
+        1001.8880705676755,
+        999.1980117950922
+      ],
+      "skew": [
+        1000.5501166683438,
+        996.582136777805
+      ]
+    },
+    "bank_estimate": 995.3,
+    "bank_position": "inside range",
+    "preliminary": false,
+    "n_paths": 4000,
+    "seed": 0,
+    "grid": {
+      "vol_shifts": [
+        -0.05,
+        0.0,
+        0.05
+      ],
+      "correlation_shifts": [
+        -0.25,
+        0.0,
+        0.25
+      ],
+      "spread_shifts": [
+        -0.0025,
+        0.0,
+        0.0025
+      ],
+      "dividend_shifts": [
+        -0.005,
+        0.0,
+        0.005
+      ],
+      "skew_per_10pct": [
+        0.0,
+        0.02
+      ]
+    },
+    "assumptions": [
+      "risk-free rate r = 0.037 per year, as of 2026-10-21",
+      "issuer credit spread = 0.006 per year",
+      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
+      "correlation: single underlying, correlation matrix [[1]]",
+      "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 0.9",
+      "measure: risk-neutral (for estimated value)",
+      "discounting at r + issuer spread",
+      "the bank's estimated value is a comparison point, not a calibration target"
+    ]
+  },
+  "loss_odds": {
+    "measure": "real_world",
+    "drifts": [
+      0.087
+    ],
+    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.037)",
+    "prob_loss": 0.2325,
+    "prob_loss_over_20": 0.0225,
+    "prob_loss_over_50": 0.0,
+    "prob_called": null,
+    "expected_cash": 1036.7804456666145,
+    "quantiles": {
+      "p05": 853.7988244347808,
+      "p25": 1000.0,
+      "p50": 1022.0079401886405,
+      "p75": 1146.0,
+      "p95": 1146.0
+    },
+    "std_errors": {
+      "prob_loss": 0.0029870030967509894,
+      "prob_loss_over_20": 0.0010486598590582173,
+      "prob_loss_over_50": 0.0,
+      "expected_cash": 0.6883206289445853
+    },
+    "n_paths": 20000,
+    "seed": 0,
+    "excludes_issuer_default": true
+  },
+  "estimated_value": 995.3,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "46661QNW1",
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "underlyings": [
+    "TOPIX\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-21",
+  "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
+  "seconds": 47.46997301800002,
+  "cost_usd": 0.0833438,
+  "model_seconds": 47.25493465799991
+}

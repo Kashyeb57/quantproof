@@ -1,0 +1,366 @@
+{
+  "meta": {
+    "issuer_group": "JPMorgan",
+    "accession": "0001918704-26-032189",
+    "url": "https://www.sec.gov/Archives/edgar/data/19617/000191870426032189/form424b2.htm",
+    "filing_date": "2026-10-21",
+    "form": "424B2",
+    "primary_document": "form424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Contingent Digital Return']",
+  "termsheet": {
+    "issuer": "JPMorgan Chase Financial Company LLC",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "46661QLX1",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-19",
+    "issue_date": "2026-10-22",
+    "maturity_date": "2027-11-03",
+    "final_review_date": "2027-10-29",
+    "estimated_value": 988.3,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "JPMorgan Chase Financial Company LLC",
+        "quote": "Issuer: | JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing supplement",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7659.44,
+        "quote": "Index Strike Level: | 7,659.44, the closing level of the Index on the Strike Date. The Index Strike Level is not determined by reference to the closing level of the Index on the Pricing Date.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 7659.44,
+        "quote": "The closing level of the Index on October 16, 2026 was 7,659.44.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-16",
+        "quote": "The closing level of the Index on October 16, 2026 was 7,659.44.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "$1,000 + ($1,000 \u00d7 Contingent Digital Return)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per note | $1,000.00 | $10.00 | $990.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-19",
+        "quote": "Pricing Date: | October 19, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-22",
+        "quote": "Original Issue Date (Settlement Date): | On or about October 22, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2027-11-03",
+        "quote": "Maturity Date*: | November 3, 2027",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2027-10-29",
+        "quote": "Valuation Date*: | October 29, 2027",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "If the Ending Index Level is less than the Index Strike Level by more than the Buffer Amount, at maturity you will lose 1.11111% of the principal amount of your notes for every 1% that the Ending Index Level is less than the Index Strike Level by more than the Buffer Amount.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.9,
+        "quote": "Buffer Amount: | 10.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Ending Index Level: | The closing level of the Index on the Valuation Date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.11111,
+        "quote": "Downside Leverage Factor: | 1.11111",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "guarantor",
+        "value": "JPMorgan Chase & Co.",
+        "quote": "Guarantor: | JPMorgan Chase & Co.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "46661QLX1",
+        "quote": "CUSIP: | 46661QLX1",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 988.3,
+        "quote": "The estimated value of the notes, when the terms of the notes were set, was $988.30 per $1,000 principal amount note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 10.0,
+        "quote": "Per note | $1,000.00 | $10.00 | $990.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Contingent Digital Return",
+        "quote": "Contingent Digital Return: | 9.00%, which reflects the maximum return on the notes.",
+        "section": "Key Terms",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "JPMorgan Chase Financial Company LLC",
+      "quote": "Issuer: | JPMorgan Chase Financial Company LLC, a direct, wholly owned finance subsidiary of JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing supplement",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7659.44,
+      "quote": "Index Strike Level: | 7,659.44, the closing level of the Index on the Strike Date. The Index Strike Level is not determined by reference to the closing level of the Index on the Pricing Date.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 7659.44,
+      "quote": "The closing level of the Index on October 16, 2026 was 7,659.44.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-16",
+      "quote": "The closing level of the Index on October 16, 2026 was 7,659.44.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Index: | The S&P 500\u00ae Index (Bloomberg ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "$1,000 + ($1,000 \u00d7 Contingent Digital Return)",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per note | $1,000.00 | $10.00 | $990.00",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-19",
+      "quote": "Pricing Date: | October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-22",
+      "quote": "Original Issue Date (Settlement Date): | On or about October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2027-11-03",
+      "quote": "Maturity Date*: | November 3, 2027",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2027-10-29",
+      "quote": "Valuation Date*: | October 29, 2027",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "If the Ending Index Level is less than the Index Strike Level by more than the Buffer Amount, at maturity you will lose 1.11111% of the principal amount of your notes for every 1% that the Ending Index Level is less than the Index Strike Level by more than the Buffer Amount.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.9,
+      "quote": "Buffer Amount: | 10.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Ending Index Level: | The closing level of the Index on the Valuation Date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.11111,
+      "quote": "Downside Leverage Factor: | 1.11111",
+      "verified": true
+    },
+    {
+      "path": "guarantor",
+      "value": "JPMorgan Chase & Co.",
+      "quote": "Guarantor: | JPMorgan Chase & Co.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "46661QLX1",
+      "quote": "CUSIP: | 46661QLX1",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 988.3,
+      "quote": "The estimated value of the notes, when the terms of the notes were set, was $988.30 per $1,000 principal amount note.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 10.0,
+      "quote": "Per note | $1,000.00 | $10.00 | $990.00",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Contingent Digital Return",
+      "quote": "Contingent Digital Return: | 9.00%, which reflects the maximum return on the notes.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 23,
+    "verified": 23
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 988.3,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "46661QLX1",
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-19",
+  "structure": "single underlying, buffer 90% at maturity",
+  "seconds": 70.61865442600003,
+  "cost_usd": 0.1153468,
+  "model_seconds": 70.58606012799999
+}
