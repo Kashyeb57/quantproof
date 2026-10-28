@@ -1,6 +1,15 @@
 # Checkpoint (read this after a /compact or in a new session)
 
-Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Updated: Wed Oct 28, 2026 (Day 7 app done and deployed). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Live app: https://kashyeb57-quantproof-app-snew9v.streamlit.app/
+
+## Working arrangement (from Oct 28, owner's choice)
+- **Muse Code on Joyeb's PC is the main builder** (Meta credits). **Claude Code is the reviewer**:
+  pricing maths (`models/`, `payoffs/`, `valuation/`, `risk/`, `validation/`), security (sandbox,
+  secrets, cost guard, uploads) and anything Joyeb asks.
+- Only one of them works at a time: **always `git pull` first and push when done**. Never force-push.
+- Commit as Joyeb Kashyeb <168053382+Kashyeb57@users.noreply.github.com>, no Co-Authored-By trailers.
+
 
 ## Done
 - Day 1 go/no-go **GO**: Muse Spark 1.3 extracted the JPM 424B2 (worst-of autocallable, RTY + SPX,
@@ -128,12 +137,39 @@ Updated: Tue Oct 27, 2026, late night (Day 3 engine done early). Repo: https://g
   illustrative vols 30/35/28%; $978.55 at 1.5x vols; bank $980. Use real implied vols.
 - Suite: 1461 tests, ~80 s (sandbox subprocesses).
 
-## Next (in order)
-1. Day 7 app: Streamlit flow (EDGAR link -> TermSheet with citations + cross-check diffs ->
-   confirm -> battery -> range vs bank vs price -> real-world risk -> heatmap); refused notes
-   offer synthesis; cost guard; deploy. Also: fair-value range / loss odds for synthesized
-   payoffs (they take price_note today), and provenance check on any generated prose.
-2. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
+## Day 7 app + polish (Oct 28, built by Muse Code on Joyeb's PC, reviewed and tested)
+- Code moved from `scripts/analyse.py` into `quantproof/report` (CLI re-exports; example byte-identical).
+- `app/` Streamlit: **demo mode** (default; saved filings, cited term sheet with cross-check,
+  confirm/edit, illustrative inputs, proof-battery gate, verdict, real-world risk, heatmap) and
+  **live mode** (EDGAR link or upload -> Muse Spark 1.3 extraction -> quote check -> cross-check ->
+  confirm -> proof battery -> verdict), with step-by-step progress. Unsupported features are shown
+  with their quotes and never priced. Dollar signs escaped (Streamlit LaTeX).
+- Cross-check: Baseten credits have not arrived, so it runs **Muse Spark 1.3 twice** and says so.
+- **Cost guard:** 3 live runs per session; daily cap $5 (`QP_DAILY_CAP_USD`); lifetime cap $20
+  (`QP_TOTAL_CAP_USD`, over the cost log); pre-flight worst-case estimate (2 extractions + 3 re-checks
+  at max output) refuses a run that would breach the cap; uploads <= 2 MB; 424B2 only; filing
+  <= 400k chars (`QP_MAX_FILING_CHARS`); same filing served from the session cache. Keys only from env
+  or Streamlit secrets. The cost log resets on host restart; Meta billing alerts are the backstop.
+- **Deployed** on Streamlit Community Cloud (steps in `DEPLOY.md`). A live run takes ~80 s and
+  cost ~$0.13.
+- 38582 now uses the real risk-free rate (U.S. Treasury par curve 2025-11-25, interpolated to
+  maturity: 3.5515%, CSV in `docs/data`); vols, dividends and correlation remain stated assumptions.
+  Example report regenerated.
+- Validation report includes the registered ea0306095 payoff (via the synth battery).
+- README rewritten as a research note, live URL first. Demo video link still a placeholder.
+- Suite: 1,500 passed, 13 skipped.
+
+## Left to do (in order)
+1. By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check
+   (fallback while Baseten credits are missing); otherwise keep Spark 1.3 twice, stated openly.
+2. Final check of `docs/VALIDATION.md` (regenerate, every row explained) before submission.
+3. Joyeb: rehearse and record the 3-minute demo; put the public video link in the README
+   (replace "_link to be added on Day 8_"); phone/laptop check of the live app.
+4. Submit **Nov 4 by noon Central** (deadline 8 PM): Indie track, Push the Frontier, live URL first,
+   repo, video, Meta usage (log Muse Code's work in `docs/MUSE_DEV_LOG.md`), X post tagging @AIatMeta.
+   Freeze the repo after submitting.
+5. Joyeb: read the JPM key terms himself; derive d1/d2; explain "short a put" and worst-of.
+6. Open limitation: synthesized payoffs get a base value only (no fair-value range / loss odds yet).
 
 ## Environment facts
 - Recent JPM filings are PDF-to-HTML conversions: `bg*.jpg` are whole-page backgrounds (not

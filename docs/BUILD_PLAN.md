@@ -1,13 +1,13 @@
 # QuantProof — Build Plan (Oct 27 – Nov 4, 2026)
 
 Deadline: **Wed Nov 4, 8:00 PM Central**. Target submission: **Nov 4, noon Central**.
-Builder: **Claude Code (cloud environment)**. Joyeb reviews, understands and tests everything.
-Optional: Muse Code locally for side tasks; if used, note what it built (for the submission form).
+Builder: Claude Code (cloud) until Oct 27; from Oct 28 **Muse Code on Joyeb's PC builds and Claude Code
+reviews** (pricing maths, security). One at a time: pull first, push when done. Log Muse Code's work.
 
 All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10 AM.
 
 ## Environment setup (once, before Day 1 coding)
-- [ ] Public GitHub repo `quantproof` created; these brief files committed
+- [x] Public GitHub repo `quantproof` created; these brief files committed
 - [ ] Cloud environment secrets: `MODEL_API_KEY` (done), `SEC_USER_AGENT` ("Name email"),
       `BASETEN_API_KEY` (when Baseten credits arrive)
 - [ ] Allowed domains: `api.meta.ai`, `www.sec.gov`, `efts.sec.gov`, `data.sec.gov`,
@@ -19,8 +19,7 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [x] **Extraction test: GO.** Muse Spark 1.3 on a real JPM worst-of autocallable 424B2 (preliminary):
       zero wrong fields, 17/17 dates and call amounts, 93/97 quotes verbatim (4 line-join issues),
       diagrams read correctly, ~22 s and ~$0.05 per filing. Product supplement not needed for pricing.
-- [ ] Repo `quantproof` created (public); starter pack committed first
-      (committed locally first; waiting for the empty GitHub repo to push)
+- [x] Repo `quantproof` created (public); starter pack committed first
 - [x] `pyproject.toml`, package skeleton (brief section 5), `.gitignore`, CI running pytest
 - [x] `core/`: TermSheet (+ Citation; N >= 1 underlyings; preliminary flag; call schedule; barrier
       type and observation), MarketInputs, PricingResult (with measure + provenance)
@@ -84,7 +83,7 @@ All times Central. Live workshops 11:00 AM; Discord office hours weekdays 9–10
 - [x] Deploy (Streamlit Community Cloud, secrets in the host): https://kashyeb57-quantproof-app-snew9v.streamlit.app/ — live run verified (~80 s, ~$0.13); phone/laptop check still to do in rehearsal
 
 ## Day 8 — Tue Nov 3: polish + record
-- [ ] README as a research note (brief section 13), including assumptions and limitations
+- [x] README as a research note (brief section 13), including assumptions and limitations (live URL first; video link still to add)
 - [ ] Final validation report committed
 - [ ] Joyeb: rehearse and record the 3-minute demo (brief section 11)
 - [ ] Joyeb: last submission questions in Discord (last full support day)
