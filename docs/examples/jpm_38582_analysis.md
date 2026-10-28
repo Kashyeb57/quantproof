@@ -97,9 +97,9 @@ The flagged fields above have no verified quote in the filing text; they are fla
 
 ## Estimated value (risk-neutral)
 
-Estimated value range under these assumptions: $778.42 - $974.77
+Estimated value range under these assumptions: $778.01 - $974.81
 
-Base estimated value: $907.72 +- $1.45 (1.96 SE, SE = $0.74), seed 0, paths 100000.
+Base estimated value: $907.67 +- $1.46 (1.96 SE, SE = $0.74), seed 0, paths 100000.
 
 Grid paths per point: 20000, seed: 0.
 
@@ -111,17 +111,17 @@ Position of the bank's estimated value: inside range.
 
 | Assumption | Low-shift value | High-shift value |
 | --- | --- | --- |
-| Volatility | $953.98 | $862.91 |
-| Correlation | $894.57 | $914.85 |
-| Issuer credit spread | $911.42 | $900.93 |
-| Dividend yields | $916.78 | $895.55 |
-| Skew | $906.15 | $854.51 |
+| Volatility | $954.06 | $862.46 |
+| Correlation | $894.25 | $914.84 |
+| Issuer credit spread | $911.47 | $900.93 |
+| Dividend yields | $916.26 | $895.39 |
+| Skew | $906.18 | $854.03 |
 
-The assumption that moves the estimated value most is Volatility: $953.98 to $862.91 across its stated range.
+The assumption that moves the estimated value most is Volatility: $954.06 to $862.46 across its stated range.
 
 Assumptions:
 
-- risk-free rate r = 0.037 per year, as of 2025-11-25
+- risk-free rate r = 0.035515 per year, as of 2025-11-25
 - issuer credit spread = 0.006 per year
 - volatilities = (0.24, 0.17) per year (grid shifts (-0.05, 0.0, 0.05))
 - dividend yields = (0.012, 0.013) per year (grid shifts (-0.005, 0.0, 0.005))
@@ -140,16 +140,16 @@ Banks value their own notes with an internal funding rate, usually below the mar
 
 These figures use the REAL-WORLD measure. They are not a value and must not be read as an estimated value.
 
-Drift: real-world drift = r + 5.0% equity risk premium (r = 0.037)
+Drift: real-world drift = r + 5.0% equity risk premium (r = 0.035515)
 
-Real-world drifts: 0.0870, 0.0870
+Real-world drifts: 0.0855, 0.0855
 
-- P(loss): 9.61% (SE 0.09%)
-- P(loss > 20%): 9.61% (SE 0.09%)
-- P(loss > 50%): 3.39% (SE 0.06%)
-- P(called early): 82.65% (SE 0.12%)
-- Expected cash: $1,083.69 (SE $0.65)
-- p05: $557.19
+- P(loss): 9.85% (SE 0.09%)
+- P(loss > 20%): 9.85% (SE 0.09%)
+- P(loss > 50%): 3.49% (SE 0.06%)
+- P(called early): 82.29% (SE 0.12%)
+- Expected cash: $1,082.13 (SE $0.66)
+- p05: $552.30
 - p50: $1,097.50
 - p95: $1,365.62
 - Paths: 100000, seed: 0, measure: real_world
@@ -174,17 +174,17 @@ Cells are P(loss) as percent under the real-world measure, for each drift (rows)
 | --- | --- | --- | --- | --- |
 | bsm_known_values | True | 4.759422 | 4.760000 | 0.005000 |
 | put_call_parity | True | 3.325524 | 3.325524 | 0.000000 |
-| determinism | True | 906.152427 | 906.152427 | 0.000000 |
-| barrier_removed | True | 672.579119 | 673.036091 | 2.255238 |
-| barrier_at_maturity | True | 703.689011 | 704.025281 | 3.064973 |
-| never_callable | True | 703.986645 | 704.025281 | 3.077757 |
-| zero_coupon_no_downside | True | 806.066494 | 806.066494 | 0.001000 |
-| zero_vol | True | 282.123273 | 282.123273 | 0.001000 |
-| correlation_one | True | 951.242965 | 954.186526 | 6.859570 |
-| correlation_monotonicity | True | 942.539729 | 865.738824 | 3.269609 |
-| vol_monotonicity | True | 869.796741 | 946.784725 | 3.573849 |
-| spread_monotonicity | True | 885.537336 | 906.152427 | 0.000000 |
-| convergence | True | 0.504328 | 0.500000 | 0.100000 |
+| determinism | True | 906.176847 | 906.176847 | 0.000000 |
+| barrier_removed | True | 675.504767 | 675.950901 | 2.251044 |
+| barrier_at_maturity | True | 706.989201 | 707.338619 | 3.093234 |
+| never_callable | True | 707.238316 | 707.338619 | 3.105482 |
+| zero_coupon_no_downside | True | 812.090332 | 812.090332 | 0.001000 |
+| zero_vol | True | 284.231616 | 284.231616 | 0.001000 |
+| correlation_one | True | 951.610249 | 954.943863 | 6.907937 |
+| correlation_monotonicity | True | 943.027594 | 864.729310 | 3.291549 |
+| vol_monotonicity | True | 869.335503 | 946.557125 | 3.581961 |
+| spread_monotonicity | True | 885.440629 | 906.176847 | 0.000000 |
+| convergence | True | 0.504799 | 0.500000 | 0.100000 |
 | quotes | False | 77.000000 | 78.000000 | 0.000000 |
 
 ## Limitations

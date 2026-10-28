@@ -75,6 +75,94 @@ APP_BASE_PATHS = 20_000
 APP_BATTERY_PATHS = 4_000
 APP_SEED = 0
 
+TREASURY_CSV = ROOT / "docs" / "data" / "treasury_daily_par_yield_curve_2025-11.csv"
+
+_TENOR_YEARS = {
+    "1 Mo": 1 / 12, "1.5 Month": 1.5 / 12, "2 Mo": 2 / 12, "3 Mo": 0.25,
+    "4 Mo": 4 / 12, "6 Mo": 0.5, "1 Yr": 1.0, "2 Yr": 2.0, "3 Yr": 3.0,
+    "5 Yr": 5.0, "7 Yr": 7.0, "10 Yr": 10.0, "20 Yr": 20.0, "30 Yr": 30.0,
+}
+
+
+def treasury_par_rate(
+    pricing_date: date, maturity_date: date, csv_path: Path | None = None
+) -> tuple[float, str]:
+    """Treasury par yield matched to a note's maturity, interpolated.
+
+    Formula: t = (maturity - pricing).days / 365 (Act/365 year
+    fraction); the rate is the linear interpolation between the two
+    bracketing tenor yields on the pricing date's curve row, converted
+    from percent to a fraction.  Outside the tenor range the nearest
+    tenor is used.
+
+    Intuition: the risk-free leg of discounting should be a real,
+    dated market rate for the note's own horizon, not a round number;
+    matching the maturity keeps the discounting honest about term.
+
+    Reference: U.S. Treasury Daily Par Yield Curve Rates,
+    home.treasury.gov (public U.S. government data), saved under
+    docs/data/ with its source URL.
+    """
+    import csv as _csv
+
+    path = Path(csv_path) if csv_path is not None else TREASURY_CSV
+    lines = [
+        line
+        for line in path.read_text(encoding="utf-8-sig").splitlines()
+        if line.strip() and not line.startswith("#")
+    ]
+    rows = list(_csv.DictReader(lines))
+    wanted = pricing_date.strftime("%m/%d/%Y")
+    row = next((r for r in rows if r.get("Date") == wanted), None)
+    if row is None:
+        raise ValueError(f"no Treasury curve row for {wanted} in {path}")
+    curve = sorted(
+        (_TENOR_YEARS[name], float(row[name]) / 100.0)
+        for name in _TENOR_YEARS
+        if row.get(name) not in (None, "", "N/A")
+    )
+    t = (maturity_date - pricing_date).days / 365.0
+    if t <= curve[0][0]:
+        rate, label_tenor = curve[0][1], f"{t:.2f}y (nearest tenor)"
+    elif t >= curve[-1][0]:
+        rate, label_tenor = curve[-1][1], f"{t:.2f}y (nearest tenor)"
+    else:
+        for (t0, y0), (t1, y1) in zip(curve, curve[1:]):
+            if t0 <= t <= t1:
+                rate = y0 + (t - t0) / (t1 - t0) * (y1 - y0)
+                label_tenor = f"{t:.2f}y interpolated between {t0:g} Yr and {t1:g} Yr"
+                break
+    label = f"U.S. Treasury par yield, {pricing_date.isoformat()}, {label_tenor}"
+    return rate, label
+
+
+def note_defaults(stem: str, ts: TermSheet) -> dict:
+    """Default app inputs for a note, with the rate source labelled.
+
+    For the 38582 note the risk-free rate is the real Treasury par
+    yield for its pricing date and maturity (see
+    :func:`treasury_par_rate`); volatilities, dividends and correlation
+    remain stated illustrative assumptions for every note.
+    """
+    defaults = dict(DEFAULT_INPUTS[stem]) if stem in DEFAULT_INPUTS else {
+        "rate": 0.037, "spread": 0.006,
+        "vols": (0.25,) * ts.n_underlyings,
+        "dividends": (0.01,) * ts.n_underlyings,
+        "rho": 0.6 if ts.n_underlyings > 1 else 0.0,
+    }
+    defaults["rate_label"] = "risk-free rate (illustrative assumption)"
+    if stem == "jpm_424b2-38582":
+        try:
+            rate, label = treasury_par_rate(
+                ts.pricing_date.value, ts.maturity_date.value
+            )
+            defaults["rate"] = rate
+            defaults["rate_label"] = label
+        except (OSError, ValueError):
+            pass
+    return defaults
+
+
 SENSITIVITY_LABELS = {
     "vol": "Volatility",
     "correlation": "Correlation",

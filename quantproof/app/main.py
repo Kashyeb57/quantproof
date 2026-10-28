@@ -426,11 +426,12 @@ def run() -> None:
         "conditional on them."
     )
     defaults = (
-        live.generic_defaults(ts) if live_mode else demo.DEFAULT_INPUTS[stem]
+        live.generic_defaults(ts) if live_mode else demo.note_defaults(stem, ts)
     )
     col_rate, col_spread, col_rho = st.columns(3)
     rate = col_rate.number_input(
-        "Risk-free rate", value=float(defaults["rate"]), format="%.4f"
+        "Risk-free rate", value=float(defaults["rate"]), format="%.4f",
+        help=str(defaults.get("rate_label", ""))
     )
     spread = col_spread.number_input(
         "Issuer credit spread", value=float(defaults["spread"]), format="%.4f"
@@ -442,6 +443,11 @@ def run() -> None:
         max_value=1.0,
         format="%.2f",
         disabled=ts.n_underlyings < 2,
+    )
+    _caption(f"Rate source: {defaults.get('rate_label', '')}.")
+    _caption(
+        "Volatilities, dividend yields and correlation are stated "
+        "assumptions (ranges you can edit), not market data."
     )
     vols: list[float] = []
     dividends: list[float] = []
