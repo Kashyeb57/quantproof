@@ -1,0 +1,346 @@
+{
+  "meta": {
+    "issuer_group": "Bank of Montreal",
+    "accession": "0001214659-26-013104",
+    "url": "https://www.sec.gov/Archives/edgar/data/927971/000121465926013104/w1020262424b2.htm",
+    "filing_date": "2026-10-21",
+    "form": "424B2",
+    "primary_document": "w1020262424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['threshold settlement amount']",
+  "termsheet": {
+    "issuer": "Bank of Montreal",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "06376MPD0",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-19",
+    "issue_date": "2026-10-22",
+    "maturity_date": "2029-03-07",
+    "final_review_date": "2029-03-05",
+    "estimated_value": 997.53,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Bank of Montreal",
+        "quote": "Issuer: | Bank of Montreal",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 19, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7690.73,
+        "quote": "threshold level of 85.00% of the initial underlier level (7,690.73, which was the closing level of the underlier on the trade date)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 7690.73,
+        "quote": "The closing level on October 19, 2026 was 7,690.73.",
+        "section": "The Underlier",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-19",
+        "quote": "The closing level on October 19, 2026 was 7,690.73.",
+        "section": "The Underlier",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per note.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per Note | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-19",
+        "quote": "Trade Date: | October 19, 2026",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-22",
+        "quote": "October 22, 2026",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-03-07",
+        "quote": "stated maturity date (March 7, 2029, subject to postponement)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-03-05",
+        "quote": "determination date (March 5, 2029, subject to postponement)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "the product of (a) $1,000 times (b) the buffer rate of approximately 117.65% times (c) the sum of the underlier return plus 15.00%.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.85,
+        "quote": "threshold level of 85.00% of the initial underlier level (7,690.73, which was the closing level of the underlier on the trade date)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "If the final underlier level on the determination date is greater than or equal to the threshold level of 85.00% of the initial underlier level",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1765,
+        "quote": "Buffer Rate: | the quotient of the initial underlier level divided by the threshold level, which equals approximately 117.65%",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "06376MPD0",
+        "quote": "CUSIP / ISIN: | 06376MPD0 / US06376MPD01",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 997.53,
+        "quote": "is $997.53 per $1,000 principal amount of notes, which is less than the original issue price.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Per Note | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "threshold settlement amount",
+        "quote": "you will receive, for each $1,000 principal amount of your notes, the threshold settlement amount of $1,226.00.",
+        "section": "Cover",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Bank of Montreal",
+      "quote": "Issuer: | Bank of Montreal",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7690.73,
+      "quote": "threshold level of 85.00% of the initial underlier level (7,690.73, which was the closing level of the underlier on the trade date)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 7690.73,
+      "quote": "The closing level on October 19, 2026 was 7,690.73.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-19",
+      "quote": "The closing level on October 19, 2026 was 7,690.73.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per note.",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per Note | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-19",
+      "quote": "Trade Date: | October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-22",
+      "quote": "October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-03-07",
+      "quote": "stated maturity date (March 7, 2029, subject to postponement)",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-03-05",
+      "quote": "determination date (March 5, 2029, subject to postponement)",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "the product of (a) $1,000 times (b) the buffer rate of approximately 117.65% times (c) the sum of the underlier return plus 15.00%.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.85,
+      "quote": "threshold level of 85.00% of the initial underlier level (7,690.73, which was the closing level of the underlier on the trade date)",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "If the final underlier level on the determination date is greater than or equal to the threshold level of 85.00% of the initial underlier level",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1765,
+      "quote": "Buffer Rate: | the quotient of the initial underlier level divided by the threshold level, which equals approximately 117.65%",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "06376MPD0",
+      "quote": "CUSIP / ISIN: | 06376MPD0 / US06376MPD01",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 997.53,
+      "quote": "is $997.53 per $1,000 principal amount of notes, which is less than the original issue price.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Per Note | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "threshold settlement amount",
+      "quote": "you will receive, for each $1,000 principal amount of your notes, the threshold settlement amount of $1,226.00.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 22,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 997.53,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "06376MPD0",
+  "issuer": "Bank of Montreal",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-19",
+  "structure": "single underlying, buffer 85% at maturity",
+  "seconds": 54.3192661600001,
+  "cost_usd": 0.10016385,
+  "model_seconds": 54.28086164199976
+}

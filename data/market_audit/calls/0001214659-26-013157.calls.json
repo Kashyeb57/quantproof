@@ -1,0 +1,52 @@
+[
+  {
+    "purpose": "extract",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"issuer\": {\"value\": \"Bank of Montreal\", \"quote\": \"Issuer: | Bank of Montreal\", \"section\": \"Terms of the Notes\"}, \"guarantor\": null, \"cusip\": {\"value\": \"06376MPC2\", \"quote\": \"CUSIP / ISIN: | 06376MPC2 / US06376MPC28\", \"section\": \"Terms of the Notes\"}, \"is_preliminary\": {\"value\": false, \"quote\": \"Pricing Supplement dated October 21, 2026 (To Product Supplement No. ELN-1 dated March 25, 2025, Underlying Supplement No. ELN-1 dated March 25, 2025, Prospectus Supplement dated March 25, 2025 and Prospectus dated March 25, 2025)\", \"section\": \"Cover\"}, \"underlyings\": [{\"name\": {\"value\": \"S&P 500\u00ae Index\", \"quote\": \"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\", \"section\": \"Terms of the Notes\"}, \"ticker\": {\"value\": \"SPX\", \"quote\": \"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\", \"section\": \"Terms of the Notes\"}, \"initial_level\": {\"value\": 7757.17, \"quote\": \"(7,757.17, which was the closing level of the underlier on the trade date)\", \"section\": \"Cover\"}, \"reference_level\": null, \"reference_date\": null}], \"dependency\": {\"value\": \"worst_of\", \"quote\": \"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\", \"section\": \"Terms of the Notes\"}, \"notional\": {\"value\": 1000, \"quote\": \"Principal Amount: | $1,000 per note.\", \"section\": \"Terms of the Notes\"}, \"issue_price\": {\"value\": 1000, \"quote\": \"Per Note | $1,000.00 | $0.00 | $1,000.00\", \"section\": \"Cover\"}, \"pricing_date\": {\"value\": \"2026-10-21\", \"quote\": \"Trade Date: | October 21, 2026\", \"section\": \"Terms of the Notes\"}, \"issue_date\": {\"value\": \"2026-10-26\", \"quote\": \"October 26, 2026\", \"section\": \"Terms of the Notes\"}, \"maturity_date\": {\"value\": \"2028-08-16\", \"quote\": \"Stated Maturity Date: August 16, 2028, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.\", \"section\": \"Terms of the Notes\"}, \"final_review_date\": {\"value\": \"2028-08-14\", \"quote\": \"Determination Date: August 14, 2028, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.\", \"section\": \"Terms of the Notes\"}, \"downside\": {\"kind\": {\"value\": \"buffer\", \"quote\": \"Buffer Amount: | 12.50%\", \"section\": \"Terms of the Notes\"}, \"level\": {\"value\": 0.875, \"quote\": \"Buffer Level: | 6,787.52375, which is equal to 87.50% of the initial underlier level\", \"section\": \"Terms of the Notes\"}, \"observation\": {\"value\": \"final_only\", \"quote\": \"Final Underlier Level: the closing level of the underlier on the determination date.\", \"section\": \"Terms of the Notes\"}, \"gearing\": {\"value\": 1.1429, \"quote\": \"you will lose approximately 1.1429% of the principal amount of your notes for every 1% that the final underlier level has declined below 87.50% of the initial underlier level.\", \"section\": \"Cover\"}}, \"autocall\": null, \"coupon\": null, \"upside\": {\"leverage\": {\"value\": 1.4, \"quote\": \"Upside Participation Rate: 140%\", \"section\": \"Terms of the Notes\"}, \"cap\": {\"value\": 0.259, \"quote\": \"Maximum Settlement Amount: $1,259.00 per note\", \"section\": \"Terms of the Notes\"}}, \"unsupported_features\": [], \"estimated_value\": {\"value\": 996.26, \"quote\": \"is $996.26 per $1,000 principal amount of notes, which is less than the original issue price.\", \"section\": \"Cover\"}, \"estimated_value_floor\": null, \"max_selling_commission\": null, \"missing_or_ambiguous\": []}",
+    "input_tokens": 11779,
+    "output_tokens": 10740,
+    "cost_usd": 0.05841405,
+    "seconds": 31.554738671999985
+  },
+  {
+    "purpose": "extract",
+    "model": "muse-spark-1.2",
+    "finish_reason": "stop",
+    "text": "{\"issuer\":{\"value\":\"Bank of Montreal\",\"quote\":\"Issuer: | Bank of Montreal\",\"section\":\"Terms of the Notes\"},\"guarantor\":null,\"cusip\":{\"value\":\"06376MPC2\",\"quote\":\"CUSIP / ISIN: | 06376MPC2 / US06376MPC28\",\"section\":\"Terms of the Notes\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Pricing Supplement dated October 21, 2026 (To Product Supplement No. ELN-1 dated March 25, 2025, Underlying Supplement No. ELN-1 dated March 25, 2025, Prospectus Supplement dated March 25, 2025 and Prospectus dated March 25, 2025)\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"S&P 500\u00ae Index\",\"quote\":\"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\",\"section\":\"Terms of the Notes\"},\"ticker\":{\"value\":\"SPX\",\"quote\":\"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\",\"section\":\"Terms of the Notes\"},\"initial_level\":{\"value\":7757.17,\"quote\":\"Initial Underlier Level: 7,757.17, the closing level of the underlier on the trade date\",\"section\":\"Terms of the Notes\"},\"reference_level\":{\"value\":7757.17,\"quote\":\"The closing level on October 21, 2026 was 7,757.17.\",\"section\":\"The Underlier\"},\"reference_date\":{\"value\":\"2026-10-21\",\"quote\":\"The closing level on October 21, 2026 was 7,757.17.\",\"section\":\"The Underlier\"}}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)\",\"section\":\"Terms of the Notes\"},\"notional\":{\"value\":1000,\"quote\":\"Principal Amount: | $1,000 per note.\",\"section\":\"Terms of the Notes\"},\"issue_price\":{\"value\":1000,\"quote\":\"Per Note | $1,000.00 | $0.00 | $1,000.00\",\"section\":\"Cover\"},\"pricing_date\":{\"value\":\"2026-10-21\",\"quote\":\"Trade Date: | October 21, 2026\",\"section\":\"Terms of the Notes\"},\"issue_date\":{\"value\":\"2026-10-26\",\"quote\":\"Original Issue Date: October 26, 2026\",\"section\":\"Terms of the Notes\"},\"maturity_date\":{\"value\":\"2028-08-16\",\"quote\":\"Stated Maturity Date: August 16, 2028, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.\",\"section\":\"Terms of the Notes\"},\"final_review_date\":{\"value\":\"2028-08-14\",\"quote\":\"Determination Date: August 14, 2028, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.\",\"section\":\"Terms of the Notes\"},\"downside\":{\"kind\":{\"value\":\"buffer\",\"quote\":\"Buffer Level: | 6,787.52375, which is equal to 87.50% of the initial underlier level\",\"section\":\"Terms of the Notes\"},\"level\":{\"value\":0.875,\"quote\":\"Buffer Level: | 6,787.52375, which is equal to 87.50% of the initial underlier level\",\"section\":\"Terms of the Notes\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"if the final underlier level is less than the buffer level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the buffer rate times (c) the sum of the underlier return plus the buffer amount.\",\"section\":\"Terms of the Notes\"},\"gearing\":{\"value\":1.1429,\"quote\":\"Buffer Rate: | the quotient of the initial underlier level divided by the buffer level, which equals approximately 114.29%\",\"section\":\"Terms of the Notes\"}},\"autocall\":null,\"coupon\":null,\"upside\":{\"leverage\":{\"value\":1.4,\"quote\":\"Upside Participation Rate: 140%\",\"section\":\"Terms of the Notes\"},\"cap\":{\"value\":0.259,\"quote\":\"Maximum Settlement Amount: $1,259.00 per note\",\"section\":\"Terms of the Notes\"}},\"unsupported_features\":[],\"estimated_value\":{\"value\":996.26,\"quote\":\"is $996.26 per $1,000 principal amount of notes, which is less than the original issue price.\",\"section\":\"Cover\"},\"estimated_value_floor\":null,\"max_selling_commission\":{\"value\":0,\"quote\":\"Per Note | $1,000.00 | $0.00 | $1,000.00\",\"section\":\"Cover\"},\"missing_or_ambiguous\":[]}",
+    "input_tokens": 11779,
+    "output_tokens": 5044,
+    "cost_usd": 0.03420605,
+    "seconds": 13.774433182000394
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": 0.0, \"quote\": \"BMOCM will not receive an underwriting discount in connection with the sale of the notes.\", \"choice\": \"second\"}",
+    "input_tokens": 10128,
+    "output_tokens": 1838,
+    "cost_usd": 0.0203472,
+    "seconds": 5.00094426700025
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": \"2026-10-21\", \"quote\": \"The closing level on October 21, 2026 was 7,757.17.\", \"choice\": \"second\"}",
+    "input_tokens": 10134,
+    "output_tokens": 2719,
+    "cost_usd": 0.02409895,
+    "seconds": 8.932779213999765
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": 7757.17, \"quote\": \"7,757.17, the closing level of the underlier on the trade date\", \"choice\": \"second\"}",
+    "input_tokens": 10132,
+    "output_tokens": 616,
+    "cost_usd": 0.0151587,
+    "seconds": 2.527296136000132
+  }
+]

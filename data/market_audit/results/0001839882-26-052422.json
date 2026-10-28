@@ -1,0 +1,1077 @@
+{
+  "meta": {
+    "issuer_group": "Wells Fargo",
+    "accession": "0001839882-26-052422",
+    "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052422/r10723wfc_424b2-35603.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "r10723wfc_424b2-35603.htm"
+  },
+  "status": "priced",
+  "reason": null,
+  "termsheet": {
+    "issuer": "Wells Fargo Finance LLC",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "95001HTE1",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-22",
+    "issue_date": "2026-10-27",
+    "maturity_date": "2029-03-07",
+    "final_review_date": "2029-03-05",
+    "estimated_value": 995.25,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Wells Fargo Finance LLC",
+        "quote": "Issuer: | Wells Fargo Finance LLC",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement No. 314 dated October 22, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7663.43,
+        "quote": "Initial Underlier Level: | 7,663.43, the closing level of the underlier on the trade date",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 7663.43,
+        "quote": "The closing level on October 22, 2026 was 7,663.43.",
+        "section": "The Underlier",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-22",
+        "quote": "The closing level on October 22, 2026 was 7,663.43.",
+        "section": "The Underlier",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Face Amount: | $1,000 per security.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original Offering Price: | $1,000 per security.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-22",
+        "quote": "Trade Date: | October 22, 2026",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-27",
+        "quote": "Original Issue Date: | October 27, 2026",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-03-07",
+        "quote": "Stated Maturity Date: | March 7, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-03-05",
+        "quote": "Determination Date: | March 5, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "if the final underlier level is less than the buffer level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the buffer rate times (c) the sum of the underlier return plus the buffer amount.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.85,
+        "quote": "Buffer Level: | 6,513.9155, which is equal to 85.00% of the initial underlier level",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final Underlier Level: | the closing level of the underlier on the determination date",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1765,
+        "quote": "Buffer Rate: | the quotient of the initial underlier level divided by the buffer level, which equals approximately 117.65%",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "guarantor",
+        "value": "Wells Fargo & Company",
+        "quote": "Guarantor: | Wells Fargo & Company",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "95001HTE1",
+        "quote": "CUSIP / ISIN: | 95001HTE1 / US95001HTE17",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.4,
+        "quote": "Upside Participation Rate: | 140%",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.34832,
+        "quote": "124.880% | 134.832%",
+        "section": "Hypothetical Examples",
+        "verified": false
+      },
+      {
+        "path": "estimated_value",
+        "value": 995.25,
+        "quote": "The current estimated value of the securities is $995.25 per security.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Per Security | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "upside.cap"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Wells Fargo Finance LLC",
+      "quote": "Issuer: | Wells Fargo Finance LLC",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement No. 314 dated October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7663.43,
+      "quote": "Initial Underlier Level: | 7,663.43, the closing level of the underlier on the trade date",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 7663.43,
+      "quote": "The closing level on October 22, 2026 was 7,663.43.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-22",
+      "quote": "The closing level on October 22, 2026 was 7,663.43.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Face Amount: | $1,000 per security.",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original Offering Price: | $1,000 per security.",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-22",
+      "quote": "Trade Date: | October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-27",
+      "quote": "Original Issue Date: | October 27, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-03-07",
+      "quote": "Stated Maturity Date: | March 7, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-03-05",
+      "quote": "Determination Date: | March 5, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "if the final underlier level is less than the buffer level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the buffer rate times (c) the sum of the underlier return plus the buffer amount.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.85,
+      "quote": "Buffer Level: | 6,513.9155, which is equal to 85.00% of the initial underlier level",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final Underlier Level: | the closing level of the underlier on the determination date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1765,
+      "quote": "Buffer Rate: | the quotient of the initial underlier level divided by the buffer level, which equals approximately 117.65%",
+      "verified": true
+    },
+    {
+      "path": "guarantor",
+      "value": "Wells Fargo & Company",
+      "quote": "Guarantor: | Wells Fargo & Company",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "95001HTE1",
+      "quote": "CUSIP / ISIN: | 95001HTE1 / US95001HTE17",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.4,
+      "quote": "Upside Participation Rate: | 140%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.34832,
+      "quote": "124.880% | 134.832%",
+      "verified": false
+    },
+    {
+      "path": "estimated_value",
+      "value": 995.25,
+      "quote": "The current estimated value of the securities is $995.25 per security.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Per Security | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 24,
+    "verified": 23
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": "2026-10-22",
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": 7663.43,
+        "second": null,
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": [
+    {
+      "name": "bsm_known_values",
+      "passed": true,
+      "value": 4.759422392871532,
+      "reference": 4.76,
+      "tolerance": 0.005,
+      "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81"
+    },
+    {
+      "name": "put_call_parity",
+      "passed": true,
+      "value": 3.325524483300075,
+      "reference": 3.3255244833000717,
+      "tolerance": 1e-10,
+      "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03"
+    },
+    {
+      "name": "determinism",
+      "passed": true,
+      "value": 954.8757895024161,
+      "reference": 954.8757895024161,
+      "tolerance": 0.0,
+      "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical"
+    },
+    {
+      "name": "barrier_removed",
+      "passed": true,
+      "value": 787.9643028600038,
+      "reference": 788.4667658175626,
+      "tolerance": 4.686122683036708,
+      "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form"
+    },
+    {
+      "name": "barrier_at_maturity",
+      "passed": true,
+      "value": 800.2327654113618,
+      "reference": 799.7597640829802,
+      "tolerance": 5.601538858521386,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form"
+    },
+    {
+      "name": "zero_coupon_no_downside",
+      "passed": true,
+      "value": 902.9033837516762,
+      "reference": 902.903383751676,
+      "tolerance": 0.001,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)"
+    },
+    {
+      "name": "zero_vol",
+      "passed": true,
+      "value": 383.73393809446225,
+      "reference": 383.7339380944623,
+      "tolerance": 0.001,
+      "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)"
+    },
+    {
+      "name": "spread_monotonicity",
+      "passed": true,
+      "value": 932.4614815499401,
+      "reference": 954.8757895024161,
+      "tolerance": 0.0,
+      "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing"
+    },
+    {
+      "name": "convergence",
+      "passed": true,
+      "value": 0.5285409911254736,
+      "reference": 0.5,
+      "tolerance": 0.1,
+      "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]"
+    },
+    {
+      "name": "quotes",
+      "passed": false,
+      "value": 23.0,
+      "reference": 24.0,
+      "tolerance": 0.0,
+      "detail": "23/24 verified"
+    }
+  ],
+  "fair_value": {
+    "low": 897.0074819947647,
+    "high": 993.237060810927,
+    "base": {
+      "price": 955.1839173579674,
+      "measure": "risk_neutral",
+      "model": "montecarlo.worst_of_note",
+      "greeks": {},
+      "inputs": {
+        "rate": 0.037,
+        "spread": 0.006,
+        "vols": [
+          0.25
+        ],
+        "dividend_yields": [
+          0.01
+        ],
+        "correlation": [
+          [
+            1.0
+          ]
+        ],
+        "n_dates": 1,
+        "antithetic": true
+      },
+      "seed": 0,
+      "paths": 20000,
+      "std_error": 0.517349712443619,
+      "version": "0.1.0"
+    },
+    "points": [
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 993.237060810927,
+        "std_error": 1.0403093166912458
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 977.9632216987366,
+        "std_error": 1.1443485263670161
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 986.3058337145161,
+        "std_error": 1.0321836475126902
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 971.2612146623081,
+        "std_error": 1.1129858927903882
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 979.2477724518858,
+        "std_error": 1.010357967499706
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 964.5209030799793,
+        "std_error": 1.0727876505237741
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 987.35634356641,
+        "std_error": 1.0341498959651372
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 972.1729371742629,
+        "std_error": 1.1375731145562147
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 980.4661545950548,
+        "std_error": 1.0260723369153184
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 965.5106111061623,
+        "std_error": 1.1063961715738917
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 973.4498824120085,
+        "std_error": 1.0043758814932096
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 958.8102072841452,
+        "std_error": 1.066435933411055
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 981.5104446313122,
+        "std_error": 1.0280269436845888
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 966.4169355288695,
+        "std_error": 1.130837818325718
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 974.6610508081654,
+        "std_error": 1.0199972099150296
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 959.7940554876471,
+        "std_error": 1.0998454665084463
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 967.6863202816351,
+        "std_error": 0.99842921397614
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 953.133323141712,
+        "std_error": 1.0601218232844523
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 967.0643139913736,
+        "std_error": 1.1986967862402584
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 950.0495131912458,
+        "std_error": 1.2580314892508513
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 960.5630518148406,
+        "std_error": 1.1567952008817728
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 943.7091296503858,
+        "std_error": 1.2038578516365546
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 954.0216742485615,
+        "std_error": 1.1080338053831738
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 937.2638193469584,
+        "std_error": 1.145692368470287
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 961.3385592725526,
+        "std_error": 1.1915995914819049
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 944.4244990070113,
+        "std_error": 1.2505829880169739
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 954.8757895024161,
+        "std_error": 1.149946095311099
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 938.1216553489214,
+        "std_error": 1.1967300994539225
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 948.3731418560873,
+        "std_error": 1.1014734042826504
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 931.7145061743354,
+        "std_error": 1.1389090000942887
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 955.6467053673856,
+        "std_error": 1.1845444175031308
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 938.8327891760065,
+        "std_error": 1.2431785875636454
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 949.2222000993847,
+        "std_error": 1.14313754164372
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 932.5672631360886,
+        "std_error": 1.1896445489740146
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 942.758053062485,
+        "std_error": 1.0949518457358385
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 926.1980491474977,
+        "std_error": 1.1321657944074992
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 938.1855478624213,
+        "std_error": 1.279687388734277
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 919.8805034200686,
+        "std_error": 1.2921158475838797
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 931.9207375886689,
+        "std_error": 1.2212061899555342
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 913.8341626999108,
+        "std_error": 1.232969467639127
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 925.6309882246977,
+        "std_error": 1.1612497563056874
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 907.7244972941245,
+        "std_error": 1.175731307205742
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 932.6307773574157,
+        "std_error": 1.2721106681391188
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 914.4341126712773,
+        "std_error": 1.284465541079412
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 926.4030595153336,
+        "std_error": 1.2139757224430565
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 908.4235708772188,
+        "std_error": 1.2256693525947
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 920.1505502413748,
+        "std_error": 1.154374276385997
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 902.3500793277329,
+        "std_error": 1.168770085513553
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 927.108895309745,
+        "std_error": 1.2645788074804438
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 909.0199686894065,
+        "std_error": 1.2768605301958604
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 920.9180502839852,
+        "std_error": 1.206788064786014
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 903.0450138646346,
+        "std_error": 1.2184124597719586
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 914.702560610442,
+        "std_error": 1.1475395045257648
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 897.0074819947647,
+        "std_error": 1.1618500795371918
+      }
+    ],
+    "sensitivities": {
+      "vol": [
+        980.4661545950548,
+        926.4030595153336
+      ],
+      "correlation": [
+        954.8757895024161,
+        954.8757895024161
+      ],
+      "spread": [
+        960.5630518148406,
+        949.2222000993847
+      ],
+      "dividend": [
+        961.3385592725526,
+        948.3731418560873
+      ],
+      "skew": [
+        954.8757895024161,
+        938.1216553489214
+      ]
+    },
+    "bank_estimate": 995.25,
+    "bank_position": "above range",
+    "preliminary": false,
+    "n_paths": 4000,
+    "seed": 0,
+    "grid": {
+      "vol_shifts": [
+        -0.05,
+        0.0,
+        0.05
+      ],
+      "correlation_shifts": [
+        -0.25,
+        0.0,
+        0.25
+      ],
+      "spread_shifts": [
+        -0.0025,
+        0.0,
+        0.0025
+      ],
+      "dividend_shifts": [
+        -0.005,
+        0.0,
+        0.005
+      ],
+      "skew_per_10pct": [
+        0.0,
+        0.02
+      ]
+    },
+    "assumptions": [
+      "risk-free rate r = 0.037 per year, as of 2026-10-22",
+      "issuer credit spread = 0.006 per year",
+      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
+      "correlation: single underlying, correlation matrix [[1]]",
+      "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 0.85",
+      "measure: risk-neutral (for estimated value)",
+      "discounting at r + issuer spread",
+      "the bank's estimated value is a comparison point, not a calibration target"
+    ]
+  },
+  "loss_odds": {
+    "measure": "real_world",
+    "drifts": [
+      0.087
+    ],
+    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.037)",
+    "prob_loss": 0.23845,
+    "prob_loss_over_20": 0.09525,
+    "prob_loss_over_50": 0.0075,
+    "prob_called": null,
+    "expected_cash": 1127.0885353467347,
+    "quantiles": {
+      "p05": 702.5206382703797,
+      "p25": 1000.0,
+      "p50": 1156.7798649770848,
+      "p75": 1348.32,
+      "p95": 1348.32
+    },
+    "std_errors": {
+      "prob_loss": 0.0030132341221684052,
+      "prob_loss_over_20": 0.002075782232075417,
+      "prob_loss_over_50": 0.0006100717170956215,
+      "expected_cash": 1.613593176159926
+    },
+    "n_paths": 20000,
+    "seed": 0,
+    "excludes_issuer_default": true
+  },
+  "estimated_value": 995.25,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "95001HTE1",
+  "issuer": "Wells Fargo Finance LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity",
+  "seconds": 50.37271401199996,
+  "cost_usd": 0.1215982,
+  "model_seconds": 50.140530011999545
+}

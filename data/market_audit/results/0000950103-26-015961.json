@@ -1,0 +1,1027 @@
+{
+  "meta": {
+    "issuer_group": "Royal Bank of Canada",
+    "accession": "0000950103-26-015961",
+    "url": "https://www.sec.gov/Archives/edgar/data/1000275/000095010326015961/dp255335_424b2-spbeln1018spx.htm",
+    "filing_date": "2026-10-21",
+    "form": "424B2",
+    "primary_document": "dp255335_424b2-spbeln1018spx.htm"
+  },
+  "status": "priced",
+  "reason": null,
+  "termsheet": {
+    "issuer": "Royal Bank of Canada",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "78018DG43",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-19",
+    "issue_date": "2026-10-22",
+    "maturity_date": "2028-01-21",
+    "final_review_date": "2028-01-19",
+    "estimated_value": 984.08,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Royal Bank of Canada",
+        "quote": "Issuer: Royal Bank of Canada",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 19, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlier: the S&P 500\u00ae Index (Bloomberg symbol \u201cSPX Index\u201d)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Underlier: the S&P 500\u00ae Index (Bloomberg symbol \u201cSPX Index\u201d)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7690.73,
+        "quote": "Initial underlier level: 7,690.73, the closing level of the underlier on the trade date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "is based on the performance of the S&P 500\u00ae Index (which we refer to as the \u201cunderlier\u201d)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "each note will have a principal amount of $1,000",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original issue price: 100.00% of the principal amount ... each note will have a principal amount of $1,000",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-19",
+        "quote": "Trade date: October 19, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-22",
+        "quote": "Original issue date (settlement date): October 22, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-01-21",
+        "quote": "Stated maturity date: January 21, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-01-19",
+        "quote": "Determination date: January 19, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "if the final underlier level is equal to or less than the initial underlier level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the underlier return.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 1.0,
+        "quote": "100.000% | 100.000%",
+        "section": "Hypothetical Examples",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final underlier level: the closing level of the underlier on the determination date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "cusip",
+        "value": "78018DG43",
+        "quote": "CUSIP no.: 78018DG43",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.5,
+        "quote": "Upside participation rate: 150%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.19725,
+        "quote": "Maximum settlement amount: $1,197.25",
+        "section": "Key Terms",
+        "verified": false
+      },
+      {
+        "path": "estimated_value",
+        "value": 984.08,
+        "quote": "is $984.08 per $1,000 principal amount of notes and is less than the original issue price.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 12.5,
+        "quote": "Underwriting discount: 1.25% of the principal amount",
+        "section": "Cover",
+        "verified": false
+      }
+    ],
+    "unverified": [
+      "downside.gearing",
+      "upside.cap",
+      "max_selling_commission"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Royal Bank of Canada",
+      "quote": "Issuer: Royal Bank of Canada",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlier: the S&P 500\u00ae Index (Bloomberg symbol \u201cSPX Index\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Underlier: the S&P 500\u00ae Index (Bloomberg symbol \u201cSPX Index\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7690.73,
+      "quote": "Initial underlier level: 7,690.73, the closing level of the underlier on the trade date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "is based on the performance of the S&P 500\u00ae Index (which we refer to as the \u201cunderlier\u201d)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "each note will have a principal amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original issue price: 100.00% of the principal amount ... each note will have a principal amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-19",
+      "quote": "Trade date: October 19, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-22",
+      "quote": "Original issue date (settlement date): October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-01-21",
+      "quote": "Stated maturity date: January 21, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-01-19",
+      "quote": "Determination date: January 19, 2028",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "if the final underlier level is equal to or less than the initial underlier level, the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the underlier return.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 1.0,
+      "quote": "100.000% | 100.000%",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final underlier level: the closing level of the underlier on the determination date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "cusip",
+      "value": "78018DG43",
+      "quote": "CUSIP no.: 78018DG43",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.5,
+      "quote": "Upside participation rate: 150%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.19725,
+      "quote": "Maximum settlement amount: $1,197.25",
+      "verified": false
+    },
+    {
+      "path": "estimated_value",
+      "value": 984.08,
+      "quote": "is $984.08 per $1,000 principal amount of notes and is less than the original issue price.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 12.5,
+      "quote": "Underwriting discount: 1.25% of the principal amount",
+      "verified": false
+    }
+  ],
+  "quotes": {
+    "checked": 21,
+    "verified": 18
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": [
+    {
+      "name": "bsm_known_values",
+      "passed": true,
+      "value": 4.759422392871532,
+      "reference": 4.76,
+      "tolerance": 0.005,
+      "detail": "BSM call and put at S=42, K=40, r=0.10, sigma=0.20, T=0.5 compared with 4.76 and 0.81"
+    },
+    {
+      "name": "put_call_parity",
+      "passed": true,
+      "value": 3.325524483300075,
+      "reference": 3.3255244833000717,
+      "tolerance": 1e-10,
+      "detail": "C - P compared with S e^{-qT} - K e^{-rT} at S=42, K=40, r=0.10, sigma=0.20, T=0.5, q=0.03"
+    },
+    {
+      "name": "determinism",
+      "passed": true,
+      "value": 931.2423990072347,
+      "reference": 931.2423990072347,
+      "tolerance": 0.0,
+      "detail": "price_note run twice with seed=0, n_paths=4000; prices must be identical"
+    },
+    {
+      "name": "barrier_removed",
+      "passed": true,
+      "value": 855.2874776324677,
+      "reference": 855.6792115519031,
+      "tolerance": 3.9668663720452306,
+      "detail": "single asset, autocall/coupon/upside removed, BUFFER level 1.0 gearing 1.0; MC vs N*min(W,1) closed form"
+    },
+    {
+      "name": "barrier_at_maturity",
+      "passed": true,
+      "value": 855.2874776324677,
+      "reference": 855.6792115519031,
+      "tolerance": 3.9668663720452306,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER at downside level FINAL_ONLY gearing 1; MC vs put + digital closed form"
+    },
+    {
+      "name": "zero_coupon_no_downside",
+      "passed": true,
+      "value": 947.3620250750461,
+      "reference": 947.3620250750458,
+      "tolerance": 0.001,
+      "detail": "single asset, autocall/coupon/upside removed, BARRIER level 1e-6 (never breached); MC vs N*DF(T_p)"
+    },
+    {
+      "name": "zero_vol",
+      "passed": true,
+      "value": 473.68101253752303,
+      "reference": 473.6810125375229,
+      "tolerance": 0.001,
+      "detail": "single asset, vol 1e-8, autocall/coupon/upside removed, BARRIER at downside level gearing 1; q=r+0.10 (above barrier, if applicable) and q set for W=K/2 (below barrier)"
+    },
+    {
+      "name": "spread_monotonicity",
+      "passed": true,
+      "value": 919.6050322174352,
+      "reference": 931.2423990072347,
+      "tolerance": 0.0,
+      "detail": "credit spread + (0, 0.005, 0.01), same seed; prices must be strictly decreasing"
+    },
+    {
+      "name": "convergence",
+      "passed": true,
+      "value": 0.5370365636334526,
+      "reference": 0.5,
+      "tolerance": 0.1,
+      "detail": "barrier_at_maturity setup at n_paths//16, n_paths//4, n_paths; each price within 3 SE of closed form and each SE ratio in [0.4, 0.6]"
+    },
+    {
+      "name": "quotes",
+      "passed": false,
+      "value": 18.0,
+      "reference": 21.0,
+      "tolerance": 0.0,
+      "detail": "18/21 verified"
+    }
+  ],
+  "fair_value": {
+    "low": 902.6874360736585,
+    "high": 960.019523796268,
+    "base": {
+      "price": 931.4531729249541,
+      "measure": "risk_neutral",
+      "model": "montecarlo.worst_of_note",
+      "greeks": {},
+      "inputs": {
+        "rate": 0.037,
+        "spread": 0.006,
+        "vols": [
+          0.25
+        ],
+        "dividend_yields": [
+          0.01
+        ],
+        "correlation": [
+          [
+            1.0
+          ]
+        ],
+        "n_dates": 1,
+        "antithetic": true
+      },
+      "seed": 0,
+      "paths": 20000,
+      "std_error": 0.4363375658355406,
+      "version": "0.1.0"
+    },
+    "points": [
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 960.019523796268,
+        "std_error": 0.8423408300863652
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 960.019523796268,
+        "std_error": 0.8423408300863652
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 955.6291757134633,
+        "std_error": 0.8109473834231523
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 955.6291757134633,
+        "std_error": 0.8109473834231523
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 951.2080449504402,
+        "std_error": 0.7807551493688597
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 951.2080449504402,
+        "std_error": 0.7807551493688597
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 957.006119530675,
+        "std_error": 0.8396968073477147
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 957.006119530675,
+        "std_error": 0.8396968073477147
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 952.6295523068134,
+        "std_error": 0.808401901540955
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 952.6295523068134,
+        "std_error": 0.808401901540955
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 948.222299026456,
+        "std_error": 0.7783044378581306
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 948.222299026456,
+        "std_error": 0.7783044378581306
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 954.0021740365371,
+        "std_error": 0.8370610839292362
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 954.0021740365371,
+        "std_error": 0.8370610839292362
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 949.6393444148952,
+        "std_error": 0.8058644096691396
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 949.6393444148952,
+        "std_error": 0.8058644096691396
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 945.2459250571877,
+        "std_error": 0.7758614188831651
+      },
+      {
+        "vol_shift": -0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 945.2459250571877,
+        "std_error": 0.7758614188831651
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 938.2009756347313,
+        "std_error": 1.010296593836464
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 938.2009756347313,
+        "std_error": 1.010296593836464
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 934.1746789166314,
+        "std_error": 0.9783287187746248
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 934.1746789166314,
+        "std_error": 0.9783287187746248
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 930.1217412036441,
+        "std_error": 0.9470087971913294
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 930.1217412036441,
+        "std_error": 0.9470087971913294
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 935.2560575868343,
+        "std_error": 1.0071253749290168
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 935.2560575868343,
+        "std_error": 1.0071253749290168
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 931.2423990072347,
+        "std_error": 0.9752578437963223
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 931.2423990072347,
+        "std_error": 0.9752578437963223
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 927.2021830561384,
+        "std_error": 0.9440362322816845
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 927.2021830561384,
+        "std_error": 0.9440362322816845
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 932.3203833390761,
+        "std_error": 1.003964110157237
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 932.3203833390761,
+        "std_error": 1.003964110157237
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 928.3193232281375,
+        "std_error": 0.972196607984234
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 928.3193232281375,
+        "std_error": 0.972196607984234
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 924.2917891066074,
+        "std_error": 0.9410729979528838
+      },
+      {
+        "vol_shift": 0.0,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 924.2917891066074,
+        "std_error": 0.9410729979528838
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 915.9238830478009,
+        "std_error": 1.1342211103314486
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 915.9238830478009,
+        "std_error": 1.1342211103314486
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 912.1599305054938,
+        "std_error": 1.1018962482359573
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 912.1599305054938,
+        "std_error": 1.1018962482359573
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 908.38111914315,
+        "std_error": 1.0702852372490486
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": -0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 908.38111914315,
+        "std_error": 1.0702852372490486
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 913.0488905422105,
+        "std_error": 1.1306609048905394
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 913.0488905422105,
+        "std_error": 1.1306609048905394
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 909.2967526665486,
+        "std_error": 1.098437507270414
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 909.2967526665486,
+        "std_error": 1.098437507270414
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 905.5298026111843,
+        "std_error": 1.0669257200523836
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 905.5298026111843,
+        "std_error": 1.0669257200523836
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.0,
+        "price": 910.1829223475486,
+        "std_error": 1.1271118745747146
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": -0.005,
+        "skew_per_10pct": 0.02,
+        "price": 910.1829223475486,
+        "std_error": 1.1271118745747146
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.0,
+        "price": 906.4425620534872,
+        "std_error": 1.0949896229432214
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.0,
+        "skew_per_10pct": 0.02,
+        "price": 906.4425620534872,
+        "std_error": 1.0949896229432214
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.0,
+        "price": 902.6874360736585,
+        "std_error": 1.0635767480406861
+      },
+      {
+        "vol_shift": 0.05,
+        "correlation_shift": 0.0,
+        "spread_shift": 0.0025,
+        "dividend_shift": 0.005,
+        "skew_per_10pct": 0.02,
+        "price": 902.6874360736585,
+        "std_error": 1.0635767480406861
+      }
+    ],
+    "sensitivities": {
+      "vol": [
+        952.6295523068134,
+        909.2967526665486
+      ],
+      "correlation": [
+        931.2423990072347,
+        931.2423990072347
+      ],
+      "spread": [
+        934.1746789166314,
+        928.3193232281375
+      ],
+      "dividend": [
+        935.2560575868343,
+        927.2021830561384
+      ],
+      "skew": [
+        931.2423990072347,
+        931.2423990072347
+      ]
+    },
+    "bank_estimate": 984.08,
+    "bank_position": "above range",
+    "preliminary": false,
+    "n_paths": 4000,
+    "seed": 0,
+    "grid": {
+      "vol_shifts": [
+        -0.05,
+        0.0,
+        0.05
+      ],
+      "correlation_shifts": [
+        -0.25,
+        0.0,
+        0.25
+      ],
+      "spread_shifts": [
+        -0.0025,
+        0.0,
+        0.0025
+      ],
+      "dividend_shifts": [
+        -0.005,
+        0.0,
+        0.005
+      ],
+      "skew_per_10pct": [
+        0.0,
+        0.02
+      ]
+    },
+    "assumptions": [
+      "risk-free rate r = 0.037 per year, as of 2026-10-19",
+      "issuer credit spread = 0.006 per year",
+      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
+      "correlation: single underlying, correlation matrix [[1]]",
+      "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 1",
+      "measure: risk-neutral (for estimated value)",
+      "discounting at r + issuer spread",
+      "the bank's estimated value is a comparison point, not a calibration target"
+    ]
+  },
+  "loss_odds": {
+    "measure": "real_world",
+    "drifts": [
+      0.087
+    ],
+    "drift_note": "real-world drift = r + 5.0% equity risk premium (r = 0.037)",
+    "prob_loss": 0.421,
+    "prob_loss_over_20": 0.1549,
+    "prob_loss_over_50": 0.0044,
+    "prob_called": null,
+    "expected_cash": 1024.5481958899534,
+    "quantiles": {
+      "p05": 672.8144441991003,
+      "p25": 878.8809826525685,
+      "p50": 1085.8075285644354,
+      "p75": 1197.25,
+      "p95": 1197.25
+    },
+    "std_errors": {
+      "prob_loss": 0.0034911244606859837,
+      "prob_loss_over_20": 0.0025583782949360713,
+      "prob_loss_over_50": 0.00046800854693050214,
+      "expected_cash": 1.3417185679991324
+    },
+    "n_paths": 20000,
+    "seed": 0,
+    "excludes_issuer_default": true
+  },
+  "estimated_value": 984.08,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "78018DG43",
+  "issuer": "Royal Bank of Canada",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-19",
+  "structure": "single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity",
+  "seconds": 46.54984157299987,
+  "cost_usd": 0.08825485000000001,
+  "model_seconds": 46.363996329999736
+}

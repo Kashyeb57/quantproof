@@ -1,0 +1,497 @@
+{
+  "meta": {
+    "issuer_group": "UBS",
+    "accession": "0001839882-26-052237",
+    "url": "https://www.sec.gov/Archives/edgar/data/1114446/000183988226052237/ubs_424b2-35399.htm",
+    "filing_date": "2026-10-23",
+    "form": "424B2",
+    "primary_document": "ubs_424b2-35399.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Threshold settlement amount']",
+  "termsheet": {
+    "issuer": "UBS AG London Branch",
+    "underlying_names": [
+      "EURO STOXX 50\u00ae Index",
+      "TOPIX",
+      "FTSE\u00ae 100 Index",
+      "Swiss Market Index",
+      "S&P/ASX 200 Index"
+    ],
+    "n_underlyings": 5,
+    "cusip": "90266F6R2",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-21",
+    "issue_date": "2026-10-26",
+    "maturity_date": "2028-09-15",
+    "final_review_date": "2028-09-13",
+    "estimated_value": 996.0,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "UBS AG London Branch",
+        "quote": "Issuer: UBS AG London Branch",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 21, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "EURO STOXX 50\u00ae Index",
+        "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SX5E",
+        "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 6207.52,
+        "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].name",
+        "value": "TOPIX",
+        "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].ticker",
+        "value": "TPX",
+        "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[1].initial_level",
+        "value": 4043.73,
+        "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].name",
+        "value": "FTSE\u00ae 100 Index",
+        "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].ticker",
+        "value": "UKX",
+        "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[2].initial_level",
+        "value": 10752.88,
+        "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[3].name",
+        "value": "Swiss Market Index",
+        "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[3].ticker",
+        "value": "SMI",
+        "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[3].initial_level",
+        "value": 14552.39,
+        "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[4].name",
+        "value": "S&P/ASX 200 Index",
+        "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[4].ticker",
+        "value": "AS51",
+        "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[4].initial_level",
+        "value": 8831.303,
+        "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: An unequally-weighted basket of five indices.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Each note will have a face amount of $1,000",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original issue price: | 100.00% of the face amount...Each note will have a face amount of $1,000",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-21",
+        "quote": "Trade date: October 21, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-26",
+        "quote": "Original issue date (settlement date): October 26, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-09-15",
+        "quote": "Stated maturity date: September 15, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-09-13",
+        "quote": "Determination date: September 13, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "buffer level: yes, as described below",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.9,
+        "quote": "Buffer level: 90.00, which is 90.00% of the initial basket level",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final basket level: the basket closing level on the determination date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1111,
+        "quote": "Buffer rate: the quotient of the initial basket level divided by the buffer level, expressed as a percentage, which equals approximately 111.11%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "90266F6R2",
+        "quote": "CUSIP no.: 90266F6R2",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the basket return",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 996.0,
+        "quote": "The estimated initial value of the notes as of the trade date is $996.00 per $1,000 face amount.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Underwriting discount*: | 0.00% of the face amount",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Threshold settlement amount",
+        "quote": "Threshold settlement amount: $1,221.00",
+        "section": "Key Terms",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "UBS AG London Branch",
+      "quote": "Issuer: UBS AG London Branch",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 21, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "EURO STOXX 50\u00ae Index",
+      "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SX5E",
+      "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 6207.52,
+      "quote": "SX5E | EURO STOXX 50\u00ae Index | 40.00% | 0.00644380 | 6,207.52",
+      "verified": true
+    },
+    {
+      "path": "underlyings[1].name",
+      "value": "TOPIX",
+      "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+      "verified": true
+    },
+    {
+      "path": "underlyings[1].ticker",
+      "value": "TPX",
+      "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+      "verified": true
+    },
+    {
+      "path": "underlyings[1].initial_level",
+      "value": 4043.73,
+      "quote": "TPX | TOPIX | 25.00% | 0.00618241 | 4,043.73",
+      "verified": true
+    },
+    {
+      "path": "underlyings[2].name",
+      "value": "FTSE\u00ae 100 Index",
+      "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+      "verified": true
+    },
+    {
+      "path": "underlyings[2].ticker",
+      "value": "UKX",
+      "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+      "verified": true
+    },
+    {
+      "path": "underlyings[2].initial_level",
+      "value": 10752.88,
+      "quote": "UKX | FTSE\u00ae 100 Index | 17.00% | 0.00158097 | 10,752.88",
+      "verified": true
+    },
+    {
+      "path": "underlyings[3].name",
+      "value": "Swiss Market Index",
+      "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+      "verified": true
+    },
+    {
+      "path": "underlyings[3].ticker",
+      "value": "SMI",
+      "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+      "verified": true
+    },
+    {
+      "path": "underlyings[3].initial_level",
+      "value": 14552.39,
+      "quote": "SMI | Swiss Market Index | 11.00% | 0.00075589 | 14,552.39",
+      "verified": true
+    },
+    {
+      "path": "underlyings[4].name",
+      "value": "S&P/ASX 200 Index",
+      "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+      "verified": true
+    },
+    {
+      "path": "underlyings[4].ticker",
+      "value": "AS51",
+      "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+      "verified": true
+    },
+    {
+      "path": "underlyings[4].initial_level",
+      "value": 8831.303,
+      "quote": "AS51 | S&P/ASX 200 Index | 7.00% | 0.00079264 | 8,831.303",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: An unequally-weighted basket of five indices.",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Each note will have a face amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original issue price: | 100.00% of the face amount...Each note will have a face amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-21",
+      "quote": "Trade date: October 21, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-26",
+      "quote": "Original issue date (settlement date): October 26, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-09-15",
+      "quote": "Stated maturity date: September 15, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-09-13",
+      "quote": "Determination date: September 13, 2028",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "buffer level: yes, as described below",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.9,
+      "quote": "Buffer level: 90.00, which is 90.00% of the initial basket level",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final basket level: the basket closing level on the determination date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1111,
+      "quote": "Buffer rate: the quotient of the initial basket level divided by the buffer level, expressed as a percentage, which equals approximately 111.11%",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "90266F6R2",
+      "quote": "CUSIP no.: 90266F6R2",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "the sum of (i) $1,000 plus (ii) the product of (a) $1,000 times (b) the basket return",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 996.0,
+      "quote": "The estimated initial value of the notes as of the trade date is $996.00 per $1,000 face amount.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Underwriting discount*: | 0.00% of the face amount",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Threshold settlement amount",
+      "quote": "Threshold settlement amount: $1,221.00",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 33,
+    "verified": 33
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 996.0,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "90266F6R2",
+  "issuer": "UBS AG London Branch",
+  "underlyings": [
+    "EURO STOXX 50\u00ae Index",
+    "TOPIX",
+    "FTSE\u00ae 100 Index",
+    "Swiss Market Index",
+    "S&P/ASX 200 Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-21",
+  "structure": "worst-of 5, upside leverage 1x, buffer 90% at maturity",
+  "seconds": 69.02432748799993,
+  "cost_usd": 0.14940485,
+  "model_seconds": 68.94456921400024
+}

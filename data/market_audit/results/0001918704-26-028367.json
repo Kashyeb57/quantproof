@@ -1,0 +1,367 @@
+{
+  "meta": {
+    "issuer_group": "Citigroup",
+    "accession": "0001918704-26-028367",
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426028367/form424b2.htm",
+    "filing_date": "2026-09-22",
+    "form": "424B2",
+    "primary_document": "form424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Absolute return amount']",
+  "termsheet": {
+    "issuer": "Citigroup Global Markets Holdings Inc.",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "17334DCA8",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-09-18",
+    "issue_date": "2026-09-23",
+    "maturity_date": "2028-03-23",
+    "final_review_date": "2028-03-20",
+    "estimated_value": 968.7,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Citigroup Global Markets Holdings Inc.",
+        "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Filed Pursuant to Rule 424(b)(2)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlying: | The S&P 500\u00ae Index",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7650.5,
+        "quote": "Initial underlying value: | 7,650.50, the closing value of the underlying on the pricing date",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlying: | The S&P 500\u00ae Index",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Stated principal amount: | $1,000 per security",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Issue price(1) | Underwriting fee(2) | Proceeds to issuer(3)...Per security: | $1,000.00 | $22.50 | $977.50",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-09-18",
+        "quote": "Pricing date: | September 18, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-09-23",
+        "quote": "Issue date: | September 23, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-03-23",
+        "quote": "Maturity date: | March 23, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-03-20",
+        "quote": "Valuation date: | March 20, 2028, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "Buffer percentage: | 10.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.9,
+        "quote": "Final buffer value: | 6,885.45, 90.00% of the initial underlying value",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Your payment at maturity depends on the closing value of the underlying on a single day.",
+        "section": "Summary Risk Factors",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "Citigroup Inc.",
+        "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "17334DCA8",
+        "quote": "CUSIP / ISIN: | 17334DCA8 / US17334DCA81",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "Upside participation rate: | 100.00%",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.1325,
+        "quote": "Maximum upside return: | $132.50 per security (13.25% of the stated principal amount).",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 968.7,
+        "quote": "On the date of this pricing supplement, the estimated value of the securities is $968.70 per security, which is less than the issue price.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 22.5,
+        "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+        "section": "Supplemental Plan of Distribution",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Absolute return amount",
+        "quote": "Absolute return amount: | $1,000 \u00d7 the absolute value of the underlying return",
+        "section": "Key Terms",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Citigroup Global Markets Holdings Inc.",
+      "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Filed Pursuant to Rule 424(b)(2)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlying: | The S&P 500\u00ae Index",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7650.5,
+      "quote": "Initial underlying value: | 7,650.50, the closing value of the underlying on the pricing date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlying: | The S&P 500\u00ae Index",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Stated principal amount: | $1,000 per security",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Issue price(1) | Underwriting fee(2) | Proceeds to issuer(3)...Per security: | $1,000.00 | $22.50 | $977.50",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-09-18",
+      "quote": "Pricing date: | September 18, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-09-23",
+      "quote": "Issue date: | September 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-03-23",
+      "quote": "Maturity date: | March 23, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-03-20",
+      "quote": "Valuation date: | March 20, 2028, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "Buffer percentage: | 10.00%",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.9,
+      "quote": "Final buffer value: | 6,885.45, 90.00% of the initial underlying value",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Your payment at maturity depends on the closing value of the underlying on a single day.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "Citigroup Inc.",
+      "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "17334DCA8",
+      "quote": "CUSIP / ISIN: | 17334DCA8 / US17334DCA81",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "Upside participation rate: | 100.00%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.1325,
+      "quote": "Maximum upside return: | $132.50 per security (13.25% of the stated principal amount).",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 968.7,
+      "quote": "On the date of this pricing supplement, the estimated value of the securities is $968.70 per security, which is less than the issue price.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 22.5,
+      "quote": "CGMI will receive an underwriting fee of up to $22.50 for each security sold in this offering.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Absolute return amount",
+      "quote": "Absolute return amount: | $1,000 \u00d7 the absolute value of the underlying return",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 22,
+    "verified": 21
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-09-18",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 7650.5,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 968.7,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "17334DCA8",
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-09-18",
+  "structure": "single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity",
+  "seconds": 55.870903334000104,
+  "cost_usd": 0.14370495,
+  "model_seconds": 55.832229391000055
+}

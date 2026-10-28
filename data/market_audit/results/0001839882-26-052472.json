@@ -1,0 +1,345 @@
+{
+  "meta": {
+    "issuer_group": "Wells Fargo",
+    "accession": "0001839882-26-052472",
+    "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052472/r10727wfc_424b2-35604.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "r10727wfc_424b2-35604.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Threshold Settlement Amount']",
+  "termsheet": {
+    "issuer": "Wells Fargo Finance LLC",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "95001HTH4",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-22",
+    "issue_date": "2026-10-27",
+    "maturity_date": "2029-01-24",
+    "final_review_date": "2029-01-22",
+    "estimated_value": 994.42,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Wells Fargo Finance LLC",
+        "quote": "Issuer: | Wells Fargo Finance LLC",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement No. 317 dated October 22, 2026 (To Product Supplement No. 1 dated February 13, 2026, Market Measure Supplement No. 1 dated February 13, 2026, Prospectus Supplement dated February 13, 2026 and Prospectus dated February 13, 2026)",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7663.43,
+        "quote": "Initial Underlier Level: | 7,663.43, the closing level of the underlier on the trade date",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Face Amount: | $1,000 per security.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original Offering Price: | $1,000 per security.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-22",
+        "quote": "Trade Date: | October 22, 2026",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-27",
+        "quote": "Original Issue Date: | October 27, 2026",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-01-24",
+        "quote": "Stated Maturity Date: | January 24, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-01-22",
+        "quote": "Determination Date: | January 22, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "desire to moderate any decline of more than the threshold amount from the initial underlier level to the final underlier level through the buffer feature;",
+        "section": "Investor Considerations",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.85,
+        "quote": "Threshold Level: | 6,513.9155, which is equal to 85.00% of the initial underlier level",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final Underlier Level: | the closing level of the underlier on the determination date",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1765,
+        "quote": "you will lose approximately 1.1765% of the face amount of your securities for every 1% that the final underlier level has declined below 85.00% of the initial underlier level.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "guarantor",
+        "value": "Wells Fargo & Company",
+        "quote": "Guarantor: | Wells Fargo & Company",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "95001HTH4",
+        "quote": "CUSIP / ISIN: | 95001HTH4 / US95001HTH48",
+        "section": "Terms of the Securities",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 994.42,
+        "quote": "The current estimated value of the securities is $994.42 per security.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Per Security | $1,000.00 | $0.00 | $1,000.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Threshold Settlement Amount",
+        "quote": "\u25cfif the final underlier level is greater than or equal to the threshold level, the threshold settlement amount; or...Threshold Settlement Amount: | $1,208.30 per security.",
+        "section": "Terms of the Securities",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Wells Fargo Finance LLC",
+      "quote": "Issuer: | Wells Fargo Finance LLC",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement No. 317 dated October 22, 2026 (To Product Supplement No. 1 dated February 13, 2026, Market Measure Supplement No. 1 dated February 13, 2026, Prospectus Supplement dated February 13, 2026 and Prospectus dated February 13, 2026)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7663.43,
+      "quote": "Initial Underlier Level: | 7,663.43, the closing level of the underlier on the trade date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlier: | S&P 500\u00ae Index (Bloomberg ticker symbol: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Face Amount: | $1,000 per security.",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original Offering Price: | $1,000 per security.",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-22",
+      "quote": "Trade Date: | October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-27",
+      "quote": "Original Issue Date: | October 27, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-01-24",
+      "quote": "Stated Maturity Date: | January 24, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-01-22",
+      "quote": "Determination Date: | January 22, 2029, subject to postponement as described under \u201c\u2014Market Disruption Events and Postponement Provisions\u201d below.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "desire to moderate any decline of more than the threshold amount from the initial underlier level to the final underlier level through the buffer feature;",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.85,
+      "quote": "Threshold Level: | 6,513.9155, which is equal to 85.00% of the initial underlier level",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final Underlier Level: | the closing level of the underlier on the determination date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1765,
+      "quote": "you will lose approximately 1.1765% of the face amount of your securities for every 1% that the final underlier level has declined below 85.00% of the initial underlier level.",
+      "verified": true
+    },
+    {
+      "path": "guarantor",
+      "value": "Wells Fargo & Company",
+      "quote": "Guarantor: | Wells Fargo & Company",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "95001HTH4",
+      "quote": "CUSIP / ISIN: | 95001HTH4 / US95001HTH48",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 994.42,
+      "quote": "The current estimated value of the securities is $994.42 per security.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Per Security | $1,000.00 | $0.00 | $1,000.00",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Threshold Settlement Amount",
+      "quote": "\u25cfif the final underlier level is greater than or equal to the threshold level, the threshold settlement amount; or...Threshold Settlement Amount: | $1,208.30 per security.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 21,
+    "verified": 21
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Threshold Settlement Amount"
+        ],
+        "second": [
+          "Threshold Settlement Amount",
+          "Digital return"
+        ],
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 994.42,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "95001HTH4",
+  "issuer": "Wells Fargo Finance LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, buffer 85% at maturity",
+  "seconds": 44.99139306500001,
+  "cost_usd": 0.10915230000000001,
+  "model_seconds": 44.94995351599982
+}

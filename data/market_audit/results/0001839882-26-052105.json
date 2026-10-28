@@ -1,0 +1,369 @@
+{
+  "meta": {
+    "issuer_group": "UBS",
+    "accession": "0001839882-26-052105",
+    "url": "https://www.sec.gov/Archives/edgar/data/1114446/000183988226052105/ubs_424b2-35282.htm",
+    "filing_date": "2026-10-22",
+    "form": "424B2",
+    "primary_document": "ubs_424b2-35282.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['maximum settlement amount']",
+  "termsheet": {
+    "issuer": "UBS AG London Branch",
+    "underlying_names": [
+      "MSCI EAFE\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "90266F6G6",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-20",
+    "issue_date": "2026-10-23",
+    "maturity_date": "2028-11-17",
+    "final_review_date": "2028-11-15",
+    "estimated_value": 996.2,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "UBS AG London Branch",
+        "quote": "Issuer: UBS AG London Branch",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 20, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "MSCI EAFE\u00ae Index",
+        "quote": "Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "MXEA",
+        "quote": "Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 3092.714974,
+        "quote": "Initial underlier level: 3,092.714974",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 3092.714974,
+        "quote": "The dotted line represents the buffer level, which is equal to 85.00% of 3,092.714974, which was the closing level of the underlier on October 20, 2026.",
+        "section": "Historical Closing Levels of the Underlier",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-10-20",
+        "quote": "The dotted line represents the buffer level, which is equal to 85.00% of 3,092.714974, which was the closing level of the underlier on October 20, 2026.",
+        "section": "Historical Closing Levels of the Underlier",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "type of notes: notes linked to a single underlier",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Each note will have a face amount of $1,000",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Original issue price: | 100.00% of the face amount...Each note will have a face amount of $1,000",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-20",
+        "quote": "Trade date: October 20, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-23",
+        "quote": "Original issue date (settlement date): October 23, 2026",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-11-17",
+        "quote": "Stated maturity date: November 17, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-11-15",
+        "quote": "Determination date: November 15, 2028",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "buffer level: yes, as described below",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.85,
+        "quote": "Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "if the final underlier level is less than the buffer level, the sum of (1) $1,000 plus (2) the product of (i) $1,000 times (ii) the buffer rate times (iii) the sum of the underlier return plus the buffer amount.",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1765,
+        "quote": "you will lose approximately 1.1765% of the face amount of your notes for every 1% negative underlier return below the buffer level of 85.00% of the initial underlier level.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "90266F6G6",
+        "quote": "CUSIP no.: 90266F6G6",
+        "section": "Key Terms",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 996.2,
+        "quote": "The estimated initial value of the notes as of the trade date is $996.20 per $1,000 face amount.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.0,
+        "quote": "Underwriting discount*: | 0.00% of the face amount",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "maximum settlement amount",
+        "quote": "if the final underlier level is equal to or greater than the buffer level, the maximum settlement amount",
+        "section": "Key Terms",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "UBS AG London Branch",
+      "quote": "Issuer: UBS AG London Branch",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 20, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "MSCI EAFE\u00ae Index",
+      "quote": "Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "MXEA",
+      "quote": "Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 3092.714974,
+      "quote": "Initial underlier level: 3,092.714974",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 3092.714974,
+      "quote": "The dotted line represents the buffer level, which is equal to 85.00% of 3,092.714974, which was the closing level of the underlier on October 20, 2026.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-10-20",
+      "quote": "The dotted line represents the buffer level, which is equal to 85.00% of 3,092.714974, which was the closing level of the underlier on October 20, 2026.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "type of notes: notes linked to a single underlier",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Each note will have a face amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Original issue price: | 100.00% of the face amount...Each note will have a face amount of $1,000",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-20",
+      "quote": "Trade date: October 20, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-23",
+      "quote": "Original issue date (settlement date): October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-11-17",
+      "quote": "Stated maturity date: November 17, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-11-15",
+      "quote": "Determination date: November 15, 2028",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "buffer level: yes, as described below",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.85,
+      "quote": "Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "if the final underlier level is less than the buffer level, the sum of (1) $1,000 plus (2) the product of (i) $1,000 times (ii) the buffer rate times (iii) the sum of the underlier return plus the buffer amount.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1765,
+      "quote": "you will lose approximately 1.1765% of the face amount of your notes for every 1% negative underlier return below the buffer level of 85.00% of the initial underlier level.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "90266F6G6",
+      "quote": "CUSIP no.: 90266F6G6",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 996.2,
+      "quote": "The estimated initial value of the notes as of the trade date is $996.20 per $1,000 face amount.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.0,
+      "quote": "Underwriting discount*: | 0.00% of the face amount",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "maximum settlement amount",
+      "quote": "if the final underlier level is equal to or greater than the buffer level, the maximum settlement amount",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 22,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": "2026-10-20",
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": 3092.714974,
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "maximum settlement amount"
+        ],
+        "second": [
+          "Digital return (Maximum settlement amount)"
+        ],
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 996.2,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "90266F6G6",
+  "issuer": "UBS AG London Branch",
+  "underlyings": [
+    "MSCI EAFE\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-20",
+  "structure": "single underlying, buffer 85% at maturity",
+  "seconds": 64.08760496200011,
+  "cost_usd": 0.18573175,
+  "model_seconds": 64.02710203600009
+}

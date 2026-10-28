@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "issuer_group": "Citigroup",
+    "accession": "0001918704-26-029389",
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426029389/form424b2.htm",
+    "filing_date": "2026-09-29",
+    "form": "424B2",
+    "primary_document": "form424b2.htm"
+  },
+  "status": "extraction_failed",
+  "reason": "downside level must be a fraction of initial in (0, 1]",
+  "termsheet": null,
+  "fields": [],
+  "quotes": {
+    "checked": 0,
+    "verified": 0
+  },
+  "crosscheck": null,
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": null,
+  "issue_price": null,
+  "notional": null,
+  "cusip": null,
+  "issuer": null,
+  "underlyings": [],
+  "is_preliminary": false,
+  "pricing_date": null,
+  "structure": null,
+  "seconds": 31.702556604000165,
+  "cost_usd": 0.0503295,
+  "model_seconds": 31.70117862699999
+}

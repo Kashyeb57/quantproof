@@ -1,0 +1,374 @@
+{
+  "meta": {
+    "issuer_group": "Bank of America",
+    "accession": "0001918704-26-032658",
+    "url": "https://www.sec.gov/Archives/edgar/data/1682472/000191870426032658/bofa-424b2.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "bofa-424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Absolute Return Buffer']",
+  "termsheet": {
+    "issuer": "BofA Finance LLC",
+    "underlying_names": [
+      "iShares Semiconductor ETF"
+    ],
+    "n_underlyings": 1,
+    "cusip": "09712D317",
+    "is_preliminary": false,
+    "notional": 10.0,
+    "issue_price": 10.0,
+    "pricing_date": "2026-10-22",
+    "issue_date": "2026-10-30",
+    "maturity_date": "2028-10-27",
+    "final_review_date": "2028-10-24",
+    "estimated_value": 9.792,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "BofA Finance LLC",
+        "quote": "Issuer: | BofA Finance LLC (\u201cBofA Finance\u201d)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "The initial estimated value of the notes as of the pricing date is $9.792 per unit, which is less than the public offering price listed below.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "iShares Semiconductor ETF",
+        "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SOXX",
+        "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 475.69,
+        "quote": "Starting Value: | $475.69",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 10.0,
+        "quote": "Principal Amount: | $10.00 per unit",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 10.0,
+        "quote": "Public offering price.............................. | $10.00 | $18,797,150.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-22",
+        "quote": "October 22, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-30",
+        "quote": "October 30, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-10-27",
+        "quote": "October 27, 2028",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-10-24",
+        "quote": "October 18, 2028, October 19, 2028, October 20, 2028, October 23, 2028 and October 24, 2028.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.75,
+        "quote": "Threshold Value: | $356.77 (75.00% of the Starting Value, rounded to two decimal places).",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Ending Value: | The average of the Closing Market Price of the Market Measure times the Price Multiplier on each calculation day occurring during the maturity valuation period.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "guarantor",
+        "value": "Bank of America Corporation",
+        "quote": "Guarantor: | Bank of America Corporation (\u201cBAC\u201d)",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "09712D317",
+        "quote": "CUSIP No. 09712D317",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "Participation Rate: | 100%",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.4005,
+        "quote": "Capped Value: | $14.005 per unit, which represents a return of 40.05% over the principal amount.",
+        "section": "Terms of the Notes",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 9.792,
+        "quote": "The initial estimated value of the notes as of the pricing date is $9.792 per unit, which is less than the public offering price listed below.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 0.2,
+        "quote": "Underwriting discount........................... | $0.20 | $375,943.00",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Absolute Return Buffer",
+        "quote": "A positive return equal to the absolute value of the percentage decline in the price of the Underlying Fund only if the Underlying Fund does not decline by more than 25.00% (e.g., if the negative return of the Underlying Fund is -5.00%, you will receive a positive return of +5.00%)",
+        "section": "Cover",
+        "verified": false
+      }
+    ],
+    "unverified": [
+      "unsupported_features[0]"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "BofA Finance LLC",
+      "quote": "Issuer: | BofA Finance LLC (\u201cBofA Finance\u201d)",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "The initial estimated value of the notes as of the pricing date is $9.792 per unit, which is less than the public offering price listed below.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "iShares Semiconductor ETF",
+      "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SOXX",
+      "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 475.69,
+      "quote": "Starting Value: | $475.69",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 10.0,
+      "quote": "Principal Amount: | $10.00 per unit",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 10.0,
+      "quote": "Public offering price.............................. | $10.00 | $18,797,150.00",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-22",
+      "quote": "October 22, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-30",
+      "quote": "October 30, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-10-27",
+      "quote": "October 27, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-10-24",
+      "quote": "October 18, 2028, October 19, 2028, October 20, 2028, October 23, 2028 and October 24, 2028.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.75,
+      "quote": "Threshold Value: | $356.77 (75.00% of the Starting Value, rounded to two decimal places).",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Ending Value: | The average of the Closing Market Price of the Market Measure times the Price Multiplier on each calculation day occurring during the maturity valuation period.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk",
+      "verified": true
+    },
+    {
+      "path": "guarantor",
+      "value": "Bank of America Corporation",
+      "quote": "Guarantor: | Bank of America Corporation (\u201cBAC\u201d)",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "09712D317",
+      "quote": "CUSIP No. 09712D317",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "Participation Rate: | 100%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.4005,
+      "quote": "Capped Value: | $14.005 per unit, which represents a return of 40.05% over the principal amount.",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 9.792,
+      "quote": "The initial estimated value of the notes as of the pricing date is $9.792 per unit, which is less than the public offering price listed below.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 0.2,
+      "quote": "Underwriting discount........................... | $0.20 | $375,943.00",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Absolute Return Buffer",
+      "quote": "A positive return equal to the absolute value of the percentage decline in the price of the Underlying Fund only if the Underlying Fund does not decline by more than 25.00% (e.g., if the negative return of the Underlying Fund is -5.00%, you will receive a positive return of +5.00%)",
+      "verified": false
+    }
+  ],
+  "quotes": {
+    "checked": 23,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-10-22",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 475.69,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 9.792,
+  "issue_price": 10.0,
+  "notional": 10.0,
+  "cusip": "09712D317",
+  "issuer": "BofA Finance LLC",
+  "underlyings": [
+    "iShares Semiconductor ETF"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, upside leverage 1x, cap 40.05%, buffer 75% at maturity",
+  "seconds": 55.39459140700001,
+  "cost_usd": 0.12575805,
+  "model_seconds": 55.31744759899948
+}

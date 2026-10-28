@@ -1,0 +1,361 @@
+{
+  "meta": {
+    "issuer_group": "Citigroup",
+    "accession": "0001918704-26-028961",
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426028961/form424b2.htm",
+    "filing_date": "2026-09-28",
+    "form": "424B2",
+    "primary_document": "form424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['digital return']",
+  "termsheet": {
+    "issuer": "Citigroup Global Markets Holdings Inc.",
+    "underlying_names": [
+      "Boston Scientific Corporation"
+    ],
+    "n_underlyings": 1,
+    "cusip": "17334DBW1",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-09-24",
+    "issue_date": "2026-09-29",
+    "maturity_date": "2027-10-28",
+    "final_review_date": "2027-10-25",
+    "estimated_value": 971.6,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "Citigroup Global Markets Holdings Inc.",
+        "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement No. 2026-USNCH34154",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "Boston Scientific Corporation",
+        "quote": "Underlying: | Boston Scientific Corporation",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "BSX",
+        "quote": "The underlying shares of Boston Scientific Corporation trade on the New York Stock Exchange under the ticker symbol \u201cBSX.\u201d",
+        "section": "Information About Boston Scientific Corporation",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 44.68,
+        "quote": "Initial underlying value: | $44.68, the closing value of the underlying on the pricing date",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "value": 44.68,
+        "quote": "The closing value of Boston Scientific Corporation on September 24, 2026 was $44.68.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "value": "2026-09-24",
+        "quote": "The closing value of Boston Scientific Corporation on September 24, 2026 was $44.68.",
+        "section": "Historical Information",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Underlying: | Boston Scientific Corporation",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Stated principal amount: | $1,000 per security",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per security: | $1,000.00 | $19.40 | $980.60",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-09-24",
+        "quote": "Pricing date: | September 24, 2026",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-09-29",
+        "quote": "Issue date: | September 29, 2026",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2027-10-28",
+        "quote": "Maturity date: | October 28, 2027",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2027-10-25",
+        "quote": "Valuation date: | October 25, 2027, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "If the final underlying value is less than the final barrier value, you will lose 1% of the stated principal amount of your securities for every 1% by which the final underlying value is less than the initial underlying value.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.6,
+        "quote": "Final barrier value: | $26.808, 60.00% of the initial underlying value",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final underlying value: | The closing value of the underlying on the valuation date",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "guarantor",
+        "value": "Citigroup Inc.",
+        "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+        "section": "KEY TERMS",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "17334DBW1",
+        "quote": "CUSIP / ISIN: | 17334DBW1 / US17334DBW11",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 971.6,
+        "quote": "On the date of this pricing supplement, the estimated value of the securities is $971.60 per security, which is less than the issue price.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 19.4,
+        "quote": "CGMI will pay selected dealers not affiliated with CGMI a variable selling concession of up to $19.40 for each security they sell.",
+        "section": "Supplemental Plan of Distribution",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "digital return",
+        "quote": "Digital return amount: | $119.00 per security (representing a digital return equal to 11.90% of the stated principal amount).",
+        "section": "KEY TERMS",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "Citigroup Global Markets Holdings Inc.",
+      "quote": "Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement No. 2026-USNCH34154",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "Boston Scientific Corporation",
+      "quote": "Underlying: | Boston Scientific Corporation",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "BSX",
+      "quote": "The underlying shares of Boston Scientific Corporation trade on the New York Stock Exchange under the ticker symbol \u201cBSX.\u201d",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 44.68,
+      "quote": "Initial underlying value: | $44.68, the closing value of the underlying on the pricing date",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_level",
+      "value": 44.68,
+      "quote": "The closing value of Boston Scientific Corporation on September 24, 2026 was $44.68.",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].reference_date",
+      "value": "2026-09-24",
+      "quote": "The closing value of Boston Scientific Corporation on September 24, 2026 was $44.68.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Underlying: | Boston Scientific Corporation",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Stated principal amount: | $1,000 per security",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per security: | $1,000.00 | $19.40 | $980.60",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-09-24",
+      "quote": "Pricing date: | September 24, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-09-29",
+      "quote": "Issue date: | September 29, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2027-10-28",
+      "quote": "Maturity date: | October 28, 2027",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2027-10-25",
+      "quote": "Valuation date: | October 25, 2027, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "If the final underlying value is less than the final barrier value, you will lose 1% of the stated principal amount of your securities for every 1% by which the final underlying value is less than the initial underlying value.",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.6,
+      "quote": "Final barrier value: | $26.808, 60.00% of the initial underlying value",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final underlying value: | The closing value of the underlying on the valuation date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "guarantor",
+      "value": "Citigroup Inc.",
+      "quote": "Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "17334DBW1",
+      "quote": "CUSIP / ISIN: | 17334DBW1 / US17334DBW11",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 971.6,
+      "quote": "On the date of this pricing supplement, the estimated value of the securities is $971.60 per security, which is less than the issue price.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 19.4,
+      "quote": "CGMI will pay selected dealers not affiliated with CGMI a variable selling concession of up to $19.40 for each security they sell.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "digital return",
+      "quote": "Digital return amount: | $119.00 per security (representing a digital return equal to 11.90% of the stated principal amount).",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 23,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 971.6,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "17334DBW1",
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "underlyings": [
+    "Boston Scientific Corporation"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-09-24",
+  "structure": "single underlying, barrier 60% at maturity",
+  "seconds": 35.540878441999666,
+  "cost_usd": 0.07628275000000001,
+  "model_seconds": 35.50623447500038
+}
