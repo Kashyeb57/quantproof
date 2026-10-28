@@ -54,7 +54,14 @@ BANNED_WORDS: tuple[str, ...] = (
 
 _ASSUMPTIONS_SENTENCE = (
     "Volatilities, dividends, correlation, rate and credit spread are "
-    "stated assumptions, not market data as of each pricing date."
+    "anchored where a licence allows and stated otherwise: the risk-free "
+    "rate is the U.S. Treasury par yield on each note's pricing date "
+    "interpolated to its maturity; index volatilities are 30-day "
+    "implied-vol closes as grid centres (a stated simplification); "
+    "correlation is realised from cached FRED closes where both legs "
+    "exist, else stated; credit spread, dividends and the ERP stay "
+    "stated. The Inputs column states every source and date, including "
+    "anything missing or not anchored."
 )
 
 _CROSSCHECK_NOTE = (
@@ -132,6 +139,28 @@ def load_run(audit_dir: Path = Path("data/market_audit")) -> dict:
     with path.open(encoding="utf-8") as handle:
         data = json.load(handle)
     return data if isinstance(data, dict) else {}
+
+
+def _format_inputs(market_inputs: Any) -> str:
+    """One-line market-input provenance for a row (stdlib only).
+
+    Shows the rate with its source label, the per-underlying vols and
+    rho with its source label, straight from the saved
+    ``market_inputs`` record written by ``audit_note``.  Missing data
+    and unanchored inputs appear verbatim through those labels; a note
+    priced before inputs were recorded shows an empty string.
+    """
+    if not isinstance(market_inputs, dict) or not market_inputs:
+        return ""
+    vols = "; ".join(
+        f"{float(value):.2f}" for value in (market_inputs.get("vols") or [])
+    )
+    return (
+        f"r {float(market_inputs.get('rate', 0.0)):.4f} "
+        f"({market_inputs.get('rate_label', '')}); vol [{vols}]; "
+        f"rho {float(market_inputs.get('rho', 0.0)):.2f} "
+        f"({market_inputs.get('corr_label', '')})"
+    )
 
 
 def note_row(result: dict) -> dict:
@@ -253,6 +282,7 @@ def note_row(result: dict) -> dict:
         "base_std_error": base.get("std_error"),
         "bank_in_range": bank_in_range,
         "prob_loss": prob_loss,
+    "inputs": _format_inputs(result.get("market_inputs")),
         "quotes_checked": quotes_checked,
         "quotes_verified": quotes_verified,
         "quote_verification_rate": quote_verification_rate,
@@ -361,6 +391,7 @@ def table_columns() -> list[tuple[str, str]]:
         ("range_low", "Our range low ($)"),
         ("range_high", "Our range high ($)"),
         ("prob_loss", "Real-world P(loss)"),
+        ("inputs", "Inputs"),
         ("quote_verification_rate", "Quotes verified"),
         ("status", "Status"),
         ("reason", "Reason"),

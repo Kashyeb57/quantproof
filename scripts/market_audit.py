@@ -138,6 +138,12 @@ def _replay(out: Path) -> int:
         replayed += 1
         print(f"replayed {accession}: {result.get('status')}")
     print(f"Replayed {replayed} note(s); spend $0.00 (replay, no network).")
+    run_path = out / "run.json"
+    if run_path.is_file():
+        run = json.loads(run_path.read_text(encoding="utf-8"))
+        run["assumptions"] = dict(ASSUMPTIONS)
+        _write_json(run_path, run)
+        print("Refreshed run.json assumptions for the anchored inputs.")
     return 0
 
 

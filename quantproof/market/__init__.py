@@ -7,6 +7,7 @@ closes, plus the grid centre/range the valuation range is built around.
 never committing raw data. Standard library + NumPy only; no AI calls.
 """
 
+from quantproof.market.anchored import anchored_inputs, inputs_summary
 from quantproof.market.vol import (
     correlation_matrix,
     corr_grid,

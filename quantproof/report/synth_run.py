@@ -38,7 +38,14 @@ from quantproof.core.termsheet import TermSheet
 from quantproof.payoffs.synthesized import cash_from_code, price_cashflows
 from quantproof.payoffs.worst_of import observation_dates, pathwise_cashflows
 from quantproof.report import audit_run
-from quantproof.report.audit_run import ASSUMPTIONS, SEED, plausibility_issues
+from quantproof.market.anchored import (
+    STATED_CORRELATION,
+    STATED_DIVIDEND,
+    STATED_RATE,
+    STATED_SPREAD,
+    STATED_VOL,
+)
+from quantproof.report.audit_run import SEED, plausibility_issues
 from quantproof.validation.quotes import verify_termsheet
 from quantproof.validation.synth_battery import _citation_verified, _example_perf, battery_passed
 from quantproof.payoffs.worst_of import price_note
@@ -56,26 +63,26 @@ def stated_market(ts: TermSheet) -> MarketInputs:
     """Market inputs from the audit's stated assumptions for ``ts``.
 
     Formula: no pricing formula; this duplicates exactly the market
-    construction in ``audit_run.audit_note`` (vol ``ASSUMPTIONS["vol"]``
-    and dividend ``ASSUMPTIONS["dividend"]`` per underlying, correlation
-    ``ASSUMPTIONS["correlation"]`` for more than one underlying else
-    0.0, rate and credit spread from ``ASSUMPTIONS``), with the source
+    construction in ``audit_run.audit_note`` (vol ``STATED_VOL``
+    and dividend ``STATED_DIVIDEND`` per underlying, correlation
+    ``STATED_CORRELATION`` for more than one underlying else
+    0.0, rate and credit spread from the ``STATED_*`` constants), with the source
     label replaced by "stated assumptions, not market data".
 
     Intuition: the benchmark must price on the same stated inputs as the
     audit so its numbers are comparable, and the label must not pretend
     these assumptions are market data as of the pricing date.
 
-    Reference: ``quantproof.report.audit_run.ASSUMPTIONS``; brief section 6.
+    Reference: ``quantproof.market.anchored`` stated constants; brief section 6.
     """
     n = ts.n_underlyings
-    rho = float(ASSUMPTIONS["correlation"]) if n > 1 else 0.0
+    rho = float(STATED_CORRELATION) if n > 1 else 0.0
     market = build_market(
         ts,
-        rate=float(ASSUMPTIONS["risk_free_rate"]),
-        spread=float(ASSUMPTIONS["credit_spread"]),
-        vols=(float(ASSUMPTIONS["vol"]),) * n,
-        dividends=(float(ASSUMPTIONS["dividend"]),) * n,
+        rate=float(STATED_RATE),
+        spread=float(STATED_SPREAD),
+        vols=(float(STATED_VOL),) * n,
+        dividends=(float(STATED_DIVIDEND),) * n,
         rho=rho,
     )
     # Same construction as demo.build_market, but the provenance label must

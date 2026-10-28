@@ -299,10 +299,8 @@ def test_export_dataset(audit_dir: Path, tmp_path: Path) -> None:
 def test_render_markdown(audit_dir: Path) -> None:
     rows = [note_row(r) for r in load_results(audit_dir)]
     markdown = render_markdown(rows, aggregate(rows, load_run(audit_dir)))
-    assert (
-        "Volatilities, dividends, correlation, rate and credit spread are "
-        "stated assumptions, not market data as of each pricing date."
-    ) in markdown
+    assert "anchored where a licence allows and stated otherwise" in markdown
+    assert "Inputs" in markdown
     assert (
         "This is a risk analysis under stated assumptions, not investment advice."
     ) in markdown

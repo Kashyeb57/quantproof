@@ -14,6 +14,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -66,6 +67,19 @@ def main(argv: list[str] | None = None) -> int:
     agg = aggregate(rows, run)
 
     csv_path, json_path = export_dataset(results, out_dir)
+
+    # Derived-numbers-only cache: rate, vols and correlation per note
+    # with their source labels, so the anchored inputs stay reviewable
+    # offline. Raw price series are never written here.
+    derived = {}
+    for result in results:
+        inputs = result.get("market_inputs")
+        if isinstance(inputs, dict) and inputs:
+            meta = result.get("meta")
+            key = str((meta or {}).get("accession") or result.get("accession"))
+            derived[key] = inputs
+    derived_path = out_dir / "market_inputs.json"
+    derived_path.write_text(json.dumps(derived, indent=2, sort_keys=True), encoding="utf-8")
 
     markdown = render_markdown(rows, agg)
     banned = check_neutral(markdown)

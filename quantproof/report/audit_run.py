@@ -42,6 +42,7 @@ from quantproof.agent.crosscheck import crosscheck
 from quantproof.agent.extract import ExtractionError, extract_termsheet
 from quantproof.app import demo as demo_module
 from quantproof.ingest.html import Filing
+from quantproof.market.anchored import anchored_inputs
 from quantproof.payoffs.worst_of import UnsupportedTermSheet, check_supported
 from quantproof.report import analysis
 from quantproof.validation.battery import run_battery
@@ -58,17 +59,24 @@ BATTERY_PATHS = 4_000
 # Stated inputs used for every note.  These are NOT market data: they are
 # fixed assumptions, stated up front, applied unchanged to every note.
 ASSUMPTIONS: dict[str, Any] = {
-    "risk_free_rate": 0.037,
+    "risk_free_rate": "Treasury",
     "credit_spread": 0.006,
-    "vol": 0.25,
+    "vol": "implied",
     "dividend": 0.01,
-    "correlation": 0.6,
+    "correlation": "realised",
     "erp": 0.05,
     "note": (
-        "These are stated assumptions, not market data as of each pricing "
-        "date: risk_free_rate 0.037, credit_spread 0.006, vol 0.25 per "
-        "underlying, dividend 0.01 per underlying, pairwise correlation "
-        "0.6 (0 for one underlying), erp 0.05."
+        "Inputs are anchored where a licence allows and stated "
+        "otherwise: risk_free_rate is the U.S. Treasury par yield on "
+        "each note's pricing date interpolated to its maturity; vol is "
+        "the 30-day implied-vol index close (VIX/VXN/RVX) on the pricing "
+        "date as the grid centre for index underlyings (single stocks "
+        "and others keep stated 0.25); correlation is the average "
+        "realised pairwise correlation from cached FRED closes where "
+        "both legs exist, else stated 0.6 (0 for one underlying); "
+        "credit_spread 0.006, dividend 0.01 and erp 0.05 stay stated. "
+        "The per-note market_inputs record states every source and "
+        "date, including anything missing or not anchored."
     ),
 }
 
@@ -451,21 +459,35 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
     if gap is not None:
         return finish("unsupported", gap)
 
-    # Step d: market inputs from the stated assumptions, proof battery gate.
+    # Step d: market inputs anchored where a licence allows (Treasury
+    # rate, FRED implied vols, FRED realised correlation), stated
+    # otherwise; the per-input labels in market_inputs say which.
     n = ts.n_underlyings
-    rho = float(ASSUMPTIONS["correlation"]) if n > 1 else 0.0
+    anchored, market_inputs = anchored_inputs(
+        [u.name.value for u in ts.underlyings],
+        ts.pricing_date.value,
+        ts.maturity_date.value,
+    )
+    result["market_inputs"] = market_inputs
     market = demo_module.build_market(
         ts,
-        rate=float(ASSUMPTIONS["risk_free_rate"]),
-        spread=float(ASSUMPTIONS["credit_spread"]),
-        vols=(float(ASSUMPTIONS["vol"]),) * n,
-        dividends=(float(ASSUMPTIONS["dividend"]),) * n,
-        rho=rho,
+        rate=float(anchored["rate"]),
+        spread=float(anchored["spread"]),
+        vols=tuple(float(v) for v in anchored["vols"]),
+        dividends=tuple(float(q) for q in anchored["dividends"]),
+        rho=float(anchored["rho"]),
     )
-    # Same construction as demo.build_market, but the provenance label must
-    # say these are the audit's stated assumptions, not market data.
+    # Same construction as demo.build_market, but the provenance label
+    # must describe the anchored mix, not claim market data throughout.
     market = replace(
-        market, sources={"all": "stated assumptions, not market data"}
+        market,
+        sources={
+            "all": (
+                "anchored where a licence allows (Treasury rate, FRED "
+                "implied vols, FRED realised correlation), stated "
+                "assumptions otherwise; see market_inputs"
+            )
+        },
     )
 
     try:

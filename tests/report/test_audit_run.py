@@ -67,6 +67,43 @@ def _calls(reply_text: str | None = None) -> list[dict]:
     return calls
 
 
+def _flat_inputs(names, pricing_date, maturity_date, **kwargs):
+    """Pinned pre-anchoring inputs: replay tests stay hermetic.
+
+    The real ``anchored_inputs`` reads the developer's local Treasury
+    and FRED files, which CI does not have; pinning the old flat
+    stated inputs here keeps every replay expectation independent of
+    this machine. The anchored wiring itself is proved by
+    ``test_anchored_inputs_price_with_implied_vols`` below.
+    """
+    n = len(names)
+    vols = (0.25,) * n
+    market = {
+        "rate": 0.037,
+        "spread": 0.006,
+        "vols": vols,
+        "dividends": (0.01,) * n,
+        "rho": 0.6 if n > 1 else 0.0,
+    }
+    report = {
+        "rate": 0.037,
+        "rate_label": "stated 0.037",
+        "vols": list(vols),
+        "vol_labels": [f"{name}: stated 0.25 (not anchored)" for name in names],
+        "rho": market["rho"],
+        "corr_label": "stated 0.6" if n > 1 else "single underlying: rho 0.0",
+        "spread": 0.006,
+        "dividend": 0.01,
+        "erp": 0.05,
+    }
+    return market, report
+
+
+@pytest.fixture(autouse=True)
+def _flat_market_inputs(monkeypatch):
+    monkeypatch.setattr(audit_run, "anchored_inputs", _flat_inputs)
+
+
 def _run(calls: list[dict]):
     replay = Replay(calls)
     result = audit_note(_filing(), chat=replay, meta={"accession": STEM})
@@ -76,7 +113,12 @@ def _run(calls: list[dict]):
 @pytest.fixture(scope="module")
 def priced():
     """The priced replay, run once and reused (it takes ~3 s)."""
-    return _run(_calls())
+    original = audit_run.anchored_inputs
+    audit_run.anchored_inputs = _flat_inputs
+    try:
+        return _run(_calls())
+    finally:
+        audit_run.anchored_inputs = original
 
 
 def test_priced_replay(priced):
@@ -112,6 +154,52 @@ def test_determinism_second_replay(priced):
     assert second["fair_value"]["low"] == first["fair_value"]["low"]
     assert second["fair_value"]["high"] == first["fair_value"]["high"]
     assert second["fair_value"]["base"]["price"] == first["fair_value"]["base"]["price"]
+
+
+def test_anchored_inputs_price_with_implied_vols(tmp_path, monkeypatch):
+    """audit_note records anchored market inputs and prices on them.
+
+    Tmp Treasury/FRED files stand in for the developer's local data:
+    VIX 18.56 / RVX 23.36 on the 38582 pricing date become the grid
+    centres, and the market_inputs record carries every source label.
+    """
+    from quantproof.market.anchored import anchored_inputs as real_inputs
+    from quantproof.market.sources import FredClient
+
+    (tmp_path / "treasury_daily_par_yield_curve_2025-11.csv").write_text(
+        "# Source: fake\n"
+        'Date,"1 Yr","2 Yr","5 Yr","7 Yr"\n'
+        "11/25/2025,3.60,3.43,3.55,3.77\n",
+        encoding="utf-8",
+    )
+    fred = tmp_path / "fred"
+    fred.mkdir()
+    (fred / "VIXCLS.csv").write_text(
+        "observation_date,VIXCLS\n2025-11-25,18.56\n", encoding="utf-8"
+    )
+    (fred / "RVXCLS.csv").write_text(
+        "observation_date,RVXCLS\n2025-11-25,23.36\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        audit_run,
+        "anchored_inputs",
+        lambda names, pricing_date, maturity_date, **kw: real_inputs(
+            names,
+            pricing_date,
+            maturity_date,
+            fred_client=FredClient(cache_dir=fred),
+            treasury_dir=tmp_path,
+        ),
+    )
+    _replay, result = _run(_calls())
+    assert result["status"] == "priced"
+    market_inputs = result["market_inputs"]
+    assert market_inputs["vols"] == pytest.approx([0.2336, 0.1856])  # RTY, then SPX
+    assert all(
+        "stated simplification" in label for label in market_inputs["vol_labels"]
+    )
+    assert market_inputs["rate_label"].startswith("U.S. Treasury par yield, 2025-11-25")
+    assert market_inputs["rate"] == pytest.approx(0.035515, abs=1e-6)
 
 
 def test_replay_raises_when_calls_run_out_and_on_model_mismatch():
