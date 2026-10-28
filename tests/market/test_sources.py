@@ -1,12 +1,12 @@
-"""Offline tests for quantproof/market/sources.py (fake network only).
+"""Offline tests for quantproof/market/sources.py (local files only).
 
-The urlopen callable is faked, so no bytes ever leave the machine; the
-cache directory is a tmp dir, so no raw data can reach the repo.
+The client never touches the network: series files are written into a
+tmp dir in FRED graph-CSV format, and the real ``.cache/fred/`` files
+are never read or written here, so no raw data can reach the repo.
 """
 
 from __future__ import annotations
 
-import io
 import sys
 from datetime import date
 from pathlib import Path
@@ -20,7 +20,7 @@ if str(ROOT) not in sys.path:
 from quantproof.market import sources
 
 FAKE_CSV = (
-    "DATE,SP500\n"
+    "observation_date,SP500\n"
     "2025-11-20,100.0\n"
     "2025-11-21,101.0\n"
     "2025-11-22,.\n"
@@ -29,79 +29,55 @@ FAKE_CSV = (
 )
 
 
-def _fake_urlopen(expected_url_part: str, seen: list):
-    def fake(url, timeout=None):
-        seen.append(url)
-        assert expected_url_part in url
-        assert "fredgraph.csv" in url
-
-        class Reply:
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *args):
-                return False
-
-            def read(self):
-                return FAKE_CSV.encode("utf-8")
-
-        return Reply()
-
-    return fake
+def _write(path: Path, text: str = FAKE_CSV) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    return path
 
 
-def test_fred_url_format_and_cache_path(tmp_path: Path):
-    url = sources.fred_csv_url("SP500", date(2025, 11, 20), date(2025, 11, 25))
-    assert url.startswith("https://fred.stlouisfed.org/graph/fredgraph.csv?")
-    assert "id=SP500" in url
-    path = sources.cache_path("SP500", date(2025, 11, 20), date(2025, 11, 25), tmp_path)
-    assert path.parent == tmp_path
-    assert path.suffix == ".csv"
+def test_series_ids_include_the_three_volatility_indices():
+    assert sources.FRED_SERIES["VIX"][0] == "VIXCLS"
+    assert sources.FRED_SERIES["VXN"][0] == "VXNCLS"
+    assert sources.FRED_SERIES["RVX"][0] == "RVXCLS"
+    # Volatility indices are not prices: closes resolve only SPX/NDX.
+    assert set(sources.FRED_CLOSES) == {"SPX", "NDX"}
 
 
-def test_get_closes_parses_skips_missing_and_caches(tmp_path: Path):
-    seen: list = []
-    client = sources.FredClient(
-        cache_dir=tmp_path, urlopen=_fake_urlopen("id=SP500", seen)
-    )
-    rows = client.get_closes("SP500", date(2025, 11, 20), date(2025, 11, 25))
-    assert rows == [
+def test_missing_file_names_the_expected_path(tmp_path: Path):
+    with pytest.raises(sources.SourceError, match="SP500.csv"):
+        sources.FredClient(cache_dir=tmp_path).get_closes(
+            "SP500", date(2025, 11, 20), date(2025, 11, 25)
+        )
+
+
+def test_get_closes_parses_and_skips_missing(tmp_path: Path):
+    _write(tmp_path / "SP500.csv")
+    client = sources.FredClient(cache_dir=tmp_path)
+    assert client.get_closes("SP500", date(2025, 11, 20), date(2025, 11, 25)) == [
         (date(2025, 11, 20), 100.0),
         (date(2025, 11, 21), 101.0),
         (date(2025, 11, 24), 102.0),
         (date(2025, 11, 25), 103.0),
     ]
-    assert len(seen) == 1
-    # Second call is served from the cache file: a failing urlopen is
-    # never touched.
-    def _boom(url, timeout=None):
-        raise AssertionError("must not fetch twice")
-
-    cached = sources.FredClient(cache_dir=tmp_path, urlopen=_boom).get_closes(
-        "SP500", date(2025, 11, 20), date(2025, 11, 25)
-    )
-    assert cached == rows
 
 
 def test_missing_window_end_is_an_error_not_a_short_window(tmp_path: Path):
-    seen: list = []
-    client = sources.FredClient(
-        cache_dir=tmp_path, urlopen=_fake_urlopen("id=SP500", seen)
-    )
+    _write(tmp_path / "SP500.csv")
+    client = sources.FredClient(cache_dir=tmp_path)
     with pytest.raises(sources.SourceError, match="no close on the window end"):
         client.get_closes("SP500", date(2025, 11, 20), date(2025, 11, 26))
 
 
-def test_download_failure_is_a_source_error(tmp_path: Path):
-    import urllib.error
-
-    def _fail(url, timeout=None):
-        raise urllib.error.URLError("offline")
-
-    with pytest.raises(sources.SourceError, match="download failed"):
-        sources.FredClient(cache_dir=tmp_path, urlopen=_fail).get_closes(
-            "SP500", date(2025, 11, 20), date(2025, 11, 25)
-        )
+def test_value_on_or_before_handles_weekends(tmp_path: Path):
+    _write(tmp_path / "VIXCLS.csv", FAKE_CSV.replace("SP500", "VIXCLS"))
+    client = sources.FredClient(cache_dir=tmp_path)
+    # 2025-11-23 is a Sunday: the Friday close is returned, dated.
+    assert client.value_on_or_before("VIXCLS", date(2025, 11, 23)) == (
+        101.0,
+        date(2025, 11, 21),
+    )
+    with pytest.raises(sources.SourceError, match="no observation on or before"):
+        client.value_on_or_before("VIXCLS", date(2025, 11, 19))
 
 
 def test_unknown_ticker_names_user_entered_path(tmp_path: Path):
@@ -112,10 +88,8 @@ def test_unknown_ticker_names_user_entered_path(tmp_path: Path):
 
 
 def test_known_ticker_returns_attribution(tmp_path: Path):
-    seen: list = []
-    client = sources.FredClient(
-        cache_dir=tmp_path, urlopen=_fake_urlopen("id=SP500", seen)
-    )
+    _write(tmp_path / "SP500.csv")
+    client = sources.FredClient(cache_dir=tmp_path)
     rows, attribution = sources.closes_for_ticker(
         "spx", date(2025, 11, 25), window_days=5, client=client
     )
