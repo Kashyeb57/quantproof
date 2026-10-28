@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "issuer_group": "Toronto-Dominion",
+    "accession": "0001140361-26-040730",
+    "url": "https://www.sec.gov/Archives/edgar/data/947263/000114036126040730/ef20084380_424b2.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "ef20084380_424b2.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Contingent Absolute Return']",
+  "termsheet": {
+    "issuer": "TD",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "89115NKY9",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-23",
+    "issue_date": "2026-10-28",
+    "maturity_date": "2029-10-26",
+    "final_review_date": "2029-10-23",
+    "estimated_value": 983.6,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "TD",
+        "quote": "Issuer: | TD",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 23, 2026 to the",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg ticker: SPX, \u201cSPX\u201d)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg ticker: SPX, \u201cSPX\u201d)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7623.68,
+        "quote": "Initial Value: | 7,623.68, which is the Closing Value of the Reference Asset on the Pricing Date, as determined by the Calculation Agent.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "linked to the S&P 500\u00ae Index (the \u201cReference Asset\u201d).",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per Note",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Per Note | $1,000.00 | $2.0325* | $997.9675*",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-23",
+        "quote": "Pricing Date: | October 23, 2026",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-28",
+        "quote": "Issue Date: | October 28, 2026, which is the third DTC settlement day following the Pricing Date.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2029-10-26",
+        "quote": "Maturity Date: | October 26, 2029, subject to postponement upon the occurrence of a market disruption event as described in the accompanying product supplement.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2029-10-23",
+        "quote": "Valuation Date: | October 23, 2029, subject to postponement upon the occurrence of a market disruption event as described in the accompanying product supplement.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "Type of Note: | Capped Leveraged Contingent Absolute Return Buffered Notes",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.7,
+        "quote": "Buffer Value: | 5,336.576 (70.00% of the Initial Value), as determined by the Calculation Agent.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Any payment on the Notes will be based on the Final Value, which will be the Closing Value of the Reference Asset on the Valuation Date.",
+        "section": "Additional Risk Factors",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "If, however, the Final Value is less than the Buffer Value, investors will lose 1% of the Principal Amount of the Notes for each 1% that the Final Value is less than the Initial Value in excess of 30.00%, and may lose up to 70.00% of the Principal Amount of the Notes.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "89115NKY9",
+        "quote": "CUSIP / ISIN: | 89115NKY9 / US89115NKY93",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.25,
+        "quote": "Upside Leverage Factor: | 125.00%",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.2865,
+        "quote": "As a result of the Maximum Upside Redemption Amount, the maximum return at maturity of the Notes in excess of the Principal Amount from any increase in the value of the Reference Asset from the Initial Value to the Final Value is 28.65% of the Principal Amount of the Notes.",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 983.6,
+        "quote": "The estimated value of your Notes at the time the terms of your Notes were set on the Pricing Date was $983.60 per Note",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 10.0,
+        "quote": "TDS will receive a commission of $10.00 (1.00%) per Note with respect to a portion of the Notes",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Contingent Absolute Return",
+        "quote": "Principal Amount + (Principal Amount \u00d7 Contingent Absolute Return)",
+        "section": "Summary",
+        "verified": true
+      }
+    ],
+    "unverified": []
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "TD",
+      "quote": "Issuer: | TD",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 23, 2026 to the",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg ticker: SPX, \u201cSPX\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg ticker: SPX, \u201cSPX\u201d)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7623.68,
+      "quote": "Initial Value: | 7,623.68, which is the Closing Value of the Reference Asset on the Pricing Date, as determined by the Calculation Agent.",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "linked to the S&P 500\u00ae Index (the \u201cReference Asset\u201d).",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per Note",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Per Note | $1,000.00 | $2.0325* | $997.9675*",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-23",
+      "quote": "Pricing Date: | October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-28",
+      "quote": "Issue Date: | October 28, 2026, which is the third DTC settlement day following the Pricing Date.",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2029-10-26",
+      "quote": "Maturity Date: | October 26, 2029, subject to postponement upon the occurrence of a market disruption event as described in the accompanying product supplement.",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2029-10-23",
+      "quote": "Valuation Date: | October 23, 2029, subject to postponement upon the occurrence of a market disruption event as described in the accompanying product supplement.",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "Type of Note: | Capped Leveraged Contingent Absolute Return Buffered Notes",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.7,
+      "quote": "Buffer Value: | 5,336.576 (70.00% of the Initial Value), as determined by the Calculation Agent.",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Any payment on the Notes will be based on the Final Value, which will be the Closing Value of the Reference Asset on the Valuation Date.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "If, however, the Final Value is less than the Buffer Value, investors will lose 1% of the Principal Amount of the Notes for each 1% that the Final Value is less than the Initial Value in excess of 30.00%, and may lose up to 70.00% of the Principal Amount of the Notes.",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "89115NKY9",
+      "quote": "CUSIP / ISIN: | 89115NKY9 / US89115NKY93",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.25,
+      "quote": "Upside Leverage Factor: | 125.00%",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.2865,
+      "quote": "As a result of the Maximum Upside Redemption Amount, the maximum return at maturity of the Notes in excess of the Principal Amount from any increase in the value of the Reference Asset from the Initial Value to the Final Value is 28.65% of the Principal Amount of the Notes.",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 983.6,
+      "quote": "The estimated value of your Notes at the time the terms of your Notes were set on the Pricing Date was $983.60 per Note",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 10.0,
+      "quote": "TDS will receive a commission of $10.00 (1.00%) per Note with respect to a portion of the Notes",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Contingent Absolute Return",
+      "quote": "Principal Amount + (Principal Amount \u00d7 Contingent Absolute Return)",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 22,
+    "verified": 22
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "issuer",
+        "first": "TD",
+        "second": "The Toronto-Dominion Bank",
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 983.6,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "89115NKY9",
+  "issuer": "TD",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity",
+  "seconds": 0.07880066500001703,
+  "cost_usd": 0.1461628,
+  "model_seconds": 51.89014712700009
+}

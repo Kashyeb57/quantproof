@@ -1,0 +1,348 @@
+{
+  "meta": {
+    "issuer_group": "Bank of Nova Scotia",
+    "accession": "0001839882-26-052363",
+    "url": "https://www.sec.gov/Archives/edgar/data/9631/000183988226052363/bns_424b2-35645.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "bns_424b2-35645.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Absolute Reference Asset Return']",
+  "termsheet": {
+    "issuer": "The Bank of Nova Scotia",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "06419TK64",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-23",
+    "issue_date": "2026-10-28",
+    "maturity_date": "2028-10-26",
+    "final_review_date": "2028-10-23",
+    "estimated_value": 967.25,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "The Bank of Nova Scotia",
+        "quote": "Issuer: | The Bank of Nova Scotia (the \u201cBank\u201d)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 23, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7623.68,
+        "quote": "Initial Value: | 7,623.68, which was the Closing Value of the Reference Asset on the Trade Date",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per Note; $6,395,000 in the aggregate",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per Note; $6,395,000 in the aggregate...Original Issue Price: | 100% of the Principal Amount of each Note",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-23",
+        "quote": "Trade Date: | October 23, 2026",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-28",
+        "quote": "The Trade Date was October 23, 2026 and the Notes will settle on October 28, 2026 and will have a term of approximately 2 years",
+        "section": "General",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2028-10-26",
+        "quote": "Maturity Date: | October 26, 2028",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2028-10-23",
+        "quote": "Final Valuation Date: | October 23, 2028",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "barrier",
+        "quote": "Barrier Value: | 5,717.76, which is equal to 75.00% of the Initial Value, rounded to the same number of decimal places as the Initial Value",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.75,
+        "quote": "Barrier Value: | 5,717.76, which is equal to 75.00% of the Initial Value, rounded to the same number of decimal places as the Initial Value",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "The Payment at Maturity will be based on the Final Value, which will be equal to the Closing Value of the Reference Asset on the Final Valuation Date.",
+        "section": "Additional Risks",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.0,
+        "quote": "",
+        "section": null,
+        "verified": false
+      },
+      {
+        "path": "cusip",
+        "value": "06419TK64",
+        "quote": "CUSIP / ISIN: | 06419TK64 / US06419TK641",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "upside.leverage",
+        "value": 1.0,
+        "quote": "$1,000 + ($1,000 \u00d7 Reference Asset Return), subject to the Maximum Upside Return",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "upside.cap",
+        "value": 0.201,
+        "quote": "Maximum Upside Return: 20.10%",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 967.25,
+        "quote": "The initial estimated value of your Notes at the time the terms of your Notes were set on the Trade Date was $967.25 per $1,000 Principal Amount, which is less than the Original Issue Price of your Notes listed below.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 22.5,
+        "quote": "has agreed to sell the Notes to other registered broker-dealers at a discount of $22.50 (2.25%) per Note.",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Absolute Reference Asset Return",
+        "quote": "Absolute Reference Asset Return: | The absolute value of the Reference Asset Return, expressed as a percentage (e.g., a Reference Asset Return of -10.00% will result in an Absolute Reference Asset Return of +10.00%)",
+        "section": "Summary",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "downside.gearing"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "The Bank of Nova Scotia",
+      "quote": "Issuer: | The Bank of Nova Scotia (the \u201cBank\u201d)",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7623.68,
+      "quote": "Initial Value: | 7,623.68, which was the Closing Value of the Reference Asset on the Trade Date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per Note; $6,395,000 in the aggregate",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per Note; $6,395,000 in the aggregate...Original Issue Price: | 100% of the Principal Amount of each Note",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-23",
+      "quote": "Trade Date: | October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-28",
+      "quote": "The Trade Date was October 23, 2026 and the Notes will settle on October 28, 2026 and will have a term of approximately 2 years",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2028-10-26",
+      "quote": "Maturity Date: | October 26, 2028",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2028-10-23",
+      "quote": "Final Valuation Date: | October 23, 2028",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "barrier",
+      "quote": "Barrier Value: | 5,717.76, which is equal to 75.00% of the Initial Value, rounded to the same number of decimal places as the Initial Value",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.75,
+      "quote": "Barrier Value: | 5,717.76, which is equal to 75.00% of the Initial Value, rounded to the same number of decimal places as the Initial Value",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "The Payment at Maturity will be based on the Final Value, which will be equal to the Closing Value of the Reference Asset on the Final Valuation Date.",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.0,
+      "quote": "",
+      "verified": false
+    },
+    {
+      "path": "cusip",
+      "value": "06419TK64",
+      "quote": "CUSIP / ISIN: | 06419TK64 / US06419TK641",
+      "verified": true
+    },
+    {
+      "path": "upside.leverage",
+      "value": 1.0,
+      "quote": "$1,000 + ($1,000 \u00d7 Reference Asset Return), subject to the Maximum Upside Return",
+      "verified": true
+    },
+    {
+      "path": "upside.cap",
+      "value": 0.201,
+      "quote": "Maximum Upside Return: 20.10%",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 967.25,
+      "quote": "The initial estimated value of your Notes at the time the terms of your Notes were set on the Trade Date was $967.25 per $1,000 Principal Amount, which is less than the Original Issue Price of your Notes listed below.",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 22.5,
+      "quote": "has agreed to sell the Notes to other registered broker-dealers at a discount of $22.50 (2.25%) per Note.",
+      "verified": true
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Absolute Reference Asset Return",
+      "quote": "Absolute Reference Asset Return: | The absolute value of the Reference Asset Return, expressed as a percentage (e.g., a Reference Asset Return of -10.00% will result in an Absolute Reference Asset Return of +10.00%)",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 22,
+    "verified": 21
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 967.25,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "06419TK64",
+  "issuer": "The Bank of Nova Scotia",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, upside leverage 1x, cap 20.1%, barrier 75% at maturity",
+  "seconds": 0.08011072199997216,
+  "cost_usd": 0.11389835000000001,
+  "model_seconds": 51.19695202999992
+}

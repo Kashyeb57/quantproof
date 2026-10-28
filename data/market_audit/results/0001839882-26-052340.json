@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "issuer_group": "Bank of Nova Scotia",
+    "accession": "0001839882-26-052340",
+    "url": "https://www.sec.gov/Archives/edgar/data/9631/000183988226052340/bns_424b2-35661.htm",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "primary_document": "bns_424b2-35661.htm"
+  },
+  "status": "unsupported",
+  "reason": "unsupported features: ['Digital Return']",
+  "termsheet": {
+    "issuer": "The Bank of Nova Scotia",
+    "underlying_names": [
+      "S&P 500\u00ae Index"
+    ],
+    "n_underlyings": 1,
+    "cusip": "06419TL48",
+    "is_preliminary": false,
+    "notional": 1000.0,
+    "issue_price": 1000.0,
+    "pricing_date": "2026-10-23",
+    "issue_date": "2026-10-28",
+    "maturity_date": "2027-11-10",
+    "final_review_date": "2027-11-05",
+    "estimated_value": 987.59,
+    "terms": [
+      {
+        "path": "issuer",
+        "value": "The Bank of Nova Scotia",
+        "quote": "Issuer: | The Bank of Nova Scotia (the \u201cBank\u201d)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "is_preliminary",
+        "value": false,
+        "quote": "Pricing Supplement dated October 23, 2026",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].name",
+        "value": "S&P 500\u00ae Index",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "value": "SPX",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "underlyings[0].initial_level",
+        "value": 7623.68,
+        "quote": "Initial Value: | 7,623.68, which was the Closing Value of the Reference Asset on the Trade Date",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "dependency",
+        "value": "worst_of",
+        "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "notional",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per Note; $9,358,000 in the aggregate",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_price",
+        "value": 1000.0,
+        "quote": "Principal Amount: | $1,000 per Note; $9,358,000 in the aggregate...Original Issue Price: | 100.00% of the Principal Amount of each Note",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "pricing_date",
+        "value": "2026-10-23",
+        "quote": "Trade Date: | October 23, 2026",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "issue_date",
+        "value": "2026-10-28",
+        "quote": "The Trade Date was October 23, 2026 and the Notes will settle on October 28, 2026",
+        "section": "General",
+        "verified": true
+      },
+      {
+        "path": "maturity_date",
+        "value": "2027-11-10",
+        "quote": "Maturity Date: | November 10, 2027",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "final_review_date",
+        "value": "2027-11-05",
+        "quote": "Final Valuation Date: | November 5, 2027",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.kind",
+        "value": "buffer",
+        "quote": "Type of Notes: | Contingent Buffer Digital Notes",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.level",
+        "value": 0.85,
+        "quote": "Buffer Value: | 6,480.13, which is equal to 85.00% of the Initial Value",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.observation",
+        "value": "final_only",
+        "quote": "Final Value: | The Closing Value of the Reference Asset on the Final Valuation Date",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "downside.gearing",
+        "value": 1.1765,
+        "quote": "Downside Leverage Factor: | The quotient of 1 / (1 \u2013 Buffer Amount), which is equal to approximately 1.1765",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "cusip",
+        "value": "06419TL48",
+        "quote": "CUSIP / ISIN: | 06419TL48 / US06419TL482",
+        "section": "Summary",
+        "verified": true
+      },
+      {
+        "path": "estimated_value",
+        "value": 987.59,
+        "quote": "The initial estimated value of your Notes at the time the terms of your Notes were set on the Trade Date was $987.59 per $1,000 Principal Amount",
+        "section": "Cover",
+        "verified": true
+      },
+      {
+        "path": "max_selling_commission",
+        "value": 10.0,
+        "quote": "The placement agents will receive a fee of 1.00% per Note, but will forgo fees for sales to fiduciary accounts.",
+        "section": "Cover",
+        "verified": false
+      },
+      {
+        "path": "unsupported_features[0]",
+        "value": "Digital Return",
+        "quote": "Digital Return: | 7.78% of the Principal Amount.",
+        "section": "Summary",
+        "verified": true
+      }
+    ],
+    "unverified": [
+      "max_selling_commission"
+    ]
+  },
+  "fields": [
+    {
+      "path": "issuer",
+      "value": "The Bank of Nova Scotia",
+      "quote": "Issuer: | The Bank of Nova Scotia (the \u201cBank\u201d)",
+      "verified": true
+    },
+    {
+      "path": "is_preliminary",
+      "value": false,
+      "quote": "Pricing Supplement dated October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].name",
+      "value": "S&P 500\u00ae Index",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].ticker",
+      "value": "SPX",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "underlyings[0].initial_level",
+      "value": 7623.68,
+      "quote": "Initial Value: | 7,623.68, which was the Closing Value of the Reference Asset on the Trade Date",
+      "verified": true
+    },
+    {
+      "path": "dependency",
+      "value": "worst_of",
+      "quote": "Reference Asset: | The S&P 500\u00ae Index (Bloomberg Ticker: SPX)",
+      "verified": true
+    },
+    {
+      "path": "notional",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per Note; $9,358,000 in the aggregate",
+      "verified": true
+    },
+    {
+      "path": "issue_price",
+      "value": 1000.0,
+      "quote": "Principal Amount: | $1,000 per Note; $9,358,000 in the aggregate...Original Issue Price: | 100.00% of the Principal Amount of each Note",
+      "verified": true
+    },
+    {
+      "path": "pricing_date",
+      "value": "2026-10-23",
+      "quote": "Trade Date: | October 23, 2026",
+      "verified": true
+    },
+    {
+      "path": "issue_date",
+      "value": "2026-10-28",
+      "quote": "The Trade Date was October 23, 2026 and the Notes will settle on October 28, 2026",
+      "verified": true
+    },
+    {
+      "path": "maturity_date",
+      "value": "2027-11-10",
+      "quote": "Maturity Date: | November 10, 2027",
+      "verified": true
+    },
+    {
+      "path": "final_review_date",
+      "value": "2027-11-05",
+      "quote": "Final Valuation Date: | November 5, 2027",
+      "verified": true
+    },
+    {
+      "path": "downside.kind",
+      "value": "buffer",
+      "quote": "Type of Notes: | Contingent Buffer Digital Notes",
+      "verified": true
+    },
+    {
+      "path": "downside.level",
+      "value": 0.85,
+      "quote": "Buffer Value: | 6,480.13, which is equal to 85.00% of the Initial Value",
+      "verified": true
+    },
+    {
+      "path": "downside.observation",
+      "value": "final_only",
+      "quote": "Final Value: | The Closing Value of the Reference Asset on the Final Valuation Date",
+      "verified": true
+    },
+    {
+      "path": "downside.gearing",
+      "value": 1.1765,
+      "quote": "Downside Leverage Factor: | The quotient of 1 / (1 \u2013 Buffer Amount), which is equal to approximately 1.1765",
+      "verified": true
+    },
+    {
+      "path": "cusip",
+      "value": "06419TL48",
+      "quote": "CUSIP / ISIN: | 06419TL48 / US06419TL482",
+      "verified": true
+    },
+    {
+      "path": "estimated_value",
+      "value": 987.59,
+      "quote": "The initial estimated value of your Notes at the time the terms of your Notes were set on the Trade Date was $987.59 per $1,000 Principal Amount",
+      "verified": true
+    },
+    {
+      "path": "max_selling_commission",
+      "value": 10.0,
+      "quote": "The placement agents will receive a fee of 1.00% per Note, but will forgo fees for sales to fiduciary accounts.",
+      "verified": false
+    },
+    {
+      "path": "unsupported_features[0]",
+      "value": "Digital Return",
+      "quote": "Digital Return: | 7.78% of the Principal Amount.",
+      "verified": true
+    }
+  ],
+  "quotes": {
+    "checked": 20,
+    "verified": 19
+  },
+  "crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 987.59,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "06419TL48",
+  "issuer": "The Bank of Nova Scotia",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, buffer 85% at maturity",
+  "seconds": 0.08294333000003462,
+  "cost_usd": 0.1440393,
+  "model_seconds": 61.408952992000195
+}

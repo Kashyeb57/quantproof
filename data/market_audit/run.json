@@ -1,0 +1,35 @@
+{
+  "started": "2026-10-28T14:24:49.815714+00:00",
+  "finished": "2026-10-28T15:00:56.729953+00:00",
+  "days": 60,
+  "max_notes": 45,
+  "budget_usd": 7.8,
+  "spent_usd": 3.7472495000000006,
+  "issuers": {
+    "JPMorgan": 19617,
+    "Goldman Sachs": 886982,
+    "Morgan Stanley": 895421,
+    "Citigroup": 831001,
+    "Bank of America": 70858,
+    "UBS": 1114446,
+    "Wells Fargo": 72971,
+    "Royal Bank of Canada": 1000275,
+    "Bank of Montreal": 927971,
+    "Toronto-Dominion": 947263,
+    "Bank of Nova Scotia": 9631,
+    "HSBC": 83246,
+    "CIBC": 1045520
+  },
+  "assumptions": {
+    "risk_free_rate": 0.037,
+    "credit_spread": 0.006,
+    "vol": 0.25,
+    "dividend": 0.01,
+    "correlation": 0.6,
+    "erp": 0.05,
+    "note": "These are stated assumptions, not market data as of each pricing date: risk_free_rate 0.037, credit_spread 0.006, vol 0.25 per underlying, dividend 0.01 per underlying, pairwise correlation 0.6 (0 for one underlying), erp 0.05."
+  },
+  "kept": 43,
+  "skipped": 190,
+  "stopped_reason": null
+}

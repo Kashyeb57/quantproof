@@ -368,7 +368,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-23",
   "structure": "single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity",
-  "seconds": 60.622134165000034,
+  "seconds": 0.03934086500021294,
   "cost_usd": 0.1283405,
   "model_seconds": 60.591341418999946
 }
