@@ -1,6 +1,6 @@
 # Checkpoint (read this after a /compact or in a new session)
 
-Updated: Wed Oct 28, 2026 (Day 7 app done and deployed). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
+Updated: Wed Oct 28, 2026 (new direction; Part A market audit done = checkpoint 1). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
 Live app: https://kashyeb57-quantproof-app-snew9v.streamlit.app/
 
 ## Working arrangement (from Oct 28, owner's choice)
@@ -136,6 +136,40 @@ Live app: https://kashyeb57-quantproof-app-snew9v.streamlit.app/
   examples, $0.14; registered as `synthesized_46661pwm5`. Base value $1,083.27 +- 0.54 with
   illustrative vols 30/35/28%; $978.55 at 1.5x vols; bank $980. Use real implied vols.
 - Suite: 1461 tests, ~80 s (sandbox subprocesses).
+
+## New direction (Oct 28, agreed after two external reviews)
+Frontier = **verified AI-written financial code**; structured notes are the proving ground. Two
+additive features, each ending at a checkpoint where Claude stops and reports. Budgets (Meta
+credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's reserve.
+
+## Part A market audit (checkpoint 1, Oct 28) — done
+- `scripts/market_audit.py` + `quantproof/report/audit_run.py`: EDGAR full-text search ("estimated
+  value", 424B2, last 60 days) across 13 issuer CIKs; filters before any model call (424B2 header,
+  size, preliminary, disclosed estimated value); per note: Spark 1.3 extraction, quote check,
+  cross-check with **muse-spark-1.2** (Baseten still missing), template support + `template_gaps`
+  (principal protection, excess-return index: not modelled -> unsupported with the filing's
+  wording), proof battery gate, pricing under stated assumptions (r 3.7%, spread 0.6%, vol 25%,
+  div 1%, rho 0.6, ERP 5%). Hard budget guard (pre-flight worst case). Recorder/Replay: everything in
+  `data/market_audit/` (filings gz, calls, results) and `--replay` re-runs it offline at $0.
+  Audit calls log to `.cache/audit_calls.jsonl`, never the app's cost log.
+- `quantproof/report/market_audit.py` + `scripts/market_audit_export.py`: per-note rows,
+  aggregates from saved rows only, `data/market_audit/notes.csv|json` (every field's quote),
+  `docs/MARKET_AUDIT.md`, neutral-language check. App: sidebar page "Market Audit" (saved data only).
+- Result: 44 notes, 11 issuers; 34 extracted (10 schema failures recorded); 8 priced, 26
+  unsupported (digital, absolute-return, threshold settlement, protection...); quote verification
+  95.2%; median cost to investor 1.6% of issue price ($15.96 per $1,000, bank's figures); bank
+  value inside our range 2 of 8 (ours mostly below under the flat 25% vol assumption). Model time
+  44 min, cost $4.88. Review caught 3 Morgan Stanley principal-protected notes mis-mapped to a 100%
+  barrier and priced at ~$1,100-1,330; now gated as unsupported.
+- Spend Part A: $4.88 audit + $1.15 Muse drafts = **$6.03 of $12**. Dev log total $9.27.
+- Local note: a test read the real local cost log (audit spend made "today" look capped); it now
+  runs from a temp dir.
+
+## Next: Part B synthesis benchmark (checkpoint 2), budget $15
+8-10 real 424B2s with different structures (the audit already found digital, dual-directional /
+absolute-return, threshold settlement, step-down, buffered leverage), templates disabled, Wonder
+synthesis + sandbox + battery + repair (max 3), log every attempt, template agreement within 3 SE
+and filing examples to the cent where a template covers, `docs/SYNTHESIS_BENCHMARK.md`, app replay page.
 
 ## Day 7 app + polish (Oct 28, built by Muse Code on Joyeb's PC, reviewed and tested)
 - Code moved from `scripts/analyse.py` into `quantproof/report` (CLI re-exports; example byte-identical).
