@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "dp255335_424b2-spbeln1018spx.htm"
   },
-  "status": "priced",
-  "reason": null,
+  "status": "needs_review",
+  "reason": "plausibility gate: bank's estimated value 984.08 is above our whole range (high 960.02)",
   "termsheet": {
     "issuer": "Royal Bank of Canada",
     "underlying_names": [
@@ -1021,7 +1021,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-19",
   "structure": "single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity",
-  "seconds": 0.26770492500008913,
+  "seconds": 0.1780500140002914,
   "cost_usd": 0.08825485000000001,
   "model_seconds": 46.363996329999736
 }

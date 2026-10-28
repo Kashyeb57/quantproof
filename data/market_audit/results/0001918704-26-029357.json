@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "form424b2.htm"
   },
-  "status": "priced",
-  "reason": null,
+  "status": "needs_review",
+  "reason": "plausibility gate: bank's estimated value 977.60 is above our whole range (high 972.86)",
   "termsheet": {
     "issuer": "Citigroup Global Markets Holdings Inc.",
     "underlying_names": [
@@ -1032,7 +1032,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-09-25",
   "structure": "single underlying, upside leverage 1x, cap 11.15%, barrier 80% at maturity",
-  "seconds": 0.33966850399974646,
+  "seconds": 0.19185463800022262,
   "cost_usd": 0.114042,
   "model_seconds": 48.487300693999714
 }

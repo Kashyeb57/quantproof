@@ -491,7 +491,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-21",
   "structure": "worst-of 5, upside leverage 1x, buffer 90% at maturity",
-  "seconds": 0.06343118699987826,
+  "seconds": 0.07331783300014649,
   "cost_usd": 0.14940485,
   "model_seconds": 68.94456921400024
 }

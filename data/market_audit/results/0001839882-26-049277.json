@@ -355,7 +355,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-09-30",
   "structure": "single underlying, upside leverage 2.3x, barrier 100% at maturity",
-  "seconds": 0.051066474999970524,
+  "seconds": 0.030166356000336236,
   "cost_usd": 0.0848373,
   "model_seconds": 47.72892875499997
 }

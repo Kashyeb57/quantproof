@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "y1022262424b2.htm"
   },
-  "status": "priced",
-  "reason": null,
+  "status": "needs_review",
+  "reason": "plausibility gate: bank's estimated value 996.26 is above our whole range (high 988.37)",
   "termsheet": {
     "issuer": "Bank of Montreal",
     "underlying_names": [
@@ -1025,7 +1025,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-21",
   "structure": "single underlying, upside leverage 1.4x, cap 25.9%, buffer 87.5% at maturity",
-  "seconds": 0.17515017599998828,
+  "seconds": 0.20549589700021897,
   "cost_usd": 0.15222495,
   "model_seconds": 61.790191471000526
 }

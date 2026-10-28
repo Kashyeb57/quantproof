@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "ms18827_424b2-31846.htm"
   },
-  "status": "priced",
-  "reason": null,
+  "status": "needs_review",
+  "reason": "plausibility gate: bank's estimated value 9.80 is above our whole range (high 9.56)",
   "termsheet": {
     "issuer": "Morgan Stanley Finance LLC",
     "underlying_names": [
@@ -1059,7 +1059,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-09-21",
   "structure": "single underlying, upside leverage 3x, cap 13.25%, barrier 100% at maturity",
-  "seconds": 0.19275390599977982,
+  "seconds": 0.2759386839998115,
   "cost_usd": 0.08095849999999999,
   "model_seconds": 50.869425513000124
 }

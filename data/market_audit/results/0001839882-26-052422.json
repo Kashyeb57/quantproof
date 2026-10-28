@@ -7,8 +7,8 @@
     "form": "424B2",
     "primary_document": "r10723wfc_424b2-35603.htm"
   },
-  "status": "priced",
-  "reason": null,
+  "status": "needs_review",
+  "reason": "plausibility gate: bank's estimated value 995.25 is above our whole range (high 993.24)",
   "termsheet": {
     "issuer": "Wells Fargo Finance LLC",
     "underlying_names": [
@@ -1071,7 +1071,7 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-22",
   "structure": "single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity",
-  "seconds": 0.3853417069999523,
+  "seconds": 0.25174265400073637,
   "cost_usd": 0.1215982,
   "model_seconds": 50.140530011999545
 }
