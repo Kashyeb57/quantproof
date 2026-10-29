@@ -314,6 +314,66 @@ def test_crosscheck_non_json_second_reply_sets_error_without_raising():
     assert models == ["muse-spark-1.2"]
 
 
+def test_crosscheck_uses_second_chat_for_second_extraction():
+    filing, first = _load_first_extraction()
+    reply_text = REPLY.read_text(encoding="utf-8")
+    seen = []
+
+    def main_chat(messages, **kwargs):
+        raise AssertionError("main chat must not be used")
+
+    def second_chat(messages, *, model, purpose="", **_kwargs):
+        seen.append((model, purpose))
+        return _chat_result(reply_text, model)
+
+    result = crosscheck(
+        filing,
+        first,
+        chat=main_chat,
+        second_model="second-model",
+        second_chat=second_chat,
+        recheck_model="recheck-model",
+        recheck_chat=second_chat,
+    )
+    assert result.agreed is True
+    assert result.second_model == "second-model"
+    assert ("second-model", "extract") in seen
+
+
+OTHER_REPLY = ROOT / "tests" / "fixtures" / "extractions" / "jpm_424b2-ea0308498.reply.json"
+
+
+def test_crosscheck_recheck_goes_to_recheck_chat_on_disagreement():
+    filing, first = _load_first_extraction()
+    other_text = OTHER_REPLY.read_text(encoding="utf-8")
+    seen = []
+
+    def main_chat(messages, **kwargs):
+        raise AssertionError("main chat must not be used")
+
+    def second_chat(messages, *, model, purpose="", **_kwargs):
+        seen.append(("second", model, purpose))
+        return _chat_result(other_text, model)
+
+    def recheck_chat(messages, *, model, purpose="", **_kwargs):
+        seen.append(("recheck", model, purpose))
+        return _chat_result(_recheck_reply("neither", None, ""), model)
+
+    result = crosscheck(
+        filing,
+        first,
+        chat=main_chat,
+        second_model="s2",
+        second_chat=second_chat,
+        recheck_model="r2",
+        recheck_chat=recheck_chat,
+    )
+    assert result.agreed is False
+    assert result.diffs
+    assert ("second", "s2", "extract") in seen
+    assert ("recheck", "r2", "recheck") in seen
+
+
 def test_fielddiff_defaults_are_open_without_quote():
     diff = FieldDiff(path="downside.level", first=0.7, second=0.65, kind="value")
     assert diff.status == "open"

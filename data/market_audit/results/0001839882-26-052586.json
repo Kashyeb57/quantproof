@@ -363,6 +363,51 @@
     "verified": 23
   },
   "crosscheck": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "downside.kind",
+        "first": "barrier",
+        "second": "buffer",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "first": "2026-10-23",
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": 7623.68,
+        "second": null,
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 988.71,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "95001HTK7",
+  "issuer": "Wells Fargo Finance LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-23",
+  "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
+  "seconds": 0.172208399977535,
+  "cost_usd": 0.27933425,
+  "model_seconds": 150.958864864896,
+  "previous_status": "extraction_failed",
+  "previous_reason": "downside level must be a fraction of initial in (0, 1]",
+  "previous_crosscheck": {
     "second_model": "muse-spark-1.2",
     "agreed": false,
     "error": null,
@@ -389,23 +434,5 @@
       }
     ]
   },
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": 988.71,
-  "issue_price": 1000.0,
-  "notional": 1000.0,
-  "cusip": "95001HTK7",
-  "issuer": "Wells Fargo Finance LLC",
-  "underlyings": [
-    "S&P 500\u00ae Index"
-  ],
-  "is_preliminary": false,
-  "pricing_date": "2026-10-23",
-  "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
-  "seconds": 0.172208399977535,
-  "cost_usd": 0.16305895,
-  "model_seconds": 83.99760456499916,
-  "previous_status": "extraction_failed",
-  "previous_reason": "downside level must be a fraction of initial in (0, 1]"
+  "cost_usd_baseten": 0.1162753
 }

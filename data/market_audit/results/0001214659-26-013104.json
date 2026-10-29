@@ -321,7 +321,8 @@
     "verified": 22
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": true,
     "error": null,
     "diffs": []
@@ -341,6 +342,13 @@
   "pricing_date": "2026-10-19",
   "structure": "single underlying, buffer 85% at maturity",
   "seconds": 0.0847556998487562,
-  "cost_usd": 0.10016385,
-  "model_seconds": 54.28086164199976
+  "cost_usd": 0.15483635,
+  "model_seconds": 85.88446744184239,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "cost_usd_baseten": 0.0546725
 }

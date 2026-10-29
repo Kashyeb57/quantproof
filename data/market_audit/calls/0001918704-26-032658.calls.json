@@ -11,32 +11,32 @@
   },
   {
     "purpose": "extract",
-    "model": "muse-spark-1.2",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"issuer\": {\"value\": \"BofA Finance LLC\", \"quote\": \"Issuer: | BofA Finance LLC (\u201cBofA Finance\u201d)\", \"section\": \"Terms of the Notes\"}, \"guarantor\": {\"value\": \"Bank of America Corporation\", \"quote\": \"Guarantor: | Bank of America Corporation (\u201cBAC\u201d)\", \"section\": \"Terms of the Notes\"}, \"cusip\": {\"value\": \"09712D317\", \"quote\": \"CUSIP No. 09712D317\", \"section\": \"Cover\"}, \"is_preliminary\": {\"value\": false, \"quote\": \"Pricing Date October 22, 2026\", \"section\": \"Cover\"}, \"underlyings\": [{\"name\": {\"value\": \"iShares Semiconductor ETF\", \"quote\": \"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\", \"section\": \"Terms of the Notes\"}, \"ticker\": {\"value\": \"SOXX\", \"quote\": \"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\", \"section\": \"Terms of the Notes\"}, \"initial_level\": {\"value\": 475.69, \"quote\": \"Starting Value: | $475.69\", \"section\": \"Terms of the Notes\"}, \"reference_level\": {\"value\": 475.69, \"quote\": \"On the pricing date, the Closing Market Price of the Underlying Fund was $475.69.\", \"section\": \"The Underlying Fund\"}, \"reference_date\": {\"value\": \"2026-10-22\", \"quote\": \"On the pricing date, the Closing Market Price of the Underlying Fund was $475.69.\", \"section\": \"The Underlying Fund\"}}], \"dependency\": {\"value\": \"worst_of\", \"quote\": \"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\", \"section\": \"Terms of the Notes\"}, \"notional\": {\"value\": 10, \"quote\": \"Principal Amount: | $10.00 per unit\", \"section\": \"Terms of the Notes\"}, \"issue_price\": {\"value\": 10, \"quote\": \"Public offering price.............................. | $10.00 | $18,797,150.00\", \"section\": \"Cover\"}, \"pricing_date\": {\"value\": \"2026-10-22\", \"quote\": \"October 22, 2026\", \"section\": \"Cover\"}, \"issue_date\": {\"value\": \"2026-10-30\", \"quote\": \"October 30, 2026\", \"section\": \"Cover\"}, \"maturity_date\": {\"value\": \"2028-10-27\", \"quote\": \"October 27, 2028\", \"section\": \"Cover\"}, \"final_review_date\": {\"value\": \"2028-10-24\", \"quote\": \"Maturity Valuation Period: | October 18, 2028, October 19, 2028, October 20, 2028, October 23, 2028 and October 24, 2028.\", \"section\": \"Terms of the Notes\"}, \"downside\": {\"kind\": {\"value\": \"buffer\", \"quote\": \"1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk\", \"section\": \"Cover\"}, \"level\": {\"value\": 0.75, \"quote\": \"Threshold Value: | $356.77 (75.00% of the Starting Value, rounded to two decimal places).\", \"section\": \"Terms of the Notes\"}, \"observation\": {\"value\": \"final_only\", \"quote\": \"If the Ending Value is less than the Threshold Value, you will lose a portion, which could be significant, of the principal amount of your notes.\", \"section\": \"Summary\"}, \"gearing\": {\"value\": 1, \"quote\": \"1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk\", \"section\": \"Cover\"}}, \"autocall\": null, \"coupon\": null, \"upside\": {\"leverage\": {\"value\": 1, \"quote\": \"Participation Rate: | 100%\", \"section\": \"Terms of the Notes\"}, \"cap\": {\"value\": 0.4005, \"quote\": \"Capped Value: | $14.005 per unit, which represents a return of 40.05% over the principal amount.\", \"section\": \"Terms of the Notes\"}}, \"unsupported_features\": [{\"value\": \"Absolute Return Buffer\", \"quote\": \"you will receive a positive return equal to the absolute value of the percentage decline in the Underlying Fund from the Starting Value to the Ending Value (e.g., if the negative return of the Underlying Fund is -5.00%, you will receive a positive return of +5.00%)\", \"section\": \"Summary\"}], \"estimated_value\": {\"value\": 9.792, \"quote\": \"The initial estimated value of the notes as of the pricing date is $9.792 per unit, which is less than the public offering price listed below.\", \"section\": \"Cover\"}, \"estimated_value_floor\": null, \"max_selling_commission\": {\"value\": 0.2, \"quote\": \"Underwriting discount........................... | $0.20 | $375,943.00\", \"section\": \"Cover\"}, \"missing_or_ambiguous\": []}",
-    "input_tokens": 11485,
-    "output_tokens": 5885,
-    "cost_usd": 0.0374128,
-    "seconds": 18.36755379599981
+    "text": "{\"issuer\":{\"value\":\"BofA Finance LLC\",\"quote\":\"Issuer: | BofA Finance LLC (\u201cBofA Finance\u201d)\",\"section\":\"Terms of the Notes\"},\"guarantor\":{\"value\":\"Bank of America Corporation\",\"quote\":\"Guarantor: | Bank of America Corporation (\u201cBAC\u201d)\",\"section\":\"Terms of the Notes\"},\"cusip\":{\"value\":\"09712D317\",\"quote\":\"CUSIP No. 09712D317\",\"section\":\"Cover\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Filed Pursuant to Rule 424(b)(2)\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"iShares Semiconductor ETF\",\"quote\":\"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\",\"section\":\"Terms of the Notes\"},\"ticker\":{\"value\":\"SOXX\",\"quote\":\"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\",\"section\":\"Terms of the Notes\"},\"initial_level\":{\"value\":475.69,\"quote\":\"Starting Value: | $475.69\",\"section\":\"Terms of the Notes\"},\"reference_level\":{\"value\":475.69,\"quote\":\"On the pricing date, the Closing Market Price of the Underlying Fund was $475.69.\",\"section\":\"The Underlying Fund\"},\"reference_date\":{\"value\":\"2026-10-22\",\"quote\":\"Pricing Date ... October 22, 2026\",\"section\":\"Cover\"}}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"Market Measure: | The iShares Semiconductor ETF (Bloomberg symbol: \u201cSOXX\u201d)\",\"section\":\"Terms of the Notes\"},\"notional\":{\"value\":10,\"quote\":\"Principal Amount: | $10.00 per unit\",\"section\":\"Terms of the Notes\"},\"issue_price\":{\"value\":10,\"quote\":\"Public offering price.............................. | $10.00 | $18,797,150.00\",\"section\":\"Cover\"},\"pricing_date\":{\"value\":\"2026-10-22\",\"quote\":\"Pricing Date ... October 22, 2026\",\"section\":\"Cover\"},\"issue_date\":{\"value\":\"2026-10-30\",\"quote\":\"Settlement Date ... October 30, 2026\",\"section\":\"Cover\"},\"maturity_date\":{\"value\":\"2028-10-27\",\"quote\":\"Maturity Date ... October 27, 2028\",\"section\":\"Cover\"},\"final_review_date\":{\"value\":\"2028-10-24\",\"quote\":\"Maturity Valuation Period: | October 18, 2028, October 19, 2028, October 20, 2028, October 23, 2028 and October 24, 2028.\",\"section\":\"Terms of the Notes\"},\"downside\":{\"kind\":{\"value\":\"buffer\",\"quote\":\"1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk\",\"section\":\"Cover\"},\"level\":{\"value\":0.75,\"quote\":\"Threshold Value: | $356.77 (75.00% of the Starting Value, rounded to two decimal places).\",\"section\":\"Terms of the Notes\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"If the Ending Value is less than the Threshold Value, you will lose a portion, which could be significant, of the principal amount of your notes.\",\"section\":\"Summary\"},\"gearing\":{\"value\":1,\"quote\":\"1-to-1 downside exposure to decreases in the Underlying Fund beyond a 25.00% decline, with up to 75.00% of your principal at risk\",\"section\":\"Cover\"}},\"autocall\":null,\"coupon\":null,\"upside\":{\"leverage\":{\"value\":1,\"quote\":\"Participation Rate: | 100%\",\"section\":\"Terms of the Notes\"},\"cap\":{\"value\":0.4005,\"quote\":\"Capped Value: | $14.005 per unit, which represents a return of 40.05% over the principal amount.\",\"section\":\"Terms of the Notes\"}},\"unsupported_features\":[{\"value\":\"Absolute Return Buffer\",\"quote\":\"A positive return equal to the absolute value of the percentage decline in the price of the Underlying Fund only if the Underlying Fund does not decline by more than 25.00%\",\"section\":\"Cover\"}],\"estimated_value\":{\"value\":9.792,\"quote\":\"The initial estimated value of the notes as of the pricing date is $9.792 per unit\",\"section\":\"Cover\"},\"estimated_value_floor\":null,\"max_selling_commission\":{\"value\":0.2,\"quote\":\"Underwriting discount........................... | $0.20 | $375,943.00\",\"section\":\"Cover\"},\"missing_or_ambiguous\":[]}",
+    "input_tokens": 11698,
+    "output_tokens": 8916,
+    "cost_usd": 0.0502627,
+    "seconds": 30.24593669991009
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"value\": \"2026-10-22\", \"quote\": \"Pricing Date\\nSettlement Date\\nMaturity Date\\nOctober 22, 2026\", \"choice\": \"second\"}",
-    "input_tokens": 9840,
-    "output_tokens": 2694,
-    "cost_usd": 0.023625200000000002,
-    "seconds": 11.166855615999793
+    "text": "{\"value\": \"2026-10-22\", \"quote\": \"Pricing Date\\nSettlement Date\\nMaturity Date\\nOctober 22, 2026\\n\\nOctober 30, 2026\\n\\nOctober 27, 2028\", \"choice\": \"second\"}",
+    "input_tokens": 9973,
+    "output_tokens": 1870,
+    "cost_usd": 0.02013215,
+    "seconds": 6.58086230000481
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"value\": 475.69, \"quote\": \"Starting Value: | $475.69\", \"choice\": \"second\"}",
-    "input_tokens": 9837,
-    "output_tokens": 1512,
-    "cost_usd": 0.01872225,
-    "seconds": 4.825345162000303
+    "text": "{\"value\":475.69,\"quote\":\"Starting Value: | $475.69\",\"choice\":\"second\"}",
+    "input_tokens": 9970,
+    "output_tokens": 854,
+    "cost_usd": 0.0052504,
+    "seconds": 3.4788788999430835
   }
 ]

@@ -449,7 +449,17 @@ def test_plausibility_gate_alone_catches_the_morgan_stanley_misreads(accession, 
     filing = read_filing(gzip.decompress((audit / "filings" / f"{accession}.htm.gz").read_bytes()))
     calls = json.loads((audit / "calls" / f"{accession}.calls.json").read_text(encoding="utf-8"))
     monkeypatch.setattr(audit_run, "template_gaps", lambda ts, text: None)
-    result = audit_run.audit_note(filing, chat=audit_run.Replay(calls), meta=old["meta"])
+    replay = audit_run.Replay(calls)
+    recorded_cross = old.get("crosscheck") or {}
+    result = audit_run.audit_note(
+        filing,
+        chat=replay,
+        meta=old["meta"],
+        second_model=recorded_cross.get("second_model", audit_run.SECOND_MODEL),
+        second_chat=replay,
+        recheck_model=recorded_cross.get("recheck_model", audit_run.RECHECK_MODEL),
+        recheck_chat=replay,
+    )
     assert result["status"] == "needs_review"
     assert result["reason"].startswith("plausibility gate:")
     assert "exceeds the issue price" in result["reason"]
@@ -534,3 +544,48 @@ def test_anchored_mask_selects_relative_band(monkeypatch):
         "±15% relative band" in line
         for line in result["fair_value"]["assumptions"]
     )
+
+
+def test_crosscheck_models_recorded_through_audit_note():
+    """The models that ran are stored on the result (offline, fakes only)."""
+    reply_text = (F / "extractions" / f"{STEM}.reply.json").read_text(encoding="utf-8")
+    seen = []
+
+    def fake_second(messages, **kw):
+        seen.append((kw.get("model"), kw.get("purpose")))
+        return ChatResult(
+            text=reply_text,
+            model=kw.get("model"),
+            finish_reason="stop",
+            usage=Usage(input_tokens=10, output_tokens=5),
+            cost_usd=0.01,
+            seconds=0.5,
+            attempts=1,
+        )
+
+    replay = Replay(
+        [
+            {
+                "purpose": "extract",
+                "model": "muse-spark-1.3",
+                "finish_reason": "stop",
+                "text": reply_text,
+            }
+        ]
+    )
+    result = audit_note(
+        _filing(),
+        chat=replay,
+        meta={"accession": STEM},
+        second_model="second-test-model",
+        second_chat=fake_second,
+        recheck_model="recheck-test-model",
+        recheck_chat=fake_second,
+    )
+    assert replay.remaining == 0
+    assert result["crosscheck"]["second_model"] == "second-test-model"
+    assert result["crosscheck"]["recheck_model"] == "recheck-test-model"
+    # Same reply twice: no diffs, so the recheck chat is never needed.
+    assert result["crosscheck"]["agreed"] is True
+    assert seen == [("second-test-model", "extract")]
+    assert result["fair_value"] is not None

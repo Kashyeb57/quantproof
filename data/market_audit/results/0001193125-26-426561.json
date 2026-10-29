@@ -323,15 +323,16 @@
     "verified": 21
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
       {
-        "path": "underlyings[0].name",
-        "first": "Russell 2000\u00ae Index",
-        "second": "Russell 2000 Index",
-        "status": "resolved_first"
+        "path": "underlyings[0].ticker",
+        "first": "RTY",
+        "second": "RTY Index",
+        "status": "resolved_second"
       }
     ]
   },
@@ -1063,6 +1064,20 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.1284488,
-  "model_seconds": 73.385759194
+  "cost_usd": 0.19420415,
+  "model_seconds": 101.98391729392142,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "Russell 2000\u00ae Index",
+        "second": "Russell 2000 Index",
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.06575534999999999
 }

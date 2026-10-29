@@ -6,12 +6,12 @@ same code path can run live with ``quantproof.agent.client.chat`` or
 offline at zero cost with :class:`Replay`, which replays recorded model
 replies saved from a live run.
 
-Cross-check note: the cross-check uses a *different Muse Spark version*
-(``SECOND_MODEL = "muse-spark-1.2"``) as the second extraction.  The
-brief's intended second model, Muse Spark Open via Baseten, is not
-available (no ``BASETEN_API_KEY``), so this is a weaker independence
-check than two genuinely different model services, and audit outputs
-should be read with that limitation stated.
+Cross-check note: the cross-check uses Muse Spark Open via Baseten
+(``OPEN_MODEL``) as the second extraction when a Baseten key is set, else
+a *different Muse Spark version* (``SECOND_MODEL``), which is a weaker
+independence check than two genuinely different model services.  Every
+saved result records which models ran (``crosscheck.second_model`` and
+``crosscheck.recheck_model``).
 
 Pricing follows brief section 6 / AGENTS.md rule 5: risk-neutral Monte
 Carlo for the estimated fair value (as a range, via
@@ -36,6 +36,7 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
+from quantproof.agent import baseten
 from quantproof.agent import client as meta_client
 from quantproof.agent.costs import Usage
 from quantproof.agent.crosscheck import crosscheck
@@ -51,6 +52,7 @@ AUDIT_DIR = Path("data/market_audit")
 FIRST_MODEL = "muse-spark-1.3"
 SECOND_MODEL = "muse-spark-1.2"
 RECHECK_MODEL = "muse-spark-1.3"
+OPEN_MODEL = baseten.OPEN_MODEL
 SEED = 0
 GRID_PATHS = 4_000
 BASE_PATHS = 20_000
@@ -316,7 +318,16 @@ def plausibility_issues(
     return "; ".join(reasons) if reasons else None
 
 
-def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
+def audit_note(
+    filing: Filing,
+    *,
+    chat: Callable,
+    meta: dict,
+    second_model: str = SECOND_MODEL,
+    second_chat: Callable | None = None,
+    recheck_model: str = RECHECK_MODEL,
+    recheck_chat: Callable | None = None,
+) -> dict:
     """Run the per-note audit pipeline on one filing; never raises for
     note-level problems.
 
@@ -331,6 +342,11 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
     against, the templates support its payoff, and the proof battery's
     maths checks pass; every other outcome is recorded with its reason
     instead of raising, so one bad filing never stops the audit.
+
+    ``second_chat`` (default ``chat``) carries the second extraction, so a
+    Baseten-backed chat makes Muse Spark Open the second extractor;
+    rechecks follow ``second_chat`` unless ``recheck_chat`` is set.  The
+    models that ran are stored in the result's ``crosscheck`` dict.
 
     Reference: brief section 6 and AGENTS.md rules 5, 5a and 8
     (risk-neutral value, verified quotes, bank estimate shown alongside,
@@ -420,17 +436,20 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
         # compare against means this note is outside the audit's scope.
         return finish("no_estimated_value", "no estimated value disclosed")
 
-    # Step b: cross-check with a different Spark version (SECOND_MODEL).
+    # Step b: cross-check; rechecks follow second_chat unless recheck_chat is set.
     try:
         cc = crosscheck(
             filing,
             extraction,
             chat=chat,
-            second_model=SECOND_MODEL,
-            recheck_model=RECHECK_MODEL,
+            second_chat=second_chat,
+            recheck_chat=(recheck_chat or second_chat),
+            second_model=second_model,
+            recheck_model=recheck_model,
         )
         result["crosscheck"] = {
             "second_model": cc.second_model,
+            "recheck_model": recheck_model,
             "agreed": bool(cc.agreed),
             "error": cc.error,
             "diffs": [
@@ -447,7 +466,8 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
         raise
     except Exception as exc:  # a failed cross-check is recorded, not raised
         result["crosscheck"] = {
-            "second_model": SECOND_MODEL,
+            "second_model": second_model,
+            "recheck_model": recheck_model,
             "agreed": False,
             "error": str(exc)[:500],
             "diffs": [],

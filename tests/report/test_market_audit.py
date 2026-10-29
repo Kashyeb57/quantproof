@@ -304,7 +304,7 @@ def test_render_markdown(audit_dir: Path) -> None:
     assert (
         "This is a risk analysis under stated assumptions, not investment advice."
     ) in markdown
-    assert "different model version" in markdown
+    assert "Muse Spark Open via Baseten" in markdown
     # Money at 2 decimals and P(loss) as a percentage with 1 decimal.
     assert "962.50" in markdown
     assert "25.0%" in markdown
@@ -372,3 +372,22 @@ def test_bank_in_range_counts_priced_and_flagged() -> None:
     # Exact fraction: 2 in range of 3 priced-or-flagged.
     assert agg["share_bank_in_range"] == pytest.approx(2 / 3)
     assert "2 of 3" in render_markdown(rows, agg)
+
+
+def test_second_model_and_baseten_cost_flow_to_rows_and_aggregate(audit_dir: Path) -> None:
+    rows = [note_row(r) for r in load_results(audit_dir)]
+    # Fixture results predate model recording: the fields exist, values None.
+    assert all(row["second_model"] is None for row in rows)
+    assert all(row["recheck_model"] is None for row in rows)
+    agg = aggregate(rows, load_run(audit_dir))
+    assert agg["second_models"] == {}
+    assert agg["total_baseten_cost_usd"] == pytest.approx(0.0)
+
+    stamped = dict(rows[0])
+    stamped["second_model"] = "m"
+    stamped["recheck_model"] = "r"
+    stamped["cost_usd_baseten"] = 0.05
+    agg2 = aggregate([stamped], {})
+    assert agg2["second_models"] == {"m": 1}
+    assert agg2["total_baseten_cost_usd"] == pytest.approx(0.05)
+    assert "- Cross-check second models: m (1)" in render_markdown([stamped], agg2)

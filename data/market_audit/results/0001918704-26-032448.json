@@ -337,10 +337,18 @@
     "verified": 21
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
-    "agreed": true,
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
     "error": null,
-    "diffs": []
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_second"
+      }
+    ]
   },
   "battery": null,
   "fair_value": null,
@@ -357,6 +365,13 @@
   "pricing_date": "2026-10-21",
   "structure": "single underlying, barrier 70% at maturity",
   "seconds": 0.12146160006523132,
-  "cost_usd": 0.088839,
-  "model_seconds": 43.940635455000006
+  "cost_usd": 0.1556391,
+  "model_seconds": 77.48111835510542,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "cost_usd_baseten": 0.0668001
 }

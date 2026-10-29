@@ -120,7 +120,7 @@ class BudgetGuard:
     """Chat wrapper that refuses calls whose worst case exceeds a budget.
 
     Formula: before each call, the worst-case cost is
-    ``estimate_cost(model, Usage(input_tokens=ceil(total message chars
+    ``cost_fn(model, Usage(input_tokens=ceil(total message chars
     / 4), output_tokens=max_tokens))``; if ``spent + worst > budget``
     the call is refused with :class:`BudgetExceeded` and the wrapped
     callable is never invoked.  Otherwise the call goes through and the
@@ -133,13 +133,15 @@ class BudgetGuard:
     Reference: ``quantproof.agent.costs.estimate_cost``.
     """
 
-    def __init__(self, chat, budget_usd, spent_usd=0.0) -> None:
+    def __init__(self, chat, budget_usd, spent_usd=0.0, cost_fn=None) -> None:
         """Wrap ``chat`` with a total budget of ``budget_usd`` dollars."""
+        # cost_fn(model, usage) prices the worst case; default estimate_cost.
         self._chat = chat
         self.chat = chat
         self.budget_usd = float(budget_usd)
         self.spent_usd = float(spent_usd)
         self.refused = False  # set when a call is refused (callers may swallow the raise)
+        self._cost_fn = cost_fn or estimate_cost
 
     def __call__(self, messages, **kw):
         """Call the wrapped chat if its worst-case cost fits the budget.
@@ -161,7 +163,7 @@ class BudgetGuard:
             input_tokens=math.ceil(total_chars / 4),
             output_tokens=int(max_tokens),
         )
-        worst = float(estimate_cost(model, usage))
+        worst = float(self._cost_fn(model, usage))
         if self.spent_usd + worst > self.budget_usd:
             self.refused = True
             raise BudgetExceeded(
@@ -376,7 +378,7 @@ def attempt_to_dict(a: Attempt) -> dict:
     }
 
 
-def run_note(filing, calls_audit, meta, *, chat, template_covered: bool) -> dict:
+def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_examples: int = 0) -> dict:
     """Run the synthesized-payoff benchmark for one filing.
 
     Formula: no new pricing maths.  The term sheet is replayed and
@@ -405,6 +407,10 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool) -> dict
     :class:`BudgetExceeded` propagates: if the synthesis loop recorded
     it as an attempt error (its chat-exception handling), it is
     re-raised here instead of being reported as a synthesis failure.
+
+    When fewer than ``min_examples`` filing examples are found, the note
+    is skipped (``"skipped_few_examples"`` with ``skip_reason``) before
+    any synthesis spend: the battery needs that evidence to pass.
     """
     filing_text = filing.text
     ts = termsheet_from_audit(calls_audit, filing_text)
@@ -412,6 +418,38 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool) -> dict
     examples = extract_examples(filing, chat=chat, notional=float(ts.notional.value))
     if getattr(chat, "refused", False):  # extract_examples swallows exceptions
         raise BudgetExceeded("budget guard refused the examples call")
+    if len(examples or []) < min_examples:
+        # No synthesis spend: the battery needs min_examples worked
+        # examples as evidence, so a note with fewer can never pass.
+        issue_price = float(ts.issue_price.value) if ts.issue_price is not None else None
+        estimated_value = float(ts.estimated_value.value) if ts.estimated_value is not None else None
+        return {
+            "meta": meta,
+            "cusip": ts.cusip.value if ts.cusip is not None else None,
+            "issuer": ts.issuer.value if ts.issuer is not None else None,
+            "structure": audit_run._structure_label(ts),
+            "issue_price": issue_price,
+            "estimated_value": estimated_value,
+            "examples": [
+                {
+                    "worst_final": float(example.worst_final),
+                    "payment": float(example.payment.value),
+                    "quote": example.payment.citation.quote if getattr(example.payment, "citation", None) is not None else "",
+                    "verified": bool(example.payment.citation.verified) if getattr(example.payment, "citation", None) is not None else False,
+                }
+                for example in (examples or [])
+            ],
+            "attempts": [],
+            "passed": False,
+            "n_attempts": 0,
+            "repaired": False,
+            "first_failing_checks": [],
+            "status": "skipped_few_examples",
+            "skip_reason": (
+                f"only {len(examples or [])} filing example(s); "
+                f"the battery needs at least {min_examples}"
+            ),
+        }
     syn = synthesise_payoff(
         filing,
         ts,

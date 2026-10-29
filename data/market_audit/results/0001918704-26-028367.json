@@ -323,16 +323,11 @@
     "verified": 21
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
-      {
-        "path": "underlyings[0].name",
-        "first": "S&P 500\u00ae Index",
-        "second": "The S&P 500\u00ae Index",
-        "status": "resolved_second"
-      },
       {
         "path": "underlyings[0].reference_date",
         "first": null,
@@ -362,6 +357,32 @@
   "pricing_date": "2026-09-18",
   "structure": "single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity",
   "seconds": 0.14218689990229905,
-  "cost_usd": 0.14370495,
-  "model_seconds": 55.832229391000055
+  "cost_usd": 0.2063936,
+  "model_seconds": 86.42994349080027,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-09-18",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 7650.5,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.06268865
 }

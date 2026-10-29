@@ -297,7 +297,8 @@
     "verified": 19
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
@@ -305,18 +306,6 @@
         "path": "max_selling_commission",
         "first": null,
         "second": 0.0,
-        "status": "resolved_second"
-      },
-      {
-        "path": "underlyings[0].reference_date",
-        "first": null,
-        "second": "2026-10-21",
-        "status": "resolved_second"
-      },
-      {
-        "path": "underlyings[0].reference_level",
-        "first": null,
-        "second": 7757.17,
         "status": "resolved_second"
       }
     ]
@@ -1049,6 +1038,32 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.15222495,
-  "model_seconds": 61.790191471000526
+  "cost_usd": 0.22124945000000001,
+  "model_seconds": 94.732562570955,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "max_selling_commission",
+        "first": null,
+        "second": 0.0,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-10-21",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 7757.17,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.0690245
 }

@@ -31,5 +31,14 @@
   },
   "kept": 43,
   "skipped": 190,
-  "stopped_reason": null
+  "stopped_reason": null,
+  "crosscheck_open": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "budget_usd": 15.0,
+    "spent_usd": 3.02964555,
+    "notes": 42,
+    "agreed": 12,
+    "finished": "2026-10-29T05:59:40.891374+00:00"
+  }
 }

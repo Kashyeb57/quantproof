@@ -350,10 +350,22 @@
     "verified": 22
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Upside payment"
+        ],
+        "second": [
+          "Upside payment",
+          "Enhanced Trigger Jump Securities"
+        ],
+        "status": "unresolved"
+      },
       {
         "path": "upside.leverage",
         "first": 1.0,
@@ -377,6 +389,20 @@
   "pricing_date": "2026-09-30",
   "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
   "seconds": 0.11004570010118186,
-  "cost_usd": 0.1179545,
-  "model_seconds": 78.73515053599999
+  "cost_usd": 0.18416495,
+  "model_seconds": 119.90702683589348,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "upside.leverage",
+        "first": 1.0,
+        "second": null,
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.06621045
 }

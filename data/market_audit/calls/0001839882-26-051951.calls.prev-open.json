@@ -1,0 +1,52 @@
+[
+  {
+    "purpose": "extract",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"issuer\": {\"value\": \"UBS AG London Branch\", \"quote\": \"Issuer: UBS AG London Branch\", \"section\": \"Key Terms\"}, \"guarantor\": null, \"cusip\": {\"value\": \"90266F3B0\", \"quote\": \"CUSIP no.: 90266F3B0\", \"section\": \"Key Terms\"}, \"is_preliminary\": {\"value\": false, \"quote\": \"Pricing Supplement dated October 19, 2026\", \"section\": \"Cover\"}, \"underlyings\": [{\"name\": {\"value\": \"S&P 500\u00ae Index\", \"quote\": \"Underlier: S&P 500\u00ae Index (Bloomberg symbol, \u201cSPX\u201d <Index>), as maintained by S&P Dow Jones Indices LLC (\u201cS&P\u201d or the \u201cunderlier sponsor\u201d)\", \"section\": \"Key Terms\"}, \"ticker\": {\"value\": \"SPX\", \"quote\": \"Underlier: S&P 500\u00ae Index (Bloomberg symbol, \u201cSPX\u201d <Index>), as maintained by S&P Dow Jones Indices LLC (\u201cS&P\u201d or the \u201cunderlier sponsor\u201d)\", \"section\": \"Key Terms\"}, \"initial_level\": {\"value\": 7690.73, \"quote\": \"Initial underlier level: 7,690.73\", \"section\": \"Key Terms\"}, \"reference_level\": {\"value\": 7690.73, \"quote\": \"The dotted line represents the buffer level, which is equal to 87.50% of 7,690.73, which was the closing level of the underlier on October 19, 2026.\", \"section\": \"Historical Closing Levels of the Underlier\"}, \"reference_date\": {\"value\": \"2026-10-19\", \"quote\": \"The dotted line represents the buffer level, which is equal to 87.50% of 7,690.73, which was the closing level of the underlier on October 19, 2026.\", \"section\": \"Historical Closing Levels of the Underlier\"}}], \"dependency\": {\"value\": \"worst_of\", \"quote\": \"type of notes: notes linked to a single underlier\", \"section\": \"Key Terms\"}, \"notional\": {\"value\": 1000, \"quote\": \"Each note will have a face amount of $1,000\", \"section\": \"Key Terms\"}, \"issue_price\": {\"value\": 1000, \"quote\": \"Original issue price: | 100.00% of the face amount...Each note will have a face amount of $1,000\", \"section\": \"Cover\"}, \"pricing_date\": {\"value\": \"2026-10-19\", \"quote\": \"Trade date: October 19, 2026\", \"section\": \"Key Terms\"}, \"issue_date\": {\"value\": \"2026-10-22\", \"quote\": \"Original issue date (settlement date): October 22, 2026\", \"section\": \"Key Terms\"}, \"maturity_date\": {\"value\": \"2028-07-12\", \"quote\": \"Stated maturity date: July 12, 2028\", \"section\": \"Key Terms\"}, \"final_review_date\": {\"value\": \"2028-07-10\", \"quote\": \"Determination date: July 10, 2028\", \"section\": \"Key Terms\"}, \"downside\": {\"kind\": {\"value\": \"buffer\", \"quote\": \"buffer level: yes, as described below\", \"section\": \"Key Terms\"}, \"level\": {\"value\": 0.875, \"quote\": \"Buffer level: 6,729.38875, which is 87.50% of the initial underlier level\", \"section\": \"Key Terms\"}, \"observation\": {\"value\": \"final_only\", \"quote\": \"if the final underlier level is less than the buffer level, the sum of (1) $1,000 plus (2) the product of (i) $1,000 times (ii) the buffer rate\", \"section\": \"Key Terms\"}, \"gearing\": {\"value\": 1.1429, \"quote\": \"you will lose approximately 1.1429% of the face amount of your notes for every 1% negative underlier return below the buffer level\", \"section\": \"Cover\"}}, \"autocall\": null, \"coupon\": null, \"upside\": {\"leverage\": {\"value\": 1.4, \"quote\": \"Upside participation rate: 140.00%\", \"section\": \"Key Terms\"}, \"cap\": {\"value\": 0.2408, \"quote\": \"Maximum settlement amount: $1,240.80\", \"section\": \"Key Terms\"}}, \"unsupported_features\": [], \"estimated_value\": {\"value\": 996.7, \"quote\": \"The estimated initial value of the notes as of the trade date is $996.70 per $1,000 face amount.\", \"section\": \"Cover\"}, \"estimated_value_floor\": null, \"max_selling_commission\": {\"value\": 0, \"quote\": \"Underwriting discount*: | 0.00% of the face amount\", \"section\": \"Cover\"}, \"missing_or_ambiguous\": []}",
+    "input_tokens": 18292,
+    "output_tokens": 8575,
+    "cost_usd": 0.057354050000000004,
+    "seconds": 24.34854227699998
+  },
+  {
+    "purpose": "extract",
+    "model": "muse-spark-1.2",
+    "finish_reason": "stop",
+    "text": "{\"issuer\":{\"value\":\"UBS AG\",\"quote\":\"Issuer: UBS AG London Branch\",\"section\":\"Key Terms\"},\"guarantor\":null,\"cusip\":{\"value\":\"90266F3B0\",\"quote\":\"CUSIP no.: 90266F3B0\",\"section\":\"Key Terms\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Pricing Supplement dated October 19, 2026\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"S&P 500\u00ae Index\",\"quote\":\"Underlier: S&P 500\u00ae Index (Bloomberg symbol, \u201cSPX\u201d <Index>), as maintained by S&P Dow Jones Indices LLC (\u201cS&P\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"ticker\":{\"value\":\"SPX\",\"quote\":\"Underlier: S&P 500\u00ae Index (Bloomberg symbol, \u201cSPX\u201d <Index>), as maintained by S&P Dow Jones Indices LLC (\u201cS&P\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"initial_level\":{\"value\":7690.73,\"quote\":\"Initial underlier level: 7,690.73\",\"section\":\"Key Terms\"},\"reference_level\":{\"value\":null,\"quote\":null,\"section\":null},\"reference_date\":{\"value\":null,\"quote\":null,\"section\":null}}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"type of notes: notes linked to a single underlier\",\"section\":\"Key Terms\"},\"notional\":{\"value\":1000,\"quote\":\"Each note will have a face amount of $1,000\",\"section\":\"Key Terms\"},\"issue_price\":{\"value\":1000,\"quote\":\"Original issue price: | 100.00% of the face amount ... Each note will have a face amount of $1,000\",\"section\":\"Cover ... Key Terms\"},\"pricing_date\":{\"value\":\"2026-10-19\",\"quote\":\"Trade date: October 19, 2026\",\"section\":\"Key Terms\"},\"issue_date\":{\"value\":\"2026-10-22\",\"quote\":\"Original issue date (settlement date): October 22, 2026\",\"section\":\"Key Terms\"},\"maturity_date\":{\"value\":\"2028-07-12\",\"quote\":\"Stated maturity date: July 12, 2028\",\"section\":\"Key Terms\"},\"final_review_date\":{\"value\":\"2028-07-10\",\"quote\":\"Determination date: July 10, 2028\",\"section\":\"Key Terms\"},\"downside\":{\"kind\":{\"value\":\"buffer\",\"quote\":\"Buffer level: 6,729.38875, which is 87.50% of the initial underlier level\",\"section\":\"Key Terms\"},\"level\":{\"value\":0.875,\"quote\":\"Buffer level: 6,729.38875, which is 87.50% of the initial underlier level\",\"section\":\"Key Terms\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"if the final underlier level is less than the buffer level, the sum of (1) $1,000 plus (2) the product of (i) $1,000 times (ii) the buffer rate times (iii) the sum of the underlier return plus the buffer amount.\",\"section\":\"Key Terms\"},\"gearing\":{\"value\":1.1429,\"quote\":\"you will lose approximately 1.1429% of the face amount of your notes for every 1% negative underlier return below the buffer level of 87.50% of the initial underlier level.\",\"section\":\"Cover\"}},\"autocall\":null,\"coupon\":null,\"upside\":{\"leverage\":{\"value\":1.4,\"quote\":\"Upside participation rate: 140.00%\",\"section\":\"Key Terms\"},\"cap\":{\"value\":0.2408,\"quote\":\"Cap level: 117.20% of the initial underlier level ... Maximum settlement amount: $1,240.80\",\"section\":\"Key Terms\"}},\"unsupported_features\":[],\"estimated_value\":{\"value\":996.7,\"quote\":\"The estimated initial value of the notes as of the trade date is $996.70 per $1,000 face amount.\",\"section\":\"Cover\"},\"estimated_value_floor\":{\"value\":null,\"quote\":null,\"section\":null},\"max_selling_commission\":{\"value\":0,\"quote\":\"Underwriting discount*: | 0.00% of the face amount\",\"section\":\"Cover\"},\"missing_or_ambiguous\":[\"Reference level and reference date not separately quoted; only the initial level is stated.\",\"Estimated value floor (minimum estimated value) not stated in the filing.\",\"Guarantor not mentioned in the filing.\"]}",
+    "input_tokens": 18292,
+    "output_tokens": 11153,
+    "cost_usd": 0.06831055,
+    "seconds": 34.82287055200004
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": \"UBS AG London Branch\", \"quote\": \"Issuer: UBS AG London Branch\", \"choice\": \"first\"}",
+    "input_tokens": 16642,
+    "output_tokens": 324,
+    "cost_usd": 0.0220552,
+    "seconds": 2.551185049999731
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": \"2026-10-19\", \"quote\": \"Trade date: October 19, 2026\", \"choice\": \"first\"}",
+    "input_tokens": 16647,
+    "output_tokens": 1109,
+    "cost_usd": 0.025397700000000002,
+    "seconds": 4.86138472399989
+  },
+  {
+    "purpose": "recheck",
+    "model": "muse-spark-1.3",
+    "finish_reason": "stop",
+    "text": "{\"value\": 7690.73, \"quote\": \"Initial underlier level: 7,690.73\", \"choice\": \"first\"}",
+    "input_tokens": 16645,
+    "output_tokens": 608,
+    "cost_usd": 0.00524355,
+    "seconds": 2.9232877239996924
+  }
+]

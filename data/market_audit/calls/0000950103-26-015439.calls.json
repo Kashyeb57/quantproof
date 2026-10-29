@@ -11,22 +11,42 @@
   },
   {
     "purpose": "extract",
-    "model": "muse-spark-1.2",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"issuer\":{\"value\":\"Citigroup Global Markets Holdings Inc.\",\"quote\":\"Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.\",\"section\":\"Key Terms\"},\"guarantor\":{\"value\":\"Citigroup Inc.\",\"quote\":\"Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.\",\"section\":\"Key Terms\"},\"cusip\":{\"value\":\"17334DTT9\",\"quote\":\"CUSIP / ISIN: | 17334DTT9 / US17334DTT99\",\"section\":\"Key Terms\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Pricing Supplement No. 2026-USNCH34575\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"S&P 500\u00ae Index\",\"quote\":\"Underlying: | The S&P 500\u00ae Index\",\"section\":\"Key Terms\"},\"ticker\":null,\"initial_level\":{\"value\":7801.77,\"quote\":\"Initial underlying value: | 7,801.77, the closing value of the underlying on the pricing date\",\"section\":\"Key Terms\"},\"reference_level\":null,\"reference_date\":null}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"Underlying: | The S&P 500\u00ae Index\",\"section\":\"Key Terms\"},\"notional\":{\"value\":1000,\"quote\":\"Stated principal amount: | $1,000 per security\",\"section\":\"Key Terms\"},\"issue_price\":{\"value\":1000,\"quote\":\"Per security: | $1,000.00 | $23.50 | $976.50\",\"section\":\"Key Terms\"},\"pricing_date\":{\"value\":\"2026-10-07\",\"quote\":\"Pricing date: | October 7, 2026\",\"section\":\"Key Terms\"},\"issue_date\":{\"value\":\"2026-10-13\",\"quote\":\"Issue date: | October 13, 2026\",\"section\":\"Key Terms\"},\"maturity_date\":{\"value\":\"2027-12-10\",\"quote\":\"Maturity date: | December 10, 2027\",\"section\":\"Key Terms\"},\"final_review_date\":{\"value\":\"2027-12-07\",\"quote\":\"Valuation date: | December 7, 2027, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur\",\"section\":\"Key Terms\"},\"downside\":{\"kind\":{\"value\":\"barrier\",\"quote\":\"If the final underlying value is greater than or equal to the initial underlying value: $1,000 - ($1,000 \u00d7 the underlying return), subject to the maximum loss at maturity\",\"section\":\"Key Terms\"},\"level\":{\"value\":1,\"quote\":\"Maximum loss at maturity: | $1,000.00 per security (100.00% of the stated principal amount).\",\"section\":\"Key Terms\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"Final underlying value: | The closing value of the underlying on the valuation date\",\"section\":\"Key Terms\"},\"gearing\":{\"value\":1,\"quote\":\"you will lose 1% of the stated principal amount of your securities for every 1% by which the final underlying value is greater than the initial underlying value, subject to the maximum loss at maturity\",\"section\":\"Cover\"}},\"autocall\":null,\"coupon\":null,\"upside\":{\"leverage\":{\"value\":2.5,\"quote\":\"Participation rate: | 250.00%\",\"section\":\"Key Terms\"},\"cap\":{\"value\":1,\"quote\":\"Maximum return at maturity: | $1,000.00 per security (100.00% of the stated principal amount).\",\"section\":\"Key Terms\"}},\"unsupported_features\":[],\"estimated_value\":{\"value\":969.7,\"quote\":\"On the date of this pricing supplement, the estimated value of the securities is $969.70 per security, which is less than the issue price.\",\"section\":\"Cover\"},\"estimated_value_floor\":null,\"max_selling_commission\":{\"value\":23.5,\"quote\":\"CGMI will receive an underwriting fee of up to $23.50 for each security sold in this offering.\",\"section\":\"Supplemental Plan of Distribution\"},\"missing_or_ambiguous\":[\"The filing does not state a ticker symbol for the S&P 500 Index.\",\"The filing does not quote a recent closing level and date distinct from the initial underlying value for a separate reference level.\",\"The filing does not state an estimated value floor.\"]}",
-    "input_tokens": 10748,
-    "output_tokens": 10152,
-    "cost_usd": 0.0546263,
-    "seconds": 37.25896191100037
+    "text": "{\"issuer\": {\"value\": \"Citigroup Global Markets Holdings Inc.\", \"quote\": \"Issuer: | Citigroup Global Markets Holdings Inc., a wholly owned subsidiary of Citigroup Inc.\", \"section\": \"KEY TERMS\"}, \"guarantor\": {\"value\": \"Citigroup Inc.\", \"quote\": \"Guarantee: | All payments due on the securities are fully and unconditionally guaranteed by Citigroup Inc.\", \"section\": \"KEY TERMS\"}, \"cusip\": {\"value\": \"17334DTT9\", \"quote\": \"CUSIP / ISIN: | 17334DTT9 / US17334DTT99\", \"section\": \"KEY TERMS\"}, \"is_preliminary\": {\"value\": false, \"quote\": \"Pricing Supplement No. 2026-USNCH34575\", \"section\": \"Cover\"}, \"underlyings\": [{\"name\": {\"value\": \"S&P 500\u00ae Index\", \"quote\": \"Underlying: | The S&P 500\u00ae Index\", \"section\": \"KEY TERMS\"}, \"ticker\": null, \"initial_level\": {\"value\": 7801.77, \"quote\": \"Initial underlying value: | 7,801.77, the closing value of the underlying on the pricing date\", \"section\": \"KEY TERMS\"}, \"reference_level\": {\"value\": 7801.77, \"quote\": \"The closing value of the S&P 500\u00ae Index on October 7, 2026 was 7,801.77.\", \"section\": \"Historical Information\"}, \"reference_date\": {\"value\": \"2026-10-07\", \"quote\": \"The closing value of the S&P 500\u00ae Index on October 7, 2026 was 7,801.77.\", \"section\": \"Historical Information\"}}], \"dependency\": {\"value\": \"worst_of\", \"quote\": \"Underlying: | The S&P 500\u00ae Index\", \"section\": \"KEY TERMS\"}, \"notional\": {\"value\": 1000, \"quote\": \"Stated principal amount: | $1,000 per security\", \"section\": \"KEY TERMS\"}, \"issue_price\": {\"value\": 1000, \"quote\": \"Per security: | $1,000.00 | $23.50 | $976.50\", \"section\": \"KEY TERMS\"}, \"pricing_date\": {\"value\": \"2026-10-07\", \"quote\": \"Pricing date: | October 7, 2026\", \"section\": \"KEY TERMS\"}, \"issue_date\": {\"value\": \"2026-10-13\", \"quote\": \"Issue date: | October 13, 2026\", \"section\": \"KEY TERMS\"}, \"maturity_date\": {\"value\": \"2027-12-10\", \"quote\": \"Maturity date: | December 10, 2027\", \"section\": \"KEY TERMS\"}, \"final_review_date\": {\"value\": \"2027-12-07\", \"quote\": \"Valuation date: | December 7, 2027, subject to postponement if such date is not a scheduled trading day or certain market disruption events occur\", \"section\": \"KEY TERMS\"}, \"downside\": {\"kind\": {\"value\": \"barrier\", \"quote\": \"If the final underlying value is greater than or equal to the initial underlying value: $1,000 - ($1,000 \u00d7 the underlying return), subject to the maximum loss at maturity\", \"section\": \"KEY TERMS\"}, \"level\": {\"value\": 1.0, \"quote\": \"If the final underlying value is greater than or equal to the initial underlying value:\", \"section\": \"KEY TERMS\"}, \"observation\": {\"value\": \"final_only\", \"quote\": \"Final underlying value: | The closing value of the underlying on the valuation date\", \"section\": \"KEY TERMS\"}, \"gearing\": {\"value\": 1, \"quote\": \"you will lose 1% of the stated principal amount of your securities for every 1% by which the final underlying value is greater than the initial underlying value, subject to the maximum loss at maturity\", \"section\": \"Cover\"}}, \"autocall\": null, \"coupon\": null, \"upside\": {\"leverage\": {\"value\": 2.5, \"quote\": \"Participation rate: | 250.00%\", \"section\": \"KEY TERMS\"}, \"cap\": {\"value\": 1.0, \"quote\": \"Maximum return at maturity: | $1,000.00 per security (100.00% of the stated principal amount). The payment at maturity per security will not exceed the stated principal amount plus the maximum return at maturity.\", \"section\": \"KEY TERMS\"}}, \"unsupported_features\": [], \"estimated_value\": {\"value\": 969.7, \"quote\": \"On the date of this pricing supplement, the estimated value of the securities is $969.70 per security, which is less than the issue price.\", \"section\": \"KEY TERMS\"}, \"estimated_value_floor\": null, \"max_selling_commission\": {\"value\": 23.5, \"quote\": \"CGMI will receive an underwriting fee of up to $23.50 for each security sold in this offering.\", \"section\": \"Supplemental Plan of Distribution\"}, \"missing_or_ambiguous\": [\"Ticker for the S&P 500 Index is not stated in the filing.\", \"Minimum estimated value (floor) is not stated in the filing.\"]}",
+    "input_tokens": 10961,
+    "output_tokens": 12015,
+    "cost_usd": 0.062653,
+    "seconds": 38.18786459998228
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
+    "finish_reason": "stop",
+    "text": "{\"value\": \"2026-10-07\", \"quote\": \"Pricing date: | October 7, 2026\", \"choice\": \"second\"}",
+    "input_tokens": 9236,
+    "output_tokens": 1317,
+    "cost_usd": 0.01714225,
+    "seconds": 4.901269500143826
+  },
+  {
+    "purpose": "recheck",
+    "model": "meta-models/muse-spark-open-1026",
+    "finish_reason": "stop",
+    "text": "{\"value\":7801.77,\"quote\":\"Initial underlying value: | 7,801.77, the closing value of the underlying on the pricing date\",\"choice\":\"second\"}",
+    "input_tokens": 9234,
+    "output_tokens": 734,
+    "cost_usd": 0.0046651999999999996,
+    "seconds": 3.3723788000643253
+  },
+  {
+    "purpose": "recheck",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
     "text": "{\"value\": [], \"quote\": \"The securities offer modified inverse exposure to the performance of the underlying, which means that you will receive a positive return at maturity only if the underlying depreciates and will incur a loss at maturity if the underlying appreciates.\", \"choice\": \"second\"}",
-    "input_tokens": 9093,
-    "output_tokens": 1348,
-    "cost_usd": 0.01709525,
-    "seconds": 6.020515258999694
+    "input_tokens": 9226,
+    "output_tokens": 3314,
+    "cost_usd": 0.0156202,
+    "seconds": 11.69794029998593
   }
 ]

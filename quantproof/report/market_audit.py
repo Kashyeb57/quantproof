@@ -66,10 +66,10 @@ _ASSUMPTIONS_SENTENCE = (
 
 _CROSSCHECK_NOTE = (
     "Cross-check note: each extraction was compared with a second "
-    "extraction by a different model version, and any differing fields "
-    "are recorded in the saved results. This is a weaker independence "
-    "check than two genuinely different model services, and the audit "
-    "outputs should be read with that limitation stated."
+    "extraction by Muse Spark Open via Baseten (else a different Muse Spark "
+    "version); the saved result records which models ran, and differing "
+    "fields are recorded there. A fallback extraction is a weaker "
+    "independence check than two genuinely different model services."
 )
 
 _NOT_ADVICE_SENTENCE = (
@@ -237,6 +237,8 @@ def note_row(result: dict) -> dict:
     crosscheck_agreed = crosscheck.get("agreed") if crosscheck else None
     diffs = crosscheck.get("diffs")
     crosscheck_diffs = len(diffs) if isinstance(diffs, list) else 0
+    second_model = crosscheck.get("second_model")
+    recheck_model = crosscheck.get("recheck_model")
 
     if status == "priced":
         supported: bool | None = True
@@ -253,6 +255,7 @@ def note_row(result: dict) -> dict:
     else:
         underlyings_text = None
 
+    cost_usd_baseten = result.get("cost_usd_baseten", 0.0) or 0.0
     cost_usd = _first(result, meta, "cost_usd")
     if cost_usd is None:
         cost_usd = _sum_calls(result, "cost_usd")
@@ -290,8 +293,11 @@ def note_row(result: dict) -> dict:
         "quote_verification_rate": quote_verification_rate,
         "crosscheck_agreed": crosscheck_agreed,
         "crosscheck_diffs": crosscheck_diffs,
+        "second_model": second_model,
+        "recheck_model": recheck_model,
         "supported": supported,
         "cost_usd": cost_usd,
+        "cost_usd_baseten": cost_usd_baseten,
         "model_seconds": model_seconds,
         "seconds": result.get("seconds"),
     }
@@ -357,12 +363,16 @@ def aggregate(rows: list[dict], run: dict) -> dict:
     quote_rate = (total_verified / total_checked) if total_checked else None
 
     status_counts = dict(sorted(Counter(str(row.get("status")) for row in rows).items()))
+    second_models = dict(
+        sorted(Counter(str(row["second_model"]) for row in rows if row.get("second_model")).items())
+    )
     issuers = sorted({str(row["issuer_group"]) for row in rows if row.get("issuer_group")})
 
     return {
         "notes_read": notes_read,
         "notes_extracted": notes_extracted,
         "total_cost_usd": _total("cost_usd"),
+        "total_baseten_cost_usd": _total("cost_usd_baseten"),
         "total_model_seconds": _total("model_seconds"),
         "wall_seconds": _wall_seconds(run),
         "median_cost_to_investor": statistics.median(costs) if costs else None,
@@ -376,6 +386,7 @@ def aggregate(rows: list[dict], run: dict) -> dict:
         "share_bank_in_range": share_bank_in_range,
         "quote_verification_rate": quote_rate,
         "status_counts": status_counts,
+        "second_models": second_models,
         "issuers": issuers,
         "skipped": run.get("skipped"),
         "assumptions": run.get("assumptions"),
@@ -485,8 +496,16 @@ def render_markdown(rows: list[dict], agg: dict) -> str:
         f"- Quote verification rate: "
         f"{_format_pct_fraction(agg.get('quote_verification_rate'))}"
     )
+    second_models = agg.get("second_models") or {}
+    if second_models:
+        models_text = ", ".join(
+            f"{model} ({count})" for model, count in sorted(second_models.items())
+        )
+        lines.append(f"- Cross-check second models: {models_text}")
     total_cost = agg.get("total_cost_usd")
     lines.append(f"- Total model cost (USD): {'' if total_cost is None else f'{float(total_cost):.4f}'}")
+    baseten_cost = agg.get("total_baseten_cost_usd")
+    lines.append(f"- Total Baseten cost (USD): {'' if baseten_cost is None else f'{float(baseten_cost):.4f}'}")
     total_model_seconds = agg.get("total_model_seconds")
     lines.append(
         f"- Total model seconds: "

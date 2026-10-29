@@ -336,7 +336,8 @@
     "verified": 22
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": true,
     "error": null,
     "diffs": []
@@ -356,6 +357,13 @@
   "pricing_date": "2026-10-16",
   "structure": "single underlying, upside leverage 2.09x, barrier 100% at maturity",
   "seconds": 0.0912663999479264,
-  "cost_usd": 0.0822745,
-  "model_seconds": 52.65627284900006
+  "cost_usd": 0.13403775,
+  "model_seconds": 83.1627652490763,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "cost_usd_baseten": 0.05176325
 }

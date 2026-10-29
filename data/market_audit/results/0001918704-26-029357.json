@@ -310,10 +310,17 @@
     "verified": 20
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "S&P 500\u00ae Index",
+        "second": "The S&P 500\u00ae Index",
+        "status": "resolved_second"
+      },
       {
         "path": "underlyings[0].reference_date",
         "first": null,
@@ -1056,6 +1063,26 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.114042,
-  "model_seconds": 48.487300693999714
+  "cost_usd": 0.1753595,
+  "model_seconds": 77.04400359397914,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-09-25",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 7743.41,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.0613175
 }

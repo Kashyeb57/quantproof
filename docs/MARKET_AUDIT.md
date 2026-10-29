@@ -14,8 +14,10 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 - Median cost to investor (%, bank's figure): 1.9%
 - Bank estimated value within our range (priced and needs-review notes): 11 of 13 (84.6%)
 - Quote verification rate: 95.2%
-- Total model cost (USD): 5.4949
-- Total model seconds: 2817.6
+- Cross-check second models: meta-models/muse-spark-open-1026 (42)
+- Total model cost (USD): 8.5246
+- Total Baseten cost (USD): 3.0296
+- Total model seconds: 6781.7
 - Issuers: Bank of America, Bank of Montreal, Bank of Nova Scotia, Citigroup, Goldman Sachs, JPMorgan, Morgan Stanley, Royal Bank of Canada, Toronto-Dominion, UBS, Wells Fargo
 - Status counts: extraction_failed: 2, needs_review: 2, priced: 11, unsupported: 29
 - Skipped: 190
@@ -81,6 +83,6 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 
 Volatilities, dividends, correlation, rate and credit spread are anchored where a licence allows and stated otherwise: the risk-free rate is the U.S. Treasury par yield on each note's pricing date interpolated to its maturity; index volatilities are 30-day implied-vol closes as grid centres (a stated simplification); correlation is realised from cached FRED closes where both legs exist, else stated; credit spread, dividends and the ERP stay stated. The Inputs column states every source and date, including anything missing or not anchored.
 
-Cross-check note: each extraction was compared with a second extraction by a different model version, and any differing fields are recorded in the saved results. This is a weaker independence check than two genuinely different model services, and the audit outputs should be read with that limitation stated.
+Cross-check note: each extraction was compared with a second extraction by Muse Spark Open via Baseten (else a different Muse Spark version); the saved result records which models ran, and differing fields are recorded there. A fallback extraction is a weaker independence check than two genuinely different model services.
 
 This is a risk analysis under stated assumptions, not investment advice.

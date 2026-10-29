@@ -312,10 +312,18 @@
     "verified": 18
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
-    "agreed": true,
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
     "error": null,
-    "diffs": []
+    "diffs": [
+      {
+        "path": "underlyings[0].ticker",
+        "first": "SPX",
+        "second": "SPX Index",
+        "status": "resolved_second"
+      }
+    ]
   },
   "battery": [
     {
@@ -1045,6 +1053,13 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.08825485000000001,
-  "model_seconds": 46.363996329999736
+  "cost_usd": 0.14978575,
+  "model_seconds": 73.74112913017461,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "cost_usd_baseten": 0.0615309
 }

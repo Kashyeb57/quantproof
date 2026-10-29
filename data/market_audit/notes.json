@@ -94,14 +94,21 @@
       "agreed": false,
       "diffs": [
         {
-          "first": "The TJX Companies, Inc.",
-          "path": "underlyings[0].name",
-          "second": "The Common Stock of The TJX Companies, Inc.",
-          "status": "resolved_first"
+          "first": null,
+          "path": "underlyings[0].reference_date",
+          "second": "2026-10-22",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_level",
+          "second": 147.38,
+          "status": "resolved_second"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -263,9 +270,10 @@
       "cost_to_investor": 0.43900000000000006,
       "cost_to_investor_pct": 4.390000000000001,
       "cost_to_investor_per_1000": 43.900000000000006,
-      "cost_usd": 0.10060625,
+      "cost_usd": 0.1558423,
+      "cost_usd_baseten": 0.055236049999999995,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "crosscheck_diffs": 2,
       "cusip": "09712D598",
       "estimated_value": 9.561,
       "filing_date": "2026-10-26",
@@ -273,7 +281,7 @@
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
-      "model_seconds": 52.65263955000046,
+      "model_seconds": 79.73614685012217,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
       "prob_loss": 0.23415,
@@ -283,6 +291,8 @@
       "range_high": 9.912878389450118,
       "range_low": 9.28185297992729,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.5398226999677718,
       "status": "priced",
       "structure": "single underlying, autocall, upside leverage 1.6x, barrier 100% at maturity",
@@ -391,10 +401,24 @@
       }
     ],
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": null,
+          "path": "underlyings[0].reference_date",
+          "second": "2026-10-22",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_level",
+          "second": 102.81,
+          "status": "resolved_second"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -586,9 +610,10 @@
       "cost_to_investor": 0.4939999999999998,
       "cost_to_investor_pct": 4.939999999999998,
       "cost_to_investor_per_1000": 49.39999999999998,
-      "cost_usd": 0.0988585,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.17437015,
+      "cost_usd_baseten": 0.07551165,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 2,
       "cusip": "09712D887",
       "estimated_value": 9.506,
       "filing_date": "2026-10-26",
@@ -596,7 +621,7 @@
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
-      "model_seconds": 52.09226791999936,
+      "model_seconds": 87.19063391999043,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
       "prob_loss": 0.20875,
@@ -606,6 +631,8 @@
       "range_high": 10.033539284794024,
       "range_low": 9.217034737650549,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.6251590999308974,
       "status": "priced",
       "structure": "single underlying, autocall, barrier 100% at maturity",
@@ -633,7 +660,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -783,7 +811,8 @@
       "cost_to_investor": 0.20800000000000018,
       "cost_to_investor_pct": 2.080000000000002,
       "cost_to_investor_per_1000": 20.80000000000002,
-      "cost_usd": 0.12575805,
+      "cost_usd": 0.2014033,
+      "cost_usd_baseten": 0.07564525,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 2,
       "cusip": "09712D317",
@@ -793,7 +822,7 @@
       "issue_price": 10.0,
       "issuer": "BofA Finance LLC",
       "issuer_group": "Bank of America",
-      "model_seconds": 55.31744759899948,
+      "model_seconds": 95.62312549885746,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
       "prob_loss": null,
@@ -803,6 +832,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Return Buffer']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.10344409989193082,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 40.05%, buffer 75% at maturity",
@@ -903,10 +934,24 @@
       }
     ],
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "2026-10-15",
+          "path": "underlyings[0].reference_date",
+          "second": null,
+          "status": "resolved_first"
+        },
+        {
+          "first": 2767.269,
+          "path": "underlyings[0].reference_level",
+          "second": null,
+          "status": "resolved_first"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -1074,9 +1119,10 @@
       "cost_to_investor": 0.41000000000000014,
       "cost_to_investor_pct": 4.100000000000001,
       "cost_to_investor_per_1000": 41.000000000000014,
-      "cost_usd": 0.10780275,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.2051002,
+      "cost_usd_baseten": 0.09729745000000001,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 2,
       "cusip": "06368N326",
       "estimated_value": 9.59,
       "filing_date": "2026-10-19",
@@ -1084,7 +1130,7 @@
       "issue_price": 10.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
-      "model_seconds": 59.34996959700038,
+      "model_seconds": 118.30415419691963,
       "notional": 10.0,
       "pricing_date": "2026-10-15",
       "prob_loss": 0.18355,
@@ -1094,6 +1140,8 @@
       "range_high": 9.81146877798053,
       "range_low": 9.373417869926156,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.6634531000163406,
       "status": "priced",
       "structure": "single underlying, autocall, upside leverage 2.11x, barrier 100% at maturity",
@@ -1108,7 +1156,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -1252,7 +1301,8 @@
       "cost_to_investor": 2.4700000000000273,
       "cost_to_investor_pct": 0.24700000000000272,
       "cost_to_investor_per_1000": 2.4700000000000273,
-      "cost_usd": 0.10016385,
+      "cost_usd": 0.15483635,
+      "cost_usd_baseten": 0.0546725,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "06376MPD0",
@@ -1262,7 +1312,7 @@
       "issue_price": 1000.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
-      "model_seconds": 54.28086164199976,
+      "model_seconds": 85.88446744184239,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
       "prob_loss": null,
@@ -1272,6 +1322,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['threshold settlement amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.0847556998487562,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
@@ -1371,22 +1423,11 @@
           "path": "max_selling_commission",
           "second": 0.0,
           "status": "resolved_second"
-        },
-        {
-          "first": null,
-          "path": "underlyings[0].reference_date",
-          "second": "2026-10-21",
-          "status": "resolved_second"
-        },
-        {
-          "first": null,
-          "path": "underlyings[0].reference_level",
-          "second": 7757.17,
-          "status": "resolved_second"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -1518,9 +1559,10 @@
       "cost_to_investor": 3.740000000000009,
       "cost_to_investor_pct": 0.3740000000000009,
       "cost_to_investor_per_1000": 3.740000000000009,
-      "cost_usd": 0.15222495,
+      "cost_usd": 0.22124945000000001,
+      "cost_usd_baseten": 0.0690245,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 3,
+      "crosscheck_diffs": 1,
       "cusip": "06376MPC2",
       "estimated_value": 996.26,
       "filing_date": "2026-10-23",
@@ -1528,7 +1570,7 @@
       "issue_price": 1000.0,
       "issuer": "Bank of Montreal",
       "issuer_group": "Bank of Montreal",
-      "model_seconds": 61.790191471000526,
+      "model_seconds": 94.732562570955,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
       "prob_loss": 0.11275,
@@ -1538,6 +1580,8 @@
       "range_high": 1002.7582211860046,
       "range_low": 953.8737082929424,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.5490081000607461,
       "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 25.9%, buffer 87.5% at maturity",
@@ -1549,10 +1593,30 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "S&P 500\u00ae Index",
+          "path": "underlyings[0].name",
+          "second": "The S&P 500\u00ae Index",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_date",
+          "second": "2026-10-16",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_level",
+          "second": 7659.44,
+          "status": "resolved_second"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -1684,9 +1748,10 @@
       "cost_to_investor": 13.120000000000005,
       "cost_to_investor_pct": 1.3120000000000005,
       "cost_to_investor_per_1000": 13.120000000000005,
-      "cost_usd": 0.10478685000000001,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.2129136,
+      "cost_usd_baseten": 0.10812675,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 3,
       "cusip": "06419TE79",
       "estimated_value": 986.88,
       "filing_date": "2026-10-19",
@@ -1694,7 +1759,7 @@
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
-      "model_seconds": 47.013573446999544,
+      "model_seconds": 97.93623844719423,
       "notional": 1000.0,
       "pricing_date": "2026-10-16",
       "prob_loss": null,
@@ -1704,6 +1769,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.1474337000399828,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
@@ -1715,17 +1782,11 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": false,
-      "diffs": [
-        {
-          "first": "S&P 500\u00ae Index",
-          "path": "underlyings[0].name",
-          "second": "The S&P 500\u00ae Index",
-          "status": "resolved_first"
-        }
-      ],
+      "agreed": true,
+      "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -1857,9 +1918,10 @@
       "cost_to_investor": 12.409999999999968,
       "cost_to_investor_pct": 1.2409999999999968,
       "cost_to_investor_per_1000": 12.409999999999968,
-      "cost_usd": 0.1440393,
-      "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "cost_usd": 0.1818055,
+      "cost_usd_baseten": 0.0377662,
+      "crosscheck_agreed": true,
+      "crosscheck_diffs": 0,
       "cusip": "06419TL48",
       "estimated_value": 987.59,
       "filing_date": "2026-10-26",
@@ -1867,7 +1929,7 @@
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
-      "model_seconds": 61.408952992000195,
+      "model_seconds": 74.23627169179781,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -1877,6 +1939,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.43697189982049167,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
@@ -1891,7 +1955,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -2035,7 +2100,8 @@
       "cost_to_investor": 32.75,
       "cost_to_investor_pct": 3.2750000000000004,
       "cost_to_investor_per_1000": 32.75,
-      "cost_usd": 0.11389835000000001,
+      "cost_usd": 0.1519696,
+      "cost_usd_baseten": 0.03807125,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "06419TK64",
@@ -2045,7 +2111,7 @@
       "issue_price": 1000.0,
       "issuer": "The Bank of Nova Scotia",
       "issuer_group": "Bank of Nova Scotia",
-      "model_seconds": 51.19695202999992,
+      "model_seconds": 65.95185463007783,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -2055,6 +2121,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Reference Asset Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.14654779992997646,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 20.1%, barrier 75% at maturity",
@@ -2069,6 +2137,18 @@
       "agreed": false,
       "diffs": [
         {
+          "first": null,
+          "path": "underlyings[0].reference_date",
+          "second": "2026-10-07",
+          "status": "resolved_second"
+        },
+        {
+          "first": null,
+          "path": "underlyings[0].reference_level",
+          "second": 7801.77,
+          "status": "resolved_second"
+        },
+        {
           "first": [
             "modified inverse exposure"
           ],
@@ -2078,7 +2158,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -2222,9 +2303,10 @@
       "cost_to_investor": 30.299999999999955,
       "cost_to_investor_pct": 3.0299999999999954,
       "cost_to_investor_per_1000": 30.299999999999955,
-      "cost_usd": 0.13521305,
+      "cost_usd": 0.2352937,
+      "cost_usd_baseten": 0.10008065000000001,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "crosscheck_diffs": 3,
       "cusip": "17334DTT9",
       "estimated_value": 969.7,
       "filing_date": "2026-10-09",
@@ -2232,7 +2314,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 81.4303538969998,
+      "model_seconds": 139.58980709717616,
       "notional": 1000.0,
       "pricing_date": "2026-10-07",
       "prob_loss": null,
@@ -2242,6 +2324,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['modified inverse exposure']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.15622169990092516,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 100%, barrier 100% at maturity",
@@ -2256,12 +2340,6 @@
       "agreed": false,
       "diffs": [
         {
-          "first": "S&P 500\u00ae Index",
-          "path": "underlyings[0].name",
-          "second": "The S&P 500\u00ae Index",
-          "status": "resolved_second"
-        },
-        {
           "first": null,
           "path": "underlyings[0].reference_date",
           "second": "2026-09-18",
@@ -2275,7 +2353,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -2419,9 +2498,10 @@
       "cost_to_investor": 31.299999999999955,
       "cost_to_investor_pct": 3.1299999999999955,
       "cost_to_investor_per_1000": 31.299999999999955,
-      "cost_usd": 0.14370495,
+      "cost_usd": 0.2063936,
+      "cost_usd_baseten": 0.06268865,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 3,
+      "crosscheck_diffs": 2,
       "cusip": "17334DCA8",
       "estimated_value": 968.7,
       "filing_date": "2026-09-22",
@@ -2429,7 +2509,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 55.832229391000055,
+      "model_seconds": 86.42994349080027,
       "notional": 1000.0,
       "pricing_date": "2026-09-18",
       "prob_loss": null,
@@ -2439,6 +2519,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute return amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.14218689990229905,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 13.25%, buffer 90% at maturity",
@@ -2453,7 +2535,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -2603,7 +2686,8 @@
       "cost_to_investor": 28.399999999999977,
       "cost_to_investor_pct": 2.8399999999999976,
       "cost_to_investor_per_1000": 28.399999999999977,
-      "cost_usd": 0.07628275000000001,
+      "cost_usd": 0.11586575000000002,
+      "cost_usd_baseten": 0.039583,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "17334DBW1",
@@ -2613,7 +2697,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 35.50623447500038,
+      "model_seconds": 54.657534175141336,
       "notional": 1000.0,
       "pricing_date": "2026-09-24",
       "prob_loss": null,
@@ -2623,6 +2707,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['digital return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.12688080011866987,
       "status": "unsupported",
       "structure": "single underlying, barrier 60% at maturity",
@@ -2718,6 +2804,12 @@
       "agreed": false,
       "diffs": [
         {
+          "first": "S&P 500\u00ae Index",
+          "path": "underlyings[0].name",
+          "second": "The S&P 500\u00ae Index",
+          "status": "resolved_second"
+        },
+        {
           "first": null,
           "path": "underlyings[0].reference_date",
           "second": "2026-09-25",
@@ -2731,7 +2823,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -2869,9 +2962,10 @@
       "cost_to_investor": 22.399999999999977,
       "cost_to_investor_pct": 2.239999999999998,
       "cost_to_investor_per_1000": 22.399999999999977,
-      "cost_usd": 0.114042,
+      "cost_usd": 0.1753595,
+      "cost_usd_baseten": 0.0613175,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 2,
+      "crosscheck_diffs": 3,
       "cusip": "17334CUE2",
       "estimated_value": 977.6,
       "filing_date": "2026-09-29",
@@ -2879,7 +2973,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 48.487300693999714,
+      "model_seconds": 77.04400359397914,
       "notional": 1000.0,
       "pricing_date": "2026-09-25",
       "prob_loss": 0.0221,
@@ -2889,6 +2983,8 @@
       "range_high": 993.3861052706804,
       "range_low": 954.4901509647174,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.624715399928391,
       "status": "priced",
       "structure": "single underlying, upside leverage 1x, cap 11.15%, barrier 80% at maturity",
@@ -2916,7 +3012,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -3072,7 +3169,8 @@
       "cost_to_investor": 49.39999999999998,
       "cost_to_investor_pct": 4.939999999999998,
       "cost_to_investor_per_1000": 49.39999999999998,
-      "cost_usd": 0.13518515,
+      "cost_usd": 0.2096588,
+      "cost_usd_baseten": 0.07447365,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 2,
       "cusip": "17334CU51",
@@ -3082,7 +3180,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 96.8501157210003,
+      "model_seconds": 136.85970562126295,
       "notional": 1000.0,
       "pricing_date": "2026-09-25",
       "prob_loss": null,
@@ -3092,6 +3190,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.09839940001256764,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity",
@@ -3185,9 +3285,25 @@
     ],
     "crosscheck": {
       "agreed": false,
-      "diffs": [],
-      "error": "downside.level.quote: empty quote",
-      "second_model": "muse-spark-1.2"
+      "diffs": [
+        {
+          "first": "barrier",
+          "path": "downside.kind",
+          "second": "buffer",
+          "status": "unresolved"
+        },
+        {
+          "first": [],
+          "path": "unsupported_features",
+          "second": [
+            "principal protection (no loss of principal at maturity)"
+          ],
+          "status": "resolved_first"
+        }
+      ],
+      "error": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -3331,9 +3447,10 @@
       "cost_to_investor": 33.700000000000045,
       "cost_to_investor_pct": 3.370000000000004,
       "cost_to_investor_per_1000": 33.700000000000045,
-      "cost_usd": 0.108509,
+      "cost_usd": 0.21473145,
+      "cost_usd_baseten": 0.10622245,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 0,
+      "crosscheck_diffs": 2,
       "cusip": "17334DA77",
       "estimated_value": 966.3,
       "filing_date": "2026-10-16",
@@ -3341,7 +3458,7 @@
       "issue_price": 1000.0,
       "issuer": "Citigroup Global Markets Holdings Inc.",
       "issuer_group": "Citigroup",
-      "model_seconds": 99.86089177899885,
+      "model_seconds": 159.80536517901237,
       "notional": 1000.0,
       "pricing_date": "2026-10-14",
       "prob_loss": 0.3731,
@@ -3351,6 +3468,8 @@
       "range_high": 886.0792151069096,
       "range_low": 813.6437744090292,
       "reason": "plausibility gate: bank's estimated value 966.30 is above our whole range (high 886.08)",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.4795168999116868,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1x, cap 12.85%, barrier 100% at maturity",
@@ -3371,12 +3490,6 @@
           "status": "resolved_second"
         },
         {
-          "first": "SPX Index",
-          "path": "underlyings[0].ticker",
-          "second": "SPX",
-          "status": "resolved_first"
-        },
-        {
           "first": [
             "Company\u2019s redemption right"
           ],
@@ -3388,7 +3501,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -3526,9 +3640,10 @@
       "cost_to_investor": 2.0,
       "cost_to_investor_pct": 0.2,
       "cost_to_investor_per_1000": 2.0,
-      "cost_usd": 0.17133955,
+      "cost_usd": 0.27147135,
+      "cost_usd_baseten": 0.1001318,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 3,
+      "crosscheck_diffs": 2,
       "cusip": "40058MC55",
       "estimated_value": 998.0,
       "filing_date": "2026-10-16",
@@ -3536,7 +3651,7 @@
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 62.56635889800009,
+      "model_seconds": 111.67586199792777,
       "notional": 1000.0,
       "pricing_date": "2026-10-14",
       "prob_loss": null,
@@ -3546,6 +3661,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.1347830998711288,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.75x, buffer 80% at maturity",
@@ -3641,14 +3758,15 @@
       "agreed": false,
       "diffs": [
         {
-          "first": "Russell 2000\u00ae Index",
-          "path": "underlyings[0].name",
-          "second": "Russell 2000 Index",
-          "status": "resolved_first"
+          "first": "RTY",
+          "path": "underlyings[0].ticker",
+          "second": "RTY Index",
+          "status": "resolved_second"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -3792,7 +3910,8 @@
       "cost_to_investor": 31.0,
       "cost_to_investor_pct": 3.1,
       "cost_to_investor_per_1000": 31.0,
-      "cost_usd": 0.1284488,
+      "cost_usd": 0.19420415,
+      "cost_usd_baseten": 0.06575534999999999,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 1,
       "cusip": "40058LYL8",
@@ -3802,7 +3921,7 @@
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 73.385759194,
+      "model_seconds": 101.98391729392142,
       "notional": 1000.0,
       "pricing_date": "2026-10-16",
       "prob_loss": 0.38685,
@@ -3812,6 +3931,8 @@
       "range_high": 971.8949595836388,
       "range_low": 923.6946378586886,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.4966978000011295,
       "status": "priced",
       "structure": "single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity",
@@ -3947,12 +4068,6 @@
       "agreed": false,
       "diffs": [
         {
-          "first": "the common stock of Constellation Energy Corporation",
-          "path": "underlyings[0].name",
-          "second": "Constellation Energy Corporation",
-          "status": "resolved_first"
-        },
-        {
           "first": null,
           "path": "underlyings[0].reference_date",
           "second": "2026-10-16",
@@ -3965,12 +4080,6 @@
           "status": "resolved_second"
         },
         {
-          "first": "the common stock of Quanta Services, Inc.",
-          "path": "underlyings[1].name",
-          "second": "Quanta Services, Inc.",
-          "status": "resolved_first"
-        },
-        {
           "first": null,
           "path": "underlyings[1].reference_date",
           "second": "2026-10-16",
@@ -3981,12 +4090,6 @@
           "path": "underlyings[1].reference_level",
           "second": 631.86,
           "status": "resolved_second"
-        },
-        {
-          "first": "the common stock of Vistra Corp.",
-          "path": "underlyings[2].name",
-          "second": "Vistra Corp.",
-          "status": "resolved_first"
         },
         {
           "first": null,
@@ -4002,7 +4105,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -4482,9 +4586,10 @@
       "cost_to_investor": 0.5199999999999996,
       "cost_to_investor_pct": 5.199999999999996,
       "cost_to_investor_per_1000": 51.99999999999996,
-      "cost_usd": 0.2319227,
+      "cost_usd": 0.3776208,
+      "cost_usd_baseten": 0.1456981,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 9,
+      "crosscheck_diffs": 6,
       "cusip": "38151R701",
       "estimated_value": 9.48,
       "filing_date": "2026-10-20",
@@ -4492,7 +4597,7 @@
       "issue_price": 10.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 137.00566761199934,
+      "model_seconds": 207.70132061191453,
       "notional": 10.0,
       "pricing_date": "2026-10-16",
       "prob_loss": 0.2024,
@@ -4502,6 +4607,8 @@
       "range_high": 10.270717878776512,
       "range_low": 8.1020551500792,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 7.454912299988791,
       "status": "priced",
       "structure": "worst-of 3, autocall, contingent coupon (memory), barrier 80% at maturity",
@@ -4525,7 +4632,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -4675,7 +4783,8 @@
       "cost_to_investor": 38.0,
       "cost_to_investor_pct": 3.8,
       "cost_to_investor_per_1000": 38.0,
-      "cost_usd": 0.15522775,
+      "cost_usd": 0.2382386,
+      "cost_usd_baseten": 0.08301085,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 1,
       "cusip": "40058MG51",
@@ -4685,7 +4794,7 @@
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 81.4364426950001,
+      "model_seconds": 119.13646599501453,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
       "prob_loss": null,
@@ -4695,6 +4804,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['bearish view']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.1651778998784721,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity",
@@ -4716,6 +4827,7 @@
       "cost_to_investor_pct": null,
       "cost_to_investor_per_1000": null,
       "cost_usd": 0.09358,
+      "cost_usd_baseten": 0.0,
       "crosscheck_agreed": null,
       "crosscheck_diffs": 0,
       "cusip": null,
@@ -4735,6 +4847,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7687 (char 7686)",
+      "recheck_model": null,
+      "second_model": null,
       "seconds": 0.0016894000582396984,
       "status": "extraction_failed",
       "structure": null,
@@ -4752,7 +4866,7 @@
           "first": null,
           "path": "max_selling_commission",
           "second": 25.0,
-          "status": "resolved_first"
+          "status": "resolved_second"
         },
         {
           "first": "SPX",
@@ -4766,13 +4880,14 @@
           ],
           "path": "unsupported_features",
           "second": [
-            "Issuer callable redemption at par plus call premium"
+            "Company's redemption right"
           ],
           "status": "resolved_first"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -4910,7 +5025,8 @@
       "cost_to_investor": 39.0,
       "cost_to_investor_pct": 3.9,
       "cost_to_investor_per_1000": 39.0,
-      "cost_usd": 0.2188163,
+      "cost_usd": 0.32324965,
+      "cost_usd_baseten": 0.10443335,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 3,
       "cusip": "40058MD88",
@@ -4920,7 +5036,7 @@
       "issue_price": 1000.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 108.88965931400014,
+      "model_seconds": 159.91127951378292,
       "notional": 1000.0,
       "pricing_date": "2026-10-22",
       "prob_loss": null,
@@ -4930,6 +5046,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Company\u2019s redemption right']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.12040979997254908,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
@@ -4943,6 +5061,12 @@
     "crosscheck": {
       "agreed": false,
       "diffs": [
+        {
+          "first": 0.1,
+          "path": "max_selling_commission",
+          "second": 0.15,
+          "status": "resolved_first"
+        },
         {
           "first": "The Class A common stock of Palantir Technologies Inc.",
           "path": "underlyings[0].name",
@@ -4963,11 +5087,12 @@
           "second": [
             "Absolute Return Barrier"
           ],
-          "status": "resolved_second"
+          "status": "unresolved"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -5147,9 +5272,10 @@
       "cost_to_investor": 0.3100000000000005,
       "cost_to_investor_pct": 3.100000000000005,
       "cost_to_investor_per_1000": 31.00000000000005,
-      "cost_usd": 0.1820313,
+      "cost_usd": 0.2832719,
+      "cost_usd_baseten": 0.1012406,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 3,
+      "crosscheck_diffs": 4,
       "cusip": "38151R602",
       "estimated_value": 9.69,
       "filing_date": "2026-10-26",
@@ -5157,7 +5283,7 @@
       "issue_price": 10.0,
       "issuer": "GS Finance Corp.",
       "issuer_group": "Goldman Sachs",
-      "model_seconds": 99.30860452199977,
+      "model_seconds": 151.8066903218596,
       "notional": 10.0,
       "pricing_date": "2026-10-22",
       "prob_loss": null,
@@ -5167,6 +5293,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['absolute value of the percentage decline']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.15953839989379048,
       "status": "unsupported",
       "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
@@ -5259,10 +5387,18 @@
       }
     ],
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "TOPIX\u00ae Index",
+          "path": "underlyings[0].name",
+          "second": "The TOPIX\u00ae Index",
+          "status": "resolved_second"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -5418,9 +5554,10 @@
       "cost_to_investor": 4.7000000000000455,
       "cost_to_investor_pct": 0.4700000000000045,
       "cost_to_investor_per_1000": 4.7000000000000455,
-      "cost_usd": 0.0833438,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.1415032,
+      "cost_usd_baseten": 0.0581594,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
       "cusip": "46661QNW1",
       "estimated_value": 995.3,
       "filing_date": "2026-10-23",
@@ -5428,7 +5565,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 47.25493465799991,
+      "model_seconds": 2549.9709200581365,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
       "prob_loss": 0.22685,
@@ -5438,6 +5575,8 @@
       "range_high": 1009.7543671584012,
       "range_low": 981.3853529809702,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.4594962000846863,
       "status": "priced",
       "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
@@ -5449,23 +5588,11 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": false,
-      "diffs": [
-        {
-          "first": "2026-10-15",
-          "path": "underlyings[0].reference_date",
-          "second": null,
-          "status": "resolved_first"
-        },
-        {
-          "first": 7744.06,
-          "path": "underlyings[0].reference_level",
-          "second": null,
-          "status": "resolved_first"
-        }
-      ],
+      "agreed": true,
+      "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -5615,9 +5742,10 @@
       "cost_to_investor": 13.299999999999955,
       "cost_to_investor_pct": 1.3299999999999954,
       "cost_to_investor_per_1000": 13.299999999999955,
-      "cost_usd": 0.1098205,
-      "crosscheck_agreed": false,
-      "crosscheck_diffs": 2,
+      "cost_usd": 0.15075650000000002,
+      "cost_usd_baseten": 0.040936,
+      "crosscheck_agreed": true,
+      "crosscheck_diffs": 0,
       "cusip": "46661PHE0",
       "estimated_value": 986.7,
       "filing_date": "2026-10-19",
@@ -5625,7 +5753,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 57.82259720400009,
+      "model_seconds": 76.70748870399814,
       "notional": 1000.0,
       "pricing_date": "2026-10-15",
       "prob_loss": null,
@@ -5635,6 +5763,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.10512489988468587,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
@@ -5646,17 +5776,11 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": false,
-      "diffs": [
-        {
-          "first": "S&P 500\u00ae Index",
-          "path": "underlyings[0].name",
-          "second": "The S&P 500\u00ae Index",
-          "status": "resolved_first"
-        }
-      ],
+      "agreed": true,
+      "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -5806,9 +5930,10 @@
       "cost_to_investor": 11.700000000000045,
       "cost_to_investor_pct": 1.1700000000000046,
       "cost_to_investor_per_1000": 11.700000000000045,
-      "cost_usd": 0.1153468,
-      "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "cost_usd": 0.15816605,
+      "cost_usd_baseten": 0.04281925,
+      "crosscheck_agreed": true,
+      "crosscheck_diffs": 0,
       "cusip": "46661QLX1",
       "estimated_value": 988.3,
       "filing_date": "2026-10-21",
@@ -5816,7 +5941,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 70.58606012799999,
+      "model_seconds": 91.36141022789513,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
       "prob_loss": null,
@@ -5826,6 +5951,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.0885886000469327,
       "status": "unsupported",
       "structure": "single underlying, buffer 90% at maturity",
@@ -5837,10 +5964,18 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "S&P 500\u00ae Index",
+          "path": "underlyings[0].name",
+          "second": "The S&P 500\u00ae Index",
+          "status": "resolved_second"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -5990,9 +6125,10 @@
       "cost_to_investor": 14.0,
       "cost_to_investor_pct": 1.4000000000000001,
       "cost_to_investor_per_1000": 14.0,
-      "cost_usd": 0.088839,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.1556391,
+      "cost_usd_baseten": 0.0668001,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
       "cusip": "46661QNV3",
       "estimated_value": 986.0,
       "filing_date": "2026-10-23",
@@ -6000,7 +6136,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 43.940635455000006,
+      "model_seconds": 77.48111835510542,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
       "prob_loss": null,
@@ -6010,6 +6146,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.12146160006523132,
       "status": "unsupported",
       "structure": "single underlying, barrier 70% at maturity",
@@ -6024,20 +6162,15 @@
       "agreed": false,
       "diffs": [
         {
-          "first": null,
-          "path": "underlyings[0].reference_date",
-          "second": "2026-10-23",
-          "status": "resolved_second"
-        },
-        {
-          "first": null,
-          "path": "underlyings[0].reference_level",
-          "second": 7623.68,
+          "first": "S&P 500\u00ae Index",
+          "path": "underlyings[0].name",
+          "second": "The S&P 500\u00ae Index",
           "status": "resolved_second"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -6187,9 +6320,10 @@
       "cost_to_investor": 10.700000000000045,
       "cost_to_investor_pct": 1.0700000000000047,
       "cost_to_investor_per_1000": 10.700000000000045,
-      "cost_usd": 0.1283405,
+      "cost_usd": 0.19881135,
+      "cost_usd_baseten": 0.07047085,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 2,
+      "crosscheck_diffs": 1,
       "cusip": "46661QN84",
       "estimated_value": 989.3,
       "filing_date": "2026-10-27",
@@ -6197,7 +6331,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 60.591341418999946,
+      "model_seconds": 97.00404791891924,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -6207,6 +6341,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Absolute Index Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.11868180008605123,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity",
@@ -6218,10 +6354,23 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": [
+            "Contingent Digital Return"
+          ],
+          "path": "unsupported_features",
+          "second": [
+            "Contingent Digital Return",
+            "Contingent Digital Return 113.35%"
+          ],
+          "status": "resolved_first"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -6371,9 +6520,10 @@
       "cost_to_investor": 56.700000000000045,
       "cost_to_investor_pct": 5.670000000000004,
       "cost_to_investor_per_1000": 56.700000000000045,
-      "cost_usd": 0.09199025,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.1618956,
+      "cost_usd_baseten": 0.06990535,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
       "cusip": "46661QQZ1",
       "estimated_value": 943.3,
       "filing_date": "2026-10-27",
@@ -6381,7 +6531,7 @@
       "issue_price": 1000.0,
       "issuer": "JPMorgan Chase Financial Company LLC",
       "issuer_group": "JPMorgan",
-      "model_seconds": 51.735874545,
+      "model_seconds": 86.23693054489183,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -6391,6 +6541,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Digital Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.10510240006260574,
       "status": "unsupported",
       "structure": "single underlying, barrier 90% at maturity",
@@ -6486,7 +6638,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -6642,7 +6795,8 @@
       "cost_to_investor": 0.20199999999999996,
       "cost_to_investor_pct": 2.0199999999999996,
       "cost_to_investor_per_1000": 20.199999999999996,
-      "cost_usd": 0.08095849999999999,
+      "cost_usd": 0.11434675,
+      "cost_usd_baseten": 0.03338825,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "61780K566",
@@ -6652,7 +6806,7 @@
       "issue_price": 10.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 50.869425513000124,
+      "model_seconds": 69.69027811303818,
       "notional": 10.0,
       "pricing_date": "2026-09-21",
       "prob_loss": 0.30865,
@@ -6662,6 +6816,8 @@
       "range_high": 9.85686820117689,
       "range_low": 9.542322674329823,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.5598667999729514,
       "status": "priced",
       "structure": "single underlying, upside leverage 3x, cap 13.25%, barrier 100% at maturity",
@@ -6676,7 +6832,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -6826,7 +6983,8 @@
       "cost_to_investor": 51.10000000000002,
       "cost_to_investor_pct": 5.110000000000002,
       "cost_to_investor_per_1000": 51.10000000000002,
-      "cost_usd": 0.0848373,
+      "cost_usd": 0.1180938,
+      "cost_usd_baseten": 0.0332565,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "61781L3Q1",
@@ -6836,7 +6994,7 @@
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 47.72892875499997,
+      "model_seconds": 66.39151795484099,
       "notional": 1000.0,
       "pricing_date": "2026-09-30",
       "prob_loss": null,
@@ -6846,6 +7004,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "excess-return index underlying is not modelled by the template (no financing in its drift): S&P 500\u00ae Futures Excess Return Index",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.13628250011242926,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.3x, barrier 100% at maturity",
@@ -6869,7 +7029,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -7031,7 +7192,8 @@
       "cost_to_investor": 27.200000000000045,
       "cost_to_investor_pct": 2.7200000000000046,
       "cost_to_investor_per_1000": 27.200000000000045,
-      "cost_usd": 0.10899605000000001,
+      "cost_usd": 0.1518697,
+      "cost_usd_baseten": 0.04287365,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 1,
       "cusip": "61781LSA9",
@@ -7041,7 +7203,7 @@
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 65.65030799800024,
+      "model_seconds": 82.83854199823418,
       "notional": 1000.0,
       "pricing_date": "2026-09-30",
       "prob_loss": null,
@@ -7051,6 +7213,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Minimum payment at maturity']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.0956689000595361,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity",
@@ -7065,6 +7229,17 @@
       "agreed": false,
       "diffs": [
         {
+          "first": [
+            "Upside payment"
+          ],
+          "path": "unsupported_features",
+          "second": [
+            "Upside payment",
+            "Enhanced Trigger Jump Securities"
+          ],
+          "status": "unresolved"
+        },
+        {
           "first": 1.0,
           "path": "upside.leverage",
           "second": null,
@@ -7072,7 +7247,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -7228,9 +7404,10 @@
       "cost_to_investor": 42.5,
       "cost_to_investor_pct": 4.25,
       "cost_to_investor_per_1000": 42.5,
-      "cost_usd": 0.1179545,
+      "cost_usd": 0.18416495,
+      "cost_usd_baseten": 0.06621045,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "crosscheck_diffs": 2,
       "cusip": "61781LRR3",
       "estimated_value": 957.5,
       "filing_date": "2026-10-02",
@@ -7238,7 +7415,7 @@
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 78.73515053599999,
+      "model_seconds": 119.90702683589348,
       "notional": 1000.0,
       "pricing_date": "2026-09-30",
       "prob_loss": null,
@@ -7248,6 +7425,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Upside payment']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.11004570010118186,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
@@ -7262,7 +7441,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -7412,7 +7592,8 @@
       "cost_to_investor": 16.0,
       "cost_to_investor_pct": 1.6,
       "cost_to_investor_per_1000": 16.0,
-      "cost_usd": 0.0822745,
+      "cost_usd": 0.13403775,
+      "cost_usd_baseten": 0.05176325,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "61781LV72",
@@ -7422,7 +7603,7 @@
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 52.65627284900006,
+      "model_seconds": 83.1627652490763,
       "notional": 1000.0,
       "pricing_date": "2026-10-16",
       "prob_loss": null,
@@ -7432,6 +7613,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.0912663999479264,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.09x, barrier 100% at maturity",
@@ -7446,7 +7629,8 @@
       "agreed": true,
       "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -7596,7 +7780,8 @@
       "cost_to_investor": 18.100000000000023,
       "cost_to_investor_pct": 1.8100000000000023,
       "cost_to_investor_per_1000": 18.100000000000023,
-      "cost_usd": 0.093513,
+      "cost_usd": 0.141231,
+      "cost_usd_baseten": 0.047718,
       "crosscheck_agreed": true,
       "crosscheck_diffs": 0,
       "cusip": "61781THB2",
@@ -7606,7 +7791,7 @@
       "issue_price": 1000.0,
       "issuer": "Morgan Stanley Finance LLC",
       "issuer_group": "Morgan Stanley",
-      "model_seconds": 61.92821356399986,
+      "model_seconds": 90.5207179640613,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -7616,6 +7801,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "principal protection is not modelled by the template: \"Under no circumstances will the payment at maturity be less than the stated principal amount. Upside payment: | stated principal amount \u00d7 participation rate \u00d7 u\"",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.09621210000477731,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 2.03x, barrier 100% at maturity",
@@ -7708,10 +7895,18 @@
       }
     ],
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "SPX",
+          "path": "underlyings[0].ticker",
+          "second": "SPX Index",
+          "status": "resolved_second"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -7849,9 +8044,10 @@
       "cost_to_investor": 15.919999999999959,
       "cost_to_investor_pct": 1.5919999999999959,
       "cost_to_investor_per_1000": 15.919999999999959,
-      "cost_usd": 0.08825485000000001,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.14978575,
+      "cost_usd_baseten": 0.0615309,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
       "cusip": "78018DG43",
       "estimated_value": 984.08,
       "filing_date": "2026-10-21",
@@ -7859,7 +8055,7 @@
       "issue_price": 1000.0,
       "issuer": "Royal Bank of Canada",
       "issuer_group": "Royal Bank of Canada",
-      "model_seconds": 46.363996329999736,
+      "model_seconds": 73.74112913017461,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
       "prob_loss": 0.33995,
@@ -7869,6 +8065,8 @@
       "range_high": 975.7379420948286,
       "range_low": 937.4212646588823,
       "reason": "plausibility gate: bank's estimated value 984.08 is above our whole range (high 975.74)",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.6192804998718202,
       "status": "needs_review",
       "structure": "single underlying, upside leverage 1.5x, cap 19.725%, barrier 100% at maturity",
@@ -7888,14 +8086,15 @@
           ],
           "path": "unsupported_features",
           "second": [
-            "Digital Notes",
-            "Threshold Settlement Amount"
+            "Threshold Settlement Amount",
+            "Digital Notes"
           ],
-          "status": "resolved_second"
+          "status": "unresolved"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -8027,7 +8226,8 @@
       "cost_to_investor": 4.7999999999999545,
       "cost_to_investor_pct": 0.47999999999999543,
       "cost_to_investor_per_1000": 4.7999999999999545,
-      "cost_usd": 0.14588255,
+      "cost_usd": 0.24855845,
+      "cost_usd_baseten": 0.1026759,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 1,
       "cusip": "89115NMK7",
@@ -8037,7 +8237,7 @@
       "issue_price": 1000.0,
       "issuer": "The Toronto-Dominion Bank",
       "issuer_group": "Toronto-Dominion",
-      "model_seconds": 57.843438830000196,
+      "model_seconds": 106.07067482988987,
       "notional": 1000.0,
       "pricing_date": "2026-10-22",
       "prob_loss": null,
@@ -8047,6 +8247,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.1628666000906378,
       "status": "unsupported",
       "structure": "single underlying, buffer 87.5% at maturity",
@@ -8068,7 +8270,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -8212,7 +8415,8 @@
       "cost_to_investor": 16.399999999999977,
       "cost_to_investor_pct": 1.6399999999999977,
       "cost_to_investor_per_1000": 16.399999999999977,
-      "cost_usd": 0.1461628,
+      "cost_usd": 0.2265139,
+      "cost_usd_baseten": 0.0803511,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 1,
       "cusip": "89115NKY9",
@@ -8222,7 +8426,7 @@
       "issue_price": 1000.0,
       "issuer": "TD",
       "issuer_group": "Toronto-Dominion",
-      "model_seconds": 51.89014712700009,
+      "model_seconds": 82.31386202692374,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -8232,6 +8436,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Contingent Absolute Return']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.16051320009864867,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity",
@@ -8253,6 +8459,7 @@
       "cost_to_investor_pct": null,
       "cost_to_investor_per_1000": null,
       "cost_usd": 0.07867025,
+      "cost_usd_baseten": 0.0,
       "crosscheck_agreed": null,
       "crosscheck_diffs": 0,
       "cusip": null,
@@ -8272,6 +8479,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "autocall.review_dates: expected cited field, got null; autocall.call_amounts: expected cited field, got null",
+      "recheck_model": null,
+      "second_model": null,
       "seconds": 0.0031217001378536224,
       "status": "extraction_failed",
       "structure": null,
@@ -8386,7 +8595,8 @@
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -8536,7 +8746,8 @@
       "cost_to_investor": 3.2999999999999545,
       "cost_to_investor_pct": 0.32999999999999546,
       "cost_to_investor_per_1000": 3.2999999999999545,
-      "cost_usd": 0.17836105,
+      "cost_usd": 0.28426495,
+      "cost_usd_baseten": 0.10590390000000001,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 3,
       "cusip": "90266F3B0",
@@ -8546,7 +8757,7 @@
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
-      "model_seconds": 69.50727032699933,
+      "model_seconds": 115.87393592709986,
       "notional": 1000.0,
       "pricing_date": "2026-10-19",
       "prob_loss": 0.1428,
@@ -8556,6 +8767,8 @@
       "range_high": 996.8854938546066,
       "range_low": 945.9265191331003,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.6244107999373227,
       "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 24.08%, buffer 87.5% at maturity",
@@ -8569,6 +8782,12 @@
     "crosscheck": {
       "agreed": false,
       "diffs": [
+        {
+          "first": "UBS AG London Branch",
+          "path": "issuer",
+          "second": "UBS AG",
+          "status": "resolved_first"
+        },
         {
           "first": "2026-10-20",
           "path": "underlyings[0].reference_date",
@@ -8587,13 +8806,16 @@
           ],
           "path": "unsupported_features",
           "second": [
-            "Digital return (Maximum settlement amount)"
+            "Maximum settlement amount / Digital return",
+            "Cap level",
+            "Threshold settlement amount"
           ],
-          "status": "resolved_first"
+          "status": "unresolved"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -8737,9 +8959,10 @@
       "cost_to_investor": 3.7999999999999545,
       "cost_to_investor_pct": 0.37999999999999545,
       "cost_to_investor_per_1000": 3.7999999999999545,
-      "cost_usd": 0.18573175,
+      "cost_usd": 0.28727375,
+      "cost_usd_baseten": 0.10154200000000001,
       "crosscheck_agreed": false,
-      "crosscheck_diffs": 3,
+      "crosscheck_diffs": 4,
       "cusip": "90266F6G6",
       "estimated_value": 996.2,
       "filing_date": "2026-10-22",
@@ -8747,7 +8970,7 @@
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
-      "model_seconds": 64.02710203600009,
+      "model_seconds": 106.91932913620849,
       "notional": 1000.0,
       "pricing_date": "2026-10-20",
       "prob_loss": null,
@@ -8757,6 +8980,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['maximum settlement amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.16778430016711354,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
@@ -8768,10 +8993,18 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": true,
-      "diffs": [],
+      "agreed": false,
+      "diffs": [
+        {
+          "first": "UBS AG London Branch",
+          "path": "issuer",
+          "second": "UBS AG",
+          "status": "resolved_first"
+        }
+      ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -8981,9 +9214,10 @@
       "cost_to_investor": 4.0,
       "cost_to_investor_pct": 0.4,
       "cost_to_investor_per_1000": 4.0,
-      "cost_usd": 0.14940485,
-      "crosscheck_agreed": true,
-      "crosscheck_diffs": 0,
+      "cost_usd": 0.2456932,
+      "cost_usd_baseten": 0.09628835,
+      "crosscheck_agreed": false,
+      "crosscheck_diffs": 1,
       "cusip": "90266F6R2",
       "estimated_value": 996.0,
       "filing_date": "2026-10-23",
@@ -8991,7 +9225,7 @@
       "issue_price": 1000.0,
       "issuer": "UBS AG London Branch",
       "issuer_group": "UBS",
-      "model_seconds": 68.94456921400024,
+      "model_seconds": 99.36744781419156,
       "notional": 1000.0,
       "pricing_date": "2026-10-21",
       "prob_loss": null,
@@ -9001,6 +9235,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold settlement amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.23329300014302135,
       "status": "unsupported",
       "structure": "worst-of 5, upside leverage 1x, buffer 90% at maturity",
@@ -9093,23 +9329,11 @@
       }
     ],
     "crosscheck": {
-      "agreed": false,
-      "diffs": [
-        {
-          "first": "2026-10-22",
-          "path": "underlyings[0].reference_date",
-          "second": null,
-          "status": "resolved_first"
-        },
-        {
-          "first": 7663.43,
-          "path": "underlyings[0].reference_level",
-          "second": null,
-          "status": "resolved_first"
-        }
-      ],
+      "agreed": true,
+      "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -9265,9 +9489,10 @@
       "cost_to_investor": 4.75,
       "cost_to_investor_pct": 0.475,
       "cost_to_investor_per_1000": 4.75,
-      "cost_usd": 0.1215982,
-      "crosscheck_agreed": false,
-      "crosscheck_diffs": 2,
+      "cost_usd": 0.16611395,
+      "cost_usd_baseten": 0.04451575,
+      "crosscheck_agreed": true,
+      "crosscheck_diffs": 0,
       "cusip": "95001HTE1",
       "estimated_value": 995.25,
       "filing_date": "2026-10-26",
@@ -9275,7 +9500,7 @@
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
-      "model_seconds": 50.140530011999545,
+      "model_seconds": 70.66866421202303,
       "notional": 1000.0,
       "pricing_date": "2026-10-22",
       "prob_loss": 0.12935,
@@ -9285,6 +9510,8 @@
       "range_high": 1000.7899443706054,
       "range_low": 934.0614126150706,
       "reason": null,
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.7143395999446511,
       "status": "priced",
       "structure": "single underlying, upside leverage 1.4x, cap 34.832%, buffer 85% at maturity",
@@ -9296,22 +9523,11 @@
   {
     "battery": null,
     "crosscheck": {
-      "agreed": false,
-      "diffs": [
-        {
-          "first": [
-            "Threshold Settlement Amount"
-          ],
-          "path": "unsupported_features",
-          "second": [
-            "Threshold Settlement Amount",
-            "Digital return"
-          ],
-          "status": "resolved_first"
-        }
-      ],
+      "agreed": true,
+      "diffs": [],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -9449,9 +9665,10 @@
       "cost_to_investor": 5.580000000000041,
       "cost_to_investor_pct": 0.558000000000004,
       "cost_to_investor_per_1000": 5.580000000000041,
-      "cost_usd": 0.10915230000000001,
-      "crosscheck_agreed": false,
-      "crosscheck_diffs": 1,
+      "cost_usd": 0.14942605,
+      "cost_usd_baseten": 0.04027375,
+      "crosscheck_agreed": true,
+      "crosscheck_diffs": 0,
       "cusip": "95001HTH4",
       "estimated_value": 994.42,
       "filing_date": "2026-10-26",
@@ -9459,7 +9676,7 @@
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
-      "model_seconds": 44.94995351599982,
+      "model_seconds": 63.51245051597698,
       "notional": 1000.0,
       "pricing_date": "2026-10-22",
       "prob_loss": null,
@@ -9469,6 +9686,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['Threshold Settlement Amount']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.11106489994563162,
       "status": "unsupported",
       "structure": "single underlying, buffer 85% at maturity",
@@ -9483,6 +9702,12 @@
       "agreed": false,
       "diffs": [
         {
+          "first": "barrier",
+          "path": "downside.kind",
+          "second": "buffer",
+          "status": "resolved_first"
+        },
+        {
           "first": "2026-10-23",
           "path": "underlyings[0].reference_date",
           "second": null,
@@ -9493,18 +9718,11 @@
           "path": "underlyings[0].reference_level",
           "second": null,
           "status": "resolved_first"
-        },
-        {
-          "first": [
-            "principal protection (no loss of principal at maturity)"
-          ],
-          "path": "unsupported_features",
-          "second": [],
-          "status": "resolved_second"
         }
       ],
       "error": null,
-      "second_model": "muse-spark-1.2"
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026"
     },
     "fields": [
       {
@@ -9666,7 +9884,8 @@
       "cost_to_investor": 11.289999999999964,
       "cost_to_investor_pct": 1.1289999999999962,
       "cost_to_investor_per_1000": 11.289999999999964,
-      "cost_usd": 0.16305895,
+      "cost_usd": 0.27933425,
+      "cost_usd_baseten": 0.1162753,
       "crosscheck_agreed": false,
       "crosscheck_diffs": 3,
       "cusip": "95001HTK7",
@@ -9676,7 +9895,7 @@
       "issue_price": 1000.0,
       "issuer": "Wells Fargo Finance LLC",
       "issuer_group": "Wells Fargo",
-      "model_seconds": 83.99760456499916,
+      "model_seconds": 150.958864864896,
       "notional": 1000.0,
       "pricing_date": "2026-10-23",
       "prob_loss": null,
@@ -9686,6 +9905,8 @@
       "range_high": null,
       "range_low": null,
       "reason": "unsupported features: ['principal protection (no loss of principal at maturity)']",
+      "recheck_model": "meta-models/muse-spark-open-1026",
+      "second_model": "meta-models/muse-spark-open-1026",
       "seconds": 0.172208399977535,
       "status": "unsupported",
       "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",

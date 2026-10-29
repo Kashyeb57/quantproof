@@ -203,3 +203,58 @@ def test_prose_worked_example_verifies():
     ex = extract_examples(filing, chat=_reply([(1.05, 1075.0, quote), (1.05, 1100.0, quote)]),
                           notional=1000.0)
     assert [e.payment.citation.verified for e in ex] == [True, False]
+
+
+def test_budget_guard_accepts_custom_cost_fn():
+    calls = []
+
+    def fake(messages, **kw):
+        calls.append(kw)
+        return ChatResult(text="x", model="m", finish_reason="stop",
+                          usage=Usage(1, 1), cost_usd=0.25, seconds=1.0, attempts=1)
+
+    guard = synth_run.BudgetGuard(
+        fake, budget_usd=1.0, cost_fn=lambda model, usage: 999.0
+    )
+    with pytest.raises(synth_run.BudgetExceeded):
+        guard([{"role": "user", "content": "hi"}], model="m", max_tokens=10)
+    assert guard.refused and not calls
+
+
+def test_run_note_skips_below_min_examples_before_any_synthesis_spend(monkeypatch):
+    from types import SimpleNamespace
+    filing = SimpleNamespace(text="filing")
+    ts = SimpleNamespace(
+        n_underlyings=1, autocall=None, coupon=None, upside=None, downside=None,
+        cusip=None, issuer=SimpleNamespace(value="I"), issue_price=None,
+        estimated_value=None, notional=SimpleNamespace(value=1000.0),
+        unsupported_features=[],
+    )
+    example = SimpleNamespace(
+        worst_final=1.0, payment=SimpleNamespace(value=100.0, citation=None)
+    )
+    monkeypatch.setattr(synth_run, "termsheet_from_audit", lambda calls, text: ts)
+    monkeypatch.setattr(synth_run, "stated_market", lambda ts: object())
+    monkeypatch.setattr(
+        synth_run, "extract_examples", lambda filing, **kw: [example]
+    )
+
+    def boom(*args, **kwargs):
+        raise AssertionError("skipped notes must not reach synthesis")
+
+    monkeypatch.setattr(synth_run, "synthesise_payoff", boom)
+    result = synth_run.run_note(
+        filing, [], {"accession": "x"}, chat=object(),
+        template_covered=False, min_examples=3,
+    )
+    assert result["status"] == "skipped_few_examples"
+    assert result["passed"] is False
+    assert result["n_attempts"] == 0
+    assert result["attempts"] == []
+    assert "only 1" in result["skip_reason"]
+    # Default min_examples=0 proceeds to synthesis (here: the boom).
+    with pytest.raises(AssertionError):
+        synth_run.run_note(
+            filing, [], {"accession": "x"}, chat=object(),
+            template_covered=False,
+        )

@@ -1053,16 +1053,11 @@
     "verified": 77
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
-      {
-        "path": "underlyings[0].name",
-        "first": "the common stock of Constellation Energy Corporation",
-        "second": "Constellation Energy Corporation",
-        "status": "resolved_first"
-      },
       {
         "path": "underlyings[0].reference_date",
         "first": null,
@@ -1076,12 +1071,6 @@
         "status": "resolved_second"
       },
       {
-        "path": "underlyings[1].name",
-        "first": "the common stock of Quanta Services, Inc.",
-        "second": "Quanta Services, Inc.",
-        "status": "resolved_first"
-      },
-      {
         "path": "underlyings[1].reference_date",
         "first": null,
         "second": "2026-10-16",
@@ -1092,12 +1081,6 @@
         "first": null,
         "second": 631.86,
         "status": "resolved_second"
-      },
-      {
-        "path": "underlyings[2].name",
-        "first": "the common stock of Vistra Corp.",
-        "second": "Vistra Corp.",
-        "status": "resolved_first"
       },
       {
         "path": "underlyings[2].reference_date",
@@ -2880,8 +2863,70 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.2319227,
-  "model_seconds": 137.00566761199934,
+  "cost_usd": 0.3776208,
+  "model_seconds": 207.70132061191453,
   "previous_status": "extraction_failed",
-  "previous_reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7252 (char 7251)"
+  "previous_reason": "reply is not valid JSON: Expecting ',' delimiter: line 1 column 7252 (char 7251)",
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "underlyings[0].name",
+        "first": "the common stock of Constellation Energy Corporation",
+        "second": "Constellation Energy Corporation",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_date",
+        "first": null,
+        "second": "2026-10-16",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": null,
+        "second": 271.37,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[1].name",
+        "first": "the common stock of Quanta Services, Inc.",
+        "second": "Quanta Services, Inc.",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[1].reference_date",
+        "first": null,
+        "second": "2026-10-16",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[1].reference_level",
+        "first": null,
+        "second": 631.86,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[2].name",
+        "first": "the common stock of Vistra Corp.",
+        "second": "Vistra Corp.",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[2].reference_date",
+        "first": null,
+        "second": "2026-10-16",
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[2].reference_level",
+        "first": null,
+        "second": 152.02,
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.1456981
 }

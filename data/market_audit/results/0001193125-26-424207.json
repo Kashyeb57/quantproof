@@ -310,7 +310,8 @@
     "verified": 20
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
@@ -319,12 +320,6 @@
         "first": null,
         "second": 0.0,
         "status": "resolved_second"
-      },
-      {
-        "path": "underlyings[0].ticker",
-        "first": "SPX Index",
-        "second": "SPX",
-        "status": "resolved_first"
       },
       {
         "path": "unsupported_features",
@@ -353,6 +348,36 @@
   "pricing_date": "2026-10-14",
   "structure": "single underlying, upside leverage 1.75x, buffer 80% at maturity",
   "seconds": 0.1347830998711288,
-  "cost_usd": 0.17133955,
-  "model_seconds": 62.56635889800009
+  "cost_usd": 0.27147135,
+  "model_seconds": 111.67586199792777,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "max_selling_commission",
+        "first": null,
+        "second": 0.0,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "first": "SPX Index",
+        "second": "SPX",
+        "status": "resolved_first"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Company\u2019s redemption right"
+        ],
+        "second": [
+          "Company's redemption right"
+        ],
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.1001318
 }

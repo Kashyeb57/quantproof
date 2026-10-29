@@ -308,6 +308,30 @@
     "verified": 21
   },
   "crosscheck": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 994.42,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "95001HTH4",
+  "issuer": "Wells Fargo Finance LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, buffer 85% at maturity",
+  "seconds": 0.11106489994563162,
+  "cost_usd": 0.14942605,
+  "model_seconds": 63.51245051597698,
+  "previous_crosscheck": {
     "second_model": "muse-spark-1.2",
     "agreed": false,
     "error": null,
@@ -325,21 +349,5 @@
       }
     ]
   },
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": 994.42,
-  "issue_price": 1000.0,
-  "notional": 1000.0,
-  "cusip": "95001HTH4",
-  "issuer": "Wells Fargo Finance LLC",
-  "underlyings": [
-    "S&P 500\u00ae Index"
-  ],
-  "is_preliminary": false,
-  "pricing_date": "2026-10-22",
-  "structure": "single underlying, buffer 85% at maturity",
-  "seconds": 0.11106489994563162,
-  "cost_usd": 0.10915230000000001,
-  "model_seconds": 44.94995351599982
+  "cost_usd_baseten": 0.04027375
 }

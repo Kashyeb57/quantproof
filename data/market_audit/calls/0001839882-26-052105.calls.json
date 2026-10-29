@@ -11,42 +11,52 @@
   },
   {
     "purpose": "extract",
-    "model": "muse-spark-1.2",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"issuer\":{\"value\":\"UBS AG London Branch\",\"quote\":\"Issuer: UBS AG London Branch\",\"section\":\"Key Terms\"},\"guarantor\":null,\"cusip\":{\"value\":\"90266F6G6\",\"quote\":\"CUSIP no.: 90266F6G6\",\"section\":\"Key Terms\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Pricing Supplement dated October 20, 2026\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"MSCI EAFE\u00ae Index\",\"quote\":\"Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"ticker\":{\"value\":\"MXEA\",\"quote\":\"Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"initial_level\":{\"value\":3092.714974,\"quote\":\"Initial underlier level: 3,092.714974\",\"section\":\"Key Terms\"},\"reference_level\":null,\"reference_date\":null}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"type of notes: notes linked to a single underlier\",\"section\":\"Key Terms\"},\"notional\":{\"value\":1000,\"quote\":\"Each note will have a face amount of $1,000; $3,068,000 in the aggregate for all the offered notes\",\"section\":\"Key Terms\"},\"issue_price\":{\"value\":1000,\"quote\":\"Original issue price: 100.00% of the face amount\",\"section\":\"Cover\"},\"pricing_date\":{\"value\":\"2026-10-20\",\"quote\":\"Trade date: October 20, 2026\",\"section\":\"Key Terms\"},\"issue_date\":{\"value\":\"2026-10-23\",\"quote\":\"Original issue date (settlement date): October 23, 2026\",\"section\":\"Key Terms\"},\"maturity_date\":{\"value\":\"2028-11-17\",\"quote\":\"Stated maturity date: November 17, 2028, subject to adjustment as described under \u201cGeneral Terms of the Notes \u2014 Stated Maturity Date\u201d\",\"section\":\"Key Terms\"},\"final_review_date\":{\"value\":\"2028-11-15\",\"quote\":\"Determination date: November 15, 2028, subject to adjustment as described under \u201cGeneral Terms of the Notes \u2014 Determination Date\u201d\",\"section\":\"Key Terms\"},\"downside\":{\"kind\":{\"value\":\"buffer\",\"quote\":\"Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level\",\"section\":\"Key Terms\"},\"level\":{\"value\":0.85,\"quote\":\"Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level\",\"section\":\"Key Terms\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"Final underlier level: the closing level of the underlier on the determination date, except in the limited circumstances described under \u201cGeneral Terms of the Notes \u2014 Market Disruption Event \u2014 Consequences of a Market Disruption Event or a Non-Trading Day\u201d\",\"section\":\"Key Terms\"},\"gearing\":{\"value\":1.1765,\"quote\":\"Buffer rate: the quotient of the initial underlier level divided by the buffer level, expressed as a percentage, which equals approximately 117.65%\",\"section\":\"Key Terms\"}},\"autocall\":null,\"coupon\":null,\"upside\":null,\"unsupported_features\":[{\"value\":\"Digital return (Maximum settlement amount)\",\"quote\":\"If the final underlier level on the determination date is equal to or greater than the buffer level of 85.00% of the initial underlier level of 3,092.714974, you will receive the maximum settlement amount of $1,176.50 for each $1,000 face amount of your notes.\",\"section\":\"Cover\"}],\"estimated_value\":{\"value\":996.2,\"quote\":\"The estimated initial value of the notes as of the trade date is $996.20 per $1,000 face amount.\",\"section\":\"Cover\"},\"estimated_value_floor\":null,\"max_selling_commission\":{\"value\":0,\"quote\":\"Underwriting discount*: | 0.00% of the face amount | Net proceeds to the issuer*: | 100.00% of the face amount\",\"section\":\"Cover\"},\"missing_or_ambiguous\":[\"Reference level and reference date not stated separately from initial level.\",\"Estimated value floor not disclosed.\",\"Guarantor not stated in filing.\"]}",
-    "input_tokens": 18859,
-    "output_tokens": 8664,
-    "cost_usd": 0.06039575,
-    "seconds": 24.395336328999747
+    "text": "{\"issuer\":{\"value\":\"UBS AG\",\"quote\":\"Issuer: UBS AG London Branch\",\"section\":\"Key Terms\"},\"guarantor\":null,\"cusip\":{\"value\":\"90266F6G6\",\"quote\":\"CUSIP no.: 90266F6G6\",\"section\":\"Key Terms\"},\"is_preliminary\":{\"value\":false,\"quote\":\"Pricing Supplement dated October 20, 2026\",\"section\":\"Cover\"},\"underlyings\":[{\"name\":{\"value\":\"MSCI EAFE\u00ae Index\",\"quote\":\"Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"ticker\":{\"value\":\"MXEA\",\"quote\":\"Underlier: MSCI EAFE\u00ae Index (Bloomberg symbol, \u201cMXEA\u201d <Index>), as maintained by MSCI Inc. (\u201cMSCI\u201d or the \u201cunderlier sponsor\u201d)\",\"section\":\"Key Terms\"},\"initial_level\":{\"value\":3092.714974,\"quote\":\"Initial underlier level: 3,092.714974\",\"section\":\"Key Terms\"},\"reference_level\":{\"value\":null,\"quote\":null,\"section\":null},\"reference_date\":{\"value\":null,\"quote\":null,\"section\":null}}],\"dependency\":{\"value\":\"worst_of\",\"quote\":\"type of notes: notes linked to a single underlier\",\"section\":\"Key Terms\"},\"notional\":{\"value\":1000,\"quote\":\"Each note will have a face amount of $1,000; $3,068,000 in the aggregate for all the offered notes\",\"section\":\"Key Terms\"},\"issue_price\":{\"value\":1000,\"quote\":\"Each note will have a face amount of $1,000 ... Original issue price: | 100.00% of the face amount\",\"section\":\"Key Terms\"},\"pricing_date\":{\"value\":\"2026-10-20\",\"quote\":\"Trade date: October 20, 2026\",\"section\":\"Key Terms\"},\"issue_date\":{\"value\":\"2026-10-23\",\"quote\":\"Original issue date (settlement date): October 23, 2026\",\"section\":\"Key Terms\"},\"maturity_date\":{\"value\":\"2028-11-17\",\"quote\":\"Stated maturity date: November 17, 2028\",\"section\":\"Key Terms\"},\"final_review_date\":{\"value\":\"2028-11-15\",\"quote\":\"Determination date: November 15, 2028\",\"section\":\"Key Terms\"},\"downside\":{\"kind\":{\"value\":\"buffer\",\"quote\":\"Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level\",\"section\":\"Key Terms\"},\"level\":{\"value\":0.85,\"quote\":\"Buffer level: 2,628.8077279, which is 85.00% of the initial underlier level\",\"section\":\"Key Terms\"},\"observation\":{\"value\":\"final_only\",\"quote\":\"Final underlier level: the closing level of the underlier on the determination date\",\"section\":\"Key Terms\"},\"gearing\":{\"value\":1.1765,\"quote\":\"Buffer rate: the quotient of the initial underlier level divided by the buffer level, expressed as a percentage, which equals approximately 117.65%\",\"section\":\"Key Terms\"}},\"autocall\":null,\"coupon\":null,\"upside\":null,\"unsupported_features\":[{\"value\":\"Maximum settlement amount / Digital return\",\"quote\":\"If the final underlier level is equal to or greater than the buffer level of 85.00% of the initial underlier level of 3,092.714974, you will receive the maximum settlement amount of $1,176.50 for each $1,000 face amount of your notes\",\"section\":\"Cover\"},{\"value\":\"Cap level\",\"quote\":\"Cap level: 117.65% of the initial underlier level\",\"section\":\"Key Terms\"},{\"value\":\"Threshold settlement amount\",\"quote\":\"Threshold settlement amount: $1,176.50\",\"section\":\"Key Terms\"}],\"estimated_value\":{\"value\":996.2,\"quote\":\"The estimated initial value of the notes as of the trade date is $996.20 per $1,000 face amount\",\"section\":\"Cover\"},\"estimated_value_floor\":{\"value\":null,\"quote\":null,\"section\":null},\"max_selling_commission\":{\"value\":0,\"quote\":\"Underwriting discount*: | 0.00% of the face amount\",\"section\":\"Cover\"},\"missing_or_ambiguous\":[\"Reference closing level and reference date for the underlier are not stated in the filing.\",\"Estimated value floor (will not be less than) is not stated in the filing.\",\"The filing does not state a guarantor for the notes.\"]}",
+    "input_tokens": 19072,
+    "output_tokens": 5022,
+    "cost_usd": 0.0451835,
+    "seconds": 17.56911460007541
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"value\": \"2026-10-20\", \"quote\": \"The dotted line represents the buffer level, which is equal to 85.00% of 3,092.714974, which was the closing level of the underlier on October 20, 2026.\", \"choice\": \"first\"}",
-    "input_tokens": 17214,
-    "output_tokens": 1551,
-    "cost_usd": 0.02798495,
-    "seconds": 4.945331487000203
+    "text": "{\"value\": \"UBS AG London Branch\", \"quote\": \"Issuer: UBS AG London Branch\", \"choice\": \"first\"}",
+    "input_tokens": 17342,
+    "output_tokens": 660,
+    "cost_usd": 0.0244825,
+    "seconds": 3.2355279000476003
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"value\": 3092.714974, \"quote\": \"Initial underlier level: 3,092.714974\", \"choice\": \"first\"}",
-    "input_tokens": 17213,
-    "output_tokens": 947,
-    "cost_usd": 0.006690299999999999,
-    "seconds": 3.2765274899998076
+    "text": "{\"value\": \"2026-10-20\", \"quote\": \"Trade date: October 20, 2026\", \"choice\": \"first\"}",
+    "input_tokens": 17347,
+    "output_tokens": 1312,
+    "cost_usd": 0.00825175,
+    "seconds": 5.057466899976134
   },
   {
     "purpose": "recheck",
-    "model": "muse-spark-1.3",
+    "model": "meta-models/muse-spark-open-1026",
     "finish_reason": "stop",
-    "text": "{\"value\": [\"maximum settlement amount\"], \"quote\": \"If the final underlier level on the determination date is equal to or greater than the buffer level of 85.00% of the initial underlier level of 3,092.714974, you will receive the maximum settlement amount of $1,176.50 for each $1,000 face amount of your notes.\", \"choice\": \"first\"}",
-    "input_tokens": 17212,
-    "output_tokens": 2236,
-    "cost_usd": 0.0308937,
-    "seconds": 7.080890907000139
+    "text": "{\"value\": 3092.714974,\"quote\": \"Initial underlier level: 3,092.714974\",\"choice\": \"first\"}",
+    "input_tokens": 17346,
+    "output_tokens": 519,
+    "cost_usd": 0.00488025,
+    "seconds": 3.6327830001246184
+  },
+  {
+    "purpose": "recheck",
+    "model": "meta-models/muse-spark-open-1026",
+    "finish_reason": "stop",
+    "text": "{\"value\":null,\"quote\":\"Maximum settlement amount: the threshold settlement amount\",\"choice\":\"neither\"}",
+    "input_tokens": 17353,
+    "output_tokens": 3779,
+    "cost_usd": 0.018744,
+    "seconds": 13.39733469998464
   }
 ]

@@ -401,6 +401,61 @@
     "verified": 27
   },
   "crosscheck": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "max_selling_commission",
+        "first": 0.1,
+        "second": 0.15,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].name",
+        "first": "The Class A common stock of Palantir Technologies Inc.",
+        "second": "Class A Common Stock of Palantir Technologies Inc.",
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "first": "PLTR",
+        "second": "PLTR UW",
+        "status": "resolved_second"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "absolute value of the percentage decline"
+        ],
+        "second": [
+          "Absolute Return Barrier"
+        ],
+        "status": "unresolved"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 9.69,
+  "issue_price": 10.0,
+  "notional": 10.0,
+  "cusip": "38151R602",
+  "issuer": "GS Finance Corp.",
+  "underlyings": [
+    "The Class A common stock of Palantir Technologies Inc."
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
+  "seconds": 0.15953839989379048,
+  "cost_usd": 0.2832719,
+  "model_seconds": 151.8066903218596,
+  "previous_status": "extraction_failed",
+  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType",
+  "previous_crosscheck": {
     "second_model": "muse-spark-1.2",
     "agreed": false,
     "error": null,
@@ -429,23 +484,5 @@
       }
     ]
   },
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": 9.69,
-  "issue_price": 10.0,
-  "notional": 10.0,
-  "cusip": "38151R602",
-  "issuer": "GS Finance Corp.",
-  "underlyings": [
-    "The Class A common stock of Palantir Technologies Inc."
-  ],
-  "is_preliminary": false,
-  "pricing_date": "2026-10-22",
-  "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
-  "seconds": 0.15953839989379048,
-  "cost_usd": 0.1820313,
-  "model_seconds": 99.30860452199977,
-  "previous_status": "extraction_failed",
-  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType"
+  "cost_usd_baseten": 0.1012406
 }

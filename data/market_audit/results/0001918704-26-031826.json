@@ -334,6 +334,30 @@
     "verified": 23
   },
   "crosscheck": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 986.7,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "46661PHE0",
+  "issuer": "JPMorgan Chase Financial Company LLC",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-15",
+  "structure": "single underlying, buffer 90% at maturity",
+  "seconds": 0.10512489988468587,
+  "cost_usd": 0.15075650000000002,
+  "model_seconds": 76.70748870399814,
+  "previous_crosscheck": {
     "second_model": "muse-spark-1.2",
     "agreed": false,
     "error": null,
@@ -352,21 +376,5 @@
       }
     ]
   },
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": 986.7,
-  "issue_price": 1000.0,
-  "notional": 1000.0,
-  "cusip": "46661PHE0",
-  "issuer": "JPMorgan Chase Financial Company LLC",
-  "underlyings": [
-    "S&P 500\u00ae Index"
-  ],
-  "is_preliminary": false,
-  "pricing_date": "2026-10-15",
-  "structure": "single underlying, buffer 90% at maturity",
-  "seconds": 0.10512489988468587,
-  "cost_usd": 0.1098205,
-  "model_seconds": 57.82259720400009
+  "cost_usd_baseten": 0.040936
 }

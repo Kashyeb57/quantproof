@@ -375,10 +375,24 @@
     "verified": 25
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
-    "agreed": true,
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
     "error": null,
-    "diffs": []
+    "diffs": [
+      {
+        "path": "underlyings[0].reference_date",
+        "first": "2026-10-15",
+        "second": null,
+        "status": "resolved_first"
+      },
+      {
+        "path": "underlyings[0].reference_level",
+        "first": 2767.269,
+        "second": null,
+        "status": "resolved_first"
+      }
+    ]
   },
   "battery": [
     {
@@ -1117,8 +1131,15 @@
     "dividend": 0.01,
     "erp": 0.05
   },
-  "cost_usd": 0.10780275,
-  "model_seconds": 59.34996959700038,
+  "cost_usd": 0.2051002,
+  "model_seconds": 118.30415419691963,
   "previous_status": "extraction_failed",
-  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType"
+  "previous_reason": "autocall.payment_dates.value: expected list, got NoneType",
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": true,
+    "error": null,
+    "diffs": []
+  },
+  "cost_usd_baseten": 0.09729745000000001
 }

@@ -6,11 +6,11 @@ back to a model with the filing text for a quoted recheck.  The first
 term sheet is never changed here: the user confirms disagreements and
 the application applies any choices.
 
-Until ``BASETEN_API_KEY`` exists, the brief's intended second model,
-Muse Spark Open on Baseten, cannot be used.  The default second run
-therefore uses a different Muse Spark version.  That is weaker
-independence than two genuinely different model services, and callers
-should state that limitation where the cross-check is presented.
+The brief's intended second model is Muse Spark Open on Baseten
+(``quantproof.agent.baseten``); without a Baseten key callers fall back to
+a different Muse Spark version.  That is weaker independence than two
+genuinely different model services.  Callers state which model ran
+(``CrossCheck.second_model``) where the cross-check is presented.
 """
 
 from __future__ import annotations
@@ -371,15 +371,17 @@ def crosscheck(
     *,
     chat=client.chat,
     second_model: str = "muse-spark-1.2",
+    second_chat=None,
     recheck_model: str = "muse-spark-1.3",
+    recheck_chat=None,
 ) -> CrossCheck:
     """Run a second extraction, diff it against the first, and recheck diffs.
 
-    The second extraction uses ``second_model``.  The brief's intended
-    second model is Muse Spark Open on Baseten; until
-    ``BASETEN_API_KEY`` exists, the default second run uses a different
-    Muse Spark version, which is weaker independence than a genuinely
-    separate model service.
+    The second extraction uses ``second_model`` through ``second_chat``
+    (default ``chat``), so a Baseten-backed chat makes Muse Spark Open the
+    second extractor; rechecks go through ``recheck_chat`` (default
+    ``chat``) with ``recheck_model``.  Without a Baseten key, callers pass
+    a different Muse Spark version as ``second_model`` instead.
 
     If the second extraction raises
     :class:`~quantproof.agent.extract.ExtractionError`, a ``CrossCheck``
@@ -388,7 +390,7 @@ def crosscheck(
     with ``recheck_model``.  The first term sheet is never changed.
     """
     try:
-        second = extract_termsheet(filing, chat=chat, model=second_model)
+        second = extract_termsheet(filing, chat=second_chat or chat, model=second_model)
     except ExtractionError as exc:
         return CrossCheck(
             first=first,
@@ -399,7 +401,7 @@ def crosscheck(
         )
 
     diffs = diff_termsheets(first.termsheet, second.termsheet)
-    diffs = recheck(filing, diffs, chat=chat, model=recheck_model)
+    diffs = recheck(filing, diffs, chat=recheck_chat or chat, model=recheck_model)
     return CrossCheck(
         first=first,
         second=second,

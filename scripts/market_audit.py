@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from quantproof.agent import baseten  # noqa: E402
 from quantproof.agent import client as meta_client  # noqa: E402
 from quantproof.app import live  # noqa: E402
 from quantproof.ingest.edgar import EdgarClient, FilingRef  # noqa: E402
@@ -45,6 +46,9 @@ from quantproof.report.audit_run import (  # noqa: E402
     Recorder,
     Replay,
     audit_note,
+    OPEN_MODEL,
+    RECHECK_MODEL,
+    SECOND_MODEL,
     has_estimated_value,
     is_preliminary_text,
     select_candidates,
@@ -98,6 +102,21 @@ def _write_json(path: Path, data: object) -> None:
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
+def _resolve_second() -> tuple:
+    """Second model, recheck model, and its recorder (or None).
+
+    Muse Spark Open via Baseten when BASETEN_API_KEY is set, else a
+    different Muse Spark version through the main chat. The caller
+    appends the recorder's calls and Baseten cost to the note's records.
+    """
+    if baseten.api_key() is not None:
+        second = Recorder(
+            functools.partial(baseten.chat, log_path=AUDIT_COST_LOG)
+        )
+        return OPEN_MODEL, OPEN_MODEL, second
+    return SECOND_MODEL, RECHECK_MODEL, None
+
+
 def _replay(out: Path) -> int:
     """Re-run every saved result from its recordings; no network, no key.
 
@@ -123,7 +142,16 @@ def _replay(out: Path) -> int:
             (out / "calls" / f"{accession}.calls.json").read_text(encoding="utf-8")
         )
         replay = Replay(calls)
-        result = audit_note(filing, chat=replay, meta=meta)
+        recorded_cross = old.get("crosscheck") or {}
+        result = audit_note(
+            filing,
+            chat=replay,
+            meta=meta,
+            second_model=recorded_cross.get("second_model", SECOND_MODEL),
+            second_chat=replay,
+            recheck_model=recorded_cross.get("recheck_model", RECHECK_MODEL),
+            recheck_chat=replay,
+        )
         if replay.remaining != 0:
             raise RuntimeError(
                 f"replay of {accession}: {replay.remaining} recorded "
@@ -172,7 +200,21 @@ def _redo(accessions: list[str], out: Path, budget_usd: float) -> int:
             prev.write_text(calls_path.read_text(encoding="utf-8"), encoding="utf-8")
         recorder = Recorder(functools.partial(meta_client.chat, log_path=AUDIT_COST_LOG))
         try:
-            result = audit_note(filing, chat=recorder, meta=old["meta"])
+            second_model, recheck_model, second_recorder = _resolve_second()
+            result = audit_note(
+                filing,
+                chat=recorder,
+                meta=old["meta"],
+                second_model=second_model,
+                second_chat=second_recorder,
+                recheck_model=recheck_model,
+            )
+            if second_recorder is not None:
+                result["cost_usd_baseten"] = sum(
+                    float(call.get("cost_usd", 0.0) or 0.0)
+                    for call in second_recorder.calls
+                )
+                recorder.calls.extend(second_recorder.calls)
         except Exception as exc:  # API failure: record it, keep going
             result = {"meta": old["meta"], "status": "api_error",
                       "reason": f"{type(exc).__name__}: {str(exc)[:400]}"}
@@ -294,7 +336,21 @@ def _live(args: argparse.Namespace, out: Path) -> int:
         }
         recorder = Recorder(functools.partial(meta_client.chat, log_path=AUDIT_COST_LOG))
         try:
-            result = audit_note(filing, chat=recorder, meta=meta)
+            second_model, recheck_model, second_recorder = _resolve_second()
+            result = audit_note(
+                filing,
+                chat=recorder,
+                meta=meta,
+                second_model=second_model,
+                second_chat=second_recorder,
+                recheck_model=recheck_model,
+            )
+            if second_recorder is not None:
+                result["cost_usd_baseten"] = sum(
+                    float(call.get("cost_usd", 0.0) or 0.0)
+                    for call in second_recorder.calls
+                )
+                recorder.calls.extend(second_recorder.calls)
         except Exception as exc:  # API failure: record it, keep the audit going
             result = {"meta": meta, "status": "api_error",
                       "reason": f"{type(exc).__name__}: {str(exc)[:400]}"}

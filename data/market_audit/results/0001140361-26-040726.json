@@ -295,7 +295,8 @@
     "verified": 20
   },
   "crosscheck": {
-    "second_model": "muse-spark-1.2",
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
     "agreed": false,
     "error": null,
     "diffs": [
@@ -305,10 +306,10 @@
           "Threshold Settlement Amount"
         ],
         "second": [
-          "Digital Notes",
-          "Threshold Settlement Amount"
+          "Threshold Settlement Amount",
+          "Digital Notes"
         ],
-        "status": "resolved_second"
+        "status": "unresolved"
       }
     ]
   },
@@ -327,6 +328,25 @@
   "pricing_date": "2026-10-22",
   "structure": "single underlying, buffer 87.5% at maturity",
   "seconds": 0.1628666000906378,
-  "cost_usd": 0.14588255,
-  "model_seconds": 57.843438830000196
+  "cost_usd": 0.24855845,
+  "model_seconds": 106.07067482988987,
+  "previous_crosscheck": {
+    "second_model": "muse-spark-1.2",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Threshold Settlement Amount"
+        ],
+        "second": [
+          "Digital Notes",
+          "Threshold Settlement Amount"
+        ],
+        "status": "resolved_second"
+      }
+    ]
+  },
+  "cost_usd_baseten": 0.1026759
 }

@@ -310,6 +310,53 @@
     "verified": 20
   },
   "crosscheck": {
+    "second_model": "meta-models/muse-spark-open-1026",
+    "recheck_model": "meta-models/muse-spark-open-1026",
+    "agreed": false,
+    "error": null,
+    "diffs": [
+      {
+        "path": "max_selling_commission",
+        "first": null,
+        "second": 25.0,
+        "status": "resolved_second"
+      },
+      {
+        "path": "underlyings[0].ticker",
+        "first": "SPX",
+        "second": "SPX Index",
+        "status": "resolved_second"
+      },
+      {
+        "path": "unsupported_features",
+        "first": [
+          "Company\u2019s redemption right"
+        ],
+        "second": [
+          "Company's redemption right"
+        ],
+        "status": "resolved_first"
+      }
+    ]
+  },
+  "battery": null,
+  "fair_value": null,
+  "loss_odds": null,
+  "estimated_value": 961.0,
+  "issue_price": 1000.0,
+  "notional": 1000.0,
+  "cusip": "40058MD88",
+  "issuer": "GS Finance Corp.",
+  "underlyings": [
+    "S&P 500\u00ae Index"
+  ],
+  "is_preliminary": false,
+  "pricing_date": "2026-10-22",
+  "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
+  "seconds": 0.12040979997254908,
+  "cost_usd": 0.32324965,
+  "model_seconds": 159.91127951378292,
+  "previous_crosscheck": {
     "second_model": "muse-spark-1.2",
     "agreed": false,
     "error": null,
@@ -338,21 +385,5 @@
       }
     ]
   },
-  "battery": null,
-  "fair_value": null,
-  "loss_odds": null,
-  "estimated_value": 961.0,
-  "issue_price": 1000.0,
-  "notional": 1000.0,
-  "cusip": "40058MD88",
-  "issuer": "GS Finance Corp.",
-  "underlyings": [
-    "S&P 500\u00ae Index"
-  ],
-  "is_preliminary": false,
-  "pricing_date": "2026-10-22",
-  "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
-  "seconds": 0.12040979997254908,
-  "cost_usd": 0.2188163,
-  "model_seconds": 108.88965931400014
+  "cost_usd_baseten": 0.10443335
 }
