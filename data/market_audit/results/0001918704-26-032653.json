@@ -496,7 +496,7 @@
     },
     "points": [
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -505,7 +505,7 @@
         "std_error": 0.03644212227581001
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -514,7 +514,7 @@
         "std_error": 0.03644212227581001
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -523,7 +523,7 @@
         "std_error": 0.036242312954827466
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -532,7 +532,7 @@
         "std_error": 0.036242312954827466
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -541,7 +541,7 @@
         "std_error": 0.03571719810848838
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -550,7 +550,7 @@
         "std_error": 0.03571719810848838
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -559,7 +559,7 @@
         "std_error": 0.036203154479748756
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -568,7 +568,7 @@
         "std_error": 0.036203154479748756
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -577,7 +577,7 @@
         "std_error": 0.035999045534667616
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -586,7 +586,7 @@
         "std_error": 0.035999045534667616
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -595,7 +595,7 @@
         "std_error": 0.03547009206109203
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -604,7 +604,7 @@
         "std_error": 0.03547009206109203
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -613,7 +613,7 @@
         "std_error": 0.03596658725604688
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -622,7 +622,7 @@
         "std_error": 0.03596658725604688
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -631,7 +631,7 @@
         "std_error": 0.035758088787218
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -640,7 +640,7 @@
         "std_error": 0.035758088787218
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -649,7 +649,7 @@
         "std_error": 0.03522518121296296
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -820,7 +820,7 @@
         "std_error": 0.04290017478663791
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -829,7 +829,7 @@
         "std_error": 0.05300790157586124
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -838,7 +838,7 @@
         "std_error": 0.05300790157586124
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -847,7 +847,7 @@
         "std_error": 0.051845717626055464
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -856,7 +856,7 @@
         "std_error": 0.051845717626055464
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -865,7 +865,7 @@
         "std_error": 0.0504669412686913
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -874,7 +874,7 @@
         "std_error": 0.0504669412686913
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -883,7 +883,7 @@
         "std_error": 0.05260848621603574
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -892,7 +892,7 @@
         "std_error": 0.05260848621603574
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -901,7 +901,7 @@
         "std_error": 0.05145439906135432
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -910,7 +910,7 @@
         "std_error": 0.05145439906135432
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -919,7 +919,7 @@
         "std_error": 0.050085256742928144
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -928,7 +928,7 @@
         "std_error": 0.050085256742928144
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -937,7 +937,7 @@
         "std_error": 0.052212128903131004
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -946,7 +946,7 @@
         "std_error": 0.052212128903131004
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -955,7 +955,7 @@
         "std_error": 0.05106614054759529
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -964,7 +964,7 @@
         "std_error": 0.05106614054759529
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -973,7 +973,7 @@
         "std_error": 0.0497066430423047
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -1015,6 +1015,11 @@
         0.0,
         0.05
       ],
+      "vol_rel_shifts": [
+        -0.15,
+        0.0,
+        0.15
+      ],
       "correlation_shifts": [
         -0.25,
         0.0,
@@ -1038,7 +1043,7 @@
     "assumptions": [
       "risk-free rate r = 0.0472041 per year, as of 2026-10-22",
       "issuer credit spread = 0.006 per year",
-      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "volatilities = (0.25,) per year (absolute grid shifts (-0.05, 0.0, 0.05))",
       "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
       "correlation: single underlying, correlation matrix [[1]]",
       "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 1",
@@ -1087,12 +1092,15 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-22",
   "structure": "single underlying, autocall, upside leverage 1.6x, barrier 100% at maturity",
-  "seconds": 0.37561849993653595,
+  "seconds": 0.5398226999677718,
   "market_inputs": {
     "rate": 0.047204109589041095,
     "rate_label": "U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr",
     "vols": [
       0.25
+    ],
+    "vol_anchored": [
+      false
     ],
     "vol_labels": [
       "The TJX Companies, Inc.: stated 0.25 (not anchored)"

@@ -30,6 +30,8 @@ class AssumptionGrid:
     Formula: each tuple lists absolute shifts (or, for correlation, blend
     weights and, for skew, an extra volatility per 10% below the initial
     level) applied one at a time and in combination over the cartesian grid.
+    Anchored vols use vol_rel_shifts instead (see vol_anchored in
+    fair_value_range); unanchored vols keep the wider absolute band.
 
     Intuition: a single set of assumptions gives a single, over-precise
     number. Showing the value over a stated range of plausible assumptions
@@ -40,14 +42,17 @@ class AssumptionGrid:
     """
 
     vol_shifts: tuple[float, ...] = (-0.05, 0.0, 0.05)
+    # vol_rel_shifts is declared last so earlier positional construction is stable.
     correlation_shifts: tuple[float, ...] = (-0.25, 0.0, 0.25)
     spread_shifts: tuple[float, ...] = (-0.0025, 0.0, 0.0025)
     dividend_shifts: tuple[float, ...] = (-0.005, 0.0, 0.005)
     skew_per_10pct: tuple[float, ...] = (0.0, 0.02)
+    vol_rel_shifts: tuple[float, ...] = (-0.15, 0.0, 0.15)
 
     def __post_init__(self) -> None:
         for name in (
             "vol_shifts",
+            "vol_rel_shifts",
             "correlation_shifts",
             "spread_shifts",
             "dividend_shifts",
@@ -65,10 +70,13 @@ def shifted_market(
     spread_shift: float = 0.0,
     dividend_shift: float = 0.0,
     skew_vol: float = 0.0,
+    vol_rel_shift: float = 0.0,
+    vol_anchored: tuple[bool, ...] | None = None,
 ) -> MarketInputs:
     """Return a new MarketInputs with the stated shifts applied.
 
-    Formula: vols_i = max(vol_i + vol_shift + skew_vol, 0.01);
+    Formula: vols_i = max(vol_i + vol_shift + skew_vol, 0.01); legs marked in
+    vol_anchored instead use max(vol_i * (1 + vol_rel_shift) + skew_vol, 0.01).
     q_i = max(q_i + dividend_shift, 0.0);
     spread = max(spread + spread_shift, 0.0).
     Correlation blend: w = correlation_shift; if w > 0,
@@ -92,7 +100,17 @@ def shifted_market(
     if not -1.0 <= correlation_shift <= 1.0:
         raise ValueError("correlation_shift must lie in [-1, 1]")
 
-    new_vols = tuple(max(float(v) + vol_shift + skew_vol, 0.01) for v in market.vols)
+    if vol_anchored is None:
+        new_vols = tuple(max(float(v) + vol_shift + skew_vol, 0.01) for v in market.vols)
+    else:
+        if len(vol_anchored) != market.n:
+            raise ValueError("vol_anchored must have one entry per underlying")
+        new_vols = tuple(
+            max(float(v) * (1.0 + vol_rel_shift) + skew_vol, 0.01)
+            if anchored
+            else max(float(v) + vol_shift + skew_vol, 0.01)
+            for v, anchored in zip(market.vols, vol_anchored)
+        )
     new_q = tuple(max(float(q) + dividend_shift, 0.0) for q in market.dividend_yields)
     new_spread = max(float(market.credit_spread) + spread_shift, 0.0)
 
@@ -119,6 +137,12 @@ def shifted_market(
         f"dividend_shift={dividend_shift:+.6g}, "
         f"skew_vol={skew_vol:+.6g}"
     )
+
+    if vol_anchored is not None:
+        new_sources["grid"] += (
+            f", vol_rel_shift={vol_rel_shift:+.6g}, "
+            f"vol_anchored={tuple(bool(a) for a in vol_anchored)}"
+        )
 
     return replace(
         market,
@@ -152,7 +176,10 @@ def skew_vol(ts: TermSheet, skew_per_10pct: float) -> float:
 
 @dataclass
 class GridPoint:
-    """One priced point of the assumption grid."""
+    """One priced point of the assumption grid.
+
+    vol_shift is the relative shift when vol_anchored is set, else the
+    absolute shift (the paired triples share indices)."""
 
     vol_shift: float
     correlation_shift: float
@@ -238,6 +265,7 @@ class FairValueRange:
             "seed": self.seed,
             "grid": {
                 "vol_shifts": list(self.grid.vol_shifts),
+                "vol_rel_shifts": list(self.grid.vol_rel_shifts),
                 "correlation_shifts": list(self.grid.correlation_shifts),
                 "spread_shifts": list(self.grid.spread_shifts),
                 "dividend_shifts": list(self.grid.dividend_shifts),
@@ -247,7 +275,41 @@ class FairValueRange:
         }
 
 
-def _assumptions(ts: TermSheet, market: MarketInputs, grid: AssumptionGrid) -> list[str]:
+def _vol_grid_note(
+    market: MarketInputs, grid: AssumptionGrid, vol_anchored: tuple[bool, ...] | None
+) -> str:
+    """One-line note saying which vol band the grid uses, and why.
+
+    Formula: no pricing formula; this only describes the grid. Anchored
+    legs centre on the implied vol observed on the pricing date, so a
+    ±15% relative band states the uncertainty honestly; unanchored legs
+    keep the wider absolute band.
+
+    Intuition: an observed input deserves a tighter band than a stated
+    one, and the report must say which legs got which.
+
+    Reference: project brief section 6 (inputs stated with ranges).
+    """
+    if vol_anchored is None or not any(vol_anchored):
+        return f"absolute grid shifts {tuple(grid.vol_shifts)}"
+    if all(vol_anchored):
+        return (
+            f"relative grid shifts {tuple(grid.vol_rel_shifts)} (implied vol "
+            "observed on the pricing date; ±15% relative band)"
+        )
+    return (
+        f"anchored legs relative {tuple(grid.vol_rel_shifts)} (implied vol "
+        "observed on the pricing date; ±15% relative band), other legs "
+        f"absolute {tuple(grid.vol_shifts)}"
+    )
+
+
+def _assumptions(
+    ts: TermSheet,
+    market: MarketInputs,
+    grid: AssumptionGrid,
+    vol_anchored: tuple[bool, ...] | None = None,
+) -> list[str]:
     corr = market.correlation
     if market.n == 1:
         corr_text = "correlation: single underlying, correlation matrix [[1]]"
@@ -256,7 +318,7 @@ def _assumptions(ts: TermSheet, market: MarketInputs, grid: AssumptionGrid) -> l
     lines = [
         f"risk-free rate r = {market.risk_free_rate:.6g} per year, as of {market.as_of.isoformat()}",
         f"issuer credit spread = {market.credit_spread:.6g} per year",
-        f"volatilities = {tuple(market.vols)} per year (grid shifts {tuple(grid.vol_shifts)})",
+        f"volatilities = {tuple(market.vols)} per year ({_vol_grid_note(market, grid, vol_anchored)})",
         f"dividend yields = {tuple(market.dividend_yields)} per year (grid shifts {tuple(grid.dividend_shifts)})",
         corr_text,
         (
@@ -279,6 +341,7 @@ def fair_value_range(
     n_paths: int = 20_000,
     seed: int = 0,
     n_paths_base: int = 100_000,
+    vol_anchored: tuple[bool, ...] | None = None,
 ) -> FairValueRange:
     """Fair-value range over the full cartesian product of ``grid``.
 
@@ -288,13 +351,17 @@ def fair_value_range(
     skew_vol(ts, skew_per_10pct))`` using ``n_paths`` and the same ``seed``
     for every point; low / high are the min / max point prices. ``base`` is
     priced at the unshifted inputs with no skew using ``n_paths_base``.
-    Correlation shifts other than 0 are skipped when N = 1.
+    Correlation shifts other than 0 are skipped when N = 1. Each vol point is
+    an absolute shift, except legs marked in vol_anchored use the paired
+    relative shift instead.
 
     Intuition: using the same seed for every point (common random numbers)
     means the differences between points are far more precise than each
     point's own standard error, so the range reflects assumption changes
     rather than simulation noise. The bank's estimated value is never used
-    as an input; it is only compared with the resulting range.
+    as an input; it is only compared with the resulting range. The vol band
+    never depends on it either: vol_anchored marks observed legs (relative
+    band) and is fixed before pricing.
 
     Reference: Glasserman chapters 2-3 (common random numbers); Hull
     chapters 4, 21 and 26; project brief section 6.
@@ -306,9 +373,25 @@ def fair_value_range(
     else:
         correlation_shifts = tuple(grid.correlation_shifts)
 
+    if vol_anchored is None:
+        vol_axis: tuple[tuple[float, float], ...] = tuple(
+            (float(s), 0.0) for s in grid.vol_shifts
+        )
+    else:
+        if len(vol_anchored) != market.n:
+            raise ValueError("vol_anchored must have one entry per underlying")
+        if len(grid.vol_rel_shifts) != len(grid.vol_shifts):
+            raise ValueError("vol_rel_shifts and vol_shifts must have the same length")
+        vol_axis = tuple(
+            zip(
+                (float(s) for s in grid.vol_shifts),
+                (float(r) for r in grid.vol_rel_shifts),
+            )
+        )
+
     points: list[GridPoint] = []
-    for vol_shift, corr_shift, spread_shift, div_shift, skew in itertools.product(
-        grid.vol_shifts,
+    for (vol_shift, vol_rel), corr_shift, spread_shift, div_shift, skew in itertools.product(
+        vol_axis,
         correlation_shifts,
         grid.spread_shifts,
         grid.dividend_shifts,
@@ -317,6 +400,8 @@ def fair_value_range(
         shifted = shifted_market(
             market,
             vol_shift=float(vol_shift),
+            vol_rel_shift=float(vol_rel),
+            vol_anchored=vol_anchored,
             correlation_shift=float(corr_shift),
             spread_shift=float(spread_shift),
             dividend_shift=float(div_shift),
@@ -325,7 +410,7 @@ def fair_value_range(
         result = price_note(ts, shifted, n_paths=n_paths, seed=seed)
         points.append(
             GridPoint(
-                vol_shift=float(vol_shift),
+                vol_shift=(float(vol_rel) if vol_anchored is not None else float(vol_shift)),
                 correlation_shift=float(corr_shift),
                 spread_shift=float(spread_shift),
                 dividend_shift=float(div_shift),
@@ -370,8 +455,8 @@ def fair_value_range(
 
     sensitivities: dict[str, tuple[float, float]] = {
         "vol": (
-            _point(vol=min(grid.vol_shifts)).price,
-            _point(vol=max(grid.vol_shifts)).price,
+            _point(vol=(min(grid.vol_rel_shifts) if vol_anchored is not None else min(grid.vol_shifts))).price,
+            _point(vol=(max(grid.vol_rel_shifts) if vol_anchored is not None else max(grid.vol_shifts))).price,
         ),
         "correlation": (corr_low_price, corr_high_price),
         "spread": (
@@ -410,5 +495,5 @@ def fair_value_range(
         n_paths=int(n_paths),
         seed=int(seed),
         grid=grid,
-        assumptions=_assumptions(ts, market, grid),
+        assumptions=_assumptions(ts, market, grid, vol_anchored),
     )

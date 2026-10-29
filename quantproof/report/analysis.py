@@ -161,7 +161,7 @@ def check_to_dict(check) -> dict:
     }
 
 
-def analyse(ts, checks, market, *, paths, base_paths, seed, erp, battery: bool, filing_text) -> dict:
+def analyse(ts, checks, market, *, paths, base_paths, seed, erp, battery: bool, filing_text, grid=None, vol_anchored=None) -> dict:
     """Run the pricing pipeline on an already-extracted, verified term sheet.
 
     Formula: fair value is the risk-neutral range from ``fair_value_range``
@@ -175,8 +175,13 @@ def analyse(ts, checks, market, *, paths, base_paths, seed, erp, battery: bool, 
 
     Reference: project brief section 6 (risk-neutral for value, a separate
     labelled real-world simulation for loss odds; fair value as a range).
+    grid and vol_anchored pass straight to fair_value_range (default: the
+    absolute band on every leg).
     """
-    fair = fair_value_range(ts, market, n_paths=paths, seed=seed, n_paths_base=base_paths)
+    if grid is None:
+        fair = fair_value_range(ts, market, n_paths=paths, seed=seed, n_paths_base=base_paths, vol_anchored=vol_anchored)
+    else:
+        fair = fair_value_range(ts, market, grid, n_paths=paths, seed=seed, n_paths_base=base_paths, vol_anchored=vol_anchored)
     odds = loss_odds(
         ts, market, equity_risk_premium=erp, n_paths=base_paths, seed=seed
     )

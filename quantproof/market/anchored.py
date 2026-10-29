@@ -85,7 +85,9 @@ def anchored_inputs(
     ``dividends`` and ``rho`` ready for the market-inputs constructor.
     ``report`` holds the same numbers plus one human label per input
     (``rate_label``, ``vol_labels``, ``corr_label``) stating the
-    source and date, or saying what is missing / not anchored.
+    source and date, or saying what is missing / not anchored, plus a
+    ``vol_anchored`` boolean mask (True where the vol is a FRED implied-vol
+    centre, for the relative grid band).
     Deterministic and offline: Treasury months and FRED files are
     local; nothing is downloaded.
     """
@@ -164,6 +166,7 @@ def anchored_inputs(
                 f"no pair with two confirmed FRED closes series: stated {STATED_CORRELATION}",
             )
 
+    vol_anchored = ["via FRED" in label for label in vol_labels]
     market = {
         "rate": rate,
         "spread": STATED_SPREAD,
@@ -175,6 +178,7 @@ def anchored_inputs(
         "rate": rate,
         "rate_label": rate_label,
         "vols": list(vols),
+        "vol_anchored": list(vol_anchored),
         "vol_labels": vol_labels,
         "rho": rho,
         "corr_label": corr_label,

@@ -361,3 +361,76 @@ def test_fair_value_range_one_asset_collapses_correlation_shifts(jpm_38582_terms
     # exact equality, no tolerance.
     corr_low, corr_high = result.sensitivities["correlation"]
     assert corr_low == corr_high
+
+
+# ---------------------------------------------------------------------------
+# Relative vol band for anchored legs
+# ---------------------------------------------------------------------------
+
+
+def test_shifted_market_relative_band_for_anchored_legs(jpm_38582_termsheet):
+    market = _market(jpm_38582_termsheet)  # vols (0.24, 0.17)
+    shifted = shifted_market(
+        market, vol_shift=-0.05, vol_rel_shift=-0.15, vol_anchored=(True, False)
+    )
+    # Anchored leg scales: 0.24 * (1 - 0.15) = 0.204; the other leg keeps
+    # the absolute shift: 0.17 - 0.05 = 0.12. Both are exact decimal
+    # arithmetic, so 1e-12 allows only float round-off.
+    assert shifted.vols[0] == pytest.approx(0.204, abs=1e-12)
+    assert shifted.vols[1] == pytest.approx(0.12, abs=1e-12)
+    assert "vol_anchored=(True, False)" in shifted.sources["grid"]
+
+
+def test_shifted_market_vol_anchored_length_mismatch_raises(jpm_38582_termsheet):
+    market = _market(jpm_38582_termsheet)
+    with pytest.raises(ValueError):
+        shifted_market(market, vol_anchored=(True,))
+
+
+def test_fair_value_range_relative_band_narrows_and_ignores_bank(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    market = _market(ts)
+    grid = AssumptionGrid(
+        vol_shifts=(-0.05, 0.0, 0.05),
+        correlation_shifts=(0.0,),
+        spread_shifts=(0.0,),
+        dividend_shifts=(0.0,),
+        skew_per_10pct=(0.0,),
+    )
+    kwargs = dict(grid=grid, n_paths=5_000, n_paths_base=5_000, seed=0)
+    absolute = fair_value_range(ts, market, **kwargs)
+    anchored = fair_value_range(ts, market, vol_anchored=(True, True), **kwargs)
+    # 3 vol points each; anchored points record the relative shift.
+    assert [p.vol_shift for p in absolute.points] == [-0.05, 0.0, 0.05]
+    assert [p.vol_shift for p in anchored.points] == [-0.15, 0.0, 0.15]
+    # The ±15% relative band sits inside the ±5-point absolute band on both
+    # legs, and value falls as vol rises (short-put note), so the anchored
+    # range nests inside the absolute one. Common random numbers keep noise
+    # far below these moves, so strict inequalities are used, as above.
+    assert anchored.low > absolute.low
+    assert anchored.high < absolute.high
+    # The assumptions state why: implied vol observed on the pricing date.
+    assert any("±15% relative band" in line for line in anchored.assumptions)
+    assert anchored.to_dict()["grid"]["vol_rel_shifts"] == [-0.15, 0.0, 0.15]
+    # The bank's number never chooses the band: a different disclosed
+    # estimate reprices identically (deterministic MC, exact equality).
+    changed_ts = copy.deepcopy(ts)
+    changed_ts.estimated_value = Cited(500.0)
+    changed = fair_value_range(changed_ts, market, vol_anchored=(True, True), **kwargs)
+    assert changed.low == anchored.low
+    assert changed.high == anchored.high
+    assert changed.points == anchored.points
+
+
+def test_fair_value_range_mismatched_vol_triples_raise(jpm_38582_termsheet):
+    ts = jpm_38582_termsheet
+    market = _market(ts)
+    grid = AssumptionGrid(
+        vol_shifts=(0.0,),
+        correlation_shifts=(0.0,),
+        spread_shifts=(0.0,),
+        dividend_shifts=(0.0,),
+        skew_per_10pct=(0.0,),
+    )
+    with pytest.raises(ValueError):
+        fair_value_range(ts, market, grid=grid, vol_anchored=(True, True))

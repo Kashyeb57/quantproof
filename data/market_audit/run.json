@@ -27,7 +27,7 @@
     "dividend": 0.01,
     "correlation": "realised",
     "erp": 0.05,
-    "note": "Inputs are anchored where a licence allows and stated otherwise: risk_free_rate is the U.S. Treasury par yield on each note's pricing date interpolated to its maturity; vol is the 30-day implied-vol index close (VIX/VXN/RVX) on the pricing date as the grid centre for index underlyings (single stocks and others keep stated 0.25); correlation is the average realised pairwise correlation from cached FRED closes where both legs exist, else stated 0.6 (0 for one underlying); credit_spread 0.006, dividend 0.01 and erp 0.05 stay stated. The per-note market_inputs record states every source and date, including anything missing or not anchored."
+    "note": "Inputs are anchored where a licence allows and stated otherwise: risk_free_rate is the U.S. Treasury par yield on each note's pricing date interpolated to its maturity; vol is the 30-day implied-vol index close (VIX/VXN/RVX) on the pricing date as the grid centre for index underlyings (single stocks and others keep stated 0.25); correlation is the average realised pairwise correlation from cached FRED closes where both legs exist, else stated 0.6 (0 for one underlying); credit_spread 0.006, dividend 0.01 and erp 0.05 stay stated. The per-note market_inputs record states every source and date, including anything missing or not anchored. Anchored vols use a relative band (centre x (1 \u00b1 0.15): implied vol observed on the pricing date; \u00b115% relative band); unanchored vols keep the wider absolute band. The bank's estimated value never chooses the band."
   },
   "kept": 43,
   "skipped": 190,

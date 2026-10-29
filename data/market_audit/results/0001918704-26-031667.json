@@ -443,7 +443,7 @@
     },
     "points": [
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -452,7 +452,7 @@
         "std_error": 1.2425473806621314
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -461,7 +461,7 @@
         "std_error": 1.2425473806621314
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -470,7 +470,7 @@
         "std_error": 1.2054655950783648
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -479,7 +479,7 @@
         "std_error": 1.2054655950783648
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -488,7 +488,7 @@
         "std_error": 1.1663149065913399
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -497,7 +497,7 @@
         "std_error": 1.1663149065913399
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -506,7 +506,7 @@
         "std_error": 1.2362993418807418
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -515,7 +515,7 @@
         "std_error": 1.2362993418807418
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -524,7 +524,7 @@
         "std_error": 1.1994040187514587
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -533,7 +533,7 @@
         "std_error": 1.1994040187514587
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -542,7 +542,7 @@
         "std_error": 1.1604501960128086
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -551,7 +551,7 @@
         "std_error": 1.1604501960128086
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -560,7 +560,7 @@
         "std_error": 1.2300827208056075
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -569,7 +569,7 @@
         "std_error": 1.2300827208056075
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -578,7 +578,7 @@
         "std_error": 1.1933729225209713
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -587,7 +587,7 @@
         "std_error": 1.1933729225209713
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -596,7 +596,7 @@
         "std_error": 1.1546149756088226
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -767,7 +767,7 @@
         "std_error": 1.3051241402159302
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -776,7 +776,7 @@
         "std_error": 1.4950979564188478
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -785,7 +785,7 @@
         "std_error": 1.4950979564188478
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -794,7 +794,7 @@
         "std_error": 1.4532235119091945
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -803,7 +803,7 @@
         "std_error": 1.4532235119091945
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -812,7 +812,7 @@
         "std_error": 1.410398421967815
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -821,7 +821,7 @@
         "std_error": 1.410398421967815
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -830,7 +830,7 @@
         "std_error": 1.4875799895718185
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -839,7 +839,7 @@
         "std_error": 1.4875799895718185
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -848,7 +848,7 @@
         "std_error": 1.445916106974988
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -857,7 +857,7 @@
         "std_error": 1.445916106974988
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -866,7 +866,7 @@
         "std_error": 1.4033063591822739
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -875,7 +875,7 @@
         "std_error": 1.4033063591822739
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -884,7 +884,7 @@
         "std_error": 1.48009982615116
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -893,7 +893,7 @@
         "std_error": 1.48009982615116
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -902,7 +902,7 @@
         "std_error": 1.4386454466753371
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -911,7 +911,7 @@
         "std_error": 1.4386454466753371
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -920,7 +920,7 @@
         "std_error": 1.3962499582024825
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -962,6 +962,11 @@
         0.0,
         0.05
       ],
+      "vol_rel_shifts": [
+        -0.15,
+        0.0,
+        0.15
+      ],
       "correlation_shifts": [
         -0.25,
         0.0,
@@ -985,7 +990,7 @@
     "assumptions": [
       "risk-free rate r = 0.0482164 per year, as of 2026-10-14",
       "issuer credit spread = 0.006 per year",
-      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "volatilities = (0.25,) per year (absolute grid shifts (-0.05, 0.0, 0.05))",
       "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
       "correlation: single underlying, correlation matrix [[1]]",
       "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 1",
@@ -1033,12 +1038,15 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-14",
   "structure": "single underlying, upside leverage 1x, cap 12.85%, barrier 100% at maturity",
-  "seconds": 0.2674741998780519,
+  "seconds": 0.4795168999116868,
   "market_inputs": {
     "rate": 0.04821643835616438,
     "rate_label": "U.S. Treasury par yield, 2026-10-14, 2.02y interpolated between 2 Yr and 3 Yr",
     "vols": [
       0.25
+    ],
+    "vol_anchored": [
+      false
     ],
     "vol_labels": [
       "MSCI ACWI Index: stated 0.25 (not anchored)"

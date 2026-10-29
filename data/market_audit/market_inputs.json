@@ -7,6 +7,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-19, 1.26y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 18.44 on 2026-10-19 via FRED)"
     ],
@@ -22,6 +25,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-16, 1.30y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "Russell 2000\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (RVX 23.21 on 2026-10-16 via FRED)"
     ],
@@ -37,6 +43,11 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-16, 3.02y interpolated between 3 Yr and 5 Yr",
     "rho": 0.6,
     "spread": 0.006,
+    "vol_anchored": [
+      false,
+      false,
+      false
+    ],
     "vol_labels": [
       "the common stock of Constellation Energy Corporation: stated 0.25 (not anchored)",
       "the common stock of Quanta Services, Inc.: stated 0.25 (not anchored)",
@@ -56,6 +67,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-21, 0.51y interpolated between 0.5 Yr and 1 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      false
+    ],
     "vol_labels": [
       "TOPIX\u00ae Index: stated 0.25 (not anchored)"
     ],
@@ -71,6 +85,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-15, 3.03y interpolated between 3 Yr and 5 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "Russell 2000\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (RVX 20.56 on 2026-10-15 via FRED)"
     ],
@@ -86,6 +103,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-21, 1.82y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 16.68 on 2026-10-21 via FRED)"
     ],
@@ -101,6 +121,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-09-21, 1.04y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 14.87 on 2026-09-21 via FRED)"
     ],
@@ -116,6 +139,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-19, 1.73y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 18.44 on 2026-10-19 via FRED)"
     ],
@@ -131,6 +157,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-22, 2.38y interpolated between 2 Yr and 3 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 19.03 on 2026-10-22 via FRED)"
     ],
@@ -146,6 +175,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-09-25, 1.02y interpolated between 1 Yr and 2 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      true
+    ],
     "vol_labels": [
       "S&P 500\u00ae Index: 30-day implied vol applied to the note's life: a stated simplification (VIX 14.87 on 2026-09-25 via FRED)"
     ],
@@ -161,6 +193,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-14, 2.02y interpolated between 2 Yr and 3 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      false
+    ],
     "vol_labels": [
       "MSCI ACWI Index: stated 0.25 (not anchored)"
     ],
@@ -176,6 +211,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      false
+    ],
     "vol_labels": [
       "The TJX Companies, Inc.: stated 0.25 (not anchored)"
     ],
@@ -191,6 +229,9 @@
     "rate_label": "U.S. Treasury par yield, 2026-10-22, 3.01y interpolated between 3 Yr and 5 Yr",
     "rho": 0.0,
     "spread": 0.006,
+    "vol_anchored": [
+      false
+    ],
     "vol_labels": [
       "First Trust Nasdaq Cybersecurity ETF: stated 0.25 (not anchored)"
     ],

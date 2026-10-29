@@ -18,7 +18,7 @@ Carlo for the estimated fair value (as a range, via
 ``quantproof.report.analysis.analyse``), a separate labelled real-world
 simulation for loss odds, issuer credit spread in discounting, and the
 stated assumptions in :data:`ASSUMPTIONS` for every note.  Those
-assumptions are *not* market data as of each pricing date, and they are
+inputs are anchored to each pricing date where a licence allows, and they are
 never adjusted to match the bank's estimated value; the bank's value is
 a comparison point only.
 
@@ -76,7 +76,10 @@ ASSUMPTIONS: dict[str, Any] = {
         "both legs exist, else stated 0.6 (0 for one underlying); "
         "credit_spread 0.006, dividend 0.01 and erp 0.05 stay stated. "
         "The per-note market_inputs record states every source and "
-        "date, including anything missing or not anchored."
+        "date, including anything missing or not anchored. Anchored vols use "
+        "a relative band (centre x (1 ± 0.15): implied vol observed on the "
+        "pricing date; ±15% relative band); unanchored vols keep the wider "
+        "absolute band. The bank's estimated value never chooses the band."
     ),
 }
 
@@ -469,6 +472,18 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
         ts.maturity_date.value,
     )
     result["market_inputs"] = market_inputs
+    # Relative vol band for anchored legs only; the mask comes from the
+    # inputs record, never from the bank's estimated value. Older records
+    # without it price on the absolute band, as before.
+    raw_mask = market_inputs.get("vol_anchored")
+    if (
+        isinstance(raw_mask, list)
+        and len(raw_mask) == n
+        and all(isinstance(a, bool) for a in raw_mask)
+    ):
+        vol_mask: tuple[bool, ...] | None = tuple(raw_mask)
+    else:
+        vol_mask = None
     market = demo_module.build_market(
         ts,
         rate=float(anchored["rate"]),
@@ -520,6 +535,7 @@ def audit_note(filing: Filing, *, chat: Callable, meta: dict) -> dict:
             seed=SEED,
             erp=ASSUMPTIONS["erp"],
             battery=False,
+            vol_anchored=vol_mask,
             filing_text=filing.text,
         )
     except (ValueError, ZeroDivisionError, IndexError) as exc:

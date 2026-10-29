@@ -59,6 +59,7 @@ def test_rate_vol_and_rho_anchored(tmp_path: Path):
     assert "stated simplification" in report["vol_labels"][0]
     assert "VIX 18.00 on 2026-10-19" in report["vol_labels"][0]
     assert market["rho"] == 0.0  # single underlying
+    assert report["vol_anchored"] == [True]
 
 
 def test_weekend_pricing_date_uses_last_trading_day(tmp_path: Path):
@@ -88,6 +89,7 @@ def test_unmapped_underlying_and_missing_rate_say_so(tmp_path: Path):
     assert "missing" in report["rate_label"]
     assert market["vols"] == (pytest.approx(0.25),)
     assert "not anchored" in report["vol_labels"][0]
+    assert report["vol_anchored"] == [False]
     assert market["rho"] == 0.0
 
 

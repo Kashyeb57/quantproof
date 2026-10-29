@@ -491,3 +491,46 @@ def test_market_audit_script_redo_keeps_previous_recording(tmp_path, monkeypatch
         {"meta": {"accession": accession}, "status": "extraction_failed"}), encoding="utf-8")
     assert module._redo([accession], out, budget_usd=0.001) == 0
     assert json.loads((out / "results" / f"{accession}.json").read_text())["status"] == "extraction_failed"
+
+
+def test_anchored_mask_selects_relative_band(monkeypatch):
+    """Anchored vols price on the relative band through audit_note (offline).
+
+    The mask comes from the inputs record, never from the bank's number;
+    the same recorded model calls replay, so this spends nothing.
+    """
+    def _anchored(names, pricing_date, maturity_date, **kwargs):
+        n = len(names)
+        vols = (0.24, 0.17)[:n] if n == 2 else (0.25,) * n
+        rho = 0.6 if n > 1 else 0.0
+        return (
+            {
+                "rate": 0.037,
+                "spread": 0.006,
+                "vols": vols,
+                "dividends": (0.01,) * n,
+                "rho": rho,
+            },
+            {
+                "rate": 0.037,
+                "rate_label": "test",
+                "vols": list(vols),
+                "vol_labels": ["test"] * n,
+                "vol_anchored": [True] * n,
+                "rho": rho,
+                "corr_label": "test",
+                "spread": 0.006,
+                "dividend": 0.01,
+                "erp": 0.05,
+            },
+        )
+
+    monkeypatch.setattr(audit_run, "anchored_inputs", _anchored)
+    replay, result = _run(_calls())
+    assert replay.remaining == 0
+    assert result["market_inputs"]["vol_anchored"] == [True, True]
+    assert result["fair_value"] is not None
+    assert any(
+        "±15% relative band" in line
+        for line in result["fair_value"]["assumptions"]
+    )

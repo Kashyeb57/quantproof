@@ -468,7 +468,7 @@
     },
     "points": [
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -477,7 +477,7 @@
         "std_error": 0.4987822416835955
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -486,7 +486,7 @@
         "std_error": 0.5502102485591683
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -495,7 +495,7 @@
         "std_error": 0.49660508253137847
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -504,7 +504,7 @@
         "std_error": 0.5463541319314732
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -513,7 +513,7 @@
         "std_error": 0.49333868694962557
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -522,7 +522,7 @@
         "std_error": 0.5417854666807673
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -531,7 +531,7 @@
         "std_error": 0.4981437994089435
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -540,7 +540,7 @@
         "std_error": 0.5495059783320623
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -549,7 +549,7 @@
         "std_error": 0.49596942702482943
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -558,7 +558,7 @@
         "std_error": 0.5456547975414225
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -567,7 +567,7 @@
         "std_error": 0.49270721243600446
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -576,7 +576,7 @@
         "std_error": 0.5410919801914458
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -585,7 +585,7 @@
         "std_error": 0.49750617434169
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -594,7 +594,7 @@
         "std_error": 0.5488026095722663
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -603,7 +603,7 @@
         "std_error": 0.49533458515860995
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -612,7 +612,7 @@
         "std_error": 0.5449563583008008
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -621,7 +621,7 @@
         "std_error": 0.4920765462110337
       },
       {
-        "vol_shift": -0.05,
+        "vol_shift": -0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -792,7 +792,7 @@
         "std_error": 0.6838660071690777
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -801,7 +801,7 @@
         "std_error": 0.7890310217270602
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": -0.005,
@@ -810,7 +810,7 @@
         "std_error": 0.848962929382212
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -819,7 +819,7 @@
         "std_error": 0.7824855961145782
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.0,
@@ -828,7 +828,7 @@
         "std_error": 0.8420370726470742
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -837,7 +837,7 @@
         "std_error": 0.7753978129536768
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": -0.0025,
         "dividend_shift": 0.005,
@@ -846,7 +846,7 @@
         "std_error": 0.8348795407933788
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -855,7 +855,7 @@
         "std_error": 0.7880210604289551
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": -0.005,
@@ -864,7 +864,7 @@
         "std_error": 0.8478762551215154
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -873,7 +873,7 @@
         "std_error": 0.7814840129744496
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.0,
@@ -882,7 +882,7 @@
         "std_error": 0.8409592634969574
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -891,7 +891,7 @@
         "std_error": 0.7744053021902796
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0,
         "dividend_shift": 0.005,
@@ -900,7 +900,7 @@
         "std_error": 0.8338108932984611
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -909,7 +909,7 @@
         "std_error": 0.7870123918833474
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": -0.005,
@@ -918,7 +918,7 @@
         "std_error": 0.846790971806063
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -927,7 +927,7 @@
         "std_error": 0.780483711862759
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.0,
@@ -936,7 +936,7 @@
         "std_error": 0.8398828339447257
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -945,7 +945,7 @@
         "std_error": 0.7734140618426599
       },
       {
-        "vol_shift": 0.05,
+        "vol_shift": 0.15,
         "correlation_shift": 0.0,
         "spread_shift": 0.0025,
         "dividend_shift": 0.005,
@@ -987,6 +987,11 @@
         0.0,
         0.05
       ],
+      "vol_rel_shifts": [
+        -0.15,
+        0.0,
+        0.15
+      ],
       "correlation_shifts": [
         -0.25,
         0.0,
@@ -1010,7 +1015,7 @@
     "assumptions": [
       "risk-free rate r = 0.0435419 per year, as of 2026-10-21",
       "issuer credit spread = 0.006 per year",
-      "volatilities = (0.25,) per year (grid shifts (-0.05, 0.0, 0.05))",
+      "volatilities = (0.25,) per year (absolute grid shifts (-0.05, 0.0, 0.05))",
       "dividend yields = (0.01,) per year (grid shifts (-0.005, 0.0, 0.005))",
       "correlation: single underlying, correlation matrix [[1]]",
       "skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 0.9",
@@ -1058,12 +1063,15 @@
   "is_preliminary": false,
   "pricing_date": "2026-10-21",
   "structure": "single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity",
-  "seconds": 0.2614698999095708,
+  "seconds": 0.4594962000846863,
   "market_inputs": {
     "rate": 0.04354191780821918,
     "rate_label": "U.S. Treasury par yield, 2026-10-21, 0.51y interpolated between 0.5 Yr and 1 Yr",
     "vols": [
       0.25
+    ],
+    "vol_anchored": [
+      false
     ],
     "vol_labels": [
       "TOPIX\u00ae Index: stated 0.25 (not anchored)"

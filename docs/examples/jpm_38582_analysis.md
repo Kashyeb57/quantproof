@@ -123,7 +123,7 @@ Assumptions:
 
 - risk-free rate r = 0.035515 per year, as of 2025-11-25
 - issuer credit spread = 0.006 per year
-- volatilities = (0.2336, 0.1856) per year (grid shifts (-0.05, 0.0, 0.05))
+- volatilities = (0.2336, 0.1856) per year (absolute grid shifts (-0.05, 0.0, 0.05))
 - dividend yields = (0.012, 0.013) per year (grid shifts (-0.005, 0.0, 0.005))
 - correlation: ((1.0, 0.6), (0.6, 1.0)) (grid blends towards independence / perfect correlation)
 - skew: extra vol per 10% below initial in (0.0, 0.02), applied at downside level 0.7
