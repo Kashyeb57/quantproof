@@ -26,6 +26,11 @@ def test_app_runs_demo_flow_to_verdict():
 
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
     assert not at.exception
+    assert at.header[0].value == "Overview"
+    radios = [r for r in at.sidebar.radio if r.label == "Page"]
+    assert radios, "Page sidebar radio not found"
+    radios[0].set_value("Note analysis").run()
+    assert not at.exception
     assert [h.value for h in at.header][:2] == ["1. Pick a note", "2. Term sheet"]
 
     confirm = next(c for c in at.checkbox if "I confirm" in c.label)

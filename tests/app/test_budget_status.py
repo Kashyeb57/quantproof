@@ -47,6 +47,9 @@ def test_budget_line_recomputes_from_guard_state_on_rerun():
 
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
     at.session_state["live_guard"] = live.LiveGuard(extractions_used=2)
+    [r for r in at.sidebar.radio if r.label == "Page"][0].set_value(
+        "Note analysis"
+    ).run()
     at.radio[0].set_value("Live mode").run()
     assert not at.exception
     rendered = "\n".join(str(el.value) for el in at.markdown)
@@ -62,6 +65,9 @@ def test_app_shows_remaining_runs_in_live_mode(monkeypatch, tmp_path):
 
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
     assert not at.exception
+    [r for r in at.sidebar.radio if r.label == "Page"][0].set_value(
+        "Note analysis"
+    ).run()
     at.radio[0].set_value("Live mode").run()
     assert not at.exception
     rendered = "\n".join(str(el.value) for el in at.markdown)

@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from quantproof.app import audit_page, demo, live, synthesis_page
+from quantproof.app import audit_page, demo, live, overview_page, synthesis_page
 from quantproof.agent import client as meta_client
 from quantproof.ingest.edgar import EdgarClient
 
@@ -127,7 +127,18 @@ def run() -> None:
     """Render the Stage A demo app."""
     st.set_page_config(page_title="QuantProof risk analysis", layout="wide")
     st.title("QuantProof")
-    page = st.sidebar.radio("Page", ["Note analysis", "Market Audit", "Synthesis replay"])
+    page_names = ["Overview", "Note analysis", "Market Audit", "Synthesis replay"]
+    current = st.session_state.get("page", "Overview")
+    page = st.sidebar.radio(
+        "Page",
+        page_names,
+        index=page_names.index(current) if current in page_names else 0,
+    )
+    st.session_state["page"] = page
+    if page == "Overview":
+        overview_page.render(st)
+        _footer()
+        return
     if page == "Market Audit":
         audit_page.render(st)
         _footer()
