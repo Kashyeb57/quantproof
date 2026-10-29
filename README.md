@@ -44,6 +44,15 @@ From the generated example report ([docs/examples/jpm_38582_analysis.md](docs/ex
 - The assumption that moves the estimated value most is volatility ($951.33 to $859.93 across its stated range).
 - Real-world loss odds (separate REAL-WORLD measure, not a value; drift = risk-free rate + 5.0% equity risk premium): P(loss) 10.17% (SE 0.10%), P(loss > 50%) 3.42% (SE 0.06%), P(called early) 81.72% (SE 0.12%), expected cash $1,080.84 (SE $0.66). Issuer default is not simulated: if the issuer defaults, you can lose money regardless of the index.
 
+## Market audit and synthesis benchmark
+
+Two generated reports summarise what the pipeline did on real filings: [docs/MARKET_AUDIT.md](docs/MARKET_AUDIT.md) and [docs/SYNTHESIS_BENCHMARK.md](docs/SYNTHESIS_BENCHMARK.md). Headlines (every figure from those files and the saved rows behind them):
+
+- Market audit: 44 notes read across 11 issuers; 42 extracted; 11 priced with templates and 2 held by the plausibility gate for review; quote verification 95.2%; the bank's estimated value inside our range on 11 of 13 priced-or-held notes (84.6%); median cost to investor 1.9% of issue price ($19.15 per $1,000, the bank's own figure).
+- Cross-check: every extraction compared with a second extraction by Muse Spark Open (Baseten). 12 of 42 agreed on every field; the 62 differing fields were re-checked against the filing with a verified quote (36 resolved to the second extraction, 20 to the first) and 6 stayed unresolved for the user to confirm.
+- Synthesis: templates priced 11 of 42 extracted notes; with proven AI-written payoffs, 26 of 42. Of 31 attempted notes, 24 passed (77.4%): 19 on the first attempt, 5 after repair; 6 failed, 1 skipped (fewer than 3 filing examples). The battery failed 13 attempts on filing examples and 5 of those notes were repaired (for example a rounded 1.1429 gearing fixed to the exact 1/0.85). On the 2 template-covered notes the AI payoff matched the template within 3 standard errors, and both matched the filing tables to the cent.
+- Model cost: market audit $8.52 (of which $3.03 Baseten credits), synthesis benchmark $3.55 (of which $2.22 Baseten credits); $12.07 combined.
+
 ## Methodology
 
 - **Two measures, never mixed.** Fair value uses a risk-neutral simulation. "How likely am I to lose money?" uses a separate real-world simulation with a stated, adjustable drift assumption, labelled as such everywhere. Risk-neutral probabilities are never presented as real-world odds.

@@ -219,6 +219,15 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
 - README rewritten as a research note, live URL first. Demo video link still a placeholder.
 - Suite: 1,500 passed, 13 skipped.
 
+## Since Day 7 (Oct 28-29, from git log + generated docs)
+
+- Anchored per-note inputs: Treasury par yield per pricing date, FRED implied-vol centres (VIX/VXN/RVX, relative ±15% band), FRED realised correlation; audit re-priced offline; `docs/MARKET_AUDIT.md` regenerated.
+- Cross-check now Muse Spark Open via Baseten as second extractor; audit re-cross-checked (42 notes: 12 fully agreed; 62 differing fields: 36 resolved second, 20 first, 6 unresolved).
+- Synthesis benchmark second round (21 more notes) with `--model wonder|open`; open-model results committed.
+- Final numbers (`docs/MARKET_AUDIT.md`, `docs/SYNTHESIS_BENCHMARK.md`): audit 44 notes read / 11 issuers / 42 extracted / 11 priced + 2 needs-review / quotes 95.2% / bank in range 11 of 13 / median investor cost 1.9%; synthesis coverage 11 of 42 -> 26 of 42, 24 of 31 pass (77.4%), 19 first-try, 5 repaired, 6 failed, 1 skipped; cost audit $8.5246 (Baseten $3.0296) + synthesis $3.5490 (open $2.2196, wonder $1.3293).
+- Repair-loop note (Oct 29): 5 notes failed `filing_examples` after 1 attempt with 0-2 verified examples (truncated example quotes missing the payment sentence; non-verbatim quotes with mangled characters; one note with only 2 prose examples in the filing). The stop rule (`_evidence_missing`: only verified < 3 stops) already does the right thing: disagreements with verified evidence do repair (5 notes repaired to pass). No code change.
+- App opens on an Overview page (headline numbers, links to Market Audit / Synthesis replay).
+
 ## Left to do (in order)
 1. By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check
    (fallback while Baseten credits are missing); otherwise keep Spark 1.3 twice, stated openly.
