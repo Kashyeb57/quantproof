@@ -108,3 +108,35 @@ def test_inputs_summary_shows_missing_data():
         "corr_label": "single underlying: rho 0.0",
     }
     assert "missing" in anchored.inputs_summary(report)
+
+
+def test_correlation_aligns_closes_by_date_not_position(tmp_path: Path):
+    """Each FRED series misses a different day ("."): same length, different dates.
+
+    NDX has exactly the same daily returns as SPX, so the true correlation is 1.
+    Pairing returns by position would mix days and give a lower number.
+    """
+    from datetime import timedelta
+
+    import numpy as np
+
+    data_dir, client = _data(tmp_path)
+    fred = tmp_path / "fred"
+    rng = np.random.default_rng(0)
+    days = [date(2026, 9, 1) + timedelta(days=i) for i in range(49)]  # to 2026-10-19
+    spx = 5000.0 * np.exp(np.cumsum(rng.normal(0, 0.01, len(days))))
+    ndx = 3.0 * spx  # identical returns
+    spx_rows = [f"{d.isoformat()},{'.' if i == 10 else f'{p:.6f}'}" for i, (d, p) in enumerate(zip(days, spx))]
+    ndx_rows = [f"{d.isoformat()},{'.' if i == 30 else f'{p:.6f}'}" for i, (d, p) in enumerate(zip(days, ndx))]
+    (fred / "SP500.csv").write_text("observation_date,SP500\n" + "\n".join(spx_rows) + "\n", encoding="utf-8")
+    (fred / "NASDAQ100.csv").write_text("observation_date,NASDAQ100\n" + "\n".join(ndx_rows) + "\n", encoding="utf-8")
+    (fred / "VXNCLS.csv").write_text("observation_date,VXNCLS\n2026-10-19,22.00\n", encoding="utf-8")
+
+    market, report = anchored.anchored_inputs(
+        ["S&P 500 Index", "NASDAQ-100 Index"], date(2026, 10, 19), date(2027, 10, 19),
+        fred_client=client, treasury_dir=data_dir,
+    )
+    assert "average realised pairwise correlation" in report["corr_label"]
+    # Common dates only: the returns are identical, so rho is 1 to rounding
+    # of the 6-decimal closes.
+    assert market["rho"] == pytest.approx(1.0, abs=1e-6)

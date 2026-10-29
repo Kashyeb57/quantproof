@@ -145,10 +145,13 @@ def anchored_inputs(
                         pricing_date - _days(375),
                         pricing_date,
                     )
+                    # Returns must pair the same days: FRED drops missing
+                    # values ("."), so keep only dates both series have.
+                    common = {d for d, _ in first} & {d for d, _ in second}
                     pairs.append(
                         pairwise_correlation(
-                            trailing_window(first, pricing_date),
-                            trailing_window(second, pricing_date),
+                            trailing_window([c for c in first if c[0] in common], pricing_date),
+                            trailing_window([c for c in second if c[0] in common], pricing_date),
                         )
                     )
                 except (sources.SourceError, ValueError):
