@@ -1,0 +1,127 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "4 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.42452234016255624
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf)\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    notional = float(terms.get(\"notional\", 1000.0))\n    final_idx = int(terms.get(\"final_index\", n_dates - 1))\n\n    # downside barrier\n    downside = terms.get(\"downside\", {}) or {}\n    barrier = float(downside.get(\"level\", 0.75))\n    gearing = float(downside.get(\"gearing\", 1.0))\n\n    # upside leverage\n    upside = terms.get(\"upside\", {}) or {}\n    leverage = float(upside.get(\"leverage\", 1.0)) if upside.get(\"leverage\") is not None else 1.0\n\n    # unsupported upside payment from filing: $413 per security (41.30%)\n    upside_payment = 413.0\n\n    # final performance: for single asset use that asset, for basket use worst-of\n    if n_assets == 1:\n        final_perf = perf[:, final_idx, 0]\n    else:\n        final_perf = np.min(perf[:, final_idx, :], axis=1)\n\n    # final_only barrier observation\n    is_at_or_above = final_perf >= barrier\n    is_below = ~is_at_or_above\n\n    # above barrier: notional + max(notional * leverage * (perf-1), upside_payment)\n    if np.any(is_at_or_above):\n        fp_up = final_perf[is_at_or_above]\n        leveraged = notional * leverage * (fp_up - 1.0)\n        # max with upside payment\n        best = np.maximum(leveraged, upside_payment)\n        cash[is_at_or_above, final_idx] = notional + best\n\n    # below barrier: notional * performance factor ( = notional * final_perf )\n    # with gearing floor at zero: notional * max(0, 1 - gearing*(1 - fp))\n    if np.any(is_below):\n        fp_down = final_perf[is_below]\n        # filing specifies performance factor = final/initial for this note;\n        # generic gearing formula collapses to same when gearing==1\n        if gearing == 1.0:\n            pay_down = notional * fp_down\n        else:\n            pay_down = notional * np.maximum(0.0, 1.0 - gearing * (1.0 - fp_down))\n        cash[is_below, final_idx] = pay_down\n\n    return cash",
+      "cost_usd": 0.0225067,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 10.264852199936286
+    }
+  ],
+  "cost_usd": 0.0381258,
+  "cusip": "61781LRR3",
+  "estimated_value": 957.5,
+  "examples": [
+    {
+      "payment": 1800.0,
+      "quote": "If the underlier appreciates 80%, investors will receive an 80% return, or $1,800 per security.",
+      "verified": true,
+      "worst_final": 1.8
+    },
+    {
+      "payment": 1413.0,
+      "quote": "If the underlier appreciates 20%, investors will receive a 41.30% return, or $1,413 per security.",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1413.0,
+      "quote": "If the underlier depreciates 10%, investors will receive a 41.30% return, or $1,413 per security.",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 150.0,
+      "quote": "If the underlier depreciates 85%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 0.15
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 1047.7424890676232,
+      "seed": 0,
+      "std_error": 1.8851220191612807
+    },
+    "high": 1111.7338569020517,
+    "low": 992.3250008857381,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": "base value 1047.74 exceeds the issue price 1000.00 by 4.8% (more than 2%)",
+  "issue_price": 1000.0,
+  "issuer": "Morgan Stanley Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-049407",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-02",
+    "form": "424B2",
+    "issuer_group": "Morgan Stanley",
+    "label": "upside payment, 75% barrier",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "ms18885_424b2-33340.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226049407/ms18885_424b2-33340.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 15.467246799962595,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "needs_review",
+  "structure": "single underlying, upside leverage 1x, barrier 75% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Upside payment: | $413 per security (41.30% of the stated principal amount)",
+      "value": "Upside payment"
+    }
+  ]
+}

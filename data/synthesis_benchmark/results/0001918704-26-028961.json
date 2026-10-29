@@ -1,0 +1,118 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 0 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5186451839482269
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms.get(\"notional\", 1000.0))\n    final_idx = int(terms.get(\"final_index\", n_dates - 1))\n    downside = terms.get(\"downside\", None)\n    if downside is not None:\n        barrier = float(downside.get(\"level\", 0.6))\n        gearing = float(downside.get(\"gearing\", 1.0))\n    else:\n        barrier = 0.6\n        gearing = 1.0\n    # final performance - for single underlying use perf[...,0], for worst-of use min\n    if n_assets == 1:\n        perf_final = perf[:, final_idx, 0]\n    else:\n        perf_final = np.min(perf[:, final_idx, :], axis=1)\n    # digital return amount is $119 per $1000 = 11.90% of notional per filing\n    digital_amount = notional * 0.119\n    # payment at maturity: if perf >= barrier pay notional + digital, else notional * (1 + gearing*(perf-1))\n    # filing: 1000 + 1000*return = 1000*perf when gearing=1\n    above = perf_final >= barrier\n    downside_pay = notional * (1.0 + gearing * (perf_final - 1.0))\n    # floor at zero - you can lose entire investment but not negative\n    downside_pay = np.maximum(downside_pay, 0.0)\n    cash[:, final_idx] = np.where(above, notional + digital_amount, downside_pay)\n    return cash",
+      "cost_usd": 0.02678525,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 0 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 12.051530100172386
+    }
+  ],
+  "cost_usd": 0.05787875,
+  "cusip": "17334DBW1",
+  "estimated_value": 971.6,
+  "examples": [
+    {
+      "payment": 1119.0,
+      "quote": "The final underlying value is $105.00, resulting in a 5.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00",
+      "verified": false,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1119.0,
+      "quote": "The final underlying value is $180.00, resulting in a 80.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00",
+      "verified": false,
+      "worst_final": 1.8
+    },
+    {
+      "payment": 1119.0,
+      "quote": "The final underlying value is $90.00, resulting in a -10.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00",
+      "verified": false,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 300.0,
+      "quote": "The final underlying value is $30.00, resulting in a -70.00% underlying return. Payment at maturity per security = $1,000 + ($1,000 \u00d7 the underlying return) = $1,000 + ($1,000 \u00d7 -70.00%) = $1,000 + -$700.00 = $300.00",
+      "verified": false,
+      "worst_final": 0.3
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "issue_price": 1000.0,
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "meta": {
+    "accession": "0001918704-26-028961",
+    "audit_status": "unsupported",
+    "filing_date": "2026-09-28",
+    "form": "424B2",
+    "issuer_group": "Citigroup",
+    "label": "digital return, 60% barrier",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "form424b2.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426028961/form424b2.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 26.178250200115144,
+  "n_attempts": 1,
+  "passed": false,
+  "repaired": false,
+  "status": "synthesis_failed",
+  "structure": "single underlying, barrier 60% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Digital return amount: | $119.00 per security (representing a digital return equal to 11.90% of the stated principal amount).",
+      "value": "digital return"
+    }
+  ]
+}

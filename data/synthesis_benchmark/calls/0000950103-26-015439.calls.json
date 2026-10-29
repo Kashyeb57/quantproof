@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.030808099999999998,
+    "finish_reason": "stop",
+    "input_tokens": 9375,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 4591,
+    "purpose": "extract_examples",
+    "seconds": 13.819859399925917,
+    "text": "{\"examples\": [{\"worst_final\": 0.95, \"payment\": 1125.0, \"quote\": \"Example 1\u2014Upside Scenario A. The final underlying value is 95.00, resulting in a -5.00% underlying return. In this example, the final underlying value is less than the initial underlying value.\"}, {\"worst_final\": 0.1, \"payment\": 2000.0, \"quote\": \"Example 2\u2014Upside Scenario B. The final underlying value is 10.00, resulting in a -90.00% underlying return. In this example, the final underlying value is less than the initial underlying value.\"}, {\"worst_final\": 1.7, \"payment\": 300.0, \"quote\": \"Example 3\u2014Downside Scenario A. The final underlying value is 170.00, resulting in a 70.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.\"}, {\"worst_final\": 2.2, \"payment\": 0.0, \"quote\": \"Example 4\u2014Downside Scenario B. The final underlying value is 220.00, resulting in a 120.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.\"}]}"
+  },
+  {
+    "cost_usd": 0.03200595,
+    "finish_reason": "stop",
+    "input_tokens": 9964,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 4799,
+    "purpose": "synthesis",
+    "seconds": 15.698293399997056,
+    "text": "```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf)\n    n_paths = perf.shape[0]\n    n_dates = len(terms[\"observation_dates\"])\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    final_idx = int(terms[\"final_index\"])\n    notional = float(terms[\"notional\"])\n\n    # final performance (single underlying)\n    if perf.ndim == 3:\n        if terms[\"n_assets\"] == 1:\n            final_perf = perf[:, final_idx, 0]\n        else:\n            final_perf = np.min(perf[:, final_idx, :], axis=1)\n    else:\n        final_perf = perf[:, final_idx]\n\n    underlying_return = final_perf - 1.0\n\n    upside = terms.get(\"upside\")\n    downside = terms.get(\"downside\")\n\n    leverage = float(upside[\"leverage\"]) if upside is not None and upside.get(\"leverage\") is not None else 0.0\n    cap = upside.get(\"cap\") if upside is not None else None\n    if cap is None:\n        cap_val = np.inf\n        max_return_amt = np.inf\n        max_payment = np.inf\n    else:\n        cap_val = float(cap)\n        max_return_amt = notional * cap_val\n        max_payment = notional + max_return_amt\n\n    gearing = float(downside[\"gearing\"]) if downside is not None and downside.get(\"gearing\") is not None else 1.0\n\n    payment = np.empty(n_paths, dtype=float)\n\n    neg_mask = underlying_return < 0\n    pos_mask = ~neg_mask\n\n    if np.any(neg_mask):\n        abs_ret = np.abs(underlying_return[neg_mask])\n        return_amt = notional * abs_ret * leverage\n        if np.isfinite(max_return_amt):\n            return_amt = np.minimum(return_amt, max_return_amt)\n        payment[neg_mask] = notional + return_amt\n\n    if np.any(pos_mask):\n        payment[pos_mask] = notional - notional * underlying_return[pos_mask] * gearing\n\n    if np.isfinite(max_payment):\n        payment = np.clip(payment, 0.0, max_payment)\n    else:\n        payment = np.maximum(payment, 0.0)\n\n    cash[:, final_idx] = payment\n    return cash\n```"
+  }
+]

@@ -1,0 +1,116 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "3 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 2.842170943040401e-14
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.44941062272762344
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf)\n    n_paths, n_dates, n_assets = perf.shape\n    notional = float(terms[\"notional\"])\n    final_index = int(terms[\"final_index\"])\n    downside = terms.get(\"downside\", None)\n    upside = terms.get(\"upside\", None)\n    autocall = terms.get(\"autocall\", None)\n    coupon = terms.get(\"coupon\", None)\n\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    worst = np.min(perf, axis=2)\n\n    active = np.ones(n_paths, dtype=bool)\n\n    has_memory = False\n    if coupon is not None and coupon.get(\"memory\", False):\n        has_memory = True\n        carry = np.zeros(n_paths, dtype=float)\n    else:\n        carry = None\n\n    for i in range(n_dates):\n        w = worst[:, i]\n        is_final = (i == final_index)\n\n        if coupon is not None:\n            amounts = coupon.get(\"amounts\", [])\n            amt = amounts[i] if i < len(amounts) else None\n            if amt is not None:\n                barrier = coupon[\"barrier\"]\n                cond = w >= barrier\n                if has_memory:\n                    pay_mask = active & cond\n                    if np.any(pay_mask):\n                        cash[pay_mask, i] += carry[pay_mask] + float(amt)\n                        carry[pay_mask] = 0.0\n                    accrue_mask = active & (~cond)\n                    if np.any(accrue_mask):\n                        carry[accrue_mask] += float(amt)\n                else:\n                    pay_mask = active & cond\n                    if np.any(pay_mask):\n                        cash[pay_mask, i] += float(amt)\n\n        if autocall is not None:\n            call_amounts = autocall.get(\"call_amounts\", [])\n            call_amt = call_amounts[i] if i < len(call_amounts) else None\n            if call_amt is not None:\n                trig = autocall[\"trigger\"]\n                cond_call = w >= trig\n                call_mask = active & cond_call\n                if np.any(call_mask):\n                    cash[call_mask, i] += float(call_amt)\n                    active[call_mask] = False\n\n        if is_final:\n            still = active\n            if np.any(still):\n                final_w = w\n                if downside is not None:\n                    level = downside[\"level\"]\n                    obs = downside.get(\"observation\", \"final_only\")\n                    if obs == \"final_only\":\n                        breached = final_w < level\n                    else:\n                        min_worst = np.min(worst[:, :final_index + 1], axis=1)\n                        breached = min_worst < level\n                else:\n                    breached = np.zeros(n_paths, dtype=bool)\n\n                if upside is not None:\n                    lev = upside[\"leverage\"]\n                    cap = upside.get(\"cap\", None)\n                    ups_mask = still & (final_w > 1.0)\n                    if np.any(ups_mask):\n                        fw_ups = final_w[ups_mask]\n                        if cap is None:\n                            payoff_ups = notional * (1.0 + lev * (fw_ups - 1.0))\n                        else:\n                            ret = lev * (fw_ups - 1.0)\n                            ret = np.minimum(ret, cap)\n                            payoff_ups = notional * (1.0 + ret)\n                        cash[ups_mask, i] += payoff_ups\n                    remaining = still & (~ups_mask)\n                    if np.any(remaining):\n                        not_breached = remaining & (~breached)\n                        breached_rem = remaining & breached\n                        if np.any(not_breached):\n                            cash[not_breached, i] += notional\n                        if np.any(breached_rem):\n                            fw_br = final_w[breached_rem]\n                            kind = downside[\"kind\"] if downside is not None else \"barrier\"\n                            gear = float(downside[\"gearing\"]) if downside is not None else 1.0\n                            lvl = float(downside[\"level\"]) if downside is not None else 1.0\n                            if kind == \"barrier\":\n                                payoff_br = notional * (1.0 - gear * (1.0 - fw_br))\n                            elif kind == \"buffer\":\n                                payoff_br = notional * (1.0 - gear * (lvl - fw_br))\n                            else:\n                                payoff_br = notional * fw_br\n                            payoff_br = np.maximum(payoff_br, 0.0)\n                            cash[breached_rem, i] += payoff_br\n                else:\n                    not_breached = still & (~breached)\n                    breached_active = still & breached\n                    if np.any(not_breached):\n                        cash[not_breached, i] += notional\n                    if np.any(breached_active):\n                        fw_br = final_w[breached_active]\n                        kind = downside[\"kind\"] if downside is not None else \"barrier\"\n                        gear = float(downside[\"gearing\"]) if downside is not None else 1.0\n                        lvl = float(downside[\"level\"]) if downside is not None else 1.0\n                        if kind == \"barrier\":\n                            payoff_br = notional * (1.0 - gear * (1.0 - fw_br))\n                        elif kind == \"buffer\":\n                            payoff_br = notional * (1.0 - gear * (lvl - fw_br))\n                        else:\n                            payoff_br = notional * fw_br\n                        payoff_br = np.maximum(payoff_br, 0.0)\n                        cash[breached_active, i] += payoff_br\n                active[:] = False\n    return cash",
+      "cost_usd": 0.06972595,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 49.95167819992639
+    }
+  ],
+  "cost_usd": 0.08779329999999999,
+  "cusip": "61781L3Q1",
+  "estimated_value": 948.9,
+  "examples": [
+    {
+      "payment": 1115.0,
+      "quote": "If the underlier appreciates 5%, investors will receive $1,115 per security, or 111.50% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1000.0,
+      "quote": "If the final level is equal to the initial level, investors will receive the stated principal amount of $1,000 per security.",
+      "verified": false,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 150.0,
+      "quote": "If the underlier depreciates 85%, investors will lose 85% of their principal and receive only $150 per security at maturity, or 15% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 0.15
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 1233.024002367223,
+      "seed": 0,
+      "std_error": 4.616830632330803
+    },
+    "high": 1328.277722140532,
+    "low": 1144.6232505099974,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": "base value 1233.02 exceeds the issue price 1000.00 by 23.3% (more than 2%)",
+  "issue_price": 1000.0,
+  "issuer": "Morgan Stanley Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-049277",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-02",
+    "form": "424B2",
+    "issuer_group": "Morgan Stanley",
+    "label": "excess-return index, leveraged upside",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "ms19114_424b2-33322.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226049277/ms19114_424b2-33322.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 56.847766699967906,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "needs_review",
+  "structure": "single underlying, upside leverage 2.3x, barrier 100% at maturity",
+  "unsupported_features": []
+}

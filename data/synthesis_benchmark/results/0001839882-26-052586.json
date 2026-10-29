@@ -1,0 +1,223 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 2.2737367544323206e-13
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5024247231020128
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    import numpy as np\n    perf = np.asarray(perf)\n    n_paths = perf.shape[0]\n    n_dates = len(terms[\"observation_dates\"])\n    final_idx = int(terms[\"final_index\"])\n    notional = float(terms[\"notional\"])\n\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    autocall = terms.get(\"autocall\")\n    coupon = terms.get(\"coupon\")\n\n    # track paths that have been called; initially none\n    called = np.zeros(n_paths, dtype=bool)\n\n    # Autocall handling (none for this note, kept generic for compliance)\n    if autocall is not None:\n        trigger = float(autocall[\"trigger\"])\n        call_amounts = autocall[\"call_amounts\"]\n        for k in range(n_dates):\n            amt = call_amounts[k] if k < len(call_amounts) else None\n            if amt is None:\n                continue\n            # performance on this observation date\n            if perf.ndim == 3:\n                if terms.get(\"n_assets\", perf.shape[2]) == 1:\n                    perf_k = perf[:, k, 0]\n                else:\n                    # worst-of for autocall\n                    perf_k = np.min(perf[:, k, :], axis=1)\n            else:\n                perf_k = perf[:, k]\n            # only not-yet-called paths can be called\n            call_now = (~called) & (perf_k >= trigger)\n            if np.any(call_now):\n                cash[call_now, k] = float(amt)\n                called[call_now] = True\n        # coupon handling would need to respect called status\n        # but coupon is None for this note\n\n    # Maturity calculation for paths not called (all paths here)\n    # Extract final performance\n    if perf.ndim == 3:\n        if terms.get(\"n_assets\", 1) == 1:\n            perf_final = perf[:, final_idx, 0]\n        else:\n            perf_final = np.min(perf[:, final_idx, :], axis=1)\n    else:\n        perf_final = perf[:, final_idx]\n\n    upside = terms.get(\"upside\")\n    leverage = float(upside[\"leverage\"]) if upside is not None and upside.get(\"leverage\") is not None else 0.0\n    cap = upside.get(\"cap\") if upside is not None else None\n    cap_val = float(cap) if cap is not None else np.inf\n\n    # Filing: if ending > starting: 1000 + min(1000*return*150%, max_return=16.15%)\n    # else: 1000 principal return at maturity regardless of performance\n    underlier_return = perf_final - 1.0\n    maturity = np.full(n_paths, notional, dtype=float)\n    pos = underlier_return > 0\n    if np.any(pos):\n        lev_ret = leverage * underlier_return[pos]\n        capped = np.minimum(lev_ret, cap_val)\n        maturity[pos] = notional * (1.0 + capped)\n\n    # Principal protection: even if below barrier/buffer, pay notional (filing overrides generic barrier)\n    # Coupon handling (none for this note)\n    if coupon is not None:\n        # generic coupon logic respecting memory and barrier, for completeness\n        barrier = float(coupon[\"barrier\"])\n        memory = bool(coupon.get(\"memory\", False))\n        amounts = coupon[\"amounts\"]\n        # count coupons due - simplified, only at dates where amount not None\n        # This note has coupon None so not executed\n        pass\n\n    # assign maturity to uncalled paths at final index\n    not_called = ~called\n    cash[not_called, final_idx] = maturity[not_called]\n    # called paths already have zero at maturity (initialized)\n\n    return cash",
+      "cost_usd": 0.03462695,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 17.667545600095764
+    }
+  ],
+  "cost_usd": 0.05913755,
+  "cusip": "95001HTK7",
+  "estimated_value": 988.71,
+  "examples": [
+    {
+      "payment": 1161.5,
+      "quote": "200.00 100.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 2.0
+    },
+    {
+      "payment": 1161.5,
+      "quote": "175.00 75.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.75
+    },
+    {
+      "payment": 1161.5,
+      "quote": "150.00 50.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1161.5,
+      "quote": "140.00 40.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1161.5,
+      "quote": "130.00 30.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1161.5,
+      "quote": "120.00 20.00% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1161.5,
+      "quote": "110.77 10.77% $1,161.50 16.15%",
+      "verified": true,
+      "worst_final": 1.1077
+    },
+    {
+      "payment": 1150.0,
+      "quote": "110.00 10.00% $1,150.00 15.00%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1075.0,
+      "quote": "105.00 5.00% $1,075.00 7.50%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1037.5,
+      "quote": "102.50 2.50% $1,037.50 3.75%",
+      "verified": true,
+      "worst_final": 1.025
+    },
+    {
+      "payment": 1000.0,
+      "quote": "100.00 0.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1000.0,
+      "quote": "97.50 -2.50% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.975
+    },
+    {
+      "payment": 1000.0,
+      "quote": "95.00 -5.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1000.0,
+      "quote": "90.00 -10.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1000.0,
+      "quote": "80.00 -20.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 1000.0,
+      "quote": "70.00 -30.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 1000.0,
+      "quote": "60.00 -40.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 1000.0,
+      "quote": "50.00 -50.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 1000.0,
+      "quote": "25.00 -75.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 1000.0,
+      "quote": "0.00 -100.00% $1,000.00 0.00%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 981.6168251266893,
+      "seed": 0,
+      "std_error": 0.20293229047338943
+    },
+    "high": 990.7300000978547,
+    "low": 973.4008459849147,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "Wells Fargo Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-052586",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-27",
+    "form": "424B2",
+    "issuer_group": "Wells Fargo",
+    "label": "principal protection, capped upside",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "r10734wfc_424b2-35823.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052586/r10734wfc_424b2-35823.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 23.373077500145882,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "priced_ai",
+  "structure": "single underlying, upside leverage 1.5x, cap 16.15%, barrier 100% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "0.00 | -100.00% | $1,000.00 | 0.00%",
+      "value": "principal protection (no loss of principal at maturity)"
+    }
+  ]
+}

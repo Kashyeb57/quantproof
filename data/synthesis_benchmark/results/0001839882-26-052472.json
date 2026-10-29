@@ -1,0 +1,278 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.01999999999998181
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.49759471657811527
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    notional = float(terms.get(\"notional\", 1000.0))\n\n    autocall = terms.get(\"autocall\")\n    if autocall is not None:\n        trigger = float(autocall.get(\"trigger\"))\n        call_amounts = autocall.get(\"call_amounts\", [])\n        alive = np.ones(n_paths, dtype=bool)\n        for k in range(n_dates):\n            ca = call_amounts[k] if k < len(call_amounts) else None\n            if ca is None:\n                continue\n            if perf.ndim == 3:\n                if perf.shape[2] == 1:\n                    lvl = perf[:, k, 0]\n                else:\n                    lvl = np.min(perf[:, k, :], axis=1)\n            else:\n                lvl = perf[:, k]\n            hit = alive & (lvl >= trigger)\n            if np.any(hit):\n                cash[hit, k] = float(ca)\n                alive[hit] = False\n    else:\n        alive = np.ones(n_paths, dtype=bool)\n\n    if np.any(alive):\n        downside = terms.get(\"downside\", {})\n        level = float(downside.get(\"level\", 0.85))\n        gearing = float(downside.get(\"gearing\", 1.1765))\n        # Threshold settlement amount per filing: $1,208.30 per $1,000 face\n        # scale with notional: 1208.30 * (notional/1000) = notional * 1.2083\n        threshold_settlement = 1208.30 * (notional / 1000.0)\n\n        if perf.ndim == 3:\n            if perf.shape[2] == 1:\n                final_perf = perf[alive, final_index, 0]\n            else:\n                final_perf = np.min(perf[alive, final_index, :], axis=1)\n        else:\n            final_perf = perf[alive, final_index]\n\n        above = final_perf >= level\n        below_payoff = notional + notional * gearing * (final_perf - level)\n        below_payoff = np.maximum(below_payoff, 0.0)\n        payoff = np.where(above, threshold_settlement, below_payoff)\n        cash[alive, final_index] = payoff\n\n    return cash",
+      "cost_usd": 0.039973699999999994,
+      "counterexamples": {
+        "filing_examples": "final/initial 0.5000: the filing pays 588.24, your code paid 588.23 at maturity (max other column 0.00)\nfinal/initial 0.2500: the filing pays 294.12, your code paid 294.10 at maturity (max other column 0.00)"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 19.590169900096953
+    },
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0047058823529368965
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.49759467228557763
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    notional = float(terms.get(\"notional\", 1000.0))\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n\n    # autocall handling: pay call amount and zero after\n    autocall = terms.get(\"autocall\")\n    alive = np.ones(n_paths, dtype=bool)\n    if autocall is not None:\n        trigger = float(autocall.get(\"trigger\"))\n        call_amounts = autocall.get(\"call_amounts\", [])\n        for k in range(n_dates):\n            ca = call_amounts[k] if k < len(call_amounts) else None\n            if ca is None:\n                continue\n            if perf.ndim == 3:\n                if perf.shape[2] == 1:\n                    lvl = perf[:, k, 0]\n                else:\n                    lvl = np.min(perf[:, k, :], axis=1)\n            else:\n                lvl = perf[:, k]\n            hit = alive & (lvl >= trigger)\n            if np.any(hit):\n                cash[hit, k] = float(ca)\n                alive[hit] = False\n\n    if np.any(alive):\n        downside = terms.get(\"downside\", {}) or {}\n        level = float(downside.get(\"level\", 0.85))\n\n        # Filing payoff: threshold settlement amount $1,208.30 per $1,000\n        threshold_settlement = 1208.30 * (notional / 1000.0)\n\n        # Buffer rate per filing is initial / threshold = 1 / level\n        # Terms gearing 1.1765 is rounded 117.65%; use precise 1/level\n        # to meet $0.01 tolerance. If gearing is materially different,\n        # respect the term gearing.\n        gearing_term = float(downside.get(\"gearing\", 1.0 / level))\n        if downside.get(\"kind\") == \"buffer\":\n            if abs(gearing_term - 1.0 / level) < 0.01:\n                buffer_rate = 1.0 / level\n            else:\n                buffer_rate = gearing_term\n        else:\n            buffer_rate = gearing_term\n\n        if perf.ndim == 3:\n            if perf.shape[2] == 1:\n                final_perf = perf[:, final_index, 0]\n            else:\n                final_perf = np.min(perf[:, final_index, :], axis=1)\n        else:\n            final_perf = perf[:, final_index]\n\n        fp_alive = final_perf[alive]\n        above = fp_alive >= level\n        below_payoff = notional + notional * buffer_rate * (fp_alive - level)\n        below_payoff = np.maximum(below_payoff, 0.0)\n        payoff = np.where(above, threshold_settlement, below_payoff)\n        cash[alive, final_index] = payoff\n\n    return cash",
+      "cost_usd": 0.02972145,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": "Previous code:\n```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    n_paths = perf.shape[0]\n    n_dates = perf.shape[1]\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    notional = float(terms.get(\"notional\", 1000.0))\n\n    autocall = terms.get(\"autocall\")\n    if autocall is not None:\n        trigger = float(autocall.get(\"trigger\"))\n        call_amounts = autocall.get(\"call_amounts\", [])\n        alive = np.ones(n_paths, dtype=bool)\n        for k in range(n_dates):\n            ca = call_amounts[k] if k < len(call_amounts) else None\n            if ca is None:\n                continue\n            if perf.ndim == 3:\n                if perf.shape[2] == 1:\n                    lvl = perf[:, k, 0]\n                else:\n                    lvl = np.min(perf[:, k, :], axis=1)\n            else:\n                lvl = perf[:, k]\n            hit = alive & (lvl >= trigger)\n            if np.any(hit):\n                cash[hit, k] = float(ca)\n                alive[hit] = False\n    else:\n        alive = np.ones(n_paths, dtype=bool)\n\n    if np.any(alive):\n        downside = terms.get(\"downside\", {})\n        level = float(downside.get(\"level\", 0.85))\n        gearing = float(downside.get(\"gearing\", 1.1765))\n        # Threshold settlement amount per filing: $1,208.30 per $1,000 face\n        # scale with notional: 1208.30 * (notional/1000) = notional * 1.2083\n        threshold_settlement = 1208.30 * (notional / 1000.0)\n\n        if perf.ndim == 3:\n            if perf.shape[2] == 1:\n                final_perf = perf[alive, final_index, 0]\n            else:\n                final_perf = np.min(perf[alive, final_index, :], axis=1)\n        else:\n            final_perf = perf[alive, final_index]\n\n        above = final_perf >= level\n        below_payoff = notional + notional * gearing * (final_perf - level)\n        below_payoff = np.maximum(below_payoff, 0.0)\n        payoff = np.where(above, threshold_settlement, below_payoff)\n        cash[alive, final_index] = payoff\n\n    return cash\n```\nFailed checks to fix:\n- filing_examples: 20 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0\n  Counterexample: final/initial 0.5000: the filing pays 588.24, your code paid 588.23 at maturity (max other column 0.00)\nfinal/initial 0.2500: the filing pays 294.12, your code paid 294.10 at maturity (max other column 0.00)",
+      "passed": true,
+      "seconds": 23.3888455000706
+    }
+  ],
+  "cost_usd": 0.09487915,
+  "cusip": "95001HTH4",
+  "estimated_value": 994.42,
+  "examples": [
+    {
+      "payment": 1208.3,
+      "quote": "200.000% 120.830%",
+      "verified": true,
+      "worst_final": 2.0
+    },
+    {
+      "payment": 1208.3,
+      "quote": "175.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.75
+    },
+    {
+      "payment": 1208.3,
+      "quote": "160.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.6
+    },
+    {
+      "payment": 1208.3,
+      "quote": "150.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1208.3,
+      "quote": "140.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1208.3,
+      "quote": "130.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1208.3,
+      "quote": "120.830% 120.830%",
+      "verified": true,
+      "worst_final": 1.2083
+    },
+    {
+      "payment": 1208.3,
+      "quote": "120.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1208.3,
+      "quote": "110.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1208.3,
+      "quote": "105.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1208.3,
+      "quote": "100.000% 120.830%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1208.3,
+      "quote": "95.000% 120.830%",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1208.3,
+      "quote": "90.000% 120.830%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1208.3,
+      "quote": "85.000% 120.830%",
+      "verified": true,
+      "worst_final": 0.85
+    },
+    {
+      "payment": 999.99,
+      "quote": "84.999% 99.999%",
+      "verified": true,
+      "worst_final": 0.84999
+    },
+    {
+      "payment": 941.18,
+      "quote": "80.000% 94.118%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 882.35,
+      "quote": "75.000% 88.235%",
+      "verified": true,
+      "worst_final": 0.75
+    },
+    {
+      "payment": 588.24,
+      "quote": "50.000% 58.824%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 294.12,
+      "quote": "25.000% 29.412%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 0.0,
+      "quote": "0.000% 0.000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 966.920578346085,
+      "seed": 0,
+      "std_error": 1.019260541826699
+    },
+    "high": 1013.8324545311102,
+    "low": 921.0994422434179,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "Wells Fargo Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-052472",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "issuer_group": "Wells Fargo",
+    "label": "threshold settlement, 85% buffer",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "r10727wfc_424b2-35604.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/72971/000183988226052472/r10727wfc_424b2-35604.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 49.14035250013694,
+  "n_attempts": 2,
+  "passed": true,
+  "repaired": true,
+  "status": "priced_ai",
+  "structure": "single underlying, buffer 85% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "\u25cfif the final underlier level is greater than or equal to the threshold level, the threshold settlement amount; or...Threshold Settlement Amount: | $1,208.30 per security.",
+      "value": "Threshold Settlement Amount"
+    }
+  ]
+}

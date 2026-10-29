@@ -1,0 +1,112 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 0 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.5034481306925065
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    n_paths = perf.shape[0]\n    n_dates = len(terms[\"observation_dates\"])\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    notional = float(terms.get(\"notional\", 1000.0))\n    # perf has shape (n_paths, n_dates, n_assets)\n    # single underlying for this note; use worst-of if multiple for generality\n    if perf.shape[2] == 1:\n        perf_final = perf[:, final_index, 0]\n    else:\n        perf_final = np.min(perf[:, final_index, :], axis=1)\n    upside = terms.get(\"upside\")\n    if upside is not None:\n        leverage = upside.get(\"leverage\")\n        if leverage is None:\n            leverage = 1.0\n        cap = upside.get(\"cap\")\n    else:\n        leverage = 1.0\n        cap = None\n    # underlying return = perf_final - 1\n    excess = perf_final - 1.0\n    # strict greater than initial: perf_final > 1.0\n    pos_mask = perf_final > 1.0\n    if cap is not None:\n        raw = excess * float(leverage)\n        capped = np.minimum(raw, float(cap))\n        return_amount = np.where(pos_mask, notional * capped, 0.0)\n    else:\n        if upside is not None:\n            return_amount = np.where(pos_mask, notional * excess * float(leverage), 0.0)\n        else:\n            return_amount = np.zeros(n_paths, dtype=float)\n    # principal protection: if perf <=1 return_amount is 0, payment is notional\n    # autocall is None for this note, so no autocall to handle; ensure later columns stay zero (already)\n    payment = notional + return_amount\n    # ensure no negative due to numerical issues\n    payment = np.maximum(payment, 0.0)\n    cash[:, final_index] = payment\n    return cash",
+      "cost_usd": 0.0236852,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 0 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 10.173257999820635
+    }
+  ],
+  "cost_usd": 0.0453322,
+  "cusip": "17334CU51",
+  "estimated_value": 950.6,
+  "examples": [
+    {
+      "payment": 1050.0,
+      "quote": "Example 1\u2014Upside Scenario A. The final underlying value is 105.00, resulting in a 5.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.",
+      "verified": false,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1175.0,
+      "quote": "Example 2\u2014Upside Scenario B. The final underlying value is 150.00, resulting in a 50.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.",
+      "verified": false,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1000.0,
+      "quote": "Example 3\u2014Par Scenario. The final underlying value is 95.00, resulting in a -5.00% underlying return. In this example, the final underlying value is less than the initial underlying value.",
+      "verified": false,
+      "worst_final": 0.95
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "issue_price": 1000.0,
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "meta": {
+    "accession": "0001918704-26-029389",
+    "audit_status": "unsupported",
+    "filing_date": "2026-09-29",
+    "form": "424B2",
+    "issuer_group": "Citigroup",
+    "label": "principal protection, capped upside",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "form424b2.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000191870426029389/form424b2.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 17.62149709975347,
+  "n_attempts": 1,
+  "passed": false,
+  "repaired": false,
+  "status": "synthesis_failed",
+  "structure": "single underlying, upside leverage 1x, cap 17.5%, buffer 100% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "$0",
+      "value": "principal protection (no loss of principal at maturity)"
+    }
+  ]
+}

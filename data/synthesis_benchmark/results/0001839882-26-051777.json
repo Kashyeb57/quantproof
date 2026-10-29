@@ -1,0 +1,45 @@
+{
+  "attempts": [],
+  "cost_usd": 0.0161375,
+  "cusip": "61781LV72",
+  "estimated_value": 984.0,
+  "examples": [
+    {
+      "payment": 1104.5,
+      "quote": "If the underlier appreciates 5%, investors will receive $1,104.50 per note, or 110.45% of the stated principal amount.",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1000.0,
+      "quote": "If the underlier depreciates 15%, investors will receive $1,000 per note.",
+      "verified": true,
+      "worst_final": 0.85
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "first_failing_checks": [],
+  "issue_price": 1000.0,
+  "issuer": "Morgan Stanley Finance LLC",
+  "meta": {
+    "accession": "0001839882-26-051777",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-20",
+    "form": "424B2",
+    "issuer_group": "Morgan Stanley",
+    "label": "principal protection, excess-return index",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "ms19368_424b2-35166.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/895421/000183988226051777/ms19368_424b2-35166.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 4.737530099926516,
+  "n_attempts": 0,
+  "passed": false,
+  "repaired": false,
+  "skip_reason": "only 2 filing example(s); the battery needs at least 3",
+  "status": "skipped_few_examples",
+  "structure": "single underlying, upside leverage 2.09x, barrier 100% at maturity"
+}

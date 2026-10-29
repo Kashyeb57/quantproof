@@ -1,0 +1,175 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "12 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.45110350040794694
+        }
+      ],
+      "code": "def cashflows(perf, terms):\n    import numpy as np\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms[\"notional\"])\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n\n    if n_assets == 1:\n        perf_final = perf[:, final_index, 0]\n    else:\n        perf_final = np.min(perf[:, final_index, :], axis=1)\n\n    upside = terms.get(\"upside\")\n    leverage = 1.0\n    cap = None\n    if upside is not None:\n        leverage = float(upside.get(\"leverage\", 1.0))\n        cap = upside.get(\"cap\")\n\n    # filing: if final > initial pay notional * (1 + leverage*(perf-1)), else notional\n    # cap applied if present, principal protected (no downside loss)\n    excess = perf_final - 1.0\n    excess = np.maximum(excess, 0.0)\n    if leverage != 1.0:\n        excess = excess * leverage\n    if cap is not None:\n        excess = np.minimum(excess, float(cap))\n    payoff = notional * (1.0 + excess)\n\n    autocall = terms.get(\"autocall\")\n    if autocall is not None and autocall.get(\"trigger\") is not None and autocall.get(\"call_amounts\") is not None:\n        trigger = float(autocall[\"trigger\"])\n        call_amounts = autocall[\"call_amounts\"]\n        if n_assets == 1:\n            perf_all = perf[:, :, 0]\n        else:\n            perf_all = np.min(perf, axis=2)\n        alive = np.ones(n_paths, dtype=bool)\n        for k in range(n_dates):\n            amt = call_amounts[k] if k < len(call_amounts) else None\n            if amt is not None:\n                called = alive & (perf_all[:, k] >= trigger)\n                cash[called, k] = float(amt)\n                alive[called] = False\n        cash[alive, final_index] = payoff[alive]\n        # coupon handling (if any) would go here - follows terms exactly\n        coupon = terms.get(\"coupon\")\n        if coupon is not None and coupon.get(\"amounts\") is not None:\n            barrier = float(coupon[\"barrier\"])\n            amounts = coupon[\"amounts\"]\n            memory = bool(coupon.get(\"memory\", False))\n            # track memory coupons owed: simple generic implementation\n            owed = np.zeros(n_paths, dtype=float)\n            for k in range(n_dates):\n                amt = amounts[k] if k < len(amounts) else None\n                if amt is None:\n                    continue\n                # only for paths still alive at k (before maturity call handling already)\n                # for notes with no autocall, alive is all True until final\n                if n_assets == 1:\n                    p = perf[:, k, 0]\n                else:\n                    p = np.min(perf[:, k, :], axis=1)\n                hit = p >= barrier\n                if memory:\n                    owed[alive] += float(amt)\n                    pay_mask = alive & hit\n                    cash[pay_mask, k] += owed[pay_mask]\n                    owed[pay_mask] = 0.0\n                    # if called path already got call amount, still add coupon if same date per terms\n                else:\n                    pay_mask = alive & hit\n                    cash[pay_mask, k] += float(amt)\n    else:\n        cash[:, final_index] = payoff\n    return cash",
+      "cost_usd": 0.039870199999999995,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 21.643333199899644
+    }
+  ],
+  "cost_usd": 0.06765405,
+  "cusip": "40058MD88",
+  "estimated_value": 961.0,
+  "examples": [
+    {
+      "payment": 1750.0,
+      "quote": "175.000% 175.000%",
+      "verified": true,
+      "worst_final": 1.75
+    },
+    {
+      "payment": 1500.0,
+      "quote": "150.000% 150.000%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1400.0,
+      "quote": "140.000% 140.000%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1250.0,
+      "quote": "125.000% 125.000%",
+      "verified": true,
+      "worst_final": 1.25
+    },
+    {
+      "payment": 1100.0,
+      "quote": "110.000% 110.000%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1000.0,
+      "quote": "100.000% 100.000%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1000.0,
+      "quote": "95.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 1000.0,
+      "quote": "90.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1000.0,
+      "quote": "75.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.75
+    },
+    {
+      "payment": 1000.0,
+      "quote": "50.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 1000.0,
+      "quote": "25.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 1000.0,
+      "quote": "0.000% 100.000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 1059.7479499031288,
+      "seed": 0,
+      "std_error": 2.6756504555773812
+    },
+    "high": 1127.7155055876135,
+    "low": 996.4021998086083,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": "base value 1059.75 exceeds the issue price 1000.00 by 6.0% (more than 2%)",
+  "issue_price": 1000.0,
+  "issuer": "GS Finance Corp.",
+  "meta": {
+    "accession": "0001193125-26-432094",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "issuer_group": "Goldman Sachs",
+    "label": "company redemption right, par barrier",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "gs-20261026.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526432094/gs-20261026.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 28.73106010002084,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "needs_review",
+  "structure": "single underlying, upside leverage 1x, barrier 100% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "Company\u2019s redemption right: the company may redeem this note, at its option, in whole but not in part, on each call payment date",
+      "value": "Company\u2019s redemption right"
+    }
+  ]
+}

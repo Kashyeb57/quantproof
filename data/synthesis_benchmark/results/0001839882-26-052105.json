@@ -1,0 +1,260 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "17 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.020000000000095497
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.4983555197335001
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    if perf.ndim == 2:\n        perf = perf[:, :, None]\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    worst_perf = np.min(perf, axis=2)\n    autocall = terms.get(\"autocall\")\n    coupon = terms.get(\"coupon\")\n    is_called = np.zeros(n_paths, dtype=bool)\n    memory_accum = None\n    if coupon is not None and coupon.get(\"memory\"):\n        memory_accum = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        not_called_before = ~is_called\n        if coupon is not None:\n            amounts = coupon.get(\"amounts\")\n            barrier = coupon.get(\"barrier\")\n            mem = coupon.get(\"memory\")\n            amt = None\n            if amounts is not None and k < len(amounts):\n                amt = amounts[k]\n            if amt is not None:\n                cond = not_called_before & (worst_perf[:, k] >= barrier)\n                if mem:\n                    cash[cond, k] += memory_accum[cond] + amt\n                    memory_accum[cond] = 0\n                    mask = not_called_before & (~cond)\n                    memory_accum[mask] += amt\n                else:\n                    cash[cond, k] += amt\n        if autocall is not None:\n            c_amounts = autocall.get(\"call_amounts\")\n            trig = autocall.get(\"trigger\")\n            amt_c = None\n            if c_amounts is not None and k < len(c_amounts):\n                amt_c = c_amounts[k]\n            if amt_c is not None:\n                cond_c = not_called_before & (worst_perf[:, k] >= trig)\n                cash[cond_c, k] += amt_c\n                is_called[cond_c] = True\n    notional = float(terms.get(\"notional\", 1000.0))\n    downside = terms.get(\"downside\")\n    upside = terms.get(\"upside\")\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    worst_final = worst_perf[:, final_index]\n    not_called = ~is_called\n    if downside is not None and np.any(not_called):\n        level = float(downside.get(\"level\"))\n        gearing = float(downside.get(\"gearing\", 1.0))\n        kind = downside.get(\"kind\")\n        obs = downside.get(\"observation\", \"final_only\")\n        if obs == \"final_only\":\n            triggered = worst_final < level\n        elif obs == \"each_review\":\n            triggered = np.any(worst_perf < level, axis=1)\n        elif obs == \"daily\":\n            triggered = np.any(worst_perf < level, axis=1)\n        else:\n            triggered = worst_final < level\n        unsupported = terms.get(\"unsupported_features\") or []\n        has_max = False\n        for f in unsupported:\n            if isinstance(f, str) and \"maximum\" in f.lower():\n                has_max = True\n                break\n        if has_max:\n            max_amount = notional * gearing\n            if kind == \"buffer\":\n                payoff_trig = notional * (1.0 + gearing * (worst_final - level))\n            else:\n                payoff_trig = notional * (1.0 + gearing * (worst_final - 1.0))\n            payoff_trig = np.maximum(payoff_trig, 0.0)\n            payoff = np.where(triggered, payoff_trig, max_amount)\n        else:\n            if kind == \"buffer\":\n                downside_payoff = notional * (1.0 + gearing * (worst_final - level))\n            else:\n                downside_payoff = notional * (1.0 + gearing * (worst_final - 1.0))\n            downside_payoff = np.maximum(downside_payoff, 0.0)\n            if upside is not None:\n                lev = float(upside.get(\"leverage\", 1.0))\n                cap = upside.get(\"cap\")\n                upside_ret = lev * (worst_final - 1.0)\n                if cap is not None:\n                    upside_ret = np.minimum(upside_ret, float(cap))\n                upside_payoff = notional * (1.0 + upside_ret)\n                not_trig_payoff = np.where(worst_final > 1.0, upside_payoff, notional)\n            else:\n                not_trig_payoff = np.full(n_paths, notional, dtype=float)\n            payoff = np.where(triggered, downside_payoff, not_trig_payoff)\n        cash[not_called, final_index] += payoff[not_called]\n    elif upside is not None and np.any(not_called):\n        lev = float(upside.get(\"leverage\", 1.0))\n        cap = upside.get(\"cap\")\n        upside_ret = lev * (worst_final - 1.0)\n        if cap is not None:\n            upside_ret = np.minimum(upside_ret, float(cap))\n        payoff = notional * (1.0 + np.maximum(upside_ret, 0.0))\n        cash[not_called, final_index] += payoff[not_called]\n    return cash",
+      "cost_usd": 0.10958145,
+      "counterexamples": {
+        "filing_examples": "final/initial 0.5000: the filing pays 588.24, your code paid 588.23 at maturity (max other column 0.00)\nfinal/initial 0.2500: the filing pays 294.12, your code paid 294.10 at maturity (max other column 0.00)"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 68.47725320002064
+    },
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "17 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 0.0047058823529368965
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.49835547818328574
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    if perf.ndim == 2:\n        perf = perf[:, :, None]\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n\n    # worst-of performance (for single asset it's the asset itself)\n    worst_perf = np.min(perf, axis=2)\n\n    # autocall / coupon handling (none for this note, kept for completeness)\n    autocall = terms.get(\"autocall\")\n    coupon = terms.get(\"coupon\")\n    is_called = np.zeros(n_paths, dtype=bool)\n    memory_accum = None\n    if coupon is not None and coupon.get(\"memory\"):\n        memory_accum = np.zeros(n_paths, dtype=float)\n\n    for k in range(n_dates):\n        not_called_before = ~is_called\n        if coupon is not None:\n            amounts = coupon.get(\"amounts\")\n            barrier = coupon.get(\"barrier\")\n            mem = coupon.get(\"memory\")\n            amt = None\n            if amounts is not None and k < len(amounts):\n                amt = amounts[k]\n            if amt is not None:\n                cond = not_called_before & (worst_perf[:, k] >= barrier)\n                if mem:\n                    cash[cond, k] += memory_accum[cond] + amt\n                    memory_accum[cond] = 0.0\n                    mask = not_called_before & (~cond)\n                    memory_accum[mask] += amt\n                else:\n                    cash[cond, k] += amt\n        if autocall is not None:\n            c_amounts = autocall.get(\"call_amounts\")\n            trig = autocall.get(\"trigger\")\n            amt_c = None\n            if c_amounts is not None and k < len(c_amounts):\n                amt_c = c_amounts[k]\n            if amt_c is not None:\n                cond_c = not_called_before & (worst_perf[:, k] >= trig)\n                cash[cond_c, k] += amt_c\n                is_called[cond_c] = True\n\n    notional = float(terms.get(\"notional\", 1000.0))\n    downside = terms.get(\"downside\")\n    upside = terms.get(\"upside\")\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    worst_final = worst_perf[:, final_index]\n    not_called = ~is_called\n\n    if downside is not None and np.any(not_called):\n        level = float(downside.get(\"level\"))\n        gearing = float(downside.get(\"gearing\", 1.0))\n        kind = downside.get(\"kind\")\n        # triggered if below buffer / barrier\n        triggered = worst_final < level\n\n        unsupported = terms.get(\"unsupported_features\") or []\n        has_max = False\n        for f in unsupported:\n            if isinstance(f, str) and \"maximum\" in f.lower():\n                has_max = True\n                break\n\n        if has_max:\n            # max settlement amount = threshold settlement amount = notional * gearing\n            # for this filing 1000 * 1.1765 = 1176.50\n            max_amount = notional * gearing\n            if kind == \"buffer\":\n                # buffer rate is initial / buffer_level = 1 / level (exact),\n                # not the rounded gearing. Payoff below buffer is linear to zero:\n                # 1000 * (1 + (1/level)*(perf-level)) = 1000 * perf / level\n                payoff_down = notional * worst_final / level\n            else:\n                payoff_down = notional * (1.0 + gearing * (worst_final - 1.0))\n            payoff_down = np.maximum(payoff_down, 0.0)\n            payoff = np.where(triggered, payoff_down, max_amount)\n        else:\n            if kind == \"buffer\":\n                # use exact 1/level for buffer notes to avoid rounding error\n                # 1/level == initial / buffer_level == buffer rate\n                effective_gearing = 1.0 / level\n                downside_payoff = notional * (1.0 + effective_gearing * (worst_final - level))\n            else:\n                downside_payoff = notional * (1.0 + gearing * (worst_final - 1.0))\n            downside_payoff = np.maximum(downside_payoff, 0.0)\n            if upside is not None:\n                lev = float(upside.get(\"leverage\", 1.0))\n                cap = upside.get(\"cap\")\n                upside_ret = lev * (worst_final - 1.0)\n                if cap is not None:\n                    upside_ret = np.minimum(upside_ret, float(cap))\n                upside_payoff = notional * (1.0 + upside_ret)\n                not_trig_payoff = np.where(worst_final > 1.0, upside_payoff, notional)\n            else:\n                not_trig_payoff = np.full(n_paths, notional, dtype=float)\n            payoff = np.where(triggered, downside_payoff, not_trig_payoff)\n\n        cash[not_called, final_index] += payoff[not_called]\n    elif upside is not None and np.any(not_called):\n        lev = float(upside.get(\"leverage\", 1.0))\n        cap = upside.get(\"cap\")\n        upside_ret = lev * (worst_final - 1.0)\n        if cap is not None:\n            upside_ret = np.minimum(upside_ret, float(cap))\n        payoff = notional * (1.0 + np.maximum(upside_ret, 0.0))\n        cash[not_called, final_index] += payoff[not_called]\n\n    return cash",
+      "cost_usd": 0.0294055,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": "Previous code:\n```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf, dtype=float)\n    if perf.ndim == 2:\n        perf = perf[:, :, None]\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    worst_perf = np.min(perf, axis=2)\n    autocall = terms.get(\"autocall\")\n    coupon = terms.get(\"coupon\")\n    is_called = np.zeros(n_paths, dtype=bool)\n    memory_accum = None\n    if coupon is not None and coupon.get(\"memory\"):\n        memory_accum = np.zeros(n_paths, dtype=float)\n    for k in range(n_dates):\n        not_called_before = ~is_called\n        if coupon is not None:\n            amounts = coupon.get(\"amounts\")\n            barrier = coupon.get(\"barrier\")\n            mem = coupon.get(\"memory\")\n            amt = None\n            if amounts is not None and k < len(amounts):\n                amt = amounts[k]\n            if amt is not None:\n                cond = not_called_before & (worst_perf[:, k] >= barrier)\n                if mem:\n                    cash[cond, k] += memory_accum[cond] + amt\n                    memory_accum[cond] = 0\n                    mask = not_called_before & (~cond)\n                    memory_accum[mask] += amt\n                else:\n                    cash[cond, k] += amt\n        if autocall is not None:\n            c_amounts = autocall.get(\"call_amounts\")\n            trig = autocall.get(\"trigger\")\n            amt_c = None\n            if c_amounts is not None and k < len(c_amounts):\n                amt_c = c_amounts[k]\n            if amt_c is not None:\n                cond_c = not_called_before & (worst_perf[:, k] >= trig)\n                cash[cond_c, k] += amt_c\n                is_called[cond_c] = True\n    notional = float(terms.get(\"notional\", 1000.0))\n    downside = terms.get(\"downside\")\n    upside = terms.get(\"upside\")\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    worst_final = worst_perf[:, final_index]\n    not_called = ~is_called\n    if downside is not None and np.any(not_called):\n        level = float(downside.get(\"level\"))\n        gearing = float(downside.get(\"gearing\", 1.0))\n        kind = downside.get(\"kind\")\n        obs = downside.get(\"observation\", \"final_only\")\n        if obs == \"final_only\":\n            triggered = worst_final < level\n        elif obs == \"each_review\":\n            triggered = np.any(worst_perf < level, axis=1)\n        elif obs == \"daily\":\n            triggered = np.any(worst_perf < level, axis=1)\n        else:\n            triggered = worst_final < level\n        unsupported = terms.get(\"unsupported_features\") or []\n        has_max = False\n        for f in unsupported:\n            if isinstance(f, str) and \"maximum\" in f.lower():\n                has_max = True\n                break\n        if has_max:\n            max_amount = notional * gearing\n            if kind == \"buffer\":\n                payoff_trig = notional * (1.0 + gearing * (worst_final - level))\n            else:\n                payoff_trig = notional * (1.0 + gearing * (worst_final - 1.0))\n            payoff_trig = np.maximum(payoff_trig, 0.0)\n            payoff = np.where(triggered, payoff_trig, max_amount)\n        else:\n            if kind == \"buffer\":\n                downside_payoff = notional * (1.0 + gearing * (worst_final - level))\n            else:\n                downside_payoff = notional * (1.0 + gearing * (worst_final - 1.0))\n            downside_payoff = np.maximum(downside_payoff, 0.0)\n            if upside is not None:\n                lev = float(upside.get(\"leverage\", 1.0))\n                cap = upside.get(\"cap\")\n                upside_ret = lev * (worst_final - 1.0)\n                if cap is not None:\n                    upside_ret = np.minimum(upside_ret, float(cap))\n                upside_payoff = notional * (1.0 + upside_ret)\n                not_trig_payoff = np.where(worst_final > 1.0, upside_payoff, notional)\n            else:\n                not_trig_payoff = np.full(n_paths, notional, dtype=float)\n            payoff = np.where(triggered, downside_payoff, not_trig_payoff)\n        cash[not_called, final_index] += payoff[not_called]\n    elif upside is not None and np.any(not_called):\n        lev = float(upside.get(\"leverage\", 1.0))\n        cap = upside.get(\"cap\")\n        upside_ret = lev * (worst_final - 1.0)\n        if cap is not None:\n            upside_ret = np.minimum(upside_ret, float(cap))\n        payoff = notional * (1.0 + np.maximum(upside_ret, 0.0))\n        cash[not_called, final_index] += payoff[not_called]\n    return cash\n```\nFailed checks to fix:\n- filing_examples: 17 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0\n  Counterexample: final/initial 0.5000: the filing pays 588.24, your code paid 588.23 at maturity (max other column 0.00)\nfinal/initial 0.2500: the filing pays 294.12, your code paid 294.10 at maturity (max other column 0.00)",
+      "passed": true,
+      "seconds": 19.318532699951902
+    }
+  ],
+  "cost_usd": 0.17109805,
+  "cusip": "90266F6G6",
+  "estimated_value": 996.2,
+  "examples": [
+    {
+      "payment": 1176.5,
+      "quote": "150.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.5
+    },
+    {
+      "payment": 1176.5,
+      "quote": "140.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 1176.5,
+      "quote": "130.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.3
+    },
+    {
+      "payment": 1176.5,
+      "quote": "120.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 1176.5,
+      "quote": "117.650% 117.650%",
+      "verified": true,
+      "worst_final": 1.1765
+    },
+    {
+      "payment": 1176.5,
+      "quote": "115.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.15
+    },
+    {
+      "payment": 1176.5,
+      "quote": "110.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 1176.5,
+      "quote": "105.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 1176.5,
+      "quote": "100.000% 117.650%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 1176.5,
+      "quote": "90.000% 117.650%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 1176.5,
+      "quote": "85.000% 117.650%",
+      "verified": true,
+      "worst_final": 0.85
+    },
+    {
+      "payment": 941.18,
+      "quote": "80.000% 94.118%",
+      "verified": true,
+      "worst_final": 0.8
+    },
+    {
+      "payment": 823.53,
+      "quote": "70.000% 82.353%",
+      "verified": true,
+      "worst_final": 0.7
+    },
+    {
+      "payment": 705.88,
+      "quote": "60.000% 70.588%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 588.24,
+      "quote": "50.000% 58.824%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 294.12,
+      "quote": "25.000% 29.412%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 0.0,
+      "quote": "0.000% 0.000%",
+      "verified": true,
+      "worst_final": 0.0
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 960.495457051344,
+      "seed": 0,
+      "std_error": 0.9507058422860761
+    },
+    "high": 1003.2201801190323,
+    "low": 917.8778793558453,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "gate": null,
+  "issue_price": 1000.0,
+  "issuer": "UBS AG London Branch",
+  "meta": {
+    "accession": "0001839882-26-052105",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-22",
+    "form": "424B2",
+    "issuer_group": "UBS",
+    "label": "maximum settlement, 85% buffer",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "ubs_424b2-35282.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/1114446/000183988226052105/ubs_424b2-35282.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 95.33478529984131,
+  "n_attempts": 2,
+  "passed": true,
+  "repaired": true,
+  "status": "priced_ai",
+  "structure": "single underlying, buffer 85% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "if the final underlier level is equal to or greater than the buffer level, the maximum settlement amount",
+      "value": "maximum settlement amount"
+    }
+  ]
+}

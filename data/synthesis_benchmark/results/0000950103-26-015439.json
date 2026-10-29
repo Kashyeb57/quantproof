@@ -1,0 +1,118 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 1), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "not enough filing evidence: 0 verified examples, need at least 3",
+          "name": "filing_examples",
+          "passed": false,
+          "reference": 3.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.4962922700267259
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    perf = np.asarray(perf)\n    n_paths = perf.shape[0]\n    n_dates = len(terms[\"observation_dates\"])\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    final_idx = int(terms[\"final_index\"])\n    notional = float(terms[\"notional\"])\n\n    # final performance (single underlying)\n    if perf.ndim == 3:\n        if terms[\"n_assets\"] == 1:\n            final_perf = perf[:, final_idx, 0]\n        else:\n            final_perf = np.min(perf[:, final_idx, :], axis=1)\n    else:\n        final_perf = perf[:, final_idx]\n\n    underlying_return = final_perf - 1.0\n\n    upside = terms.get(\"upside\")\n    downside = terms.get(\"downside\")\n\n    leverage = float(upside[\"leverage\"]) if upside is not None and upside.get(\"leverage\") is not None else 0.0\n    cap = upside.get(\"cap\") if upside is not None else None\n    if cap is None:\n        cap_val = np.inf\n        max_return_amt = np.inf\n        max_payment = np.inf\n    else:\n        cap_val = float(cap)\n        max_return_amt = notional * cap_val\n        max_payment = notional + max_return_amt\n\n    gearing = float(downside[\"gearing\"]) if downside is not None and downside.get(\"gearing\") is not None else 1.0\n\n    payment = np.empty(n_paths, dtype=float)\n\n    neg_mask = underlying_return < 0\n    pos_mask = ~neg_mask\n\n    if np.any(neg_mask):\n        abs_ret = np.abs(underlying_return[neg_mask])\n        return_amt = notional * abs_ret * leverage\n        if np.isfinite(max_return_amt):\n            return_amt = np.minimum(return_amt, max_return_amt)\n        payment[neg_mask] = notional + return_amt\n\n    if np.any(pos_mask):\n        payment[pos_mask] = notional - notional * underlying_return[pos_mask] * gearing\n\n    if np.isfinite(max_payment):\n        payment = np.clip(payment, 0.0, max_payment)\n    else:\n        payment = np.maximum(payment, 0.0)\n\n    cash[:, final_idx] = payment\n    return cash",
+      "cost_usd": 0.03200595,
+      "counterexamples": {
+        "filing_examples": "not enough filing evidence: 0 verified examples, need at least 3"
+      },
+      "error": null,
+      "feedback_sent": null,
+      "passed": false,
+      "seconds": 15.698293399997056
+    }
+  ],
+  "cost_usd": 0.06281405,
+  "cusip": "17334DTT9",
+  "estimated_value": 969.7,
+  "examples": [
+    {
+      "payment": 1125.0,
+      "quote": "Example 1\u2014Upside Scenario A. The final underlying value is 95.00, resulting in a -5.00% underlying return. In this example, the final underlying value is less than the initial underlying value.",
+      "verified": false,
+      "worst_final": 0.95
+    },
+    {
+      "payment": 2000.0,
+      "quote": "Example 2\u2014Upside Scenario B. The final underlying value is 10.00, resulting in a -90.00% underlying return. In this example, the final underlying value is less than the initial underlying value.",
+      "verified": false,
+      "worst_final": 0.1
+    },
+    {
+      "payment": 300.0,
+      "quote": "Example 3\u2014Downside Scenario A. The final underlying value is 170.00, resulting in a 70.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.",
+      "verified": false,
+      "worst_final": 1.7
+    },
+    {
+      "payment": 0.0,
+      "quote": "Example 4\u2014Downside Scenario B. The final underlying value is 220.00, resulting in a 120.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.",
+      "verified": false,
+      "worst_final": 2.2
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "first_failing_checks": [
+    "filing_examples"
+  ],
+  "issue_price": 1000.0,
+  "issuer": "Citigroup Global Markets Holdings Inc.",
+  "meta": {
+    "accession": "0000950103-26-015439",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-09",
+    "form": "424B2",
+    "issuer_group": "Citigroup",
+    "label": "modified inverse exposure, capped",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "dp254828_424b2-us26r8422d.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/831001/000095010326015439/dp254828_424b2-us26r8422d.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 29.518152799922973,
+  "n_attempts": 1,
+  "passed": false,
+  "repaired": false,
+  "status": "synthesis_failed",
+  "structure": "single underlying, upside leverage 2.5x, cap 100%, barrier 100% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "The securities offer modified inverse exposure to the performance of the underlying, which means that you will receive a positive return at maturity only if the underlying depreciates",
+      "value": "modified inverse exposure"
+    }
+  ]
+}

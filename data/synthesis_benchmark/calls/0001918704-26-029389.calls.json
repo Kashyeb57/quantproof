@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.021647,
+    "finish_reason": "stop",
+    "input_tokens": 9093,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 2419,
+    "purpose": "extract_examples",
+    "seconds": 7.4482390999328345,
+    "text": "{\"examples\": [{\"worst_final\": 1.05, \"payment\": 1050.0, \"quote\": \"Example 1\u2014Upside Scenario A. The final underlying value is 105.00, resulting in a 5.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.\"}, {\"worst_final\": 1.5, \"payment\": 1175.0, \"quote\": \"Example 2\u2014Upside Scenario B. The final underlying value is 150.00, resulting in a 50.00% underlying return. In this example, the final underlying value is greater than the initial underlying value.\"}, {\"worst_final\": 0.95, \"payment\": 1000.0, \"quote\": \"Example 3\u2014Par Scenario. The final underlying value is 95.00, resulting in a -5.00% underlying return. In this example, the final underlying value is less than the initial underlying value.\"}]}"
+  },
+  {
+    "cost_usd": 0.0236852,
+    "finish_reason": "stop",
+    "input_tokens": 9662,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 2930,
+    "purpose": "synthesis",
+    "seconds": 10.173257999820635,
+    "text": "```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    n_paths = perf.shape[0]\n    n_dates = len(terms[\"observation_dates\"])\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    notional = float(terms.get(\"notional\", 1000.0))\n    # perf has shape (n_paths, n_dates, n_assets)\n    # single underlying for this note; use worst-of if multiple for generality\n    if perf.shape[2] == 1:\n        perf_final = perf[:, final_index, 0]\n    else:\n        perf_final = np.min(perf[:, final_index, :], axis=1)\n    upside = terms.get(\"upside\")\n    if upside is not None:\n        leverage = upside.get(\"leverage\")\n        if leverage is None:\n            leverage = 1.0\n        cap = upside.get(\"cap\")\n    else:\n        leverage = 1.0\n        cap = None\n    # underlying return = perf_final - 1\n    excess = perf_final - 1.0\n    # strict greater than initial: perf_final > 1.0\n    pos_mask = perf_final > 1.0\n    if cap is not None:\n        raw = excess * float(leverage)\n        capped = np.minimum(raw, float(cap))\n        return_amount = np.where(pos_mask, notional * capped, 0.0)\n    else:\n        if upside is not None:\n            return_amount = np.where(pos_mask, notional * excess * float(leverage), 0.0)\n        else:\n            return_amount = np.zeros(n_paths, dtype=float)\n    # principal protection: if perf <=1 return_amount is 0, payment is notional\n    # autocall is None for this note, so no autocall to handle; ensure later columns stay zero (already)\n    payment = notional + return_amount\n    # ensure no negative due to numerical issues\n    payment = np.maximum(payment, 0.0)\n    cash[:, final_index] = payment\n    return cash\n```"
+  }
+]

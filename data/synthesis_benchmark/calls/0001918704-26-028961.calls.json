@@ -1,0 +1,22 @@
+[
+  {
+    "cost_usd": 0.0310935,
+    "finish_reason": "stop",
+    "input_tokens": 9602,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 4492,
+    "purpose": "extract_examples",
+    "seconds": 14.126720099942759,
+    "text": "{\"examples\": [{\"worst_final\": 1.05, \"payment\": 1119.0, \"quote\": \"The final underlying value is $105.00, resulting in a 5.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00\"}, {\"worst_final\": 1.8, \"payment\": 1119.0, \"quote\": \"The final underlying value is $180.00, resulting in a 80.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00\"}, {\"worst_final\": 0.9, \"payment\": 1119.0, \"quote\": \"The final underlying value is $90.00, resulting in a -10.00% underlying return. Payment at maturity per security = $1,000 + the digital return amount = $1,000 + $119.00 = $1,119.00\"}, {\"worst_final\": 0.3, \"payment\": 300.0, \"quote\": \"The final underlying value is $30.00, resulting in a -70.00% underlying return. Payment at maturity per security = $1,000 + ($1,000 \\u00d7 the underlying return) = $1,000 + ($1,000 \\u00d7 -70.00%) = $1,000 + -$700.00 = $300.00\"}]}"
+  },
+  {
+    "cost_usd": 0.02678525,
+    "finish_reason": "stop",
+    "input_tokens": 10164,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 3313,
+    "purpose": "synthesis",
+    "seconds": 12.051530100172386,
+    "text": "```python\nimport numpy as np\n\ndef cashflows(perf, terms):\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms.get(\"notional\", 1000.0))\n    final_idx = int(terms.get(\"final_index\", n_dates - 1))\n    downside = terms.get(\"downside\", None)\n    if downside is not None:\n        barrier = float(downside.get(\"level\", 0.6))\n        gearing = float(downside.get(\"gearing\", 1.0))\n    else:\n        barrier = 0.6\n        gearing = 1.0\n    # final performance - for single underlying use perf[...,0], for worst-of use min\n    if n_assets == 1:\n        perf_final = perf[:, final_idx, 0]\n    else:\n        perf_final = np.min(perf[:, final_idx, :], axis=1)\n    # digital return amount is $119 per $1000 = 11.90% of notional per filing\n    digital_amount = notional * 0.119\n    # payment at maturity: if perf >= barrier pay notional + digital, else notional * (1 + gearing*(perf-1))\n    # filing: 1000 + 1000*return = 1000*perf when gearing=1\n    above = perf_final >= barrier\n    downside_pay = notional * (1.0 + gearing * (perf_final - 1.0))\n    # floor at zero - you can lose entire investment but not negative\n    downside_pay = np.maximum(downside_pay, 0.0)\n    cash[:, final_idx] = np.where(above, notional + digital_amount, downside_pay)\n    return cash\n```"
+  }
+]

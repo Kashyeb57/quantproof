@@ -1,0 +1,12 @@
+[
+  {
+    "cost_usd": 0.0161375,
+    "finish_reason": "stop",
+    "input_tokens": 8252,
+    "model": "meta-models/muse-spark-open-1026",
+    "output_tokens": 1370,
+    "purpose": "extract_examples",
+    "seconds": 4.737530099926516,
+    "text": "{\"examples\": [{\"worst_final\": 1.05, \"payment\": 1104.5, \"quote\": \"If the underlier appreciates 5%, investors will receive $1,104.50 per note, or 110.45% of the stated principal amount.\"}, {\"worst_final\": 0.85, \"payment\": 1000, \"quote\": \"If the underlier depreciates 15%, investors will receive $1,000 per note.\"}]}"
+  }
+]

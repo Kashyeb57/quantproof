@@ -1,0 +1,189 @@
+{
+  "attempts": [
+    {
+      "checks": [
+        {
+          "detail": "sandbox static check passed",
+          "name": "static_safety",
+          "passed": true,
+          "reference": 1.0,
+          "tolerance": 0.0,
+          "value": 1.0
+        },
+        {
+          "detail": "payoff run twice on the same simulated perf (seed=0, n_paths=20000); arrays must be identical",
+          "name": "determinism",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "shape (20000, 2), finite, cash >= 0, zero after trusted call date (seed=0, n_paths=20000)",
+          "name": "output_sanity",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.0,
+          "value": 0.0
+        },
+        {
+          "detail": "13 verified filing examples; cash at the final column must equal the cited payment within $0.01 and other columns must be 0",
+          "name": "filing_examples",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 0.01,
+          "value": 1.7763568394002505e-15
+        },
+        {
+          "detail": "9877 called paths (seed=0, n_paths=20000); generated row sums must equal trusted template undiscounted totals within 1e-9 * notional and columns after the call must be zero",
+          "name": "called_paths_match_template",
+          "passed": true,
+          "reference": 0.0,
+          "tolerance": 1e-08,
+          "value": 0.0
+        },
+        {
+          "detail": "price_cashflows at paths (1250, 5000, 20000) (seed=0); SE ratios must lie in [0.4, 0.6] and consecutive prices within 3 combined SE",
+          "name": "convergence",
+          "passed": true,
+          "reference": 0.5,
+          "tolerance": 0.1,
+          "value": 0.49251509493008555
+        }
+      ],
+      "code": "import numpy as np\n\ndef cashflows(perf, terms):\n    n_paths, n_dates, n_assets = perf.shape\n    cash = np.zeros((n_paths, n_dates), dtype=float)\n    notional = float(terms.get(\"notional\", 10.0))\n    final_index = int(terms.get(\"final_index\", n_dates - 1))\n    autocall = terms.get(\"autocall\")\n    downside = terms.get(\"downside\") or {}\n    upside = terms.get(\"upside\")\n    if autocall is not None:\n        trigger = float(autocall.get(\"trigger\", 1.0))\n        call_amounts = autocall.get(\"call_amounts\")\n    else:\n        trigger = None\n        call_amounts = None\n    coupon = terms.get(\"coupon\")\n    if coupon is not None:\n        c_barrier = float(coupon.get(\"barrier\", 0.0))\n        c_amounts = coupon.get(\"amounts\")\n        c_memory = bool(coupon.get(\"memory\", False))\n        unpaid = np.zeros(n_paths, dtype=float)\n    else:\n        c_barrier = None\n        c_amounts = None\n        c_memory = False\n        unpaid = None\n    called = np.zeros(n_paths, dtype=bool)\n    for k in range(n_dates):\n        if n_assets == 1:\n            perf_k = perf[:, k, 0]\n        else:\n            perf_k = np.min(perf[:, k, :], axis=1)\n        if coupon is not None and c_amounts is not None and k < len(c_amounts) and c_amounts[k] is not None:\n            amt = float(c_amounts[k])\n            active = ~called\n            if np.any(active):\n                cond = perf_k >= c_barrier\n                if c_memory:\n                    pay_mask = active & cond\n                    accrue_mask = active & (~cond)\n                    cash[pay_mask, k] += amt + unpaid[pay_mask]\n                    unpaid[pay_mask] = 0.0\n                    unpaid[accrue_mask] += amt\n                else:\n                    pay_mask = active & cond\n                    cash[pay_mask, k] += amt\n        if autocall is not None and call_amounts is not None and k < len(call_amounts) and call_amounts[k] is not None:\n            ca = float(call_amounts[k])\n            cond_a = perf_k >= trigger\n            to_call = (~called) & cond_a\n            if np.any(to_call):\n                cash[to_call, k] += ca\n                called[to_call] = True\n    remaining = ~called\n    if np.any(remaining):\n        if n_assets == 1:\n            perf_final = perf[:, final_index, 0]\n        else:\n            perf_final = np.min(perf[:, final_index, :], axis=1)\n        level = float(downside.get(\"level\", 0.6))\n        gearing = float(downside.get(\"gearing\", 1.0))\n        kind = downside.get(\"kind\", \"barrier\")\n        obs = downside.get(\"observation\", \"final_only\")\n        lev = float(upside.get(\"leverage\", 1.0)) if upside is not None else 1.0\n        cap = upside.get(\"cap\") if upside is not None else None\n        if cap is not None:\n            cap = float(cap)\n        has_abs = False\n        for f in terms.get(\"unsupported_features\", []):\n            if \"absolute\" in str(f).lower():\n                has_abs = True\n                break\n        redemption = np.zeros(n_paths, dtype=float)\n        breached = np.zeros(n_paths, dtype=bool)\n        if obs in (\"each_review\", \"daily\"):\n            if n_assets == 1:\n                worst_ever = np.min(perf[:, :, 0], axis=1)\n            else:\n                worst_ever = np.min(np.min(perf, axis=2), axis=1)\n            breached = worst_ever < level\n        up_mask = perf_final > 1.0\n        if has_abs:\n            mid_mask = (perf_final <= 1.0) & (perf_final >= level)\n            down_mask = perf_final < level\n            if obs != \"final_only\":\n                down_mask = down_mask | (breached & ~up_mask)\n                mid_mask = mid_mask & (~breached)\n            redemption[up_mask] = notional * (1.0 + lev * (perf_final[up_mask] - 1.0))\n            if cap is not None:\n                cap_val = notional * (1.0 + cap)\n                redemption[up_mask] = np.minimum(redemption[up_mask], cap_val)\n            redemption[mid_mask] = notional * (1.0 + (1.0 - perf_final[mid_mask]))\n            if kind == \"barrier\":\n                redemption[down_mask] = notional * (1.0 - gearing * (1.0 - perf_final[down_mask]))\n            else:\n                redemption[down_mask] = notional * (1.0 - gearing * (level - perf_final[down_mask]))\n        else:\n            if kind == \"barrier\":\n                par_mask = (perf_final <= 1.0) & (perf_final >= level)\n                down_mask = perf_final < level\n                if obs != \"final_only\":\n                    down_mask = down_mask | (breached & ~up_mask)\n                    par_mask = par_mask & (~breached)\n                redemption[up_mask] = notional * (1.0 + lev * (perf_final[up_mask] - 1.0))\n                if cap is not None:\n                    cap_val = notional * (1.0 + cap)\n                    redemption[up_mask] = np.minimum(redemption[up_mask], cap_val)\n                redemption[par_mask] = notional\n                redemption[down_mask] = notional * (1.0 - gearing * (1.0 - perf_final[down_mask]))\n            else:\n                par_mask = perf_final >= level\n                down_mask = perf_final < level\n                par_mask = par_mask & (~up_mask)\n                redemption[up_mask] = notional * (1.0 + lev * (perf_final[up_mask] - 1.0))\n                if cap is not None:\n                    cap_val = notional * (1.0 + cap)\n                    redemption[up_mask] = np.minimum(redemption[up_mask], cap_val)\n                redemption[par_mask] = notional\n                redemption[down_mask] = notional * (1.0 - gearing * (level - perf_final[down_mask]))\n        redemption = np.maximum(redemption, 0.0)\n        cash[remaining, final_index] += redemption[remaining]\n    return cash",
+      "cost_usd": 0.08185044999999999,
+      "counterexamples": {},
+      "error": null,
+      "feedback_sent": null,
+      "passed": true,
+      "seconds": 50.457205899991095
+    }
+  ],
+  "cost_usd": 0.10923479999999999,
+  "cusip": "38151R602",
+  "estimated_value": 9.69,
+  "examples": [
+    {
+      "payment": 0.0,
+      "quote": "0.00 -100.00% $0.000 -100.00%",
+      "verified": true,
+      "worst_final": 0.0
+    },
+    {
+      "payment": 2.5,
+      "quote": "25.00 -75.00% $2.500 -75.00%",
+      "verified": true,
+      "worst_final": 0.25
+    },
+    {
+      "payment": 5.0,
+      "quote": "50.00 -50.00% $5.000 -50.00%",
+      "verified": true,
+      "worst_final": 0.5
+    },
+    {
+      "payment": 5.999,
+      "quote": "59.99 -40.01% $5.999 -40.01%",
+      "verified": true,
+      "worst_final": 0.5999
+    },
+    {
+      "payment": 14.0,
+      "quote": "60.00(1) -40.00% $14.000 40.00%",
+      "verified": true,
+      "worst_final": 0.6
+    },
+    {
+      "payment": 12.5,
+      "quote": "75.00 -25.00% $12.500 25.00%",
+      "verified": true,
+      "worst_final": 0.75
+    },
+    {
+      "payment": 11.0,
+      "quote": "90.00 -10.00% $11.000 10.00%",
+      "verified": true,
+      "worst_final": 0.9
+    },
+    {
+      "payment": 10.0,
+      "quote": "100.00 (2) 0.00% $10.000 0.00%",
+      "verified": true,
+      "worst_final": 1.0
+    },
+    {
+      "payment": 10.75,
+      "quote": "105.00 5.00% $10.750 7.50%",
+      "verified": true,
+      "worst_final": 1.05
+    },
+    {
+      "payment": 11.5,
+      "quote": "110.00 10.00% $11.500 15.00%",
+      "verified": true,
+      "worst_final": 1.1
+    },
+    {
+      "payment": 13.0,
+      "quote": "120.00 20.00% $13.000 30.00%",
+      "verified": true,
+      "worst_final": 1.2
+    },
+    {
+      "payment": 16.0,
+      "quote": "140.00 40.00% $16.000 60.00%",
+      "verified": true,
+      "worst_final": 1.4
+    },
+    {
+      "payment": 17.5,
+      "quote": "150.00 50.00% $17.500 75.00%",
+      "verified": true,
+      "worst_final": 1.5
+    }
+  ],
+  "examples_model": "meta-models/muse-spark-open-1026",
+  "fair_value": {
+    "base": {
+      "n_paths": 20000,
+      "price": 11.31389415407342,
+      "seed": 0,
+      "std_error": 0.013467721199515859
+    },
+    "high": 11.574108096114838,
+    "low": 10.938176566373881,
+    "points": 27,
+    "skew": "not included"
+  },
+  "first_failing_checks": [],
+  "gate": "base value 11.31 exceeds the issue price 10.00 by 13.1% (more than 2%)",
+  "issue_price": 10.0,
+  "issuer": "GS Finance Corp.",
+  "meta": {
+    "accession": "0001193125-26-432141",
+    "audit_status": "unsupported",
+    "filing_date": "2026-10-26",
+    "form": "424B2",
+    "issuer_group": "Goldman Sachs",
+    "label": "absolute decline payout, autocall",
+    "min_examples": 3,
+    "model": "meta-models/muse-spark-open-1026",
+    "primary_document": "gs-20261026.htm",
+    "template_covered": false,
+    "url": "https://www.sec.gov/Archives/edgar/data/886982/000119312526432141/gs-20261026.htm"
+  },
+  "model": "meta-models/muse-spark-open-1026",
+  "model_seconds": 57.946123000001535,
+  "n_attempts": 1,
+  "passed": true,
+  "repaired": false,
+  "status": "needs_review",
+  "structure": "single underlying, autocall, upside leverage 1.5x, barrier 60% at maturity",
+  "unsupported_features": [
+    {
+      "quote": "A positive return equal to the absolute value of the percentage decline in the value of the Market Measure only if the Market Measure does not decline by more than 40.00% (e.g., if the negative return of the Market Measure is -5.00%, you will receive a positive return of +5.00%)",
+      "value": "absolute value of the percentage decline"
+    }
+  ]
+}
