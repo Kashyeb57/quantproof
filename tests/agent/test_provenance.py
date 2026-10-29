@@ -332,3 +332,13 @@ def test_rendered_38582_report_has_full_provenance():
     )
     assert not tampered_check.ok
     assert "12.34%" in [mention.text for mention in tampered_check.unmatched]
+
+
+def test_typographic_minus_is_a_sign():
+    """U+2212 ("−5.2%") is negative: it must not pass against a positive value."""
+    from quantproof.agent.provenance import check_provenance, find_numbers
+
+    assert [m.value for m in find_numbers("return −5.2% and −$3.10")] == [-5.2, -3.1]
+    assert not check_provenance("return −5.2%", [5.2]).ok
+    assert check_provenance("return −5.2%", [-5.2]).ok
+    assert check_provenance("return -5.2%", [-5.2]).ok

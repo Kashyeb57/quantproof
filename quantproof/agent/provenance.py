@@ -100,7 +100,7 @@ _ISO_DATE_STRING_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _NUMBER_RE = re.compile(
     r"(?<![A-Za-z0-9_])"
     r"(?P<text>"
-    r"(?:[+-]?\$?|\$[+-]?)"
+    r"(?:[+\-\u2212]?\$?|\$[+\-\u2212]?)"  # U+2212 is the typographic minus
     r"(?:\d{1,3}(?:,\d{3})+|\d+)"
     r"(?:\.\d+)?"
     r"%?"
@@ -246,7 +246,9 @@ def find_numbers(text: str) -> list[NumberMention]:
             continue
 
         percent = written.endswith("%")
-        numeric = written.replace("$", "").replace(",", "")
+        # A typographic minus (U+2212) is a minus sign: "−5.2%" is -5.2, so
+        # it must not match a positive engine value.
+        numeric = written.replace("$", "").replace(",", "").replace("\u2212", "-")
         if percent:
             numeric = numeric[:-1]
 
