@@ -2,7 +2,7 @@
 
 ## Method
 
-Templates are disabled for synthesis: for every note in this benchmark, Muse Wonder 1.0 writes the full payoff code from the filing text and the extracted terms.  The generated code is untrusted: it runs only in a subprocess sandbox with a timeout, no network, and an import allow-list (numpy, scipy, math).
+Templates are disabled for synthesis: for every note in this benchmark, the selected model writes the full payoff code from the filing text and the extracted terms: --model wonder (the default, Muse Wonder 1.0 via the Meta API) or --model open (Muse Spark Open via Baseten, key from BASETEN_API_KEY, final answer only).  Open-model spend is Baseten credits, billed apart from Meta spend, and each saved payoff records which model wrote it.  The generated code is untrusted: it runs only in a subprocess sandbox with a timeout, no network, and an import allow-list (numpy, scipy, math).
 
 The proof battery checks are: convergence, determinism, filing_examples, output_sanity, static_safety.
 
@@ -12,7 +12,7 @@ Pricing uses stated assumptions, not market data as of each pricing date.  Volat
 
 ## Coverage
 
-Templates priced 6 of 42 extracted notes; with proven AI-written payoffs, 12 of 42 (8 of the 29 unsupported notes were attempted).
+Templates priced 11 of 42 extracted notes; with proven AI-written payoffs, 17 of 42 (8 of the 29 unsupported notes were attempted).
 
 ## Results
 
@@ -24,23 +24,25 @@ Templates priced 6 of 42 extracted notes; with proven AI-written payoffs, 12 of 
 - Failed: 1
 - Mean attempts per note: 1.10
 - Total model cost (USD): 1.3293
+- Cost (muse-wonder-1.0, USD): 1.3293
+- 'open' costs are Baseten credits, billed separately from Meta credits.
 - Total model seconds: 272.7
 - Status counts: needs_review: 1, priced_ai: 8, synthesis_failed: 1
 
 ## Attempts per note
 
-| CUSIP | Structure | Attempts | First failing checks | Status | Cost ($) | Time (s) | Base value ± SE ($) | Range ($) | Bank estimate ($) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 89115NKY9 | single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity | 1 |  | priced_ai | 0.1790 | 30.0 | 991.81 ± 0.80 | 954.55 - 1022.16 | 983.60 |
-| 40058LYL8 | single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity | 1 |  | priced_ai | 0.1211 | 25.1 | 942.12 ± 0.50 | 911.60 - 973.57 | 969.00 |
-| 40058MG51 | single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity | 1 |  | needs_review | 0.1381 | 22.4 | 1053.43 ± 0.48 | 1011.42 - 1094.43 | 962.00 |
-| 46661QNW1 | single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity | 1 |  | priced_ai | 0.1374 | 36.9 | 1000.72 ± 0.28 | 987.52 - 1011.37 | 995.30 |
-| 06376MPD0 | single underlying, buffer 85% at maturity | 2 | filing_examples | priced_ai | 0.1737 | 30.0 | 968.96 ± 1.06 | 920.99 - 1018.28 | 997.53 |
-| 61781LSA9 | single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity | 1 |  | priced_ai | 0.1288 | 28.8 | 964.45 ± 0.44 | 935.81 - 991.70 | 972.80 |
-| 06419TE79 | single underlying, buffer 85% at maturity | 1 |  | priced_ai | 0.1372 | 25.7 | 974.25 ± 0.62 | 949.17 - 997.98 | 986.88 |
-| 61781THB2 | single underlying, upside leverage 2.03x, barrier 100% at maturity | 1 | filing_examples | synthesis_failed | 0.1048 | 22.2 |  |  | 981.90 |
-| 46661QNV3 | single underlying, barrier 70% at maturity | 1 |  | priced_ai | 0.1144 | 31.9 | 987.04 ± 0.82 | 954.92 - 1011.86 | 986.00 |
-| 46661QN84 | single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity | 1 |  | priced_ai | 0.0950 | 19.6 | 991.82 ± 0.60 | 969.22 - 1010.37 | 989.30 |
+| CUSIP | Structure | Model | Attempts | First failing checks | Status | Cost ($) | Time (s) | Base value ± SE ($) | Range ($) | Bank estimate ($) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 89115NKY9 | single underlying, upside leverage 1.25x, cap 28.65%, buffer 70% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1790 | 30.0 | 991.81 ± 0.80 | 954.55 - 1022.16 | 983.60 |
+| 40058LYL8 | single underlying, upside leverage 3x, cap 21.2%, barrier 100% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1211 | 25.1 | 942.12 ± 0.50 | 911.60 - 973.57 | 969.00 |
+| 40058MG51 | single underlying, upside leverage 2.5x, cap 110%, barrier 100% at maturity | muse-wonder-1.0 | 1 |  | needs_review | 0.1381 | 22.4 | 1053.43 ± 0.48 | 1011.42 - 1094.43 | 962.00 |
+| 46661QNW1 | single underlying, upside leverage 1x, cap 14.6%, buffer 90% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1374 | 36.9 | 1000.72 ± 0.28 | 987.52 - 1011.37 | 995.30 |
+| 06376MPD0 | single underlying, buffer 85% at maturity | muse-wonder-1.0 | 2 | filing_examples | priced_ai | 0.1737 | 30.0 | 968.96 ± 1.06 | 920.99 - 1018.28 | 997.53 |
+| 61781LSA9 | single underlying, upside leverage 1.5x, cap 22.2%, buffer 90% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1288 | 28.8 | 964.45 ± 0.44 | 935.81 - 991.70 | 972.80 |
+| 06419TE79 | single underlying, buffer 85% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1372 | 25.7 | 974.25 ± 0.62 | 949.17 - 997.98 | 986.88 |
+| 61781THB2 | single underlying, upside leverage 2.03x, barrier 100% at maturity | muse-wonder-1.0 | 1 | filing_examples | synthesis_failed | 0.1048 | 22.2 |  |  | 981.90 |
+| 46661QNV3 | single underlying, barrier 70% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.1144 | 31.9 | 987.04 ± 0.82 | 954.92 - 1011.86 | 986.00 |
+| 46661QN84 | single underlying, upside leverage 1x, cap 10%, buffer 80% at maturity | muse-wonder-1.0 | 1 |  | priced_ai | 0.0950 | 19.6 | 991.82 ± 0.60 | 969.22 - 1010.37 | 989.30 |
 
 ## What the battery caught
 

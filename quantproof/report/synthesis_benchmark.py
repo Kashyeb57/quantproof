@@ -14,7 +14,8 @@ template_covered, audit_status), ``cusip``, ``structure``,
 ``examples``, ``attempts`` (each with code, passed, error,
 feedback_sent, counterexamples, cost_usd, seconds and checks),
 ``passed``, ``n_attempts``, ``repaired``, ``first_failing_checks``,
-``status`` ("priced_ai" | "needs_review" | "synthesis_failed"),
+``status`` ("priced_ai" | "needs_review" | "synthesis_failed" |
+"skipped_few_examples"),
 ``cost_usd`` and ``model_seconds``; when passed it also has
 ``fair_value`` and ``gate``, and when template-covered and passed it also
 has ``template`` and ``template_examples``.
@@ -103,6 +104,11 @@ def _result_cost(result: dict) -> float:
     )
 
 
+def _model_of(result: dict) -> str:
+    """Model id that wrote the payoff (saved rows predate it: wonder)."""
+    return str(result.get("model") or "muse-wonder-1.0")
+
+
 def _result_seconds(result: dict) -> float:
     """Top-level ``model_seconds`` if present, else sum over attempts."""
     if result.get("model_seconds") is not None:
@@ -162,7 +168,15 @@ def summarise(results: list[dict], audit_rows: list[dict]) -> dict:
 
     n_notes = len(results)
     n_passed = sum(1 for r in results if r.get("passed"))
-    attempts_per_note = [_n_attempts(r) for r in results]
+    n_skipped = sum(1 for r in results if r.get("status") == "skipped_few_examples")
+    # Spend split by payoff-writing model: open-model costs are
+    # Baseten credits, billed separately from Meta credits.
+    cost_by_model: dict[str, float] = {}
+    for _result in results:
+        _name = _model_of(_result)
+        cost_by_model[_name] = cost_by_model.get(_name, 0.0) + _result_cost(_result)
+    attempted = [r for r in results if r.get("status") != "skipped_few_examples"]
+    attempts_per_note = [_n_attempts(r) for r in attempted]
 
     catches_counter: Counter = Counter()
     repaired_counter: Counter = Counter()
@@ -259,7 +273,10 @@ def summarise(results: list[dict], audit_rows: list[dict]) -> dict:
             )
         ),
         "n_repaired": int(sum(1 for r in results if _is_repaired(r))),
-        "n_failed": int(n_notes - n_passed),
+        "n_failed": int(sum(1 for r in attempted if not r.get("passed"))),
+    "n_skipped": int(n_skipped),
+        "models": sorted(cost_by_model),
+        "cost_by_model": {name: float(cost_by_model[name]) for name in sorted(cost_by_model)},
         "total_cost_usd": float(sum(_result_cost(r) for r in results)),
         "total_model_seconds": float(sum(_result_seconds(r) for r in results)),
         "status_counts": dict(
@@ -388,8 +405,13 @@ def render_markdown(results: list[dict], summary: dict) -> str:
     lines.append("")
     lines.append(
         "Templates are disabled for synthesis: for every note in this "
-        "benchmark, Muse Wonder 1.0 writes the full payoff code from the "
-        "filing text and the extracted terms.  The generated code is "
+        "benchmark, the selected model writes the full payoff code from "
+        "the filing text and the extracted terms: --model wonder (the "
+        "default, Muse Wonder 1.0 via the Meta API) or --model open "
+        "(Muse Spark Open via Baseten, key from BASETEN_API_KEY, final "
+        "answer only).  Open-model spend is Baseten credits, billed "
+        "apart from Meta spend, and each saved payoff records which "
+        "model wrote it.  The generated code is "
         "untrusted: it runs only in a subprocess sandbox with a timeout, "
         "no network, and an import allow-list (numpy, scipy, math)."
     )
@@ -444,6 +466,8 @@ def render_markdown(results: list[dict], summary: dict) -> str:
     lines.append(f"- Passed on the first attempt: {summary.get('n_first_try')}")
     lines.append(f"- Repaired after a failed attempt: {summary.get('n_repaired')}")
     lines.append(f"- Failed: {summary.get('n_failed')}")
+    if summary.get("n_skipped"):
+        lines.append(f"- Skipped (fewer than 3 filing examples): {summary.get('n_skipped')}")
     mean_attempts = summary.get("mean_attempts")
     lines.append(
         "- Mean attempts per note: "
@@ -451,6 +475,11 @@ def render_markdown(results: list[dict], summary: dict) -> str:
     )
     lines.append(
         f"- Total model cost (USD): {_fmt(summary.get('total_cost_usd'), 4)}"
+    )
+    for _name in sorted(summary.get("cost_by_model") or {}):
+        lines.append(f"- Cost ({_name}, USD): {_fmt(summary['cost_by_model'][_name], 4)}")
+    lines.append(
+        "- 'open' costs are Baseten credits, billed separately from Meta credits."
     )
     lines.append(
         f"- Total model seconds: {_fmt(summary.get('total_model_seconds'), 1)}"
@@ -467,6 +496,7 @@ def render_markdown(results: list[dict], summary: dict) -> str:
     headers = [
         "CUSIP",
         "Structure",
+        "Model",
         "Attempts",
         "First failing checks",
         "Status",
@@ -503,6 +533,7 @@ def render_markdown(results: list[dict], summary: dict) -> str:
         cells = [
             _escape_cell(result.get("cusip") or ""),
             _escape_cell(result.get("structure") or ""),
+            _escape_cell(_model_of(result)),
             _escape_cell(_n_attempts(result)),
             _escape_cell(first_failing_text),
             _escape_cell(result.get("status") or ""),

@@ -251,6 +251,40 @@ def test_summarise_numbers_exactly():
     ]
 
 
+def test_summarise_separates_skipped_notes():
+    skipped = {
+        "meta": {
+            "accession": "0000000004",
+            "issuer_group": "Example Bank",
+            "label": "Skipped note",
+            "template_covered": False,
+            "audit_status": "unsupported",
+        },
+        "cusip": "DDDD00004",
+        "structure": "autocallable",
+        "issue_price": 1000.0,
+        "estimated_value": 940.0,
+        "examples": [],
+        "attempts": [],
+        "passed": False,
+        "n_attempts": 0,
+        "repaired": False,
+        "first_failing_checks": [],
+        "status": "skipped_few_examples",
+        "skip_reason": "only 1 filing example(s); the battery needs at least 3",
+        "cost_usd": 0.01,
+        "model_seconds": 1.0,
+    }
+    summary = summarise(_results() + [skipped], _audit_rows())
+    assert summary["n_notes"] == 4
+    assert summary["n_skipped"] == 1
+    assert summary["n_failed"] == 1
+    assert summary["n_passed"] == 2
+    # Skipped notes attempted nothing, so the per-note attempts are unchanged.
+    assert summary["attempts_per_note"] == [1, 2, 2]
+    assert summary["status_counts"]["skipped_few_examples"] == 1
+
+
 def test_load_results_sorted_by_accession(tmp_path):
     bench_dir = _write_bench(tmp_path)
     loaded = load_results(bench_dir)

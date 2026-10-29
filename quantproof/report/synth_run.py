@@ -378,14 +378,16 @@ def attempt_to_dict(a: Attempt) -> dict:
     }
 
 
-def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_examples: int = 0) -> dict:
+def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_examples: int = 0,
+             synth_model: str = SYNTH_MODEL, examples_model: str = "muse-spark-1.3") -> dict:
     """Run the synthesized-payoff benchmark for one filing.
 
     Formula: no new pricing maths.  The term sheet is replayed and
     quote-verified (:func:`termsheet_from_audit`), the market is the
     stated assumptions (:func:`stated_market`), filing examples are
-    extracted with verified quotes, and ``synthesise_payoff`` runs with
-    ``SYNTH_MODEL``/``EFFORT``/``MAX_TOKENS``/``MAX_ATTEMPTS``,
+    extracted with verified quotes (``examples_model`` through ``chat``),
+    and ``synthesise_payoff`` runs with ``synth_model`` (default
+    ``SYNTH_MODEL``)/``EFFORT``/``MAX_TOKENS``/``MAX_ATTEMPTS``,
     ``PRICE_PATHS`` and ``SEED``, ``register=False``.  Templates are
     DISABLED for synthesis: the model always writes the full payoff;
     the template is only used afterwards for the comparison
@@ -415,7 +417,7 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_exa
     filing_text = filing.text
     ts = termsheet_from_audit(calls_audit, filing_text)
     market = stated_market(ts)
-    examples = extract_examples(filing, chat=chat, notional=float(ts.notional.value))
+    examples = extract_examples(filing, chat=chat, model=examples_model, notional=float(ts.notional.value))
     if getattr(chat, "refused", False):  # extract_examples swallows exceptions
         raise BudgetExceeded("budget guard refused the examples call")
     if len(examples or []) < min_examples:
@@ -425,6 +427,8 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_exa
         estimated_value = float(ts.estimated_value.value) if ts.estimated_value is not None else None
         return {
             "meta": meta,
+            "model": synth_model,
+            "examples_model": examples_model,
             "cusip": ts.cusip.value if ts.cusip is not None else None,
             "issuer": ts.issuer.value if ts.issuer is not None else None,
             "structure": audit_run._structure_label(ts),
@@ -456,7 +460,7 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_exa
         market,
         examples=examples,
         chat=chat,
-        model=SYNTH_MODEL,
+        model=synth_model,
         reasoning_effort=EFFORT,
         max_tokens=MAX_TOKENS,
         max_attempts=MAX_ATTEMPTS,
@@ -483,6 +487,8 @@ def run_note(filing, calls_audit, meta, *, chat, template_covered: bool, min_exa
 
     result: dict[str, Any] = {
         "meta": meta,
+        "model": synth_model,
+        "examples_model": examples_model,
         "cusip": ts.cusip.value if ts.cusip is not None else None,
         "issuer": ts.issuer.value if ts.issuer is not None else None,
         "structure": audit_run._structure_label(ts),
