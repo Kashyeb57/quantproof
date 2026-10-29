@@ -12,7 +12,7 @@ Each row is one saved audit result. Our estimated fair value is shown as a range
 - Notes with a bank estimated value: 42
 - Median cost to investor (per $1,000 notional, bank's figure): 19.15
 - Median cost to investor (%, bank's figure): 1.9%
-- Bank estimated value within our range (priced notes): 12 of 12 (100.0%)
+- Bank estimated value within our range (priced and needs-review notes): 12 of 13 (92.3%)
 - Quote verification rate: 95.2%
 - Total model cost (USD): 5.4949
 - Total model seconds: 2817.6

@@ -166,3 +166,37 @@ def test_app_market_audit_page_renders():
     radios[0].set_value("Market Audit").run()
     assert not at.exception
     assert "Market Audit" in [h.value for h in at.header]
+
+
+def test_page_data_flagged_note_counts_in_range(tmp_path):
+    audit_dir = tmp_path / "market_audit"
+    results_dir = audit_dir / "results"
+    results_dir.mkdir(parents=True)
+    priced = _result(
+        "0000000011",
+        "DDDD00011",
+        "priced",
+        1000.0,
+        962.5,
+        {"low": 940.0, "high": 980.0, "base": {"price": 960.0, "std_error": 1.0}},
+    )
+    flagged = _result(
+        "0000000012",
+        "EEEE00012",
+        "needs_review",
+        1000.0,
+        990.0,
+        {"low": 940.0, "high": 980.0, "base": {"price": 960.0, "std_error": 1.0}},
+    )
+    for result in (priced, flagged):
+        (results_dir / f"{result['meta']['accession']}.json").write_text(
+            json.dumps(result), encoding="utf-8"
+        )
+    (audit_dir / "run.json").write_text(json.dumps({}), encoding="utf-8")
+    data = page_data(audit_dir)
+    rows_by_cusip = {row["cusip"]: row for row in data["rows"]}
+    assert rows_by_cusip["DDDD00011"]["bank_in_range"] is True
+    assert rows_by_cusip["EEEE00012"]["bank_in_range"] is False
+    assert data["agg"]["n_priced_or_review"] == 2
+    # Exact fraction: 1 in range of 2 priced-or-flagged.
+    assert data["agg"]["share_bank_in_range"] == pytest.approx(1 / 2)

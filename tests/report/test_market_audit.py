@@ -336,3 +336,39 @@ def test_median_cost_is_per_1000_notional_across_note_sizes():
     rows = [note_row(small), note_row(large)]
     assert math.isclose(rows[0]["cost_to_investor_per_1000"], 38.0)
     assert math.isclose(aggregate(rows, {})["median_cost_to_investor"], 37.75)
+
+
+def _needs_review(estimated_value: float) -> dict:
+    result = _priced_in_range()
+    result["meta"] = {
+        "issuer_group": "Bank A",
+        "accession": "0005",
+        "url": "https://example.invalid/0005",
+        "filing_date": "2024-01-07",
+    }
+    result["cusip"] = "000000AA5"
+    result["status"] = "needs_review"
+    result["reason"] = "plausibility gate: bank value above our range"
+    result["estimated_value"] = estimated_value
+    result["cost_usd"] = 0.05
+    result["model_seconds"] = 0.5
+    result["seconds"] = 1.0
+    return result
+
+
+def test_bank_in_range_counts_priced_and_flagged() -> None:
+    # The gate flags a note exactly when the bank's value is above our
+    # whole range, so counting only priced notes would be circular.
+    flagged_out = note_row(_needs_review(estimated_value=900.0))
+    assert flagged_out["bank_in_range"] is False
+    flagged_in = note_row(_needs_review(estimated_value=962.5))
+    assert flagged_in["bank_in_range"] is True
+    rows = [note_row(_priced_in_range()), flagged_out, flagged_in]
+    agg = aggregate(rows, {})
+    assert agg["n_priced"] == 1
+    assert agg["n_needs_review"] == 2
+    assert agg["n_priced_or_review"] == 3
+    assert agg["n_bank_in_range"] == 2
+    # Exact fraction: 2 in range of 3 priced-or-flagged.
+    assert agg["share_bank_in_range"] == pytest.approx(2 / 3)
+    assert "2 of 3" in render_markdown(rows, agg)

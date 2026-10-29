@@ -3325,7 +3325,7 @@
     ],
     "row": {
       "accession": "0001918704-26-031667",
-      "bank_in_range": null,
+      "bank_in_range": false,
       "base_std_error": 0.6029307371094662,
       "base_value": 849.4882211867906,
       "cost_to_investor": 33.700000000000045,

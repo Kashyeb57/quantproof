@@ -170,9 +170,11 @@ def note_row(result: dict) -> dict:
     minus the bank's estimated value, both per note in dollars.  It is
     computed only when both are present, and it is never adjusted.
     ``bank_in_range`` compares the bank's estimated value with our
-    risk-neutral fair-value range and is set only when priced (a range
-    and an estimated value are both present).  Values that are
-    unavailable are ``None``.
+    risk-neutral fair-value range and is set when a range and an
+    estimated value are both present for a priced or flagged note (status
+    "priced" or "needs_review"; flagged notes count, since the gate flags a
+    note exactly when the bank value is above our whole range, so counting
+    only priced notes would be circular). Otherwise ``None``.
     """
     meta = _meta(result)
 
@@ -205,7 +207,7 @@ def note_row(result: dict) -> dict:
     range_high = fair_value.get("high")
 
     if (
-        status == "priced"
+        status in ("priced", "needs_review")
         and range_low is not None
         and range_high is not None
         and estimated_value is not None
@@ -347,7 +349,8 @@ def aggregate(rows: list[dict], run: dict) -> dict:
     share_priced = (n_priced / notes_extracted) if notes_extracted else None
 
     n_bank_in_range = sum(1 for row in rows if row.get("bank_in_range") is True)
-    share_bank_in_range = (n_bank_in_range / n_priced) if n_priced else None
+    n_priced_or_review = n_priced + n_needs_review
+    share_bank_in_range = (n_bank_in_range / n_priced_or_review) if n_priced_or_review else None
 
     total_checked = sum(int(row["quotes_checked"]) for row in rows if row.get("quotes_checked"))
     total_verified = sum(int(row["quotes_verified"]) for row in rows if row.get("quotes_verified"))
@@ -367,6 +370,7 @@ def aggregate(rows: list[dict], run: dict) -> dict:
         "n_with_estimate": n_with_estimate,
         "n_priced": n_priced,
         "n_needs_review": n_needs_review,
+        "n_priced_or_review": n_priced_or_review,
         "share_priced": share_priced,
         "n_bank_in_range": n_bank_in_range,
         "share_bank_in_range": share_bank_in_range,
@@ -473,8 +477,8 @@ def render_markdown(rows: list[dict], agg: dict) -> str:
         f"{_format_pct_points(agg.get('median_cost_to_investor_pct'))}"
     )
     lines.append(
-        f"- Bank estimated value within our range (priced notes): "
-        f"{agg.get('n_bank_in_range')} of {agg.get('n_priced')} "
+        f"- Bank estimated value within our range (priced and needs-review notes): "
+        f"{agg.get('n_bank_in_range')} of {agg.get('n_priced_or_review')} "
         f"({_format_pct_fraction(agg.get('share_bank_in_range'))})"
     )
     lines.append(

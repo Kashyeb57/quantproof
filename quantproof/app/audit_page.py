@@ -165,7 +165,7 @@ def render(st) -> None:
     )
     col5.metric("Share priced (%)", _pct_fraction(agg.get("share_priced")))
     col6.metric(
-        "Bank estimate inside our range (% of priced notes)",
+        "Bank estimate inside our range (% of priced or flagged notes)",
         _pct_fraction(agg.get("share_bank_in_range")),
     )
 
@@ -179,7 +179,8 @@ def render(st) -> None:
         "needs_review: priced, then stopped by the plausibility gate (base value "
         "more than 2% above the issue price, or the bank's estimate above our "
         "whole range). These rows are not counted as priced until a person "
-        "reviews them."
+        "reviews them, but they count in the range denominator above: the gate "
+        "flags a note exactly when the bank's estimate is above our range."
     )
 
     st.dataframe(data["table"], use_container_width=True, hide_index=True)

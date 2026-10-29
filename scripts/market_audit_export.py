@@ -96,7 +96,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Notes with a bank estimated value: {agg['n_with_estimate']}")
     print(f"Median cost to investor: {agg['median_cost_to_investor']}")
     print(f"Median cost to investor pct: {agg['median_cost_to_investor_pct']}")
-    print(f"Bank estimated value in range: {agg['n_bank_in_range']}")
+    print(f"Bank estimated value in range: {agg['n_bank_in_range']} of {agg['n_priced_or_review']}")
     print(f"Share bank in range: {agg['share_bank_in_range']}")
     print(f"Quote verification rate: {agg['quote_verification_rate']}")
     print(f"Total cost USD: {agg['total_cost_usd']}")
