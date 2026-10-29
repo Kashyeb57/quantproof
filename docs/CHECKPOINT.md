@@ -240,6 +240,29 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
 - Docs: README/MARKET_AUDIT/SYNTHESIS_BENCHMARK every number re-checked against generated docs and saved rows (cross-check 12/42, 62 = 36+20+6; coverage 11+15 = 26 of 42; costs $8.52+$3.55 = $12.07; proof table and 38582 example figures match VALIDATION.md and the example report; cost-guard constants match `live.py`). No unbacked claims; no wording changes needed.
 - Suite at freeze: 1630 passed, 13 skipped, 0 failed (canonical `python -m pytest -q`).
 
+## Independent model-validation review (Oct 29, no model calls)
+- Fixed (with tests): `market/anchored.py` paired the two FRED close series by position, not date;
+  FRED drops missing values, so equal-length series with different gaps were correlated across
+  different days (perfectly correlated test series gave rho 0.68). Now aligned on common dates.
+  No saved result used a FRED correlation (12 single-underlying, 1 stated 0.6), so no number moves.
+- Fixed (with test): `agent/provenance.py` did not read U+2212 ("−5.2%") as a minus sign, so a
+  negative stated number passed against a positive engine value. Now a sign.
+- Reviewed, correct: GBM exact steps + PSD factor + antithetic pair SE (`models/montecarlo.py`);
+  BSM/Greeks/digitals/parity (`models/bsm.py`); worst-of template (memory coupons, call before
+  maturity, per-review breach flags on live paths, payment-date discounting); fair-value grid (CRN,
+  convex correlation blend); real-world loss odds (undiscounted cash vs issue price, binomial SE);
+  synthesized pricing reuses the trusted simulation/discounting; sandbox (proxies without
+  submodules, audit hook, netns, rlimits, empty env, dtype/shape/finite gates) held against escape
+  probes; provenance rounding rule.
+- Noted, not changed: `fair_value.py` skew docstring says skew always lowers value (true only for
+  net-short-vol notes) and base (100k paths) need not lie inside [low, high] (20k-path grid);
+  `synthesized.payment_dates` discounts a final column that is also an autocall review at the
+  autocall payment date (normally = maturity); sandbox exposes `scipy.stats.*.random_state`
+  (unseeded randomness; the determinism check catches it); provenance docstring says "$908" must
+  not match 907.724 but the rounding rule (correctly) allows it; `quotes.normalise_for_match` drops
+  signs, so value support is sign-blind (extracted levels are positive).
+- Suite: 1645 passed.
+
 ## Left to do (in order)
 1. By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check
    (fallback while Baseten credits are missing); otherwise keep Spark 1.3 twice, stated openly.
