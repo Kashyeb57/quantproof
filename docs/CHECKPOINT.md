@@ -317,6 +317,23 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
   identically). No published result or headline number moves; nothing overwritten.
 - Suite: 1654 passed, 13 skipped, 0 failed (canonical run after the fix; baseline before it 1646/13/0).
 
+## Quote-verifier currency-sign follow-up (Oct 30, no model calls)
+
+- `normalise_for_match` also dropped a minus before/after `$`, so `+$5.20` verified
+  against `-$5.20` and `value_in_quote(5.2, ...)` matched inside `-5.20`-style text.
+- Fix: unify `-$<digit>` / `$-<digit>` to a plain minus, but only in sign position
+  (a minus preceded by a digit stays a range dash, so `$5-$10` still gives `$5 $10`).
+  `+` still collapses, forms carry their own `-`, and the existing `(?<!-)` boundary
+  does the rest -- no other logic changed. An early draft that dropped `$` broke the
+  `$5-$10` range case and was replaced before committing.
+- Regression tests (4, fakes only): `-$`/`$-` unification, `+$5.20` vs `-$5.20`,
+  placement cross-matching, and the full currency value-sign matrix.
+- Offline full-`verify_termsheet` replay over all saved audit notes: 978/1027 = 95.2%,
+  0 notes differ from the saved counters (the 3 real `-$600`/`-$700` filing lines are
+  hypothetical-example payments no saved quote depends on unsigned). No published
+  result or headline number moves; nothing overwritten.
+- Suite: 1658 passed, 13 skipped, 0 failed (canonical run after the fix; baseline before it 1654/13/0).
+
 ## Left to do (in order)
 1. ~~By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check~~
    DONE Oct 30: Baseten Open wired as the live second extraction (above).

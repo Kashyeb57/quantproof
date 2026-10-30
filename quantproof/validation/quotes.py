@@ -95,20 +95,24 @@ def normalise_for_match(text: str) -> str:
     """Normalise text for quote matching.
 
     Steps: NFKC; lower-case; unify the typographic minus U+2212 with
-    hyphen-minus; keep a hyphen-minus that is directly followed by a
-    digit and not directly preceded by one (a minus sign); replace every
-    other run of characters that are not ``[a-z0-9.%$]`` or a kept minus
-    with a single space; strip.
+    hyphen-minus; unify a minus directly before/after ``"$"`` with a
+    plain minus when the minus sits in sign position (not directly
+    preceded by a digit) and digits follow, so ``"-$5.20"`` and
+    ``"$-5.20"`` normalise to ``"-5.20"``; keep a hyphen-minus that is
+    directly followed by a digit and not directly preceded by one (a
+    minus sign); replace every other run of characters that are not
+    ``[a-z0-9.%$]`` or a kept minus with a single space; strip.
 
     Rationale: the model and the HTML differ in punctuation, quote style,
     dashes, line breaks and spacing, but never in words, digits, decimal
     points, percent or dollar signs, so those are what must match.  A
     minus directly before digits is evidence too: ``"-5.2%"`` must not
-    match ``"+5.2%"`` or an unsigned ``"5.2%"``, and ``"\u2212"``
-    (typographic minus) is the same sign.  Hyphens anywhere else --
-    hyphenated words (``"well-known"``), ranges and ISO dates
-    (``"5-10%"``, ``"2026-12-02"``) -- still collapse to a space, as
-    does ``"+"``, so plus-bearing quotes behave exactly as before.
+    match ``"+5.2%"`` or an unsigned ``"5.2%"``, and ``"\u2212"
+    (typographic minus) is the same sign, including before ``"$"``.
+    Hyphens anywhere else -- hyphenated words (``"well-known"``),
+    ranges and ISO dates (``"5-10%"``, ``"2026-12-02"``, ``"$5-$10"``)
+    -- still collapse to a space, as does ``"+"``, so plus-bearing
+    quotes behave exactly as before.
 
     Examples:
         "at least 9.7500% x $1,000" -> "at least 9.7500% $1 000"
@@ -116,11 +120,18 @@ def normalise_for_match(text: str) -> str:
         "Russell 2000(R)" -> "russell 2000"
         "a loss of \u22125.2%" -> "a loss of -5.2%"
         "well-known 5-10%" -> "well known 5 10%"
+        "-$5.20" and "$-5.20" -> "-5.20"; "$5-$10" -> "$5 $10"
     """
     lowered = unicodedata.normalize("NFKC", text).lower().replace("\u2212", "-")
+    # Unify minus-before/after-$ with a plain minus, but only in sign
+    # position: a minus preceded by a digit is a range dash (``$5-$10``
+    # keeps both dollars).  Forms never contain ``$``, so dropping it
+    # here loses nothing.
+    unified = re.sub(r"(?<![0-9])-\$(?=[0-9])", "-", lowered)
+    unified = re.sub(r"(?<![0-9]-)\$-(?=[0-9])", "-", unified)
     # Split out sign-position minuses so the run-collapse below cannot
     # eat them; every other chunk is normalised exactly as before.
-    parts = re.split(r"((?<![0-9])-(?=[0-9]))", lowered)
+    parts = re.split(r"((?<![0-9])-(?=[0-9]))", unified)
     normalised = [
         part if part == "-" else re.sub(r"[^a-z0-9.%$]+", " ", part)
         for part in parts

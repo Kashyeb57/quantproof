@@ -576,3 +576,52 @@ def test_value_in_quote_ranges_and_iso_dates_unchanged() -> None:
     # Digit-digit hyphens are ranges, not signs: they still collapse.
     assert value_in_quote(0.10, "a coupon between 5-10% per annum") is True
     assert value_in_quote(date(2026, 12, 2), "maturing on 2026-12-02 in full") is True
+
+
+def test_normalise_unifies_minus_around_dollar() -> None:
+    # "-$5.20" and "$-5.20" are the same evidence; plus still collapses.
+    assert normalise_for_match("a loss of -$5.20 on the notes") == (
+        "a loss of -5.20 on the notes"
+    )
+    assert normalise_for_match("a loss of $-5.20 on the notes") == (
+        "a loss of -5.20 on the notes"
+    )
+    assert normalise_for_match("a gain of +$5.20 on the notes") == (
+        "a gain of $5.20 on the notes"
+    )
+    assert normalise_for_match("well-known $5-$10 range") == "well known $5 $10 range"
+
+
+def test_verify_quote_plus_dollars_does_not_match_minus_dollars() -> None:
+    filing = "The payment at maturity was -$5.20 per note, all in."
+    normalised = normalise_for_match(filing)
+    verified, reason = verify_quote(
+        "payment at maturity was +$5.20 per note, all in", normalised
+    )
+    assert verified is False
+    assert reason.startswith("not found:")
+
+
+def test_verify_quote_dollar_minus_placements_unify() -> None:
+    filing = "The payment at maturity was -$5.20 per note, all in."
+    normalised = normalise_for_match(filing)
+    for quote in (
+        "payment at maturity was -$5.20 per note, all in",
+        "payment at maturity was $-5.20 per note, all in",
+    ):
+        verified, reason = verify_quote(quote, normalised)
+        assert verified is True
+        assert reason == "found"
+    verified, _ = verify_quote(
+        "payment at maturity was $5.20 per note, all in", normalised
+    )
+    assert verified is False
+
+
+def test_value_in_quote_currency_sign_matrix() -> None:
+    assert value_in_quote(5.2, "loss -$5.20 on the notes") is False
+    assert value_in_quote(5.2, "price $-5.20 on the notes") is False
+    assert value_in_quote(-5.2, "loss -$5.20 on the notes") is True
+    assert value_in_quote(-5.2, "loss $-5.20 on the notes") is True
+    assert value_in_quote(-5.2, "loss \u2212$5.20 on the notes") is True
+    assert value_in_quote(5.2, "cost $5.20 on the notes") is True
