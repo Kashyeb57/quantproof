@@ -221,6 +221,44 @@ def test_recheck_chat_error_is_unresolved_without_raising():
     assert diff.quote is None
 
 
+def test_recheck_max_rechecks_bounds_calls_and_leaves_rest_open():
+    # Three open disagreements but a budget of two: only two recheck
+    # calls happen and the third diff stays "open" for the user.
+    filing, first = _load_first_extraction()
+    diffs = (
+        _one_open_diff(first.termsheet)
+        + _one_open_diff(first.termsheet)
+        + _one_open_diff(first.termsheet)
+    )
+    calls = []
+
+    def failing_chat(messages, *, model, max_tokens=4000, purpose="", **_kwargs):
+        calls.append(purpose)
+        raise MetaAPIError("simulated recheck failure")
+
+    results = recheck(filing, diffs, chat=failing_chat, max_rechecks=2)
+
+    assert calls == ["recheck", "recheck"]
+    assert [diff.status for diff in results] == ["unresolved", "unresolved", "open"]
+    # The unspent diff is untouched, still awaiting user confirmation.
+    assert results[2].note == ""
+    assert all(diff.status == "open" for diff in diffs)
+
+
+def test_recheck_without_max_rechecks_calls_for_every_open_diff():
+    filing, first = _load_first_extraction()
+    diffs = _one_open_diff(first.termsheet) + _one_open_diff(first.termsheet)
+    calls = []
+
+    def failing_chat(messages, *, model, max_tokens=4000, purpose="", **_kwargs):
+        calls.append(purpose)
+        raise MetaAPIError("simulated recheck failure")
+
+    results = recheck(filing, diffs, chat=failing_chat)
+
+    assert calls == ["recheck", "recheck"]
+    assert [diff.status for diff in results] == ["unresolved", "unresolved"]
+
 # ---------------------------------------------------------------------------
 # crosscheck
 # ---------------------------------------------------------------------------

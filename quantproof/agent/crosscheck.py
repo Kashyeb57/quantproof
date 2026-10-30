@@ -221,10 +221,18 @@ def recheck(
     chat=client.chat,
     model: str = "muse-spark-1.3",
     max_tokens: int = 4000,
+    max_rechecks: int | None = None,
 ) -> list[FieldDiff]:
-    """Recheck every open diff against the filing and return new diffs.
+    """Recheck open diffs against the filing and return new diffs.
 
-    For each diff with status ``"open"``, the model is called with
+    At most ``max_rechecks`` open diffs are sent to the model (``None``
+    means every open diff, the behaviour offline runs rely on); diffs
+    beyond the budget keep status ``"open"`` so the caller still shows
+    them to the user for confirmation.  This bounds the recheck spend a
+    cost guard must allow for: without it one model call happens per
+    disagreement with no limit.
+
+    For each rechecked diff with status ``"open"``, the model is called with
     purpose ``"recheck"`` and its reply is parsed with
     :func:`quantproof.agent.extract.parse_json_reply` (called through the
     ``extract`` module, so tests may patch ``extract.parse_json_reply``).
@@ -248,11 +256,16 @@ def recheck(
     """
     normalised_text = normalise_for_match(filing.text)
     results: list[FieldDiff] = []
+    rechecks_used = 0
 
     for diff in diffs:
         if diff.status != "open":
             results.append(replace(diff))
             continue
+        if max_rechecks is not None and rechecks_used >= max_rechecks:
+            results.append(replace(diff))
+            continue
+        rechecks_used += 1
 
         try:
             result = chat(
@@ -374,6 +387,7 @@ def crosscheck(
     second_chat=None,
     recheck_model: str = "muse-spark-1.3",
     recheck_chat=None,
+    max_rechecks: int | None = None,
 ) -> CrossCheck:
     """Run a second extraction, diff it against the first, and recheck diffs.
 
@@ -382,6 +396,8 @@ def crosscheck(
     second extractor; rechecks go through ``recheck_chat`` (default
     ``chat``) with ``recheck_model``.  Without a Baseten key, callers pass
     a different Muse Spark version as ``second_model`` instead.
+    At most ``max_rechecks`` open diffs are rechecked (``None`` means
+    all); the rest stay open for the user.
 
     If the second extraction raises
     :class:`~quantproof.agent.extract.ExtractionError`, a ``CrossCheck``
@@ -401,7 +417,10 @@ def crosscheck(
         )
 
     diffs = diff_termsheets(first.termsheet, second.termsheet)
-    diffs = recheck(filing, diffs, chat=recheck_chat or chat, model=recheck_model)
+    diffs = recheck(
+        filing, diffs, chat=recheck_chat or chat, model=recheck_model,
+        max_rechecks=max_rechecks,
+    )
     return CrossCheck(
         first=first,
         second=second,
