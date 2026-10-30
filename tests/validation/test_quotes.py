@@ -496,3 +496,83 @@ def test_barrier_level_with_buffer_amount_quote_not_supported() -> None:
     )
     by_path = {c.path: c for c in verify_termsheet(ts, filing_text)}
     assert by_path["downside.level"].verified is False
+
+
+def test_normalise_keeps_sign_position_minus() -> None:
+    # U+2212 unifies with hyphen-minus; a minus directly before digits is
+    # evidence (a sign), while hyphens and ranges still collapse to space.
+    assert normalise_for_match("a loss of \u22125.2% on the notes") == (
+        "a loss of -5.2% on the notes"
+    )
+    assert normalise_for_match("a loss of -5.2% on the notes") == (
+        "a loss of -5.2% on the notes"
+    )
+    assert normalise_for_match("well-known 5-10% range") == "well known 5 10% range"
+    assert normalise_for_match("up +5.2% on the notes") == "up 5.2% on the notes"
+
+
+def test_verify_quote_plus_quote_does_not_match_minus_filing() -> None:
+    # Quote "+5.2%" against filing "\u22125.2%": the signs disagree.
+    filing = "The underlier return for the period was \u22125.2% on the notes."
+    normalised = normalise_for_match(filing)
+    verified, reason = verify_quote(
+        "underlier return for the period was +5.2% on the notes", normalised
+    )
+    assert verified is False
+    assert reason.startswith("not found:")
+
+
+def test_verify_quote_unsigned_quote_does_not_match_signed_filing() -> None:
+    filing = "The underlier return for the period was -5.2% on the notes."
+    normalised = normalise_for_match(filing)
+    verified, _ = verify_quote(
+        "underlier return for the period was 5.2% on the notes", normalised
+    )
+    assert verified is False
+
+
+def test_verify_quote_minus_matches_typographic_minus() -> None:
+    # Same sign in different orthography still verifies (no false alarm).
+    filing = "The underlier return for the period was \u22125.2% on the notes."
+    normalised = normalise_for_match(filing)
+    verified, reason = verify_quote(
+        "underlier return for the period was -5.2% on the notes", normalised
+    )
+    assert verified is True
+    assert reason == "found"
+
+
+def test_verify_quote_signed_match_still_verifies() -> None:
+    filing = "The underlier return for the period was -5.2% on the notes."
+    normalised = normalise_for_match(filing)
+    verified, reason = verify_quote(
+        "underlier return for the period was -5.2% on the notes", normalised
+    )
+    assert verified is True
+    assert reason == "found"
+
+
+def test_verify_quote_hyphenated_words_still_match() -> None:
+    filing = "The well-known index level was 2000 at closing time."
+    normalised = normalise_for_match(filing)
+    verified, reason = verify_quote(
+        "well known index level was 2000 at closing", normalised
+    )
+    assert verified is True
+    assert reason == "found"
+
+
+def test_value_in_quote_sign_matrix() -> None:
+    # A negative value needs a negative number in the quote and vice versa,
+    # in either minus orthography.
+    assert value_in_quote(-0.052, "a loss of 5.2% on the notes") is False
+    assert value_in_quote(0.052, "a decline of -5.2% on the notes") is False
+    assert value_in_quote(0.052, "a gain of +5.2% on the notes") is True
+    assert value_in_quote(-0.052, "a loss of -5.2% on the notes") is True
+    assert value_in_quote(-0.052, "a loss of \u22125.2% on the notes") is True
+
+
+def test_value_in_quote_ranges_and_iso_dates_unchanged() -> None:
+    # Digit-digit hyphens are ranges, not signs: they still collapse.
+    assert value_in_quote(0.10, "a coupon between 5-10% per annum") is True
+    assert value_in_quote(date(2026, 12, 2), "maturing on 2026-12-02 in full") is True

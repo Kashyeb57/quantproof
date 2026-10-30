@@ -94,20 +94,38 @@ _ABBR_MONTHS = (
 def normalise_for_match(text: str) -> str:
     """Normalise text for quote matching.
 
-    Steps: NFKC; lower-case; replace every run of characters that are not
-    ``[a-z0-9.%$]`` with a single space; strip.
+    Steps: NFKC; lower-case; unify the typographic minus U+2212 with
+    hyphen-minus; keep a hyphen-minus that is directly followed by a
+    digit and not directly preceded by one (a minus sign); replace every
+    other run of characters that are not ``[a-z0-9.%$]`` or a kept minus
+    with a single space; strip.
 
     Rationale: the model and the HTML differ in punctuation, quote style,
     dashes, line breaks and spacing, but never in words, digits, decimal
-    points, percent or dollar signs, so those are what must match.
+    points, percent or dollar signs, so those are what must match.  A
+    minus directly before digits is evidence too: ``"-5.2%"`` must not
+    match ``"+5.2%"`` or an unsigned ``"5.2%"``, and ``"\u2212"``
+    (typographic minus) is the same sign.  Hyphens anywhere else --
+    hyphenated words (``"well-known"``), ranges and ISO dates
+    (``"5-10%"``, ``"2026-12-02"``) -- still collapse to a space, as
+    does ``"+"``, so plus-bearing quotes behave exactly as before.
 
     Examples:
         "at least 9.7500% x $1,000" -> "at least 9.7500% $1 000"
         ""Index"" (curly quotes) -> "index"
         "Russell 2000(R)" -> "russell 2000"
+        "a loss of \u22125.2%" -> "a loss of -5.2%"
+        "well-known 5-10%" -> "well known 5 10%"
     """
-    lowered = unicodedata.normalize("NFKC", text).lower()
-    return re.sub(r"[^a-z0-9.%$]+", " ", lowered).strip()
+    lowered = unicodedata.normalize("NFKC", text).lower().replace("\u2212", "-")
+    # Split out sign-position minuses so the run-collapse below cannot
+    # eat them; every other chunk is normalised exactly as before.
+    parts = re.split(r"((?<![0-9])-(?=[0-9]))", lowered)
+    normalised = [
+        part if part == "-" else re.sub(r"[^a-z0-9.%$]+", " ", part)
+        for part in parts
+    ]
+    return "".join(normalised).strip()
 
 
 def _find_bounded(piece: str, normalised_text: str, start: int = 0) -> re.Match | None:
@@ -116,6 +134,11 @@ def _find_bounded(piece: str, normalised_text: str, start: int = 0) -> re.Match 
     Same regex and boundary rules as :func:`verify_quote`: the characters
     next to a match may not be letters or digits, and a period next to it
     counts as part of the token when a letter or digit is on its other side.
+    A match may not start immediately after a minus sign either: the
+    unsigned "5.2%" never matches inside "-5.2%", while a signed piece
+    ("-5.2%") matches its own minus literally.  Kept minuses only ever
+    sit directly before digits (see :func:`normalise_for_match`), so word
+    matches next to hyphens are unaffected.
     So "000" never matches inside "2000", "at least 9" never matches
     "at least 9.75", but a sentence-final period ("... was 6,672.41.") does
     not block a match.
@@ -129,7 +152,7 @@ def _find_bounded(piece: str, normalised_text: str, start: int = 0) -> re.Match 
         The ``re.Match`` if found at or after ``start``, else ``None``.
     """
     bounded = re.compile(
-        rf"(?<![a-z0-9])(?<![a-z0-9]\.){re.escape(piece)}(?![a-z0-9])(?!\.[a-z0-9])"
+        rf"(?<![a-z0-9])(?<![a-z0-9]\.)(?<!-){re.escape(piece)}(?![a-z0-9])(?!\.[a-z0-9])"
     )
     return bounded.search(normalised_text, start)
 

@@ -294,6 +294,29 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
   filings near a nearly-spent cap refuse earlier than before.
 - Suite: full run after the change (below).
 
+## Quote-verifier sign fix (Oct 30, no model calls)
+
+- `validation/quotes.py` was sign-blind: `normalise_for_match` dropped `-`/U+2212,
+  so a quote saying `+5.2%` verified against filing text saying `-5.2%`, and a
+  negative value was supported by a positive number and vice versa.
+- Fix (presence and value support together, one mechanism): U+2212 unifies with
+  hyphen-minus; a minus directly before digits (and not directly after a digit)
+  is kept as evidence, so `-5.2%` matches only `-5.2%` (either orthography).
+  Hyphens anywhere else -- hyphenated words, `5-10%` ranges, `2026-12-02` dates --
+  still collapse to space, as does `+`; and a match may not start immediately
+  after a kept minus, so unsigned `5.2%` no longer matches inside `-5.2%`.
+- En-dash deliberately untouched: it is never digit-adjacent in the 45 saved
+  filings (54x spaced separators, 4x letter-adjacent), so mapping it to space is
+  safe; same convention family as `synth_battery.payment_in_quote`'s cell logic,
+  which was already sign-aware and is unchanged.
+- Regression tests (7, fakes only): U+2212 unification, plus-quote vs minus-filing,
+  unsigned-quote vs signed-filing, minus-vs-minus and hyphenated-word preservation,
+  the full value-sign matrix, ranges/ISO dates unchanged.
+- Offline full-`verify_termsheet` replay over all saved audit notes: 978/1027 = 95.2%,
+  0 notes differ from the saved counters (the 2 extraction_failed notes fail
+  identically). No published result or headline number moves; nothing overwritten.
+- Suite: 1654 passed, 13 skipped, 0 failed (canonical run after the fix; baseline before it 1646/13/0).
+
 ## Left to do (in order)
 1. ~~By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check~~
    DONE Oct 30: Baseten Open wired as the live second extraction (above).
