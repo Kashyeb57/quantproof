@@ -19,6 +19,7 @@ import streamlit as st
 
 from quantproof.app import audit_page, demo, live, overview_page, synthesis_page
 from quantproof.agent import client as meta_client
+from quantproof.agent import baseten as baseten_client
 from quantproof.ingest.edgar import EdgarClient
 
 REPO_URL = "https://github.com/Kashyeb57/quantproof"
@@ -103,6 +104,7 @@ def _client_env() -> dict:
     return live.resolve_secrets(
         (
             "MODEL_API_KEY",
+            "BASETEN_API_KEY",
             "SEC_USER_AGENT",
             "QP_DAILY_CAP_USD",
             "QP_TOTAL_CAP_USD",
@@ -121,6 +123,12 @@ def _live_chat():
         return meta_client.chat(messages, env=env, **kwargs)
 
     return chat
+
+
+def _open_chat():
+    """Chat callable for the Baseten second extraction (Muse Spark Open)."""
+    env = _client_env()
+    return live.open_chat(env=env)
 
 
 def run() -> None:
@@ -152,7 +160,8 @@ def run() -> None:
         ["Demo mode", "Live mode"],
         horizontal=True,
         help="Demo mode uses saved filings and spends nothing. "
-        "Live mode downloads a filing and extracts it with Muse Spark 1.3.",
+"Live mode downloads a filing, extracts it with Muse Spark 1.3, "
+"and cross-checks with Muse Spark Open on Baseten.",
     )
     live_mode = mode == "Live mode"
     cap_env = _client_env()
@@ -166,8 +175,8 @@ def run() -> None:
         if "QP_TOTAL_CAP_USD" in cap_env
         else {}
     )
-    spent_today = live.daily_spend()
-    spent_total = live.total_spend()
+    spent_today = live.daily_spend() + live.baseten_daily_spend()
+    spent_total = live.total_spend() + live.baseten_total_spend()
     if mode == "Live mode":
         _guard = st.session_state.get("live_guard")
         _status = live.budget_status(
@@ -186,8 +195,8 @@ def run() -> None:
             f"Live runs remaining in this session: {_status['remaining']} "
             f"of {_status['session_limit']}. Live mode is "
             f"{_availability}: spent ${_status['spent_today']:,.2f} of "
-            f"${_status['cap']:,.2f} daily cap; lifetime "
-            f"${_status['spent_total']:,.2f} of "
+            f"${_status['cap']:,.2f} daily cap (Meta + Baseten combined); "
+            f"lifetime ${_status['spent_total']:,.2f} of "
             f"${_status['total_cap']:,.2f}."
         )
     if live_mode and spent_total >= total_cap:
@@ -207,8 +216,11 @@ def run() -> None:
     if live_mode:
         _warning(
             "Live mode uses real API credits: each new filing is extracted "
-            "with Muse Spark 1.3 (the only model the public app calls) "
-            "and cross-checked with a second extraction."
+"Live mode uses real API credits: each new filing is extracted "
+"with Muse Spark 1.3 and cross-checked with a second extraction "
+"by Muse Spark Open on Baseten (needs a BASETEN_API_KEY). "
+"If the second extraction is missing, fails, or comes back "
+"incomplete, the cross-check is shown as unavailable."
         )
     else:
         _caption(
@@ -267,10 +279,15 @@ def run() -> None:
                         live.check_filing_admissible(
                             filing, max_chars=live.max_filing_chars()
                         )
-                        estimate = live.estimate_live_cost(len(filing.text))
+                        estimate = live.estimate_live_cost(
+                            len(filing.text),
+                            with_baseten=live.baseten_configured(cap_env),
+                        )
                         _write(
                             f"Worst-case estimate for this live run: "
-                            f"${estimate:,.2f} (both extractions plus re-checks)."
+                            f"${estimate:,.2f} (first extraction, Baseten second "
+                            f"extraction, and up to 3 re-checks; Meta and Baseten "
+                            f"combined, every call assumed to retry to the limit)."
                         )
 
                         def _staged_run():
@@ -285,16 +302,19 @@ def run() -> None:
                             )
                             _step(live.PROGRESS_STEPS[4] + "...")
                             return live.finish_live_note(
-                                filing, source, extraction, chat=_live_chat()
+                                filing, source, extraction, chat=_live_chat(),
+                                second_chat=_open_chat(),
                             )
 
                         live_note, _from_cache = guard.get_or_extract(
                             key,
                             _staged_run,
-                            spent_today=live.daily_spend(),
+                            spent_today=live.daily_spend()
+                            + live.baseten_daily_spend(),
                             cap=cap,
                             estimate=estimate,
-                            spent_total=live.total_spend(),
+                            spent_total=live.total_spend()
+                            + live.baseten_total_spend(),
                             total_cap=total_cap,
                         )
                         _step(live.PROGRESS_STEPS[5] + ".")
@@ -373,15 +393,19 @@ def run() -> None:
     if live_mode:
         diffs = live_note.diffs
         if live_note.crosscheck_error:
-            _caption(f"Cross-check unavailable: {live_note.crosscheck_error}")
+            _caption(live_note.crosscheck_error)
         elif not diffs:
             _write(
-                "Cross-check: the second extraction (also Muse Spark 1.3 in "
-                "the public app, a weaker independence check than a "
-                "different model service) agrees on every field."
+                f"Cross-check: {live.LIVE_MODEL} (first extraction) and "
+                f"{live_note.second_model} (second extraction) agree on "
+                f"every field."
             )
         else:
-            _write("Cross-check disagreements (confirm before pricing):")
+            _write(
+                f"Cross-check disagreements (confirm before pricing). "
+                f"First: {live.LIVE_MODEL}; second: {live_note.second_model}. "
+                f"Up to 3 fields were re-checked; the rest await your confirmation."
+            )
     else:
         diffs = demo.recorded_crosscheck_diffs(stem, note.termsheet)
     if not live_mode and diffs is None:

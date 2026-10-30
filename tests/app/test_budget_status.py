@@ -56,6 +56,39 @@ def test_budget_line_recomputes_from_guard_state_on_rerun():
     assert "Live runs remaining in this session: 1 of 3" in rendered
 
 
+def test_budget_line_adds_meta_and_baseten_spend(monkeypatch, tmp_path):
+    from streamlit.testing.v1 import AppTest
+
+    # Both provider logs live under .cache; the budget line must show
+    # their sum, so Baseten spend can never hide from the caps.
+    monkeypatch.chdir(tmp_path)
+    _write_cost_log(tmp_path / ".cache" / "meta_calls.jsonl", 4.50)
+    _write_cost_log(tmp_path / ".cache" / "baseten_calls.jsonl", 0.40)
+
+    at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
+    assert not at.exception
+    [r for r in at.sidebar.radio if r.label == "Page"][0].set_value(
+        "Note analysis"
+    ).run()
+    at.radio[0].set_value("Live mode").run()
+    assert not at.exception
+    rendered = "\n".join(str(el.value) for el in at.markdown)
+    # Dollar signs are escaped in rendered markdown (Streamlit LaTeX).
+    assert "spent \\$4.90 of \\$5.00 daily cap (Meta + Baseten combined)" in rendered
+
+
+def _write_cost_log(path, cost_usd):
+    import datetime
+    import json
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+    path.write_text(
+        json.dumps({"time": f"{stamp}T00:00:00+00:00", "cost_usd": cost_usd}),
+        encoding="utf-8",
+    )
+
+
 def test_app_shows_remaining_runs_in_live_mode(monkeypatch, tmp_path):
     from streamlit.testing.v1 import AppTest
 

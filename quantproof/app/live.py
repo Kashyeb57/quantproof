@@ -2,12 +2,27 @@
 
 Live mode downloads a filing (EDGAR link or upload), extracts its terms
 with Muse Spark 1.3, verifies every quote against the filing text, and
-cross-checks with a second extraction.  The result is shaped exactly
-like a demo note so the confirm / proof / verdict flow is shared.
+cross-checks with a second extraction by Muse Spark Open on Baseten.
+The result is shaped exactly like a demo note so the confirm / proof /
+verdict flow is shared.
 
 Rules enforced here, in code:
-- Muse Spark 1.3 only (``LIVE_MODEL``); no other model is ever called,
-  and Muse Wonder payoff synthesis is never called from the app.
+- The first extraction always uses Muse Spark 1.3 (``LIVE_MODEL``); the
+  second extraction always uses Muse Spark Open on Baseten
+  (``SECOND_MODEL``).  Muse Wonder payoff synthesis is never called
+  from the app.
+- The Baseten key comes from the environment or Streamlit secrets and
+  is only sent as the Authorization header, never printed or logged.
+- Without a Baseten key, or when the second extraction fails or comes
+  back incomplete, the cross-check is reported unavailable: the note
+  shows that, never agreement.
+- Every disagreement the first extraction did not win is shown for
+  user confirmation; at most ``RECHECK_ALLOWANCE`` of them are
+  re-checked (on Meta credits).
+- Spend guard: the Meta and Baseten cost logs are separate files, but
+  the daily, lifetime and per-session limits apply to COMBINED spend;
+  the pre-flight estimate assumes every planned call retries to the
+  limit at max output.
 - A field without a verified quote is carried in ``unverified`` and
   shown to the user; it is never priced silently (the UI requires the
   user to confirm the flagged term sheet before pricing).
@@ -17,19 +32,22 @@ Rules enforced here, in code:
 The chat and EDGAR clients are injected, so tests run offline with
 fakes and spend nothing.  Keys are never read here: the injected
 clients read them from the environment (see ``quantproof.agent.client``
-and ``quantproof.ingest.edgar``).
+and ``quantproof.agent.baseten``).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
+from quantproof.agent import baseten as baseten_client
+from quantproof.agent.client import MAX_ATTEMPTS
 from quantproof.agent.crosscheck import CrossCheck, crosscheck
 from quantproof.agent.extract import Extraction, extract_termsheet
 from quantproof.core.termsheet import TermSheet
 from quantproof.ingest.html import Filing, read_filing
 
 LIVE_MODEL = "muse-spark-1.3"
+SECOND_MODEL = baseten_client.OPEN_MODEL  # second extraction (Baseten)
 
 LIVE_RUN_NOTICE = "A live run takes about 1-2 minutes."
 PROGRESS_STEPS = (
@@ -158,27 +176,23 @@ def daily_cap_usd(env: dict | None = None) -> float:
     return value if value > 0 else DEFAULT_DAILY_CAP_USD
 
 
-def daily_spend(log_path=None, *, day=None) -> float:
-    """USD spent today (UTC) according to the Meta API cost log.
+def _spend_on_day(log_path, day):
+    """USD in the JSON-lines cost log at ``log_path`` for ``day`` (UTC).
 
-    Sums ``cost_usd`` over the JSON-lines log written by
-    ``quantproof.agent.client.chat`` for records whose timestamp falls
-    on ``day`` (default: today, UTC).  A missing log means zero spend.
+    Sums ``cost_usd`` over records whose timestamp falls on ``day``.
+    A missing log means zero spend.  Malformed lines are skipped.
     """
     import datetime
     import json as _json
     from pathlib import Path
 
-    from quantproof.agent.client import DEFAULT_LOG
-
-    path = Path(log_path) if log_path is not None else DEFAULT_LOG
-    today = day or datetime.datetime.now(datetime.timezone.utc).date()
+    path = Path(log_path)
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        file_lines = path.read_text(encoding="utf-8").splitlines()
     except FileNotFoundError:
         return 0.0
     total = 0.0
-    for line in lines:
+    for line in file_lines:
         line = line.strip()
         if not line:
             continue
@@ -187,48 +201,131 @@ def daily_spend(log_path=None, *, day=None) -> float:
             stamp = datetime.datetime.fromisoformat(str(record["time"]))
         except (ValueError, KeyError, TypeError):
             continue
-        if stamp.date() == today:
+        if stamp.date() == day:
             total += float(record.get("cost_usd") or 0.0)
     return total
+
+
+def daily_spend(log_path=None, *, day=None) -> float:
+    """USD spent today (UTC) according to the Meta API cost log.
+
+    Sums ``cost_usd`` over the JSON-lines log written by
+    ``quantproof.agent.client.chat`` for records whose timestamp falls
+    on ``day`` (default: today, UTC).  A missing log means zero spend.
+    """
+    import datetime
+    from pathlib import Path
+
+    from quantproof.agent.client import DEFAULT_LOG
+
+    today = day or datetime.datetime.now(datetime.timezone.utc).date()
+    path = Path(log_path) if log_path is not None else DEFAULT_LOG
+    return _spend_on_day(path, today)
+
+
+def baseten_daily_spend(log_path=None, *, day=None) -> float:
+    """USD spent today (UTC) according to the Baseten cost log.
+
+    Sums ``cost_usd`` over the JSON-lines log written by
+    ``quantproof.agent.baseten.chat`` for records whose timestamp falls
+    on ``day`` (default: today, UTC).  A missing log means zero spend.
+    Meta and Baseten credits bill apart, but the live guard applies
+    its caps to their sum (see ``LiveGuard``).
+    """
+    import datetime
+    from pathlib import Path
+
+    today = day or datetime.datetime.now(datetime.timezone.utc).date()
+    path = (
+        Path(log_path) if log_path is not None else baseten_client.DEFAULT_LOG
+    )
+    return _spend_on_day(path, today)
+
+
+def baseten_total_spend(log_path=None) -> float:
+    """USD spent over the whole Baseten cost log, via ``client.spend``."""
+    from pathlib import Path
+
+    from quantproof.agent.client import spend
+
+    return spend(
+        Path(log_path) if log_path is not None else baseten_client.DEFAULT_LOG
+    )
 
 
 EXTRACTION_MAX_TOKENS = 16_000  # extract_termsheet default max_tokens
 RECHECK_MAX_TOKENS = 4_000  # crosscheck recheck default max_tokens
 RECHECK_ALLOWANCE = 3  # worst-case re-check calls allowed in the estimate
+ATTEMPT_ALLOWANCE = MAX_ATTEMPTS  # every planned call may bill up to 3 attempts
 
 
-def estimate_live_cost(text_len: int, *, model: str = LIVE_MODEL) -> float:
-    """Worst-case USD estimate for one whole live run, before it starts.
+def estimate_live_cost_by_provider(
+    text_len: int, *, with_baseten: bool = True
+) -> dict:
+    """Worst-case USD per provider for one whole live run, before it starts.
 
-    Formula: input tokens per call = ceil(text_len / 4) (about four
-    characters per token); each of the two extractions (first plus
-    cross-check second) is charged that input plus the full
-    ``EXTRACTION_MAX_TOKENS`` output; up to ``RECHECK_ALLOWANCE``
-    re-check calls are charged the same input plus the full
-    ``RECHECK_MAX_TOKENS`` output.  Output is charged at the maximum,
-    never at an expected value, so the estimate errs high.
+    Returns ``{'meta': ..., 'baseten': ...}``.  Input tokens per call =
+    ceil(text_len / 4) (about four characters per token); the Meta first
+    extraction and the Baseten second extraction are each charged that
+    input plus the full ``EXTRACTION_MAX_TOKENS`` output, and up to
+    ``RECHECK_ALLOWANCE`` re-check calls (Meta) are charged the same input
+    plus the full ``RECHECK_MAX_TOKENS`` output.  Output is charged at the
+    maximum, never at an expected value, so the estimate errs high.
+
+    Everything is then multiplied by ``ATTEMPT_ALLOWANCE``: a call that
+    hits a retryable error is billed again per attempt, so failed calls
+    are inside the worst case too.  Rechecks are bounded because the live
+    note passes ``max_rechecks=RECHECK_ALLOWANCE`` to the cross-check.
 
     Intuition: the daily cap is only useful if a run that would breach
     it is refused before it starts, at the most it could possibly cost.
 
     Reference: ``quantproof.agent.costs`` prices (Muse Spark: input and
-    output dollars per million tokens); extract/recheck token limits in
+    output dollars per million tokens), ``quantproof.agent.baseten`` for
+    the separately billed Open rate; extract/recheck token limits in
     ``quantproof.agent.extract`` and ``quantproof.agent.crosscheck``.
     """
     import math
 
     from quantproof.agent.costs import Usage, estimate_cost
 
-    if model != LIVE_MODEL:
-        raise ValueError(f"the public app uses {LIVE_MODEL} only, not {model!r}")
     input_tokens = math.ceil(max(int(text_len), 0) / 4)
-    one_extraction = estimate_cost(
-        model, Usage(input_tokens=input_tokens, output_tokens=EXTRACTION_MAX_TOKENS)
+    meta_extraction = estimate_cost(
+        LIVE_MODEL, Usage(input_tokens=input_tokens, output_tokens=EXTRACTION_MAX_TOKENS)
+    )
+    baseten_extraction = (
+        baseten_client.estimate_cost(
+            Usage(input_tokens=input_tokens, output_tokens=EXTRACTION_MAX_TOKENS)
+        )
+        if with_baseten
+        else 0.0
     )
     one_recheck = estimate_cost(
-        model, Usage(input_tokens=input_tokens, output_tokens=RECHECK_MAX_TOKENS)
+        LIVE_MODEL, Usage(input_tokens=input_tokens, output_tokens=RECHECK_MAX_TOKENS)
     )
-    return 2.0 * one_extraction + RECHECK_ALLOWANCE * one_recheck
+    meta = ATTEMPT_ALLOWANCE * (
+        meta_extraction + RECHECK_ALLOWANCE * one_recheck
+    )
+    baseten = ATTEMPT_ALLOWANCE * baseten_extraction
+    return {"meta": meta, "baseten": baseten}
+
+
+def estimate_live_cost(
+    text_len: int, *, model: str = LIVE_MODEL, with_baseten: bool = True
+) -> float:
+    """Combined worst-case USD across both providers for one live run.
+
+    This is the number the spend guard compares against the caps: Meta
+    first extraction plus Baseten second extraction plus bounded rechecks,
+    every call assumed to retry to the limit at max output (see
+    ``estimate_live_cost_by_provider``).
+    """
+    if model != LIVE_MODEL:
+        raise ValueError(f"the public app uses {LIVE_MODEL} only, not {model!r}")
+    by_provider = estimate_live_cost_by_provider(
+        text_len, with_baseten=with_baseten
+    )
+    return by_provider["meta"] + by_provider["baseten"]
 
 
 def budget_status(
@@ -349,7 +446,9 @@ class LiveNote:
     agreed: bool
     crosscheck_error: str | None
     model: str = LIVE_MODEL
-    cost_usd: float = 0.0
+    second_model: str = SECOND_MODEL
+    cost_usd: float = 0.0  # Meta spend: first extraction (rechecks land in the Meta log)
+    baseten_cost_usd: float = 0.0  # Baseten spend: second extraction
 
 
 def filing_from_url(url: str, *, edgar_client) -> Filing:
@@ -360,6 +459,32 @@ def filing_from_url(url: str, *, edgar_client) -> Filing:
 def filing_from_upload(data: bytes) -> Filing:
     """Parse an uploaded filing's bytes (no network)."""
     return read_filing(data)
+
+
+def baseten_configured(env=None) -> bool:
+    """Whether a Baseten key is available (mapping or environment).
+
+    Takes the resolved env/secrets mapping the app already holds (or
+    ``None`` to read the process environment).  Returns only a boolean;
+    the key itself never leaves the client that sends it as the
+    Authorization header.
+    """
+    return baseten_client.api_key(env) is not None
+
+
+def open_chat(*, env=None):
+    """Chat callable for the Baseten second extraction (Muse Spark Open only).
+
+    Binds the Baseten cost log and the resolved env/secrets mapping, so
+    the key is only ever sent as the Authorization header, never printed
+    or logged.  A missing key raises when the second extraction runs,
+    which ``finish_live_note`` reports as an unavailable cross-check.
+    """
+    import functools
+
+    return functools.partial(
+        baseten_client.chat, log_path=baseten_client.DEFAULT_LOG, env=env
+    )
 
 
 def extract_only(filing: Filing, *, chat, model: str = LIVE_MODEL) -> Extraction:
@@ -374,24 +499,81 @@ def extract_only(filing: Filing, *, chat, model: str = LIVE_MODEL) -> Extraction
 def finish_live_note(
     filing: Filing, source: str, extraction: Extraction, *, chat,
     model: str = LIVE_MODEL,
+    second_chat=None,
+    second_model: str = SECOND_MODEL,
 ) -> LiveNote:
-    """Cross-check a first extraction and build the LiveNote."""
+    """Cross-check a first extraction with Muse Spark Open and build the LiveNote.
+
+    The second extraction always runs ``second_model`` (Muse Spark Open on
+    Baseten) through ``second_chat``; rechecks run the first model through
+    ``chat``, at most ``RECHECK_ALLOWANCE`` of them — remaining open
+    disagreements stay open for the user to confirm.
+
+    When there is no second chat (Baseten key missing or second extractor
+    not wired), or the second extraction fails or comes back incomplete,
+    the note carries ``crosscheck_error`` and ``agreed=False`` with no
+    diffs: an unavailable cross-check is shown as unavailable, never as
+    agreement.  Meta spend (first extraction; rechecks land in the Meta
+    log) and Baseten spend (second extraction) are recorded apart.
+    """
     if model != LIVE_MODEL:
         raise ValueError(
             f"the public app uses {LIVE_MODEL} only, not {model!r}"
         )
-    result: CrossCheck = crosscheck(
-        filing,
-        extraction,
-        chat=chat,
-        second_model=LIVE_MODEL,
-        recheck_model=LIVE_MODEL,
-    )
-    cost = 0.0
+    if second_model != SECOND_MODEL:
+        raise ValueError(
+            f"the public app cross-checks with {SECOND_MODEL} only, not {second_model!r}"
+        )
+    meta_cost = 0.0
     if extraction.result is not None:
-        cost += float(extraction.result.cost_usd)
+        meta_cost = float(extraction.result.cost_usd)
+    if second_chat is None:
+        return LiveNote(
+            source=source,
+            termsheet=extraction.termsheet,
+            filing_text=filing.text,
+            checks=extraction.checks,
+            unverified=list(extraction.unverified),
+            diffs=[],
+            agreed=False,
+            crosscheck_error=(
+                "Cross-check unavailable: no second extraction ran "
+                "(Baseten key missing or second extractor not wired)."
+            ),
+            model=LIVE_MODEL,
+            second_model=second_model,
+            cost_usd=meta_cost,
+            baseten_cost_usd=0.0,
+        )
+    try:
+        result: CrossCheck = crosscheck(
+            filing,
+            extraction,
+            chat=chat,
+            second_model=second_model,
+            second_chat=second_chat,
+            recheck_model=LIVE_MODEL,
+            recheck_chat=chat,
+            max_rechecks=RECHECK_ALLOWANCE,
+        )
+    except Exception as exc:  # missing key, network, model errors
+        return LiveNote(
+            source=source,
+            termsheet=extraction.termsheet,
+            filing_text=filing.text,
+            checks=extraction.checks,
+            unverified=list(extraction.unverified),
+            diffs=[],
+            agreed=False,
+            crosscheck_error=f"Cross-check unavailable: {exc}",
+            model=LIVE_MODEL,
+            second_model=second_model,
+            cost_usd=meta_cost,
+            baseten_cost_usd=0.0,
+        )
+    baseten_cost = 0.0
     if result.second is not None and result.second.result is not None:
-        cost += float(result.second.result.cost_usd)
+        baseten_cost = float(result.second.result.cost_usd)
     return LiveNote(
         source=source,
         termsheet=extraction.termsheet,
@@ -400,25 +582,45 @@ def finish_live_note(
         unverified=list(extraction.unverified),
         diffs=list(result.needs_user),
         agreed=result.agreed,
-        crosscheck_error=result.error,
+        crosscheck_error=(
+            f"Cross-check unavailable: {result.error}"
+            if result.error is not None
+            else None
+        ),
         model=LIVE_MODEL,
-        cost_usd=cost,
+        second_model=second_model,
+        cost_usd=meta_cost,
+        baseten_cost_usd=baseten_cost,
     )
 
 
 def extract_and_crosscheck(
-    filing: Filing, source: str, *, chat, model: str = LIVE_MODEL
+    filing: Filing,
+    source: str,
+    *,
+    chat,
+    second_chat=None,
+    model: str = LIVE_MODEL,
+    second_model: str = SECOND_MODEL,
 ) -> LiveNote:
-    """Extract with Muse Spark 1.3, verify quotes, cross-check. Live only.
+    """Extract with Muse Spark 1.3, verify quotes, cross-check with Muse Spark Open.
 
-    Both the first and the second extraction use Muse Spark 1.3 (the
-    public app calls no other model; that makes the second extraction a
-    weaker independence check than a different model service, which the
-    UI states).  Quote verification happens inside
-    ``extract_termsheet``; unverified fields are listed, never hidden.
+    The first extraction uses Muse Spark 1.3; the second uses Muse Spark
+    Open on Baseten (``second_chat``); pass no second chat and the note
+    reports the cross-check as unavailable instead of agreeing with
+    itself.  Quote verification happens inside ``extract_termsheet``;
+    unverified fields are listed, never hidden.
     """
     extraction = extract_only(filing, chat=chat, model=model)
-    return finish_live_note(filing, source, extraction, chat=chat, model=model)
+    return finish_live_note(
+        filing,
+        source,
+        extraction,
+        chat=chat,
+        model=model,
+        second_chat=second_chat,
+        second_model=second_model,
+    )
 
 
 def unsupported_features(ts: TermSheet) -> list[tuple[str, str]]:

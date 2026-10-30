@@ -263,8 +263,32 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
   signs, so value support is sign-blind (extracted levels are positive).
 - Suite: 1645 passed.
 
+## Live second extraction on Baseten Open (Oct 30, no live calls; fakes only)
+
+- App live mode now cross-checks with Muse Spark Open (`meta-models/muse-spark-open-1026`)
+  via the existing Baseten client; first extraction stays Muse Spark 1.3. Key from env or
+  Streamlit secrets (`BASETEN_API_KEY`), sent only as the auth header, never logged.
+- Missing key / failure / incomplete second extraction -> cross-check shown as unavailable,
+  never agreement (`LiveNote.agreed=False`, `crosscheck_error` shown; UI agreement line names
+  both models). Disagreements stay visible; at most 3 re-checked (new `max_rechecks` in
+  `crosscheck.recheck`/`crosscheck`; audit path unchanged, default unbounded).
+- Guard: Meta + Baseten logs stay separate files; daily $5 / lifetime $20 / 3-per-session
+  apply to COMBINED spend. Pre-flight estimate now per-provider and assumes every planned
+  call retries to the limit (3x) at max output (fixture filing: $0.77; 400k-char max: <$5).
+- Limits that cannot be enforced reliably: calls that fail after all retries log nothing on
+  either provider (covered only by the estimate); both cost logs reset on host restart
+  (Meta billing alerts are the backstop). Audit's own guard still assumes 3 rechecks while
+  three recorded notes used 4-6 (pre-existing; audit untouched for replay determinism).
+- README updated (two-model wording, combined guard, stale $0.13 retired, repair 1/0.875).
+- Remaining risks: (1) Joyeb must add `BASETEN_API_KEY` to Streamlit secrets or every live
+  cross-check shows unavailable; (2) no live end-to-end run yet (fakes only) — do one
+  watched run before submission; (3) estimate is deliberately ~3x the old figure, so heavy
+  filings near a nearly-spent cap refuse earlier than before.
+- Suite: full run after the change (below).
+
 ## Left to do (in order)
-1. By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check
+1. ~~By the **Nov 1 checkpoint**: decide on Modal / Muse Glimmer as a second-model cross-check~~
+   DONE Oct 30: Baseten Open wired as the live second extraction (above).
    (fallback while Baseten credits are missing); otherwise keep Spark 1.3 twice, stated openly.
 2. Final check of `docs/VALIDATION.md` (regenerate, every row explained) before submission.
 3. Joyeb: rehearse and record the 3-minute demo; put the public video link in the README

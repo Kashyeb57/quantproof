@@ -15,7 +15,7 @@ Banks sell complex derivatives to ordinary investors as structured notes: autoca
 1. **Ingest.** An EDGAR link or an uploaded 424B2 is downloaded under SEC fair-access rules and decoded into cleaned text, tables and images.
 2. **Extract.** Muse Spark 1.3 reads the filing and returns a structured term sheet; every field carries the exact filing quote it came from.
 3. **Verify quotes.** Code (not a model) confirms each cited quote appears verbatim in the normalised filing text and states its value. Anything unverified is flagged to the user, never used silently.
-4. **Cross-check.** A second, independent extraction is diffed field by field against the first; disagreements are re-checked against the filing and then shown to the user to confirm. (In the public app both extractions use Muse Spark 1.3, a weaker independence check than a different model service; the app says so.)
+4. **Cross-check.** A second, independent extraction — Muse Spark Open on Baseten — is diffed field by field against the first; up to 3 disagreements are re-checked against the filing, and every remaining disagreement is shown to the user to confirm. Without a Baseten key, or when the second extraction fails or comes back incomplete, the app shows the cross-check as unavailable, never as agreement.
 5. **Confirm.** The user reviews the term sheet with its quotes, may edit fields (edited fields are labelled "user-entered"), and must confirm before any pricing.
 6. **Compile.** The term sheet becomes a payoff function: a worst-of autocallable or buffered/barrier template, or, for a feature no template covers, agent-written code (step 8).
 7. **Prove.** The payoff must pass the proof battery (below) before any price is shown.
@@ -50,7 +50,7 @@ Two generated reports summarise what the pipeline did on real filings: [docs/MAR
 
 - Market audit: 44 notes read across 11 issuers; 42 extracted; 11 priced with templates and 2 held by the plausibility gate for review; quote verification 95.2%; the bank's estimated value inside our range on 11 of 13 priced-or-held notes (84.6%); median cost to investor 1.9% of issue price ($19.15 per $1,000, the bank's own figure).
 - Cross-check: every extraction compared with a second extraction by Muse Spark Open (Baseten). 12 of 42 agreed on every field; the 62 differing fields were re-checked against the filing with a verified quote (36 resolved to the second extraction, 20 to the first) and 6 stayed unresolved for the user to confirm.
-- Synthesis: templates priced 11 of 42 extracted notes; with proven AI-written payoffs, 26 of 42. Of 31 attempted notes, 24 passed (77.4%): 19 on the first attempt, 5 after repair; 6 failed, 1 skipped (fewer than 3 filing examples). The battery failed 13 attempts on filing examples and 5 of those notes were repaired (for example a rounded 1.1429 gearing fixed to the exact 1/0.85). On the 2 template-covered notes the AI payoff matched the template within 3 standard errors, and both matched the filing tables to the cent.
+- Synthesis: templates priced 11 of 42 extracted notes; with proven AI-written payoffs, 26 of 42. Of 31 attempted notes, 24 passed (77.4%): 19 on the first attempt, 5 after repair; 6 failed, 1 skipped (fewer than 3 filing examples). The battery failed 13 attempts on filing examples and 5 of those notes were repaired (for example a rounded 1.1429 gearing fixed to the exact 1/0.875). On the 2 template-covered notes the AI payoff matched the template within 3 standard errors, and both matched the filing tables to the cent.
 - Model cost: market audit $8.52 (of which $3.03 Baseten credits), synthesis benchmark $3.55 (of which $2.22 Baseten credits); $12.07 combined.
 
 ## Methodology
@@ -81,10 +81,10 @@ Two generated reports summarise what the pipeline did on real filings: [docs/MAR
 
 ## Meta models used
 
-- Muse Spark 1.3: filing extraction (text and images), cross-check re-checks, and the only model the public app calls.
-- Muse Spark 1.3 (second extraction): the independent cross-check in the app; the intended stronger check with the open-weight Muse Spark Open on Baseten is described in the project brief.
+- Muse Spark 1.3: first filing extraction (text and images) and cross-check re-checks in the public app.
+- Muse Spark Open on Baseten (`meta-models/muse-spark-open-1026`): the independent second extraction in the public app; needs a `BASETEN_API_KEY` (environment or Streamlit secrets), otherwise the cross-check is shown as unavailable.
 - Muse Wonder 1.0: payoff synthesis for unsupported features, offline only, behind the sandbox and proof battery; never called from the public app.
-- Cost guard in the app: at most 3 live extractions per browser session; a pre-flight worst-case cost estimate (both extractions plus re-checks at maximum output) must fit under a daily cap of $5 (`QP_DAILY_CAP_USD`) and a lifetime cap of $20 (`QP_TOTAL_CAP_USD`); the same filing is then served from cache. The cost log resets when the host restarts, so a Meta Billing spend notification is the final backstop (see `docs/DEPLOY.md`). A measured live run on the deployed app took ~80 s and cost ~$0.13 (`docs/BUILD_PLAN.md`, Day 7).
+- Cost guard in the app: at most 3 live extractions per browser session; Meta and Baseten calls are logged apart (`.cache/meta_calls.jsonl`, `.cache/baseten_calls.jsonl`) but the daily cap of $5 (`QP_DAILY_CAP_USD`) and lifetime cap of $20 (`QP_TOTAL_CAP_USD`) apply to their combined spend. A pre-flight worst-case estimate (first extraction, Baseten second extraction, up to 3 re-checks, every call assumed to retry to the limit at maximum output) must fit under the caps or the run is refused before it starts; the same filing is then served from cache. Calls that fail after all retries log nothing on either provider, so their cost is covered only by the estimate, not the caps — and both logs reset when the host restarts, so a Meta Billing spend notification is the final backstop (see `docs/DEPLOY.md`). A measured live run on the deployed app took ~80 s (`docs/BUILD_PLAN.md`, Day 7); its ~$0.13 figure predates the Baseten second extraction — the app shows the worst-case estimate before each run.
 
 ## How to run
 
