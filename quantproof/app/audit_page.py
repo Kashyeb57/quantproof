@@ -33,9 +33,9 @@ ROOT = Path(__file__).resolve().parents[2]
 AUDIT_DIR = ROOT / "data" / "market_audit"
 
 _PLAIN_NOTE = (
-    "Volatilities, dividends, correlation, rate and credit spread are "
-    "stated assumptions (listed below), not market data as of each "
-    "pricing date. 'Cost to investor' is the bank's own disclosed "
+    "Inputs use dated Treasury and FRED data where available, and stated "
+    "assumptions otherwise, as described below and in each note's inputs. "
+    "'Cost to investor' is the bank's own disclosed "
     "figure: issue price minus the bank's estimated value. This is a "
     "risk analysis under stated assumptions, not investment advice."
 )
@@ -179,8 +179,7 @@ def render(st) -> None:
         "needs_review: priced, then stopped by the plausibility gate (base value "
         "more than 2% above the issue price, or the bank's estimate above our "
         "whole range). These rows are not counted as priced until a person "
-        "reviews them, but they count in the range denominator above: the gate "
-        "flags a note exactly when the bank's estimate is above our range."
+        "reviews them, but they count in the range denominator above."
     )
 
     st.dataframe(data["table"], use_container_width=True, hide_index=True)
