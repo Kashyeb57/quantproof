@@ -159,6 +159,10 @@ def chat(
                 usage_estimated=usage_estimated,
             )
         except urllib.error.HTTPError as exc:
+            meta_client._log_failed_attempt(
+                log_path, model, purpose, payload, max_tokens,
+                lambda _model, usage: estimate_cost(usage),
+            )
             detail = meta_client._read_http_error_body(exc)
             if exc.code in meta_client.RETRY_STATUSES:
                 if attempt >= max_attempts:
@@ -176,6 +180,10 @@ def chat(
                 detail=detail,
             ) from exc
         except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
+            meta_client._log_failed_attempt(
+                log_path, model, purpose, payload, max_tokens,
+                lambda _model, usage: estimate_cost(usage),
+            )
             detail = str(exc)[:500]
             if attempt >= max_attempts:
                 raise MetaAPIError(
@@ -185,4 +193,10 @@ def chat(
                 ) from exc
             sleep(2**attempt)
             continue
+        except ValueError:
+            meta_client._log_failed_attempt(
+                log_path, model, purpose, payload, max_tokens,
+                lambda _model, usage: estimate_cost(usage),
+            )
+            raise
     raise AssertionError("unreachable")  # pragma: no cover

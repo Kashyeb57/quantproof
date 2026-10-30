@@ -251,6 +251,7 @@ def chat(
             )
             return result
         except urllib.error.HTTPError as exc:
+            _log_failed_attempt(log_path, model, purpose, payload, max_tokens, estimate_cost)
             detail = _read_http_error_body(exc)
             if exc.code in RETRY_STATUSES:
                 if attempt >= MAX_ATTEMPTS:
@@ -268,6 +269,7 @@ def chat(
                 detail=detail,
             ) from exc
         except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
+            _log_failed_attempt(log_path, model, purpose, payload, max_tokens, estimate_cost)
             detail = str(exc)[:500]
             if attempt >= MAX_ATTEMPTS:
                 raise MetaAPIError(
@@ -277,7 +279,19 @@ def chat(
                 ) from exc
             sleep(2**attempt)
             continue
+        except ValueError:
+            # A malformed response can still have incurred provider charges.
+            _log_failed_attempt(log_path, model, purpose, payload, max_tokens, estimate_cost)
+            raise
     raise AssertionError("unreachable")  # pragma: no cover
+
+
+def _log_failed_attempt(log_path, model, purpose, payload, max_tokens, price):
+    """Reserve an estimated cost for a failed attempt that may have been billed."""
+    usage = Usage(input_tokens=len(payload), output_tokens=max_tokens)
+    _log_call(log_path, model=model, purpose=purpose, usage=usage,
+              cost=price(model, usage), seconds=0.0, finish_reason=None,
+              attempts=1, usage_estimated=True, failed_attempt=True)
 
 
 def _log_call(log_path: Path | None, **fields) -> None:

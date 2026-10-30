@@ -1,5 +1,13 @@
 # Checkpoint (read this after a /compact or in a new session)
 
+## Live spending guard follow-up
+- Corrected duplicate live notice. Live calls in one app process are serialized
+  around the budget check and run; failed Meta and Baseten request attempts
+  are recorded with an estimated charge. The display calls this estimated usage.
+- The limits remain best-effort: estimates can differ from provider billing,
+  separate app instances are not coordinated, and local logs can reset on
+  restart. Check provider billing; no live model calls were used for this fix.
+
 Updated: Wed Oct 28, 2026 (new direction; Part A market audit done = checkpoint 1). Repo: https://github.com/Kashyeb57/quantproof (public, `main`).
 Live app: https://kashyeb57-quantproof-app-snew9v.streamlit.app/
 

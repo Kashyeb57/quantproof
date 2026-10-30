@@ -74,7 +74,7 @@ def test_budget_line_adds_meta_and_baseten_spend(monkeypatch, tmp_path):
     assert not at.exception
     rendered = "\n".join(str(el.value) for el in at.markdown)
     # Dollar signs are escaped in rendered markdown (Streamlit LaTeX).
-    assert "spent \\$4.90 of \\$5.00 daily cap (Meta + Baseten combined)" in rendered
+    assert "recorded or estimated usage \\$4.90 of \\$5.00 daily limit (Meta + Baseten combined)" in rendered
 
 
 def _write_cost_log(path, cost_usd):

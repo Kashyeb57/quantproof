@@ -49,17 +49,14 @@ Steps in the Streamlit Community Cloud website:
 8. Put the live URL at the top of the README and in the submission
    description (Day 8).
 
-Two caps guard live mode, both enforced before an extraction starts:
-at most 3 live extractions per browser session; a daily cap
-(`QP_DAILY_CAP_USD`, default $5) that a new run's worst-case estimate
-must still fit under; and a lifetime cap (`QP_TOTAL_CAP_USD`,
-default $20) over the whole cost log. Restart-proofing caveat: the
-cost log is a local file (`.cache/meta_calls.jsonl`) and resets when
-the host restarts or redeploys, so the lifetime cap resets with it.
-Treat the caps as a strong brake, not an accounting guarantee: set a
-spend notification (billing alert) on the Meta developer billing page
-for the API key, which is the final backstop if the log is ever reset
-or bypassed.
+The app allows at most 3 live extractions per browser session. Its daily
+and total limits compare an estimated allowance with the combined Meta and
+Baseten local logs before a run. Failed requests are recorded at an estimated
+cost, and runs in the same app process are serialized. The limits are not
+billing guarantees: token estimates can be inaccurate, separate app
+instances do not share a lock, and local logs can reset on restart or
+redeployment. Check both providers' billing and use provider-side controls
+where available.
 
 If live mode says it is off, today's logged spend has reached the cap;
 raise `QP_DAILY_CAP_USD` in the app secrets only after checking the

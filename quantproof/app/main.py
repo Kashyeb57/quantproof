@@ -194,9 +194,9 @@ def run() -> None:
         _write(
             f"Live runs remaining in this session: {_status['remaining']} "
             f"of {_status['session_limit']}. Live mode is "
-            f"{_availability}: spent ${_status['spent_today']:,.2f} of "
-            f"${_status['cap']:,.2f} daily cap (Meta + Baseten combined); "
-            f"lifetime ${_status['spent_total']:,.2f} of "
+            f"{_availability}: recorded or estimated usage ${_status['spent_today']:,.2f} of "
+            f"${_status['cap']:,.2f} daily limit (Meta + Baseten combined); "
+            f"since log creation ${_status['spent_total']:,.2f} of "
             f"${_status['total_cap']:,.2f}."
         )
     if live_mode and spent_total >= total_cap:
@@ -216,11 +216,15 @@ def run() -> None:
     if live_mode:
         _warning(
             "Live mode uses real API credits: each new filing is extracted "
-"Live mode uses real API credits: each new filing is extracted "
 "with Muse Spark 1.3 and cross-checked with a second extraction "
 "by Muse Spark Open on Baseten (needs a BASETEN_API_KEY). "
 "If the second extraction is missing, fails, or comes back "
 "incomplete, the cross-check is shown as unavailable."
+        )
+        _caption(
+            "Spending limits are estimates based on local logs. They may reset "
+            "when the host restarts and do not cover other app instances or "
+            "provider billing adjustments. Check provider billing for actual spend."
         )
     else:
         _caption(
@@ -284,7 +288,7 @@ def run() -> None:
                             with_baseten=live.baseten_configured(cap_env),
                         )
                         _write(
-                            f"Worst-case estimate for this live run: "
+                            f"Estimated allowance for this live run: "
                             f"${estimate:,.2f} (first extraction, Baseten second "
                             f"extraction, and up to 3 re-checks; Meta and Baseten "
                             f"combined, every call assumed to retry to the limit)."
@@ -306,16 +310,9 @@ def run() -> None:
                                 second_chat=_open_chat(),
                             )
 
-                        live_note, _from_cache = guard.get_or_extract(
-                            key,
-                            _staged_run,
-                            spent_today=live.daily_spend()
-                            + live.baseten_daily_spend(),
-                            cap=cap,
-                            estimate=estimate,
-                            spent_total=live.total_spend()
-                            + live.baseten_total_spend(),
-                            total_cap=total_cap,
+                        live_note, _from_cache = live.guarded_live_run(
+                            guard, key, _staged_run, cap=cap,
+                            estimate=estimate, total_cap=total_cap,
                         )
                         _step(live.PROGRESS_STEPS[5] + ".")
                         status.update(

@@ -38,6 +38,7 @@ and ``quantproof.agent.baseten``).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from threading import Lock
 
 from quantproof.agent import baseten as baseten_client
 from quantproof.agent.client import MAX_ATTEMPTS
@@ -47,6 +48,7 @@ from quantproof.core.termsheet import TermSheet
 from quantproof.ingest.html import Filing, read_filing
 
 LIVE_MODEL = "muse-spark-1.3"
+LIVE_SPEND_LOCK = Lock()
 SECOND_MODEL = baseten_client.OPEN_MODEL  # second extraction (Baseten)
 
 LIVE_RUN_NOTICE = "A live run takes about 1-2 minutes."
@@ -262,7 +264,7 @@ ATTEMPT_ALLOWANCE = MAX_ATTEMPTS  # every planned call may bill up to 3 attempts
 def estimate_live_cost_by_provider(
     text_len: int, *, with_baseten: bool = True
 ) -> dict:
-    """Worst-case USD per provider for one whole live run, before it starts.
+    """Estimated USD per provider for one whole live run, before it starts.
 
     Returns ``{'meta': ..., 'baseten': ...}``.  Input tokens per call =
     ceil(text_len / 4) (about four characters per token); the Meta first
@@ -272,13 +274,12 @@ def estimate_live_cost_by_provider(
     plus the full ``RECHECK_MAX_TOKENS`` output.  Output is charged at the
     maximum, never at an expected value, so the estimate errs high.
 
-    Everything is then multiplied by ``ATTEMPT_ALLOWANCE``: a call that
-    hits a retryable error is billed again per attempt, so failed calls
-    are inside the worst case too.  Rechecks are bounded because the live
+    Everything is multiplied by ``ATTEMPT_ALLOWANCE`` to allow for retries.
+    Input token counts and provider charges remain estimates, not bounds.
+    Rechecks are bounded because the live
     note passes ``max_rechecks=RECHECK_ALLOWANCE`` to the cross-check.
 
-    Intuition: the daily cap is only useful if a run that would breach
-    it is refused before it starts, at the most it could possibly cost.
+    The estimate is used to refuse runs that would exceed the local limits.
 
     Reference: ``quantproof.agent.costs`` prices (Muse Spark: input and
     output dollars per million tokens), ``quantproof.agent.baseten`` for
@@ -313,7 +314,7 @@ def estimate_live_cost_by_provider(
 def estimate_live_cost(
     text_len: int, *, model: str = LIVE_MODEL, with_baseten: bool = True
 ) -> float:
-    """Combined worst-case USD across both providers for one live run.
+    """Combined estimated USD across both providers for one live run.
 
     This is the number the spend guard compares against the caps: Meta
     first extraction plus Baseten second extraction plus bounded rechecks,
@@ -416,14 +417,14 @@ class LiveGuard:
         if spent_today + estimate > cap:
             raise LiveRefused(
                 "Live extraction refused before it starts: today's spend "
-                f"of ${spent_today:,.2f} plus this filing's worst-case "
+                f"of ${spent_today:,.2f} plus this filing's estimated "
                 f"estimate of ${estimate:,.2f} would exceed the daily "
                 f"cap of ${cap:,.2f}. Demo mode remains available."
             )
         if total_cap is not None and spent_total + estimate > total_cap:
             raise LiveRefused(
                 "Live extraction refused before it starts: lifetime spend "
-                f"of ${spent_total:,.2f} plus this filing's worst-case "
+                f"of ${spent_total:,.2f} plus this filing's estimated "
                 f"estimate of ${estimate:,.2f} would exceed the lifetime "
                 f"cap of ${total_cap:,.2f}. Demo mode remains available."
             )
@@ -431,6 +432,18 @@ class LiveGuard:
         self.extractions_used += 1
         self.cache[key] = note
         return note, False
+
+
+def guarded_live_run(guard, key, extract_fn, *, cap, estimate, total_cap):
+    """Serialize live runs and read the current logs inside the shared lock."""
+    with LIVE_SPEND_LOCK:
+        return guard.get_or_extract(
+            key, extract_fn,
+            spent_today=daily_spend() + baseten_daily_spend(),
+            cap=cap, estimate=estimate,
+            spent_total=total_spend() + baseten_total_spend(),
+            total_cap=total_cap,
+        )
 
 
 @dataclass
