@@ -117,3 +117,12 @@ def test_repo_committed_points_match_demo_note():
     from quantproof.market import sources as _s
     assert _s.committed_point("VIXCLS", _date(2025, 11, 25)) == (18.56, _date(2025, 11, 25))
     assert _s.committed_point("RVXCLS", _date(2025, 11, 25)) == (23.36, _date(2025, 11, 25))
+
+
+def test_committed_point_rejects_future_or_invalid_records(tmp_path):
+    from datetime import date as _date
+    from quantproof.market import sources as _s
+    points = tmp_path / "points.json"
+    points.write_text('{"points": {"VIXCLS": {"2025-11-25": {"value": 18.56, "observed": "2025-11-26"}}, "RVXCLS": {"2025-11-25": {"value": "nan", "observed": "2025-11-25"}}}}')
+    assert _s.committed_point("VIXCLS", _date(2025, 11, 25), points) is None
+    assert _s.committed_point("RVXCLS", _date(2025, 11, 25), points) is None

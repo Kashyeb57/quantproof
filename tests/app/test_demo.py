@@ -116,3 +116,43 @@ def test_inputs_banner_is_honest_about_dated_inputs():
     assert dated.startswith(_d.DATED_BANNER)
     plain = _d.inputs_banner({"rate_label": "risk-free rate (illustrative assumption)"})
     assert plain.startswith(_d.ILLUSTRATIVE_BANNER)
+
+
+def _defaults_38582_like():
+    return {
+        "rate": 0.035515,
+        "rate_label": "U.S. Treasury par yield, 2025-11-25, 5.01y interpolated",
+        "vols": (0.2336, 0.1856),
+        "vol_labels": [
+            "Russell 2000 Index: 30-day implied vol (RVX 23.36 on 2025-11-25 via FRED)",
+            "S&P 500 Index: 30-day implied vol (VIX 18.56 on 2025-11-25 via FRED)",
+        ],
+    }
+
+
+def test_attribution_keeps_sources_only_for_untouched_defaults():
+    from quantproof.app import demo as _d
+    d = _defaults_38582_like()
+    same = _d.input_attribution(d, 0.035515, [0.2336, 0.1856])
+    assert same["rate_dated"] and same["vol_dated"] == [True, True]
+    assert "RVX 23.36" in same["vol_caption"]
+    edited = _d.input_attribution(d, 0.035515, [0.30, 0.1856])
+    assert edited["vol_dated"] == [False, True]
+    assert "RVX 23.36" not in edited["vol_caption"]
+    assert "0.3000, user-entered" in edited["vol_caption"]
+    rate_edit = _d.input_attribution(d, 0.05, [0.2336, 0.1856])
+    assert not rate_edit["rate_dated"]
+    assert "user-entered" in rate_edit["rate_caption"]
+    assert "the risk-free rate" not in rate_edit["banner"]
+
+
+def test_banner_does_not_call_illustrative_rate_dated():
+    from quantproof.app import demo as _d
+    d = _defaults_38582_like()
+    d["rate_label"] = "risk-free rate (illustrative assumption)"
+    out = _d.input_attribution(d, 0.035515, [0.2336, 0.1856])
+    assert not out["rate_dated"]
+    assert "the risk-free rate" not in out["banner"]
+    assert out["banner"].startswith(_d.DATED_BANNER)
+    none = _d.input_attribution(d, 0.035515, [0.30, 0.25])
+    assert none["banner"].startswith(_d.ILLUSTRATIVE_BANNER)

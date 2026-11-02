@@ -228,31 +228,90 @@ ILLUSTRATIVE_BANNER = "Illustrative inputs, not market data"
 DATED_BANNER = "Dated market inputs where labelled, stated assumptions otherwise"
 
 
-def inputs_banner(defaults: dict) -> str:
-    """The market-inputs notice, honest about which inputs are dated.
+def input_attribution(
+    defaults: dict, rate: float, vols: list[float] | tuple[float, ...]
+) -> dict:
+    """Per-field source attribution for the inputs actually in use.
 
-    When any default carries a dated source (a Treasury par yield or a
-    FRED implied volatility), say so; otherwise every input is an
-    illustrative assumption and the original banner applies.
+    A default keeps its dated source label (Treasury par yield, FRED
+    implied volatility) only while the active value still equals that
+    default; an edited value is labelled user-entered. The rate is
+    called dated only when its default label is a Treasury source.
+    Returns ``banner``, ``rate_caption``, ``vol_caption`` and the
+    ``rate_dated`` / ``vol_dated`` flags.
     """
+    tol = 1e-12
     rate_label = str(defaults.get("rate_label", ""))
-    vol_labels = [str(v) for v in defaults.get("vol_labels", [])]
-    dated = rate_label.startswith("U.S. Treasury") or any(
-        "via FRED" in v for v in vol_labels
-    )
-    if dated:
-        return (
-            f"{DATED_BANNER}: the risk-free rate and any volatility labelled "
-            "with a source and date are market inputs as of the pricing date; "
-            "dividends, correlation, credit spread and unlabelled volatilities "
-            "are stated assumptions you can edit. Every result is conditional "
-            "on them."
+    default_rate = defaults.get("rate")
+    rate_unchanged = default_rate is None or abs(float(rate) - float(default_rate)) <= tol
+    rate_dated = rate_label.startswith("U.S. Treasury") and rate_unchanged
+    if rate_dated:
+        rate_caption = f"Rate source: {rate_label}."
+    elif rate_label.startswith("U.S. Treasury"):
+        rate_caption = (
+            f"Rate: {float(rate):.4f}, user-entered (stated assumption); "
+            f"the default was {rate_label}."
         )
-    return (
-        f"{ILLUSTRATIVE_BANNER}: the inputs below are illustrative "
-        "assumptions for this analysis, not market data. Every result is "
-        "conditional on them."
-    )
+    else:
+        rate_caption = f"Rate source: {rate_label}."
+
+    default_vols = list(defaults.get("vols", []))
+    labels = [str(v) for v in defaults.get("vol_labels", [])]
+    vol_dated: list[bool] = []
+    vol_parts: list[str] = []
+    for i, value in enumerate(vols):
+        label = labels[i] if i < len(labels) else ""
+        default = default_vols[i] if i < len(default_vols) else None
+        unchanged = default is not None and abs(float(value) - float(default)) <= tol
+        dated = unchanged and "via FRED" in label
+        vol_dated.append(dated)
+        if dated or (unchanged and label):
+            vol_parts.append(label)
+        elif label:
+            name = label.split(":", 1)[0]
+            vol_parts.append(f"{name}: {float(value):.4f}, user-entered (stated assumption)")
+    if vol_parts:
+        vol_caption = (
+            "Volatilities: " + "; ".join(vol_parts) + ". Dividend yields and "
+            "correlation are stated assumptions (ranges you can edit), not market data."
+        )
+    else:
+        vol_caption = (
+            "Volatilities, dividend yields and correlation are stated "
+            "assumptions (ranges you can edit), not market data."
+        )
+
+    dated_items = []
+    if rate_dated:
+        dated_items.append("the risk-free rate")
+    if any(vol_dated):
+        dated_items.append("volatilities labelled with a source and date")
+    if dated_items:
+        banner = (
+            f"{DATED_BANNER}: " + " and ".join(dated_items) + " are market "
+            "inputs as of the pricing date; every other input is a stated "
+            "assumption you can edit. Every result is conditional on them."
+        )
+    else:
+        banner = (
+            f"{ILLUSTRATIVE_BANNER}: the inputs below are illustrative "
+            "assumptions for this analysis, not market data. Every result is "
+            "conditional on them."
+        )
+    return {
+        "banner": banner,
+        "rate_caption": rate_caption,
+        "vol_caption": vol_caption,
+        "rate_dated": rate_dated,
+        "vol_dated": vol_dated,
+    }
+
+
+def inputs_banner(defaults: dict) -> str:
+    """Banner for the untouched defaults (see :func:`input_attribution`)."""
+    return input_attribution(
+        defaults, float(defaults.get("rate", 0.0)), list(defaults.get("vols", []))
+    )["banner"]
 
 
 @dataclass

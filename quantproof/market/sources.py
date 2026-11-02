@@ -11,8 +11,10 @@ user which file to place, never a download.
 
 Daily closes are fetched from the local files, cached nowhere else
 (the files themselves are the cache, and ``.cache/`` is gitignored, so
-no raw data is ever committed) — only derived volatility/correlation
-numbers are ever shown, with attribution. Tickers without a confirmed
+no price series is ever committed). The one exception is
+``data/market_inputs/fred_points.json``: individual published closes
+(one per series per needed pricing date) used as volatility inputs on
+hosts without the local files, stored with series attribution. Tickers without a confirmed
 FRED series id (Russell 2000 closes, single stocks) raise a clear
 error instead of guessing.
 
@@ -23,15 +25,18 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from datetime import date
 from pathlib import Path
 
 DEFAULT_CACHE = Path(".cache") / "fred"
 
-# Committed single observations (derived numbers, no price series) used
-# when the local graph CSV is absent, e.g. on the deployed app where the
-# gitignored .cache/ does not exist. Looked up only for the exact day a
-# caller asks for; anything else still raises SourceError.
+# Committed individual published observations (one close per series per
+# needed pricing date, never a price series), with source attribution,
+# used when the local graph CSV is absent, e.g. on the deployed app where
+# the gitignored .cache/ does not exist. Looked up only for the exact day
+# a caller asks for; anything else still raises SourceError. See the
+# data policy in docs/VOL_SOURCES.md.
 COMMITTED_POINTS = (
     Path(__file__).resolve().parents[2] / "data" / "market_inputs" / "fred_points.json"
 )
@@ -119,9 +124,15 @@ def committed_point(
     try:
         data = json.loads(Path(points_path).read_text(encoding="utf-8"))
         entry = data["points"][series_id][day.isoformat()]
-        return float(entry["value"]), date.fromisoformat(entry["observed"])
+        value = float(entry["value"])
+        observed = date.fromisoformat(entry["observed"])
     except (KeyError, TypeError, ValueError):
         return None
+    # A stored record must describe a real past observation: finite,
+    # positive and not dated after the day asked for.
+    if not math.isfinite(value) or value <= 0 or observed > day:
+        return None
+    return value, observed
 
 
 def value_on_or_before(

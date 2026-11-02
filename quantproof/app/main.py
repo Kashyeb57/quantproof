@@ -464,7 +464,7 @@ def run() -> None:
     defaults = (
         live.generic_defaults(ts) if live_mode else demo.note_defaults(stem, ts)
     )
-    _warning(demo.inputs_banner(defaults))
+    banner_slot = st.empty()
     col_rate, col_spread, col_rho = st.columns(3)
     rate = col_rate.number_input(
         "Risk-free rate", value=float(defaults["rate"]), format="%.4f",
@@ -481,16 +481,8 @@ def run() -> None:
         format="%.2f",
         disabled=ts.n_underlyings < 2,
     )
-    _caption(f"Rate source: {defaults.get('rate_label', '')}.")
-    _caption(
-        "Volatilities, dividend yields and correlation are stated "
-        "assumptions (ranges you can edit), not market data."
-        if "vol_labels" not in defaults
-        else "Volatilities: "
-        + "; ".join(str(label) for label in defaults["vol_labels"])
-        + ". Dividend yields and correlation are stated assumptions "
-        "(ranges you can edit), not market data."
-    )
+    rate_caption_slot = st.empty()
+    vol_caption_slot = st.empty()
     vols: list[float] = []
     dividends: list[float] = []
     for i, underlying in enumerate(ts.underlyings):
@@ -511,6 +503,10 @@ def run() -> None:
                 value=float(default_div), format="%.4f", key=f"div_{i}",
             )
         )
+    attribution = demo.input_attribution(defaults, rate, vols)
+    banner_slot.warning(demo.escape_dollars(attribution["banner"]))
+    rate_caption_slot.caption(demo.escape_dollars(attribution["rate_caption"]))
+    vol_caption_slot.caption(demo.escape_dollars(attribution["vol_caption"]))
     market = demo.build_market(
         ts, rate=rate, spread=spread, vols=tuple(vols),
         dividends=tuple(dividends), rho=rho,

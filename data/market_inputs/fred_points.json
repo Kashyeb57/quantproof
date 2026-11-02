@@ -1,6 +1,7 @@
 {
-  "description": "Single derived observations used as volatility grid centres when the local FRED graph CSVs (.cache/fred/, gitignored) are absent, e.g. on the deployed app. Values are the series' published closes on the stated dates (percent points), looked up on the date each note needs. No price series are stored.",
-  "source": "FRED, Federal Reserve Bank of St. Louis (fred.stlouisfed.org/graph/fredgraph.csv); VIXCLS and RVXCLS are CBOE indices via FRED.",
+  "description": "Individual published closes (percent points), one per series per pricing date a saved demo note needs, used as volatility grid centres when the local FRED graph CSVs (.cache/fred/, gitignored) are absent, e.g. on the deployed app. These are the published observations themselves, not values calculated by QuantProof. No price series are stored.",
+  "source": "FRED, Federal Reserve Bank of St. Louis (fred.stlouisfed.org/graph/fredgraph.csv).",
+  "attribution": {"VIXCLS": "CBOE Volatility Index: VIX, Chicago Board Options Exchange, retrieved from FRED (fred.stlouisfed.org/series/VIXCLS); FRED marks this series as copyrighted by its source.", "RVXCLS": "CBOE Russell 2000 Volatility Index, Chicago Board Options Exchange, retrieved from FRED (fred.stlouisfed.org/series/RVXCLS); FRED marks this series as copyrighted by its source."},
   "retrieved": "2026-11-02",
   "points": {
     "VIXCLS": {"2025-11-25": {"value": 18.56, "observed": "2025-11-25"}},

@@ -88,8 +88,20 @@ public repo no (and we do not: cache lives under gitignored
 - Russell 2000 and single stocks: user-entered values remain the only
   path until a licence-safe series is confirmed; the fetcher raises a
   clear error naming this instead of guessing.
-- Raw data is never committed to the public repo; the cache directory
+- No price series is committed to the public repo; the cache directory
   is gitignored and the tests use synthetic and fake data only.
+- **Exception (added Nov 2, 2026):** `data/market_inputs/fred_points.json`
+  stores individual published closes of the implied-volatility indices
+  (currently two: VIXCLS and RVXCLS on 2025-11-25) so the deployed app,
+  which has no local cache, uses the same volatility inputs as the
+  published example. These are the published observations themselves,
+  not values QuantProof calculated, and FRED marks both series as
+  copyrighted by their source (CBOE). They are stored with series
+  attribution, one value per series per pricing date a saved demo note
+  needs, and are used only as model inputs. This is a project choice
+  for reproducibility, not a legal determination; if the owner prefers,
+  remove the file and the deployed demo falls back to labelled stated
+  assumptions.
 
 Links:
 
