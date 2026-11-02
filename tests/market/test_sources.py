@@ -96,3 +96,24 @@ def test_known_ticker_returns_attribution(tmp_path: Path):
     assert rows[-1] == (date(2025, 11, 25), 103.0)
     assert "FRED" in attribution
     assert "not endorsed or certified" in sources.ATTRIBUTION_NOTICE
+
+
+def test_committed_point_used_when_csv_absent(tmp_path):
+    from datetime import date as _date
+    from quantproof.market import sources as _s
+    points = tmp_path / "points.json"
+    points.write_text('{"points": {"VIXCLS": {"2025-11-25": {"value": 18.56, "observed": "2025-11-25"}}}}')
+    empty = tmp_path / "nocache"
+    value, observed = _s.value_on_or_before("VIXCLS", _date(2025, 11, 25), empty, points)
+    assert value == 18.56 and observed == _date(2025, 11, 25)
+    # Another day is not guessed: still an error naming the missing file.
+    import pytest as _pytest
+    with _pytest.raises(_s.SourceError):
+        _s.value_on_or_before("VIXCLS", _date(2025, 11, 26), empty, points)
+
+
+def test_repo_committed_points_match_demo_note():
+    from datetime import date as _date
+    from quantproof.market import sources as _s
+    assert _s.committed_point("VIXCLS", _date(2025, 11, 25)) == (18.56, _date(2025, 11, 25))
+    assert _s.committed_point("RVXCLS", _date(2025, 11, 25)) == (23.36, _date(2025, 11, 25))

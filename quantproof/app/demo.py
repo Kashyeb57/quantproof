@@ -225,6 +225,34 @@ ISSUER_RISK_LINE = (
 )
 FOOTER_LINE = "Risk analysis under stated assumptions, not investment advice"
 ILLUSTRATIVE_BANNER = "Illustrative inputs, not market data"
+DATED_BANNER = "Dated market inputs where labelled, stated assumptions otherwise"
+
+
+def inputs_banner(defaults: dict) -> str:
+    """The market-inputs notice, honest about which inputs are dated.
+
+    When any default carries a dated source (a Treasury par yield or a
+    FRED implied volatility), say so; otherwise every input is an
+    illustrative assumption and the original banner applies.
+    """
+    rate_label = str(defaults.get("rate_label", ""))
+    vol_labels = [str(v) for v in defaults.get("vol_labels", [])]
+    dated = rate_label.startswith("U.S. Treasury") or any(
+        "via FRED" in v for v in vol_labels
+    )
+    if dated:
+        return (
+            f"{DATED_BANNER}: the risk-free rate and any volatility labelled "
+            "with a source and date are market inputs as of the pricing date; "
+            "dividends, correlation, credit spread and unlabelled volatilities "
+            "are stated assumptions you can edit. Every result is conditional "
+            "on them."
+        )
+    return (
+        f"{ILLUSTRATIVE_BANNER}: the inputs below are illustrative "
+        "assumptions for this analysis, not market data. Every result is "
+        "conditional on them."
+    )
 
 
 @dataclass

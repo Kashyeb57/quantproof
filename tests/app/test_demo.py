@@ -108,3 +108,11 @@ def test_app_pipeline_for_38582_within_budget_and_priced():
     assert len(result["stress"]["prob_loss"]) == len(
         result["stress"]["drift_levels"]
     )
+
+
+def test_inputs_banner_is_honest_about_dated_inputs():
+    from quantproof.app import demo as _d
+    dated = _d.inputs_banner({"rate_label": "U.S. Treasury par yield, 2025-11-25", "vol_labels": []})
+    assert dated.startswith(_d.DATED_BANNER)
+    plain = _d.inputs_banner({"rate_label": "risk-free rate (illustrative assumption)"})
+    assert plain.startswith(_d.ILLUSTRATIVE_BANNER)

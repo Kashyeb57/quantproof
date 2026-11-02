@@ -22,10 +22,19 @@ Standard library only. No AI calls.
 from __future__ import annotations
 
 import csv
+import json
 from datetime import date
 from pathlib import Path
 
 DEFAULT_CACHE = Path(".cache") / "fred"
+
+# Committed single observations (derived numbers, no price series) used
+# when the local graph CSV is absent, e.g. on the deployed app where the
+# gitignored .cache/ does not exist. Looked up only for the exact day a
+# caller asks for; anything else still raises SourceError.
+COMMITTED_POINTS = (
+    Path(__file__).resolve().parents[2] / "data" / "market_inputs" / "fred_points.json"
+)
 
 # Series id -> attribution. Only ids confirmed against the FRED
 # catalogue are listed; the three volatility ids were verified to
@@ -96,16 +105,46 @@ def read_series(series_id: str, cache_dir: Path = DEFAULT_CACHE) -> list[tuple[d
     return rows
 
 
+def committed_point(
+    series_id: str, day: date, points_path: Path | None = COMMITTED_POINTS
+) -> tuple[float, date] | None:
+    """``(value, observed date)`` committed for ``series_id`` on ``day``, or None.
+
+    Exact-day lookup only (the stored entry already records the last
+    trading day on or before ``day``); no interpolation, no nearest-day
+    guessing.
+    """
+    if points_path is None or not Path(points_path).is_file():
+        return None
+    try:
+        data = json.loads(Path(points_path).read_text(encoding="utf-8"))
+        entry = data["points"][series_id][day.isoformat()]
+        return float(entry["value"]), date.fromisoformat(entry["observed"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
 def value_on_or_before(
-    series_id: str, day: date, cache_dir: Path = DEFAULT_CACHE
+    series_id: str,
+    day: date,
+    cache_dir: Path = DEFAULT_CACHE,
+    points_path: Path | None = COMMITTED_POINTS,
 ) -> tuple[float, date]:
     """Latest known value on or before ``day`` (weekends/holidays handled).
 
     Formula: the last ``(date, value)`` pair with ``date <= day``.
     Raises ``SourceError`` when the file holds nothing on or before
     ``day`` (series starts later): no forward-filling, no guessing.
+    When the local file is absent, falls back to a committed single
+    observation for exactly this ``day`` (see ``COMMITTED_POINTS``).
     """
-    rows = read_series(series_id, cache_dir)
+    try:
+        rows = read_series(series_id, cache_dir)
+    except SourceError:
+        point = committed_point(series_id, day, points_path)
+        if point is None:
+            raise
+        return point
     known = [(d, v) for d, v in rows if d <= day]
     if not known:
         raise SourceError(
@@ -121,10 +160,16 @@ class FredClient:
     clients; nothing secret is needed (the graph CSV needs no key).
     """
 
-    def __init__(self, cache_dir: Path = DEFAULT_CACHE, **kwargs) -> None:
+    def __init__(
+        self,
+        cache_dir: Path = DEFAULT_CACHE,
+        points_path: Path | None = COMMITTED_POINTS,
+        **kwargs,
+    ) -> None:
         if kwargs:
             raise TypeError(f"unexpected arguments: {sorted(kwargs)}")
         self._cache_dir = Path(cache_dir)
+        self._points_path = points_path
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(cache_dir={self._cache_dir!r})"
@@ -153,7 +198,7 @@ class FredClient:
 
     def value_on_or_before(self, series_id: str, day: date) -> tuple[float, date]:
         """Latest known value on or before ``day``; see module function."""
-        return value_on_or_before(series_id, day, self._cache_dir)
+        return value_on_or_before(series_id, day, self._cache_dir, self._points_path)
 
 
 def closes_for_ticker(

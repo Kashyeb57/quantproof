@@ -461,14 +461,10 @@ def run() -> None:
 
     # c. Market inputs.
     st.header("3. Market inputs")
-    _warning(
-        f"{demo.ILLUSTRATIVE_BANNER}: the inputs below are illustrative "
-        "assumptions for this analysis, not market data. Every result is "
-        "conditional on them."
-    )
     defaults = (
         live.generic_defaults(ts) if live_mode else demo.note_defaults(stem, ts)
     )
+    _warning(demo.inputs_banner(defaults))
     col_rate, col_spread, col_rho = st.columns(3)
     rate = col_rate.number_input(
         "Risk-free rate", value=float(defaults["rate"]), format="%.4f",
