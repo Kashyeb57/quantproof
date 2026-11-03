@@ -23,15 +23,18 @@ reported by multiple independent sources, and the fetcher in
     "Source: S&P Dow Jones Indices LLC via FRED" for index series).
   - Applications built on the FRED API must display prominently:
     "This product uses the FRED® API but is not endorsed or certified
-    by the Federal Reserve Bank of St. Louis." We display it whenever
-    FRED-derived numbers are shown, even though we use the keyless CSV.
+    by the Federal Reserve Bank of St. Louis." QuantProof does not use
+    the FRED API (it reads graph CSVs downloaded by hand), and the app
+    does not currently display this notice. The text is kept as
+    `ATTRIBUTION_NOTICE` in `quantproof/market/sources.py`; the app
+    shows per-series source labels instead.
   - FRED aggregates 126 sources and flags third-party-copyrighted
     series in their notes (the word "Copyright", e.g.
     "Copyright © 2025, NASDAQ, Inc." on Nasdaq index series). For those
     series, anything beyond personal use needs the owner's permission;
-    FRED cannot grant it. Our use — fetch at runtime, use individual
-    dated values as model inputs with attribution, never commit a raw
-    series — is meant to stay within personal/research use, and the
+    FRED cannot grant it. Our use — read graph CSVs downloaded by hand
+    into a gitignored cache, use individual dated values as model
+    inputs with attribution, never commit a raw series — is meant to stay within personal/research use, and the
     app's source label names the owner from the series notes.
 - Coverage: S&P 500 (`SP500`) and Nasdaq-100 (`NASDAQ100`) daily closes
   are long-standing FRED series. A Russell 2000 daily series id on
@@ -40,7 +43,9 @@ reported by multiple independent sources, and the fetcher in
   until the id is confirmed against the FRED catalogue.
 - No single-stock prices on FRED at all.
 
-Verdict for our three questions: runtime fetch yes; showing derived
+Verdict for our three questions: reading FRED data yes (in practice
+from graph CSVs downloaded by hand; the app makes no FRED requests);
+showing derived
 numbers and individual dated input values with attribution yes;
 committing raw series to the public repo no (and we do not: the cache
 lives under gitignored `.cache/`).
@@ -80,8 +85,11 @@ lives under gitignored `.cache/`).
 ## Recommendation (implemented)
 
 - Indices with a confirmed FRED series id (S&P 500, Nasdaq-100):
-  fetch daily closes at runtime from the keyless FRED graph CSV,
-  cache under `.cache/fred/` (gitignored, never committed), compute
+  read daily closes from keyless FRED graph CSVs downloaded by hand
+  into `.cache/fred/` (gitignored, never committed); the app makes no
+  network request to FRED. When the cache is absent (as on the
+  deployed app), the committed individual values described below are
+  used, and otherwise the input is a labelled stated assumption. Compute
   realised volatility/correlation in `quantproof/market/vol.py`, and
   show the derived number with its source label
   (e.g. "S&P Dow Jones Indices LLC via FRED").
