@@ -113,7 +113,7 @@ Deployment steps (Streamlit Community Cloud, or Hugging Face Spaces): [docs/DEPL
 
 ## Built during the hackathon
 
-Built during the Meta Global AI Developer Hackathon, Oct 27 – Nov 4, 2026 (Push the Frontier). Development ran largely on Meta models: Muse Wonder drafted code through `scripts/muse_draft.py` under the rules in `AGENTS.md`; every draft was reviewed line by line, tested, and only then committed. The per-call log of that drafting (task, files, tokens, estimated cost) is `docs/MUSE_DEV_LOG.md`. Pricing maths was checked against its docstrings, references and independent tests before acceptance. Tools used are disclosed here and in that log, per the owner's choice (no co-author trailers in commits).
+Built solo during the Meta Global AI Developer Hackathon, Oct 27 – Nov 4, 2026 (Push the Frontier). Meta models are the product: Muse Spark 1.3, Muse Spark Open and Muse Wonder (see Meta models used). For development, Muse Wonder drafted code early on through `scripts/muse_draft.py` under the rules in `AGENTS.md` (per-call log: `docs/MUSE_DEV_LOG.md`); later development used Claude Code, with OpenAI Codex as reviewer. Every change was reviewed and tested before commit, and pricing maths was checked against its docstrings, references and independent tests. Tools are disclosed here rather than in commit trailers, per the owner's choice.
 
 ## References
 
