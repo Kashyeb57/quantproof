@@ -468,7 +468,7 @@ def run() -> None:
     col_rate, col_spread, col_rho = st.columns(3)
     rate = col_rate.number_input(
         "Risk-free rate", value=float(defaults["rate"]), format="%.4f",
-        help=str(defaults.get("rate_label", ""))
+        help=f"Default source: {defaults.get('rate_label', '')}"
     )
     spread = col_spread.number_input(
         "Issuer credit spread", value=float(defaults["spread"]), format="%.4f"

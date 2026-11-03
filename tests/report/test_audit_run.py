@@ -487,6 +487,14 @@ def test_market_audit_script_redo_keeps_previous_recording(tmp_path, monkeypatch
     )
     fake_live = Replay(_calls())  # stands in for the Meta API: no network
     monkeypatch.setattr(module.meta_client, "chat", lambda messages, log_path=None, **kw: fake_live(messages, **kw))
+    # No Baseten either: without a key the redo uses the Meta second model, and
+    # any Baseten call that slips through fails the test instead of reaching the network.
+    monkeypatch.delenv("BASETEN_API_KEY", raising=False)
+
+    def _no_baseten(*args, **kwargs):
+        raise AssertionError("test must not call Baseten")
+
+    monkeypatch.setattr(module.baseten, "chat", _no_baseten)
 
     assert module._redo([accession], out, budget_usd=2.0) == 0
     result = json.loads((out / "results" / f"{accession}.json").read_text(encoding="utf-8"))
