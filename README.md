@@ -45,6 +45,7 @@ From the generated example report ([docs/examples/jpm_38582_analysis.md](docs/ex
 - Base estimated value: $904.66 +- $1.46 (1.96 SE, SE = $0.74; seed 0, 100,000 paths).
 - The assumption that moves the estimated value most is volatility ($951.33 to $859.93 across its stated range).
 - Real-world loss odds (separate REAL-WORLD measure, not a value; drift = risk-free rate + 5.0% equity risk premium): P(loss) 10.17% (SE 0.10%), P(loss > 50%) 3.42% (SE 0.06%), P(called early) 81.72% (SE 0.12%), expected cash $1,080.84 (SE $0.66). Issuer default is not simulated: if the issuer defaults, you can lose money regardless of the index.
+- The live app runs the same note with fewer paths (20,000 base paths, 4,000 per grid point, seed 0) to stay fast, so its figures differ slightly within simulation error: range $776.19 - $972.92, base $903.43 (SE $1.66), P(loss) 9.96%. These are the figures in the demo video.
 
 ## Market audit and synthesis benchmark
 
@@ -69,7 +70,7 @@ Two generated reports summarise what the pipeline did on real filings: [docs/MAR
 
 - Flat volatility with a simple, stated skew adjustment; no volatility surface or smile model.
 - Constant interest rates, dividend yields and correlations over the life of the note; the Treasury rate is a single interpolated par yield, not a fitted curve.
-- Correlation in the app is a single all-pairs value; volatilities, dividends and correlation are user-entered stated assumptions, not licensed market data.
+- Correlation in the app is a single all-pairs value. Dividends, correlation, credit spread and single-stock volatilities are stated assumptions the user can edit; index volatilities default to a dated 30-day implied-volatility close (a short-dated proxy for a multi-year note), and an edited value is labelled user-entered.
 - No issuer-default simulation in the loss odds or stress grid (the issuer-risk line states the consequence separately).
 - Monte Carlo values carry simulation error; every reported value states its standard error, seed and number of paths.
 - Extraction depends on the filing's text layer; fields without a verified quote are flagged for the user to confirm, and a note with a feature no template covers is not priced in the public app.
@@ -79,7 +80,8 @@ Two generated reports summarise what the pipeline did on real filings: [docs/MAR
 
 - SEC EDGAR 424B2 filings (public filings, accessed under SEC fair-access rules with a declared User-Agent; downloads cached). Test fixtures are saved filings under `tests/fixtures/`.
 - U.S. Treasury Daily Par Yield Curve Rates (public U.S. government data, home.treasury.gov), saved at `docs/data/treasury_daily_par_yield_curve_2025-11.csv` with its source URL. Works of the U.S. federal government are not subject to copyright in the United States.
-- Volatilities, dividend yields, credit spread and correlation in the app and reports are stated assumptions entered by the user or used illustratively for testing, labelled "Illustrative inputs, not market data" wherever they appear (the Treasury risk-free rate is the exception above).
+- Implied-volatility index closes (Cboe VIX, VXN, RVX) via FRED, Federal Reserve Bank of St. Louis, used as dated volatility inputs for index underlyings with source attribution. FRED marks these series as copyrighted by their source. Data rule: no raw series is committed; individual dated input values are stored with attribution (`data/market_inputs/fred_points.json` for the demo note, `data/market_audit/market_inputs.json` for the audit). See `docs/VOL_SOURCES.md`.
+- Dividend yields, credit spread, correlation and single-stock volatilities are stated assumptions, labelled as such wherever they appear.
 
 ## Meta models used
 
