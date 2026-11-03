@@ -29,10 +29,10 @@ reported by multiple independent sources, and the fetcher in
     series in their notes (the word "Copyright", e.g.
     "Copyright © 2025, NASDAQ, Inc." on Nasdaq index series). For those
     series, anything beyond personal use needs the owner's permission;
-    FRED cannot grant it. Our use — fetch at runtime, show only a
-    derived volatility/correlation number with attribution, never
-    commit raw data — stays inside the permitted personal/research use,
-    and the app's source label names the owner from the series notes.
+    FRED cannot grant it. Our use — fetch at runtime, use individual
+    dated values as model inputs with attribution, never commit a raw
+    series — is meant to stay within personal/research use, and the
+    app's source label names the owner from the series notes.
 - Coverage: S&P 500 (`SP500`) and Nasdaq-100 (`NASDAQ100`) daily closes
   are long-standing FRED series. A Russell 2000 daily series id on
   FRED is **not confirmed** (candidate ids are unverified), so the
@@ -40,10 +40,10 @@ reported by multiple independent sources, and the fetcher in
   until the id is confirmed against the FRED catalogue.
 - No single-stock prices on FRED at all.
 
-Verdict for our three questions: runtime fetch yes; showing only the
-derived volatility with attribution yes; committing raw series to the
-public repo no (and we do not: cache lives under gitignored
-`.cache/`).
+Verdict for our three questions: runtime fetch yes; showing derived
+numbers and individual dated input values with attribution yes;
+committing raw series to the public repo no (and we do not: the cache
+lives under gitignored `.cache/`).
 
 ## 2. Stooq — not recommended
 
@@ -88,20 +88,28 @@ public repo no (and we do not: cache lives under gitignored
 - Russell 2000 and single stocks: user-entered values remain the only
   path until a licence-safe series is confirmed; the fetcher raises a
   clear error naming this instead of guessing.
-- No price series is committed to the public repo; the cache directory
-  is gitignored and the tests use synthetic and fake data only.
-- **Exception (added Nov 2, 2026):** `data/market_inputs/fred_points.json`
-  stores individual published closes of the implied-volatility indices
-  (currently two: VIXCLS and RVXCLS on 2025-11-25) so the deployed app,
-  which has no local cache, uses the same volatility inputs as the
-  published example. These are the published observations themselves,
-  not values QuantProof calculated, and FRED marks both series as
-  copyrighted by their source (CBOE). They are stored with series
-  attribution, one value per series per pricing date a saved demo note
-  needs, and are used only as model inputs. This is a project choice
-  for reproducibility, not a legal determination; if the owner prefers,
-  remove the file and the deployed demo falls back to labelled stated
-  assumptions.
+- **Data rule (owner's decision, Nov 2, 2026): no raw series;
+  individual input values stored with attribution.** No price or index
+  series is committed to the public repo; the cache directory is
+  gitignored and the tests use synthetic and fake data only. Individual
+  dated values that a saved result or demo uses as model inputs may be
+  committed, each with its source label. Two files do this:
+  - `data/market_audit/market_inputs.json`: the per-note inputs of the
+    market audit, including one implied-volatility close per index note
+    (VIX, VXN or RVX on the note's pricing date), each labelled
+    "… via FRED".
+  - `data/market_inputs/fred_points.json` (added Nov 2, 2026): stores
+    individual published closes of the implied-volatility indices
+    (currently two: VIXCLS and RVXCLS on 2025-11-25) so the deployed
+    app, which has no local cache, uses the same volatility inputs as
+    the published example. These are the published observations
+    themselves, not values QuantProof calculated, and FRED marks both
+    series as copyrighted by their source (CBOE). They are stored with
+    series attribution, one value per series per pricing date a saved
+    demo note needs, and are used only as model inputs.
+  This is a project choice for reproducibility, not a legal
+  determination. Removing `fred_points.json` makes the deployed demo
+  fall back to labelled stated assumptions.
 
 Links:
 

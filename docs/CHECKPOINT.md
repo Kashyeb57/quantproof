@@ -367,3 +367,9 @@ credits): Part A <= $12, Part B <= $15, total <= $27. Never touch the live app's
 - Development mostly on Meta credits: up to $80 dev, keep >= $50 for product/demo.
 - Credits: Meta $149.98 left (Oct 27). Claude cloud credit expires Nov 5, 1:59 AM CST.
 - Deadline Wed Nov 4, 8:00 PM Central; target noon. Problem statement: Push the Frontier.
+
+## Nov 2, 2026 (evening): Codex review 2 resolved
+- Data rule decided by Joyeb: "no raw series; individual input values stored with attribution"
+  (docs/VOL_SOURCES.md). `data/market_inputs/fred_points.json` and `data/market_audit/market_inputs.json` stay.
+- Rate tooltip reads "Default source: …"; audit redo test cannot call Baseten (a37fefd).
+- Demo script v3 (outside the repo): Codex's Scene 2/3 wording, ~275 spoken words.
